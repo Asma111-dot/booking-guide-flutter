@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 String appName(String locale) => locale == 'ar' ? "نوت" : "Noot";
 
+//how?
 const authToken = "";
 
 late WidgetRef globalRef;
