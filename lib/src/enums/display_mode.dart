@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
-///
+import '../helpers/general_helper.dart';
 
 enum DisplayMode {systemDefault, light, dark}
 

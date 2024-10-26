@@ -1,5 +1,6 @@
 import 'package:form_field_validator/form_field_validator.dart';
 
+import '../helpers/general_helper.dart';
 
 var requiredValidator = RequiredValidator(errorText: trans().thisFieldIsRequired);
 
