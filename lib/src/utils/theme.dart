@@ -1,6 +1,8 @@
 import 'package:booking_guide/src/extensions/theme_extension.dart';
 import 'package:flutter/material.dart';
 
+import 'routes.dart';
+
 class CustomTheme {
   final bool isDark;
 

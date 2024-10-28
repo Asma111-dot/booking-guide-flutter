@@ -1,5 +1,6 @@
+import 'package:booking_guide/src/extensions/date_formatting.dart';
+
 import 'country.dart';
-/////import
 
 class Customer {
   int id;
@@ -78,7 +79,7 @@ class Customer {
     'code_number': codeNumber,
     'email': email,
     'note': note,
-    //'last_activity': lastActivity?.toSqlDateOnly(),
+    'last_activity': lastActivity?.toSqlDateOnly(),
     'country_id': country?.id,
   };
 

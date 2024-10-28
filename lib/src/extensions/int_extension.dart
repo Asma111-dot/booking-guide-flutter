@@ -1,8 +1,8 @@
 import 'package:intl/intl.dart';
 
+import '../providers/public/settings_provider.dart';
 import '../utils/global.dart';
 
-//
 
 locale() => globalRef.read(settingsProvider).languageCode;
 
