@@ -14,6 +14,7 @@ const errorJson = "${_lottieBase}error.json";
 const infoJson = "${_lottieBase}info.json";
 const emptyJson = "${_lottieBase}empty.json";
 const welcomeJson = "${_lottieBase}welcome.json";
+const unauthorizedJson = "${_lottieBase}unauthorized.json";
 
 // Images ----------------------------------------------------------------------
 const logoCoverImage = "${_imageBase}logo_cover.png";

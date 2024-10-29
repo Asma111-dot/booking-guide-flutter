@@ -9,38 +9,41 @@ part 'response.freezed.dart';
 class Response<T> with _$Response<T> {
   const Response._();
 
-  const factory Response({T? data, @Default([]) List<String> deleted, @Default(Meta(message: '')) Meta meta}) = _Response<T>;
+  const factory Response({
+    T? data,
+    @Default([]) List<String> deleted,
+    @Default(Meta(message: '')) Meta meta,
+  }) = _Response<T>;
 
-  init() => copyWith.meta(status: Status.initial);
+  Response<T> init() => copyWith(meta: meta.copyWith(status: Status.initial));
   bool isInit() => meta.status == Status.initial;
 
-  setResponse(Response<T> response) => copyWith(
+  Response<T> setResponse(Response<T> response) => copyWith(
     data: response.data,
     meta: response.meta,
     deleted: response.deleted,
   );
 
-  setData(value) => copyWith(data: value);
+  Response<T> setData(T value) => copyWith(data: value);
 
-  setLoading() => copyWith.meta(status: Status.loading);
+  Response<T> setLoading() => copyWith(meta: meta.copyWith(status: Status.loading));
   bool isLoading() => meta.status == Status.loading;
 
-  setLoaded() => copyWith.meta(status: Status.loaded);
+  Response<T> setLoaded() => copyWith(meta: meta.copyWith(status: Status.loaded));
   bool isLoaded() => meta.status == Status.loaded;
 
-  setError([String message = '']) =>
-      copyWith.meta(status: Status.error, message: message);
+  Response<T> setError([String message = '']) => copyWith(
+    meta: meta.copyWith(status: Status.error, message: message),
+  );
   bool isError() => meta.status == Status.error;
 
-  setFetchAll(bool value) => copyWith.meta(fetchedAll: value);
+  Response<T> setFetchAll(bool value) => copyWith(meta: meta.copyWith(fetchedAll: value));
   bool isFetchAll() => meta.fetchedAll;
 
-  setEmpty() {
-    return copyWith.meta(status: Status.empty);
-  }
+  Response<T> setEmpty() => copyWith(meta: meta.copyWith(status: Status.empty));
   bool isEmpty() => meta.status == Status.empty;
 
-  setCancelled() => copyWith.meta(status: Status.cancelled);
+  Response<T> setCancelled() => copyWith(meta: meta.copyWith(status: Status.cancelled));
   bool isCancelled() => meta.status == Status.cancelled;
 
   bool isLast() => meta.isLast();

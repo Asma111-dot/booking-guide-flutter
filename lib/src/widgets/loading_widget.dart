@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+
+import '../utils/assets.dart';
 
 class LoadingWidget extends StatelessWidget {
-  const LoadingWidget({Key? key}) : super(key: key);
+  final double? height;
+  final double? size;
+
+  const LoadingWidget({super.key, this.height, this.size});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        width: 60,
-        height: 60,
-        padding: const EdgeInsets.all(12.0),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.9),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: const CircularProgressIndicator(
-          strokeWidth: 3.0,
-        ),
+    return SizedBox(
+      height: height,
+      width: size,
+      child: Center(
+        child: Lottie.asset(loadingJson, width: size ?? 100, height: size ?? 100),
       ),
     );
   }

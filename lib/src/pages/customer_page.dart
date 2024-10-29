@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helpers/general_helper.dart';
 import '../models/company.dart';
 import '../models/customer.dart' as m;
+import '../providers/companies/companies_provider.dart';
 import '../providers/customer/customer_provider.dart';
 import '../widgets/back_button.dart';
 import '../widgets/view_widget.dart';
