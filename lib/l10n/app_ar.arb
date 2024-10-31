@@ -29,5 +29,48 @@
   "on": "تشغيل",
   "usingSystemSettings": "استخدام إعدادات النظام",
   "lightMode": "وضع النهار",
-  "darkMode": "وضع الليل"
+  "darkMode": "وضع الليل",
+  "unauthorizedMessage": "ليس لديك إذن لعرض هذا المحتوى.",
+
+  "forgotPassword": "نسيت كلمة المرور؟",
+  "resetPassword": "إعادة تعيين كلمة المرور",
+  "pleaseEnterYourEmail": "يرجى إدخال بريدك الإلكتروني.",
+  "passwordResetLinkSent": "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.",
+  "accountCreatedSuccessfully": "تم إنشاء الحساب بنجاح.",
+  "pleaseCheckYourEmailForVerification": "يرجى التحقق من بريدك الإلكتروني لتأكيد الحساب.",
+  "userNotFound": "لم يتم العثور على مستخدم بهذا البريد الإلكتروني.",
+  "loading": "جاري التحميل...",
+  "save": "حفظ",
+  "cancel": "إلغاء",
+  "settings": "الإعدادات",
+  "language": "اللغة",
+  "selectLanguage": "اختر اللغة",
+  "profile": "الملف الشخصي",
+  "editProfile": "تعديل الملف الشخصي",
+  "updateProfile": "تحديث الملف الشخصي",
+  "logout": "تسجيل الخروج",
+  "areYouSureYouWantToLogout": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+  "yes": "نعم",
+  "no": "لا",
+  "success": "نجاح",
+  "error": "خطأ",
+
+  "loginSuccessful": "تم تسجيل الدخول بنجاح.",
+  "loginFailed": "فشل تسجيل الدخول. يرجى التحقق من بيانات الاعتماد الخاصة بك.",
+  "pleaseEnterYourPassword": "يرجى إدخال كلمة المرور.",
+  "pleaseAcceptTheTerms": "يرجى قبول الشروط والأحكام.",
+  "invalidCredentials": "بيانات الاعتماد غير صالحة.",
+  "profileUpdatedSuccessfully": "تم تحديث الملف الشخصي بنجاح.",
+  "profileUpdateFailed": "فشل تحديث الملف الشخصي. يرجى المحاولة مرة أخرى.",
+
+  "termsAndConditions": "الشروط والأحكام",
+  "agreeToTerms": "أوافق على الشروط والأحكام",
+  "submit": "إرسال",
+  "button": "زر",
+  "accept": "قبول",
+  "reject": "رفض",
+
+  "terms": "يرجى قراءة الشروط والأحكام بعناية قبل استخدام التطبيق. باستخدامك لهذا التطبيق، فإنك توافق على الالتزام بهذه الشروط."
+
+
 }

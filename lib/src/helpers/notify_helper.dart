@@ -24,11 +24,11 @@ void showNotify({
     closeIcon: Icon(_getIcon(alert),
       color: _getColor(alert),
     ),
-    backgroundColor: Theme.of(navKey.currentContext!).colorScheme.tertiary,
+    backgroundColor: Theme.of(navKey.currentContext!).colorScheme.primary,
     titleStyle: TextStyle(
-      color: Theme.of(navKey.currentContext!).colorScheme.onTertiary,
+      color: Theme.of(navKey.currentContext!).colorScheme.primaryFixed,
     ),
-    duration: const Duration(seconds: 3),
+    duration: const Duration(seconds: 5),
   );
 }
 

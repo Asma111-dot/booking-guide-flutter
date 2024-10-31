@@ -32,7 +32,7 @@ class CustomTheme {
   Color progressColor() => isDark ? Colors.blueAccent : Color(0xff4A90E2);
 
   scaffoldColor() => isDark ? Color(0xff383838) : Color(0xffF0F0F0);
-  lightBackgroundColor() => isDark ? Color(0xff383838) : Color(0xffFFFFFF);
+  lightBackgroundColor() => isDark ? Color(0xff) : Color(0xff4A90E2);
   appBarColor() => isDark ? Colors.grey[900] : Color(0xff4A90E2);
   borderColor() => isDark ? Colors.grey[600] : Color(0xffE0E0E0);
   darkBackgroundColor() => isDark ? null : Colors.white;

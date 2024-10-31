@@ -39,6 +39,7 @@ class MyApp extends ConsumerWidget {
     final settings = ref.watch(settingsProvider);
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       navigatorKey: navKey,
       builder: BotToastInit(),
       navigatorObservers: [BotToastNavigatorObserver()],

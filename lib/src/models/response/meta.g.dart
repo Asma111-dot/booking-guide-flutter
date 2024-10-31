@@ -9,6 +9,7 @@ part of 'meta.dart';
 _$MetaImpl _$$MetaImplFromJson(Map<String, dynamic> json) => _$MetaImpl(
       fetchedAll: json['fetchedAll'] as bool? ?? false,
       id: (json['id'] as num?)?.toInt(),
+      accessToken: json['access_token'] as String?,
       showDialog: json['show_dialog'] as bool? ?? false,
       message: json['message'] as String? ?? '',
       type: json['type'] as String?,
@@ -28,6 +29,7 @@ Map<String, dynamic> _$$MetaImplToJson(_$MetaImpl instance) =>
     <String, dynamic>{
       'fetchedAll': instance.fetchedAll,
       'id': instance.id,
+      'access_token': instance.accessToken,
       'show_dialog': instance.showDialog,
       'message': instance.message,
       'type': instance.type,

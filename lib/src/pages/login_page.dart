@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helpers/general_helper.dart';
 import '../providers/auth/login_provider.dart';
 import '../utils/assets.dart';
-//import '../utils/routes.dart';
+import '../utils/routes.dart';
 import '../utils/validators.dart';
 import '../widgets/back_button.dart';
 import '../widgets/primary_button_widget.dart';
@@ -53,7 +53,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 16.0),
                   child: TextFormField(
-                    initialValue: kDebugMode ? 'elias@gmail.com' : null,
+                    initialValue: kDebugMode ? 'asma@gmail.com' : null,
                     readOnly: login.isLoading(),
                     decoration: InputDecoration(
                       labelText: trans().email,
@@ -66,7 +66,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 ),
 
                 TextFormField(
-                  initialValue: kDebugMode ? '12345678' : null,
+                  initialValue: kDebugMode ? 'asma1110' : null,
                   readOnly: login.isLoading(),
                   obscureText: hidePassword,
                   decoration: InputDecoration(

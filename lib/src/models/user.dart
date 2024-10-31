@@ -10,13 +10,10 @@ class User {
 
   int id;
   String name;
-  String nameEn;
   String email;
-  String mobile;
-  String? profilePhotoPath;
+  String phone;
+  String? avatar;
   String? password;
-  List<Company> companies;
-  String? token;
 
   // Used locally
   File? uploadImage;
@@ -24,41 +21,32 @@ class User {
   User.init() :
         id = 0,
         name = '',
-        nameEn = '',
-        mobile = '',
-        email = '',
-        companies = [];
+        phone = '',
+        email = '';
 
   User({
     required this.id,
     required this.name,
-    required this.nameEn,
-    required this.mobile,
+    required this.phone,
     required this.email,
-    this.profilePhotoPath,
+    this.avatar,
     this.password,
-    this.companies = const [],
   }); //  String role;
 
   User.fromJson(Map<String, dynamic> jsonMap) :
         id = jsonMap['id'],
         name = jsonMap['name'] ?? '',
-        nameEn = jsonMap['name_en'] ?? '',
-        mobile = jsonMap['mobile'] ?? '',
+        phone = jsonMap['phone'] ?? '',
         email = jsonMap['email'] ?? '',
-        profilePhotoPath = jsonMap['profile_photo_path'],
-        token = jsonMap['token'],
-        companies = jsonMap['companies'] == null
-            ? []
-            : Company.fromJsonList(jsonMap['companies']);
+        avatar = jsonMap['avatar'];
+
 
   Future<Map> toJson([String? verificationCode]) async {
     var map =  <String, dynamic>{};
     map["id"] = id;
     map["email"] = email;
     map["name"] = name;
-    map["name_en"] = nameEn;
-    map["phone"] = mobile;
+    map["phone"] = phone;
     if(verificationCode != null) {
       map["sms_verification_code"] = verificationCode;
     }
@@ -78,7 +66,7 @@ class User {
   bool isLoggedIn() => storage.isLoggedIn();
 
   Future<FormData> toImageJson() async => FormData.fromMap({
-    "profile_photo_path": uploadImage == null ? null : await MultipartFile.fromFile(uploadImage!.path),
+    "avatar": uploadImage == null ? null : await MultipartFile.fromFile(uploadImage!.path),
   });
 
   @override

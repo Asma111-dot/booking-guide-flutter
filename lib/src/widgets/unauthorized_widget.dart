@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 import '../utils/assets.dart';
+import '../helpers/general_helper.dart';
 
 class UnauthorizedWidget extends StatelessWidget {
   final String message;
@@ -9,12 +10,14 @@ class UnauthorizedWidget extends StatelessWidget {
 
   const UnauthorizedWidget({
     Key? key,
-    this.message = 'You are not authorized to view this content.',
+    this.message = '',
     this.height,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final unauthorizedMessage = message.isEmpty ? trans().unauthorizedMessage : message;
+
     return Container(
       height: height ?? 200,
       padding: const EdgeInsets.all(16.0),
@@ -29,7 +32,7 @@ class UnauthorizedWidget extends StatelessWidget {
           ),
           const SizedBox(height: 16.0),
           Text(
-            message,
+            unauthorizedMessage,
             style: const TextStyle(
               color: Colors.red,
               fontSize: 16,
@@ -42,7 +45,7 @@ class UnauthorizedWidget extends StatelessWidget {
             onPressed: () {
               Navigator.pushNamed(context, '/login');
             },
-            child: const Text('Login'),
+            child: Text(trans().login),
           ),
         ],
       ),

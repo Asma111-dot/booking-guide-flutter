@@ -24,6 +24,8 @@ mixin _$Meta {
   Status get status => throw _privateConstructorUsedError;
   bool get fetchedAll => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'access_token')
+  String? get accessToken => throw _privateConstructorUsedError;
   @JsonKey(name: 'show_dialog')
   bool get showDialog => throw _privateConstructorUsedError;
   @JsonKey(name: 'message')
@@ -69,6 +71,7 @@ abstract class $MetaCopyWith<$Res> {
       {@JsonKey(includeFromJson: false, includeToJson: false) Status status,
       bool fetchedAll,
       int? id,
+      @JsonKey(name: 'access_token') String? accessToken,
       @JsonKey(name: 'show_dialog') bool showDialog,
       @JsonKey(name: 'message') String message,
       @JsonKey(name: 'type') String? type,
@@ -102,6 +105,7 @@ class _$MetaCopyWithImpl<$Res, $Val extends Meta>
     Object? status = null,
     Object? fetchedAll = null,
     Object? id = freezed,
+    Object? accessToken = freezed,
     Object? showDialog = null,
     Object? message = null,
     Object? type = freezed,
@@ -129,6 +133,10 @@ class _$MetaCopyWithImpl<$Res, $Val extends Meta>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      accessToken: freezed == accessToken
+          ? _value.accessToken
+          : accessToken // ignore: cast_nullable_to_non_nullable
+              as String?,
       showDialog: null == showDialog
           ? _value.showDialog
           : showDialog // ignore: cast_nullable_to_non_nullable
@@ -196,6 +204,7 @@ abstract class _$$MetaImplCopyWith<$Res> implements $MetaCopyWith<$Res> {
       {@JsonKey(includeFromJson: false, includeToJson: false) Status status,
       bool fetchedAll,
       int? id,
+      @JsonKey(name: 'access_token') String? accessToken,
       @JsonKey(name: 'show_dialog') bool showDialog,
       @JsonKey(name: 'message') String message,
       @JsonKey(name: 'type') String? type,
@@ -226,6 +235,7 @@ class __$$MetaImplCopyWithImpl<$Res>
     Object? status = null,
     Object? fetchedAll = null,
     Object? id = freezed,
+    Object? accessToken = freezed,
     Object? showDialog = null,
     Object? message = null,
     Object? type = freezed,
@@ -253,6 +263,10 @@ class __$$MetaImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      accessToken: freezed == accessToken
+          ? _value.accessToken
+          : accessToken // ignore: cast_nullable_to_non_nullable
+              as String?,
       showDialog: null == showDialog
           ? _value.showDialog
           : showDialog // ignore: cast_nullable_to_non_nullable
@@ -317,6 +331,7 @@ class _$MetaImpl extends _Meta with DiagnosticableTreeMixin {
       this.status = Status.initial,
       this.fetchedAll = false,
       this.id,
+      @JsonKey(name: 'access_token') this.accessToken,
       @JsonKey(name: 'show_dialog') this.showDialog = false,
       @JsonKey(name: 'message') this.message = '',
       @JsonKey(name: 'type') this.type,
@@ -343,6 +358,9 @@ class _$MetaImpl extends _Meta with DiagnosticableTreeMixin {
   final bool fetchedAll;
   @override
   final int? id;
+  @override
+  @JsonKey(name: 'access_token')
+  final String? accessToken;
   @override
   @JsonKey(name: 'show_dialog')
   final bool showDialog;
@@ -385,7 +403,7 @@ class _$MetaImpl extends _Meta with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Meta(status: $status, fetchedAll: $fetchedAll, id: $id, showDialog: $showDialog, message: $message, type: $type, route: $route, forgetRoute: $forgetRoute, verify: $verify, currentPage: $currentPage, nextPage: $nextPage, nextCursor: $nextCursor, nextPageUrl: $nextPageUrl, perPage: $perPage, to: $to, total: $total)';
+    return 'Meta(status: $status, fetchedAll: $fetchedAll, id: $id, accessToken: $accessToken, showDialog: $showDialog, message: $message, type: $type, route: $route, forgetRoute: $forgetRoute, verify: $verify, currentPage: $currentPage, nextPage: $nextPage, nextCursor: $nextCursor, nextPageUrl: $nextPageUrl, perPage: $perPage, to: $to, total: $total)';
   }
 
   @override
@@ -396,6 +414,7 @@ class _$MetaImpl extends _Meta with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('status', status))
       ..add(DiagnosticsProperty('fetchedAll', fetchedAll))
       ..add(DiagnosticsProperty('id', id))
+      ..add(DiagnosticsProperty('accessToken', accessToken))
       ..add(DiagnosticsProperty('showDialog', showDialog))
       ..add(DiagnosticsProperty('message', message))
       ..add(DiagnosticsProperty('type', type))
@@ -420,6 +439,8 @@ class _$MetaImpl extends _Meta with DiagnosticableTreeMixin {
             (identical(other.fetchedAll, fetchedAll) ||
                 other.fetchedAll == fetchedAll) &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.accessToken, accessToken) ||
+                other.accessToken == accessToken) &&
             (identical(other.showDialog, showDialog) ||
                 other.showDialog == showDialog) &&
             (identical(other.message, message) || other.message == message) &&
@@ -448,6 +469,7 @@ class _$MetaImpl extends _Meta with DiagnosticableTreeMixin {
       status,
       fetchedAll,
       id,
+      accessToken,
       showDialog,
       message,
       type,
@@ -484,6 +506,7 @@ abstract class _Meta extends Meta {
       final Status status,
       final bool fetchedAll,
       final int? id,
+      @JsonKey(name: 'access_token') final String? accessToken,
       @JsonKey(name: 'show_dialog') final bool showDialog,
       @JsonKey(name: 'message') final String message,
       @JsonKey(name: 'type') final String? type,
@@ -508,6 +531,9 @@ abstract class _Meta extends Meta {
   bool get fetchedAll;
   @override
   int? get id;
+  @override
+  @JsonKey(name: 'access_token')
+  String? get accessToken;
   @override
   @JsonKey(name: 'show_dialog')
   bool get showDialog;
