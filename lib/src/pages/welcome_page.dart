@@ -38,8 +38,7 @@ class WelcomePage extends ConsumerWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              'مرحباً بك في دليل الحجوزات',
-              // "${trans().welcome} ${trans().to} ${trans().appTitle}",
+               "${trans().welcome} ${trans().to} ${trans().appTitle}",
               style: const TextStyle(
                 fontSize: 24,
                 color: Colors.white,
@@ -48,8 +47,7 @@ class WelcomePage extends ConsumerWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              'وجهتك النهائية للحجوزات',
-              // trans().ultimateDestination,
+               trans().ultimateDestination,
               style: const TextStyle(
                 fontSize: 16,
                 color: Colors.white70,
