@@ -53,7 +53,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 16.0),
                   child: TextFormField(
-                    initialValue: kDebugMode ? 'asma@gmail.com' : null,
+                    initialValue: kDebugMode ? 'asma@booking.com' : null,
                     readOnly: login.isLoading(),
                     decoration: InputDecoration(
                       labelText: trans().email,
@@ -66,7 +66,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 ),
 
                 TextFormField(
-                  initialValue: kDebugMode ? 'asma1110' : null,
+                  initialValue: kDebugMode ? 'asmaa123' : null,
                   readOnly: login.isLoading(),
                   obscureText: hidePassword,
                   decoration: InputDecoration(

@@ -38,18 +38,23 @@ class MyApp extends ConsumerWidget {
     globalRef = ref;
     final settings = ref.watch(settingsProvider);
 
+    final customTheme = CustomTheme(isDark: settings.displayMode.isDark());
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorKey: navKey,
       builder: BotToastInit(),
       navigatorObservers: [BotToastNavigatorObserver()],
-      initialRoute: Routes.login,
+      initialRoute: Routes.welcome,
       onGenerateRoute: Routes.generate,
       title: appName(settings.languageCode),
       locale: Locale(settings.languageCode),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      theme: CustomTheme(isDark: settings.displayMode.isDark()).fromSeed(),
+
+      theme: customTheme.fromSeed(),
+      darkTheme: CustomTheme(isDark: true).fromSeed(),
+      themeMode: settings.displayMode.isDark() ? ThemeMode.dark : ThemeMode.light,
     );
   }
 }

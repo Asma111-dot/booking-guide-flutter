@@ -1,6 +1,8 @@
 {
   "appTitle": "دليل الحجوزات",
-  "welcomeMessage": "مرحبًا بك في تطبيقنا الرائع!",
+  "welcome": "مرحباً",
+  "to": "في",
+  "ultimateDestination": "وجهتك النهائية للحجوزات",
   "checkYourInternetConnectionOrTryAgain": "تحقق من اتصال الإنترنت أو حاول مرة أخرى.",
   "thisFieldIsRequired": "هذا الحقل مطلوب.",
   "nameFieldIsRequired": "حقل الاسم مطلوب.",

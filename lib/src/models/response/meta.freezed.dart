@@ -24,22 +24,20 @@ mixin _$Meta {
   Status get status => throw _privateConstructorUsedError;
   bool get fetchedAll => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
-  @JsonKey(name: 'access_token')
-  String? get accessToken => throw _privateConstructorUsedError;
   @JsonKey(name: 'show_dialog')
   bool get showDialog => throw _privateConstructorUsedError;
   @JsonKey(name: 'message')
   String get message => throw _privateConstructorUsedError;
   @JsonKey(name: 'type')
   String? get type => throw _privateConstructorUsedError;
-  @JsonKey(name: 'route')
-  String? get route => throw _privateConstructorUsedError;
+  @JsonKey(name: 'access_token')
+  String? get accessToken => throw _privateConstructorUsedError;
+  @JsonKey(name: 'current_page')
+  int? get currentPage => throw _privateConstructorUsedError;
   @JsonKey(name: 'forget_route')
   bool? get forgetRoute => throw _privateConstructorUsedError;
   @JsonKey(name: 'verify')
   bool? get verify => throw _privateConstructorUsedError;
-  @JsonKey(name: 'current_page')
-  int? get currentPage => throw _privateConstructorUsedError;
   @JsonKey(name: 'next_page')
   int? get nextPage => throw _privateConstructorUsedError;
   @JsonKey(name: 'next_cursor')
@@ -48,6 +46,8 @@ mixin _$Meta {
   String? get nextPageUrl => throw _privateConstructorUsedError;
   @JsonKey(name: 'per_page')
   int? get perPage => throw _privateConstructorUsedError;
+  @JsonKey(name: 'route')
+  String? get route => throw _privateConstructorUsedError;
   @JsonKey(name: 'to')
   int? get to => throw _privateConstructorUsedError;
   @JsonKey(name: 'total')
@@ -71,18 +71,18 @@ abstract class $MetaCopyWith<$Res> {
       {@JsonKey(includeFromJson: false, includeToJson: false) Status status,
       bool fetchedAll,
       int? id,
-      @JsonKey(name: 'access_token') String? accessToken,
       @JsonKey(name: 'show_dialog') bool showDialog,
       @JsonKey(name: 'message') String message,
       @JsonKey(name: 'type') String? type,
-      @JsonKey(name: 'route') String? route,
+      @JsonKey(name: 'access_token') String? accessToken,
+      @JsonKey(name: 'current_page') int? currentPage,
       @JsonKey(name: 'forget_route') bool? forgetRoute,
       @JsonKey(name: 'verify') bool? verify,
-      @JsonKey(name: 'current_page') int? currentPage,
       @JsonKey(name: 'next_page') int? nextPage,
       @JsonKey(name: 'next_cursor') String? nextCursor,
       @JsonKey(name: 'next_page_url') String? nextPageUrl,
       @JsonKey(name: 'per_page') int? perPage,
+      @JsonKey(name: 'route') String? route,
       @JsonKey(name: 'to') int? to,
       @JsonKey(name: 'total') int? total});
 }
@@ -105,18 +105,18 @@ class _$MetaCopyWithImpl<$Res, $Val extends Meta>
     Object? status = null,
     Object? fetchedAll = null,
     Object? id = freezed,
-    Object? accessToken = freezed,
     Object? showDialog = null,
     Object? message = null,
     Object? type = freezed,
-    Object? route = freezed,
+    Object? accessToken = freezed,
+    Object? currentPage = freezed,
     Object? forgetRoute = freezed,
     Object? verify = freezed,
-    Object? currentPage = freezed,
     Object? nextPage = freezed,
     Object? nextCursor = freezed,
     Object? nextPageUrl = freezed,
     Object? perPage = freezed,
+    Object? route = freezed,
     Object? to = freezed,
     Object? total = freezed,
   }) {
@@ -133,10 +133,6 @@ class _$MetaCopyWithImpl<$Res, $Val extends Meta>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      accessToken: freezed == accessToken
-          ? _value.accessToken
-          : accessToken // ignore: cast_nullable_to_non_nullable
-              as String?,
       showDialog: null == showDialog
           ? _value.showDialog
           : showDialog // ignore: cast_nullable_to_non_nullable
@@ -149,10 +145,14 @@ class _$MetaCopyWithImpl<$Res, $Val extends Meta>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String?,
-      route: freezed == route
-          ? _value.route
-          : route // ignore: cast_nullable_to_non_nullable
+      accessToken: freezed == accessToken
+          ? _value.accessToken
+          : accessToken // ignore: cast_nullable_to_non_nullable
               as String?,
+      currentPage: freezed == currentPage
+          ? _value.currentPage
+          : currentPage // ignore: cast_nullable_to_non_nullable
+              as int?,
       forgetRoute: freezed == forgetRoute
           ? _value.forgetRoute
           : forgetRoute // ignore: cast_nullable_to_non_nullable
@@ -161,10 +161,6 @@ class _$MetaCopyWithImpl<$Res, $Val extends Meta>
           ? _value.verify
           : verify // ignore: cast_nullable_to_non_nullable
               as bool?,
-      currentPage: freezed == currentPage
-          ? _value.currentPage
-          : currentPage // ignore: cast_nullable_to_non_nullable
-              as int?,
       nextPage: freezed == nextPage
           ? _value.nextPage
           : nextPage // ignore: cast_nullable_to_non_nullable
@@ -181,6 +177,10 @@ class _$MetaCopyWithImpl<$Res, $Val extends Meta>
           ? _value.perPage
           : perPage // ignore: cast_nullable_to_non_nullable
               as int?,
+      route: freezed == route
+          ? _value.route
+          : route // ignore: cast_nullable_to_non_nullable
+              as String?,
       to: freezed == to
           ? _value.to
           : to // ignore: cast_nullable_to_non_nullable
@@ -204,18 +204,18 @@ abstract class _$$MetaImplCopyWith<$Res> implements $MetaCopyWith<$Res> {
       {@JsonKey(includeFromJson: false, includeToJson: false) Status status,
       bool fetchedAll,
       int? id,
-      @JsonKey(name: 'access_token') String? accessToken,
       @JsonKey(name: 'show_dialog') bool showDialog,
       @JsonKey(name: 'message') String message,
       @JsonKey(name: 'type') String? type,
-      @JsonKey(name: 'route') String? route,
+      @JsonKey(name: 'access_token') String? accessToken,
+      @JsonKey(name: 'current_page') int? currentPage,
       @JsonKey(name: 'forget_route') bool? forgetRoute,
       @JsonKey(name: 'verify') bool? verify,
-      @JsonKey(name: 'current_page') int? currentPage,
       @JsonKey(name: 'next_page') int? nextPage,
       @JsonKey(name: 'next_cursor') String? nextCursor,
       @JsonKey(name: 'next_page_url') String? nextPageUrl,
       @JsonKey(name: 'per_page') int? perPage,
+      @JsonKey(name: 'route') String? route,
       @JsonKey(name: 'to') int? to,
       @JsonKey(name: 'total') int? total});
 }
@@ -235,18 +235,18 @@ class __$$MetaImplCopyWithImpl<$Res>
     Object? status = null,
     Object? fetchedAll = null,
     Object? id = freezed,
-    Object? accessToken = freezed,
     Object? showDialog = null,
     Object? message = null,
     Object? type = freezed,
-    Object? route = freezed,
+    Object? accessToken = freezed,
+    Object? currentPage = freezed,
     Object? forgetRoute = freezed,
     Object? verify = freezed,
-    Object? currentPage = freezed,
     Object? nextPage = freezed,
     Object? nextCursor = freezed,
     Object? nextPageUrl = freezed,
     Object? perPage = freezed,
+    Object? route = freezed,
     Object? to = freezed,
     Object? total = freezed,
   }) {
@@ -263,10 +263,6 @@ class __$$MetaImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      accessToken: freezed == accessToken
-          ? _value.accessToken
-          : accessToken // ignore: cast_nullable_to_non_nullable
-              as String?,
       showDialog: null == showDialog
           ? _value.showDialog
           : showDialog // ignore: cast_nullable_to_non_nullable
@@ -279,10 +275,14 @@ class __$$MetaImplCopyWithImpl<$Res>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String?,
-      route: freezed == route
-          ? _value.route
-          : route // ignore: cast_nullable_to_non_nullable
+      accessToken: freezed == accessToken
+          ? _value.accessToken
+          : accessToken // ignore: cast_nullable_to_non_nullable
               as String?,
+      currentPage: freezed == currentPage
+          ? _value.currentPage
+          : currentPage // ignore: cast_nullable_to_non_nullable
+              as int?,
       forgetRoute: freezed == forgetRoute
           ? _value.forgetRoute
           : forgetRoute // ignore: cast_nullable_to_non_nullable
@@ -291,10 +291,6 @@ class __$$MetaImplCopyWithImpl<$Res>
           ? _value.verify
           : verify // ignore: cast_nullable_to_non_nullable
               as bool?,
-      currentPage: freezed == currentPage
-          ? _value.currentPage
-          : currentPage // ignore: cast_nullable_to_non_nullable
-              as int?,
       nextPage: freezed == nextPage
           ? _value.nextPage
           : nextPage // ignore: cast_nullable_to_non_nullable
@@ -311,6 +307,10 @@ class __$$MetaImplCopyWithImpl<$Res>
           ? _value.perPage
           : perPage // ignore: cast_nullable_to_non_nullable
               as int?,
+      route: freezed == route
+          ? _value.route
+          : route // ignore: cast_nullable_to_non_nullable
+              as String?,
       to: freezed == to
           ? _value.to
           : to // ignore: cast_nullable_to_non_nullable
@@ -331,18 +331,18 @@ class _$MetaImpl extends _Meta with DiagnosticableTreeMixin {
       this.status = Status.initial,
       this.fetchedAll = false,
       this.id,
-      @JsonKey(name: 'access_token') this.accessToken,
       @JsonKey(name: 'show_dialog') this.showDialog = false,
       @JsonKey(name: 'message') this.message = '',
       @JsonKey(name: 'type') this.type,
-      @JsonKey(name: 'route') this.route,
+      @JsonKey(name: 'access_token') this.accessToken,
+      @JsonKey(name: 'current_page') this.currentPage,
       @JsonKey(name: 'forget_route') this.forgetRoute,
       @JsonKey(name: 'verify') this.verify,
-      @JsonKey(name: 'current_page') this.currentPage,
       @JsonKey(name: 'next_page') this.nextPage,
       @JsonKey(name: 'next_cursor') this.nextCursor,
       @JsonKey(name: 'next_page_url') this.nextPageUrl,
       @JsonKey(name: 'per_page') this.perPage,
+      @JsonKey(name: 'route') this.route,
       @JsonKey(name: 'to') this.to,
       @JsonKey(name: 'total') this.total})
       : super._();
@@ -359,9 +359,6 @@ class _$MetaImpl extends _Meta with DiagnosticableTreeMixin {
   @override
   final int? id;
   @override
-  @JsonKey(name: 'access_token')
-  final String? accessToken;
-  @override
   @JsonKey(name: 'show_dialog')
   final bool showDialog;
   @override
@@ -371,17 +368,17 @@ class _$MetaImpl extends _Meta with DiagnosticableTreeMixin {
   @JsonKey(name: 'type')
   final String? type;
   @override
-  @JsonKey(name: 'route')
-  final String? route;
+  @JsonKey(name: 'access_token')
+  final String? accessToken;
+  @override
+  @JsonKey(name: 'current_page')
+  final int? currentPage;
   @override
   @JsonKey(name: 'forget_route')
   final bool? forgetRoute;
   @override
   @JsonKey(name: 'verify')
   final bool? verify;
-  @override
-  @JsonKey(name: 'current_page')
-  final int? currentPage;
   @override
   @JsonKey(name: 'next_page')
   final int? nextPage;
@@ -395,6 +392,9 @@ class _$MetaImpl extends _Meta with DiagnosticableTreeMixin {
   @JsonKey(name: 'per_page')
   final int? perPage;
   @override
+  @JsonKey(name: 'route')
+  final String? route;
+  @override
   @JsonKey(name: 'to')
   final int? to;
   @override
@@ -403,7 +403,7 @@ class _$MetaImpl extends _Meta with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Meta(status: $status, fetchedAll: $fetchedAll, id: $id, accessToken: $accessToken, showDialog: $showDialog, message: $message, type: $type, route: $route, forgetRoute: $forgetRoute, verify: $verify, currentPage: $currentPage, nextPage: $nextPage, nextCursor: $nextCursor, nextPageUrl: $nextPageUrl, perPage: $perPage, to: $to, total: $total)';
+    return 'Meta(status: $status, fetchedAll: $fetchedAll, id: $id, showDialog: $showDialog, message: $message, type: $type, accessToken: $accessToken, currentPage: $currentPage, forgetRoute: $forgetRoute, verify: $verify, nextPage: $nextPage, nextCursor: $nextCursor, nextPageUrl: $nextPageUrl, perPage: $perPage, route: $route, to: $to, total: $total)';
   }
 
   @override
@@ -414,18 +414,18 @@ class _$MetaImpl extends _Meta with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('status', status))
       ..add(DiagnosticsProperty('fetchedAll', fetchedAll))
       ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('accessToken', accessToken))
       ..add(DiagnosticsProperty('showDialog', showDialog))
       ..add(DiagnosticsProperty('message', message))
       ..add(DiagnosticsProperty('type', type))
-      ..add(DiagnosticsProperty('route', route))
+      ..add(DiagnosticsProperty('accessToken', accessToken))
+      ..add(DiagnosticsProperty('currentPage', currentPage))
       ..add(DiagnosticsProperty('forgetRoute', forgetRoute))
       ..add(DiagnosticsProperty('verify', verify))
-      ..add(DiagnosticsProperty('currentPage', currentPage))
       ..add(DiagnosticsProperty('nextPage', nextPage))
       ..add(DiagnosticsProperty('nextCursor', nextCursor))
       ..add(DiagnosticsProperty('nextPageUrl', nextPageUrl))
       ..add(DiagnosticsProperty('perPage', perPage))
+      ..add(DiagnosticsProperty('route', route))
       ..add(DiagnosticsProperty('to', to))
       ..add(DiagnosticsProperty('total', total));
   }
@@ -439,18 +439,17 @@ class _$MetaImpl extends _Meta with DiagnosticableTreeMixin {
             (identical(other.fetchedAll, fetchedAll) ||
                 other.fetchedAll == fetchedAll) &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.accessToken, accessToken) ||
-                other.accessToken == accessToken) &&
             (identical(other.showDialog, showDialog) ||
                 other.showDialog == showDialog) &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.type, type) || other.type == type) &&
-            (identical(other.route, route) || other.route == route) &&
+            (identical(other.accessToken, accessToken) ||
+                other.accessToken == accessToken) &&
+            (identical(other.currentPage, currentPage) ||
+                other.currentPage == currentPage) &&
             (identical(other.forgetRoute, forgetRoute) ||
                 other.forgetRoute == forgetRoute) &&
             (identical(other.verify, verify) || other.verify == verify) &&
-            (identical(other.currentPage, currentPage) ||
-                other.currentPage == currentPage) &&
             (identical(other.nextPage, nextPage) ||
                 other.nextPage == nextPage) &&
             (identical(other.nextCursor, nextCursor) ||
@@ -458,6 +457,7 @@ class _$MetaImpl extends _Meta with DiagnosticableTreeMixin {
             (identical(other.nextPageUrl, nextPageUrl) ||
                 other.nextPageUrl == nextPageUrl) &&
             (identical(other.perPage, perPage) || other.perPage == perPage) &&
+            (identical(other.route, route) || other.route == route) &&
             (identical(other.to, to) || other.to == to) &&
             (identical(other.total, total) || other.total == total));
   }
@@ -469,18 +469,18 @@ class _$MetaImpl extends _Meta with DiagnosticableTreeMixin {
       status,
       fetchedAll,
       id,
-      accessToken,
       showDialog,
       message,
       type,
-      route,
+      accessToken,
+      currentPage,
       forgetRoute,
       verify,
-      currentPage,
       nextPage,
       nextCursor,
       nextPageUrl,
       perPage,
+      route,
       to,
       total);
 
@@ -506,18 +506,18 @@ abstract class _Meta extends Meta {
       final Status status,
       final bool fetchedAll,
       final int? id,
-      @JsonKey(name: 'access_token') final String? accessToken,
       @JsonKey(name: 'show_dialog') final bool showDialog,
       @JsonKey(name: 'message') final String message,
       @JsonKey(name: 'type') final String? type,
-      @JsonKey(name: 'route') final String? route,
+      @JsonKey(name: 'access_token') final String? accessToken,
+      @JsonKey(name: 'current_page') final int? currentPage,
       @JsonKey(name: 'forget_route') final bool? forgetRoute,
       @JsonKey(name: 'verify') final bool? verify,
-      @JsonKey(name: 'current_page') final int? currentPage,
       @JsonKey(name: 'next_page') final int? nextPage,
       @JsonKey(name: 'next_cursor') final String? nextCursor,
       @JsonKey(name: 'next_page_url') final String? nextPageUrl,
       @JsonKey(name: 'per_page') final int? perPage,
+      @JsonKey(name: 'route') final String? route,
       @JsonKey(name: 'to') final int? to,
       @JsonKey(name: 'total') final int? total}) = _$MetaImpl;
   const _Meta._() : super._();
@@ -532,9 +532,6 @@ abstract class _Meta extends Meta {
   @override
   int? get id;
   @override
-  @JsonKey(name: 'access_token')
-  String? get accessToken;
-  @override
   @JsonKey(name: 'show_dialog')
   bool get showDialog;
   @override
@@ -544,17 +541,17 @@ abstract class _Meta extends Meta {
   @JsonKey(name: 'type')
   String? get type;
   @override
-  @JsonKey(name: 'route')
-  String? get route;
+  @JsonKey(name: 'access_token')
+  String? get accessToken;
+  @override
+  @JsonKey(name: 'current_page')
+  int? get currentPage;
   @override
   @JsonKey(name: 'forget_route')
   bool? get forgetRoute;
   @override
   @JsonKey(name: 'verify')
   bool? get verify;
-  @override
-  @JsonKey(name: 'current_page')
-  int? get currentPage;
   @override
   @JsonKey(name: 'next_page')
   int? get nextPage;
@@ -567,6 +564,9 @@ abstract class _Meta extends Meta {
   @override
   @JsonKey(name: 'per_page')
   int? get perPage;
+  @override
+  @JsonKey(name: 'route')
+  String? get route;
   @override
   @JsonKey(name: 'to')
   int? get to;

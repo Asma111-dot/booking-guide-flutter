@@ -30,6 +30,7 @@ class User extends _$User {
     await request<model.User>(
       url: getUserUrl(currentUser()!.id),
       method: Method.get,
+      //key: 'user'
     ).then((value) async {
       if(value.isLoaded()) {
         state = state.copyWith(data: value.data);

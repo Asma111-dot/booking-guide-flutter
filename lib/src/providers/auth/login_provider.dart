@@ -32,6 +32,9 @@ class Login extends _$Login {
   Future onSuccessLogin(Response<model.User> value) async {
     setToken(value.meta.accessToken ?? "");
     ref.read(userProvider.notifier).saveUserLocally(value.data!);
-    navKey.currentState!.pushNamedAndRemoveUntil(Routes.customers, (r) => true);
+    //navKey.currentState!.pushNamedAndRemoveUntil(Routes.customers, (r) => false);
+    navKey.currentState?.pushNamedAndRemoveUntil(Routes.facilityTypes, (r) => false);
+
   }
 }
+

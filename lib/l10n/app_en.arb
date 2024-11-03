@@ -1,6 +1,8 @@
 {
   "appTitle": "Booking Guide",
-  "welcomeMessage": "Welcome to our amazing app!",
+  "welcome": "Welcome",
+  "to": "to",
+  "ultimateDestination": "Your ultimate destination for reservations",
   "checkYourInternetConnectionOrTryAgain": "Please check your internet connection or try again.",
   "thisFieldIsRequired": "This field is required.",
   "nameFieldIsRequired": "Name field is required.",
