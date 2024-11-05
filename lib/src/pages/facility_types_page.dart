@@ -1,115 +1,133 @@
-import 'package:booking_guide/src/helpers/general_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../helpers/general_helper.dart';
+import '../models/facility_type.dart';
+import '../providers/facility_type/facility_type_provider.dart';
 import '../utils/assets.dart';
 import '../utils/theme.dart';
-import 'hotels_page.dart';
-import 'chalets_page.dart';
+import '../widgets/view_widget.dart';
+import '../utils/routes.dart';
 
-final themeModeProvider = Provider<ThemeMode>((ref) {
-  return ThemeMode.light;
-
-});
-
-final themeProvider = Provider<CustomTheme>((ref) {
-  final isDarkMode = ref.watch(themeModeProvider) == ThemeMode.dark;
-  return CustomTheme(isDark: isDarkMode);
-});
-
-class FacilityTypesPage extends ConsumerWidget {
-  const FacilityTypesPage({Key? key}) : super(key: key);
+class FacilityTypesPage extends ConsumerStatefulWidget {
+  FacilityTypesPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = ref.watch(themeProvider);
+  ConsumerState createState() => _FacilityTypesPageState();
+}
+
+class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.read(facilityTypesProvider.notifier).fetch();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final facilityTypesState = ref.watch(facilityTypesProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
           trans().welcomeToBooking,
-          style: TextStyle(
-            color: CustomTheme.placeholderColor,
-          ),
+          style: TextStyle(color: CustomTheme.placeholderColor),
         ),
-        backgroundColor: theme.appBarColor(),
+        backgroundColor: CustomTheme.primaryColor,
         elevation: 0,
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          SizedBox(height: 20),
-          Image.asset(
-            logoCoverImage,
-            height: 80,
-          ),
-          SizedBox(height: 20),
-          Text(
-            trans().chooseOne,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: CustomTheme.primaryColor,
-            ),
-          ),
-          SizedBox(height: 20),
-          Expanded(
-            child: GridView(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 20,
-                crossAxisSpacing: 20,
-                childAspectRatio: 3 / 4,
-              ),
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HotelsPage()),
-                    );
-                  },
-                  child: buildFacilityTypeCard(
-                    context,
-                    image: hotelImage,
-                    title: trans().hotel,
-                    theme: theme,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ChaletsPage()),
-                    );
-                  },
-                  child: buildFacilityTypeCard(
-                    context,
-                    image: chaletImage,
-                    title: trans().chalet,
-                    theme: theme,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 10),
-        ],
+      body: ViewWidget<List<FacilityType>>(
+        meta: facilityTypesState.meta,
+        data: facilityTypesState.data,
+        onLoaded: (data) {
+          return buildFacilityTypesGrid(data, context);
+        },
+        onLoading: () => Center(child: CircularProgressIndicator()),
+        onEmpty: () =>
+            const Center(child: Text('No facility types available.')),
+        requireLogin: false,
+        showError: true,
+        showEmpty: true,
       ),
     );
   }
 
-  Widget buildFacilityTypeCard(BuildContext context, {required String image, required String title, required CustomTheme theme}) {
+  Widget buildFacilityTypesGrid(List<FacilityType> data, BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(height: 20),
+        Image.asset(
+          logoCoverImage,
+          width: 150,
+          height: 150,
+        ),
+        const SizedBox(height: 20),
+        Text(
+          trans().chooseOne,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+            color: CustomTheme.primaryColor,
+          ),
+        ),
+        SizedBox(height: 20),
+        Expanded(
+          child: GridView.builder(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 20,
+              crossAxisSpacing: 20,
+              childAspectRatio: 3 / 4,
+            ),
+            itemCount: data.reversed.length,
+            itemBuilder: (context, index) {
+              final facilityType = data.reversed.toList()[index];
+              final image =
+                  facilityType.name == 'hotel' ? hotelImage : chaletImage;
+
+              return GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    facilityType.name == 'hotel'
+                        ? Routes.hotels
+                        : Routes.chalets,
+                  );
+                },
+                child: buildFacilityTypeCard(
+                  context,
+                  image: image,
+                  title: facilityType.name == 'hotel'
+                      ? trans().hotel
+                      : trans().chalet,
+                ),
+              );
+            },
+          ),
+        ),
+        SizedBox(height: 20),
+      ],
+    );
+  }
+
+  Widget buildFacilityTypeCard(BuildContext context,
+      {required String image, required String title}) {
     return Container(
       decoration: BoxDecoration(
-        color: theme.lightBackgroundColor(),
-        border: Border.all(color: theme.borderColor(), width: CustomTheme.borderWidth),
+        color: CustomTheme.primaryColor,
+        border: Border.all(
+            color: CustomTheme.tertiaryColor, width: CustomTheme.borderWidth),
         borderRadius: BorderRadius.circular(CustomTheme.radius),
       ),
       child: Column(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(CustomTheme.radius)),
+            borderRadius:
+                BorderRadius.vertical(top: Radius.circular(CustomTheme.radius)),
             child: Image.asset(
               image,
               height: 120,

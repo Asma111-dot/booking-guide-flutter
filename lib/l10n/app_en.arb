@@ -76,7 +76,9 @@
   "accept": "Accept",
   "reject": "Reject",
 
-  "terms": "Please read the terms and conditions carefully before using the application. By using this application, you agree to abide by these terms."
+  "terms": "Please read the terms and conditions carefully before using the application. By using this application, you agree to abide by these terms.",
 
+  "noFacilityTypesAvailable": "No facility types available",
+  "errorOccurred": "An error occurred, please try again"
 
 }

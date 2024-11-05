@@ -27,3 +27,13 @@ String updateCustomerUrl(String subDomain, int customerId) =>
 String getCustomersUrl(String subDomain) =>
     "${apiPanelUrl(subDomain)}customers";
 
+String getFacilityTypeUrl(int facilityTypeId) =>
+    "${apiUrl}facility-types/$facilityTypeId";
+String addFacilityTypeUrl() =>
+    "${apiUrl}facility-types";
+String updateFacilityTypeUrl(int facilityTypeId) =>
+    "${apiUrl}facility-types/$facilityTypeId";
+String deleteFacilityTypeUrl(int facilityTypeId) =>
+    "${apiUrl}facility-types/$facilityTypeId";
+String getFacilityTypesUrl() =>
+    "${apiUrl}facility-types";

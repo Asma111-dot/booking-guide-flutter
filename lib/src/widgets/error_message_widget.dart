@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
-
-import '../utils/assets.dart';
+import '../utils/assets.dart'; // تأكد من أن هذا الملف يحتوي على المسار الصحيح للأيقونات إذا كنت تستخدم أيقونات مخصصة.
 
 class ErrorMessageWidget extends StatelessWidget {
   final String message;
@@ -10,7 +8,7 @@ class ErrorMessageWidget extends StatelessWidget {
   final double? height;
   final Widget? headerWidget;
   final VoidCallback? onTap;
-  final String? lottieAnimation;
+  final IconData? errorIcon; // أضف هذه السمة الجديدة
 
   const ErrorMessageWidget({
     Key? key,
@@ -20,7 +18,7 @@ class ErrorMessageWidget extends StatelessWidget {
     this.height,
     this.headerWidget,
     this.onTap,
-    this.lottieAnimation,
+    this.errorIcon, // قم بتمرير الأيقونة هنا
   }) : super(key: key);
 
   @override
@@ -33,11 +31,10 @@ class ErrorMessageWidget extends StatelessWidget {
         children: [
           if (headerWidget != null) headerWidget!,
           if (!textOnly)
-            Lottie.asset(
-              lottieAnimation ?? (isEmpty ? emptyJson : errorJson),
-              width: 120,
-              height: 120,
-              repeat: false,
+            Icon(
+              errorIcon ?? Icons.error, // استخدم الأيقونة المحددة أو الأيقونة الافتراضية
+              size: 120,
+              color: isEmpty ? Colors.grey : Colors.red,
             ),
           const SizedBox(height: 16.0),
           Text(
