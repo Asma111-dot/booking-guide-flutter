@@ -45,8 +45,8 @@ class FacilityTypes extends _$FacilityTypes {
     state = state.setLoading();
     await request<FacilityType>(
       url: facilityType.isCreate()
-          ? addCustomerUrl(facilityType.id.toString())
-          : updateCustomerUrl(facilityType.id.toString(), facilityType.id),
+          ? addFacilityTypeUrl()
+          : updateFacilityTypeUrl(facilityType.id),
       method: facilityType.isCreate() ? Method.post : Method.put,
       body: facilityType.toJson(),
     ).then((value) async {
