@@ -55,8 +55,12 @@ class _ChaletsPageState extends ConsumerState<ChaletsPage> {
           );
         },
         onLoading: () => Center(child: CircularProgressIndicator()),
-        onEmpty: () =>
-            const Center(child: Text('لا توجد شاليهات متاحة حالياً.')),
+        onEmpty: () => const Center(
+            child: Text(
+          // trans().noChalet,
+          "",
+          style: TextStyle(color: CustomTheme.placeholderColor),
+        )),
         showError: true,
         showEmpty: true,
       ),
@@ -124,10 +128,13 @@ class _ChaletsPageState extends ConsumerState<ChaletsPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ChaletDetailsPage(facility: facility),
+              builder: (context) => ChaletDetailsPage(
+                facilityId: facility.id,  // Pass the facilityId here
+              ),
             ),
           );
         },
+
       ),
     );
   }

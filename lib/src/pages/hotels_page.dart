@@ -31,7 +31,7 @@ class _HotelsPageState extends ConsumerState<HotelsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: BackButtonWidget(),  // Add the back button widget here
+        leading: BackButtonWidget(), // Add the back button widget here
         title: Text(
           trans().hotel,
           style: TextStyle(color: CustomTheme.placeholderColor),
@@ -53,7 +53,12 @@ class _HotelsPageState extends ConsumerState<HotelsPage> {
           );
         },
         onLoading: () => Center(child: CircularProgressIndicator()),
-        onEmpty: () => const Center(child: Text('لا توجد فنادق متاحة حالياً.')),
+        onEmpty: () => const Center(
+            child: Text(
+         // trans().noHotel,
+              "",
+          style: TextStyle(color: CustomTheme.placeholderColor),
+        )),
         showError: true,
         showEmpty: true,
       ),
@@ -115,7 +120,8 @@ class _HotelsPageState extends ConsumerState<HotelsPage> {
             ),
           ],
         ),
-        trailing: Icon(Icons.arrow_forward_ios, color: CustomTheme.primaryColor),
+        trailing:
+            Icon(Icons.arrow_forward_ios, color: CustomTheme.primaryColor),
         onTap: () {
           Navigator.push(
             context,

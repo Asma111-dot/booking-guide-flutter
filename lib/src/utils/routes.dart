@@ -1,8 +1,10 @@
+import 'package:booking_guide/src/models/room.dart';
 import 'package:booking_guide/src/pages/chalets_page.dart';
 import 'package:booking_guide/src/pages/hotels_page.dart';
 import 'package:flutter/material.dart';
 
 import '../models/customer.dart';
+import '../pages/chalet_details_page.dart';
 import '../pages/customer_page.dart';
 import '../pages/customers_page.dart';
 import '../pages/facility_types_page.dart';
@@ -20,6 +22,7 @@ class Routes {
   static const String customer = '/customer';
   static const String facilityTypes = '/facility_types';
   static const String chalets = '/chalets';
+  static const String chaletDetails = '/chalet_details';
   static const String hotels = '/hotels';
 
   static Route? generate(RouteSettings settings) {
@@ -55,7 +58,17 @@ class Routes {
           builder: (_) => ChaletsPage(),
           settings: settings,
         );
-      case hotels:
+      // case chaletDetails:
+      //   // if (args is Map<String, dynamic> &&
+      //   //     args.containsKey('facilityId') &&
+      //   //     args.containsKey('roomId')) {
+      //   //   final facilityId = args['facilityId'] as int;
+      //   //   final roomId = args['roomId'] as int;
+      //     return MaterialPageRoute(
+      //       builder: (_) => ChaletDetailsPage(room: args as Room),
+      //       settings: settings,
+      //     );
+        case hotels:
         return MaterialPageRoute(
           builder: (_) => HotelsPage(),
           settings: settings,

@@ -55,7 +55,6 @@ String updateFacilityUrl(int facilityId) => "${apiUrl}facilities/$facilityId";
 
 String deleteFacilityUrl(int facilityId) => "${apiUrl}facilities/$facilityId";
 
-
 String getFacilitiesUrl({int? facilityTypeId}) {
   String url = "${apiUrl}facilities";
   if (facilityTypeId != null) {
@@ -64,4 +63,16 @@ String getFacilitiesUrl({int? facilityTypeId}) {
   return url;
 }
 
+//Urls Room
+String getRoomUrl(int roomId) => "${apiUrl}rooms/$roomId";
+
+String addRoomUrl() => "${apiUrl}rooms";
+
+String updateRoomUrl(int roomId) => "${apiUrl}rooms/$roomId";
+
+String deleteRoomUrl(int roomId) => "${apiUrl}rooms/$roomId";
+
+String getRoomsUrl({required int facilityId}) {
+  return "${apiUrl}rooms?facility_id=$facilityId";
+}
 

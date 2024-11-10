@@ -1,3 +1,5 @@
+import 'package:booking_guide/src/models/room.dart';
+
 import '../models/company.dart';
 import '../models/country.dart';
 import '../models/customer.dart';
@@ -23,6 +25,8 @@ model<T>(dynamic map) {
         return FacilityType.fromJson(map);
       case 'Facility':
         return Facility.fromJson(map);
+      case 'Room':
+        return Room.fromJson(map);
       default:
         return map;
     }
@@ -46,6 +50,8 @@ listModel<T>(dynamic data) {
         return FacilityType.fromJsonList(list);
       case 'List<Facility>':
         return Facility.fromJsonList(list);
+      case 'List<Room>':
+        return Room.fromJsonList(list);
       default:
         return list;
     }
