@@ -20,13 +20,13 @@ class Facility {
         desc = '',
         status = '';
 
-  factory Facility.fromJson(Map<String, dynamic> json) {
+  factory Facility.fromJson(Map<String, dynamic> jsonMap) {
     return Facility(
-      id: json['id'] ?? 0,
-      facilityTypeId: json['facility_type_id'] ?? 0,
-      name: json['name'] ?? '',
-      desc: json['desc'] ?? '',
-      status: json['status'] ?? '',
+      id: jsonMap['id'] ?? 0,
+      facilityTypeId: jsonMap['facility_type_id'] ?? 0,
+      name: jsonMap['name'] ?? '',
+      desc: jsonMap['desc'] ?? '',
+      status: jsonMap['status'] ?? '',
     );
   }
 

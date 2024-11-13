@@ -1,81 +1,54 @@
+import 'package:booking_guide/src/providers/room/rooms_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../models/room.dart';
+import '../../models/room.dart' as r;
 import '../../models/response/response.dart';
 import '../../services/request_service.dart';
 import '../../utils/urls.dart';
+import 'rooms_provider.dart';
 
 part 'room_provider.g.dart';
 
 @Riverpod(keepAlive: false)
-class Rooms extends _$Rooms {
+class Room extends _$Room {
+
   @override
-  Response<List<Room>> build() => const Response<List<Room>>(data: []);
+  Response<r.Room> build() => const Response<r.Room>();
 
-  setData(Room room) {
-    state = state.copyWith();
+  setData(r.Room room) {
+    state = state.copyWith(data: room);
   }
 
-  // Future fetch({required int roomId, required int facilityId}) async {
-  //     state = state.setLoading();
-  //
-  //     final url = getRoomUrl(roomId);
-  //
-  //     await request<Map<String, dynamic>>(
-  //
-  //       url: getRoomsUrl(roomId: roomId),
-  //       method: Method.get,
-  //     ).then((value) async {
-  //       List<Room> rooms = Room.fromJsonList((value.data as List<dynamic>?) ?? [])
-  //           .where((room) => room.facilityId == facilityId)
-  //           .toList();
-  //
-  //       state = state.copyWith(data: rooms, meta: value.meta);
-  //       state = state.setLoaded();
-  //     }).catchError((error) {
-  //       state = state.setError(error.toString());
-  //     });
-  Future fetch({int? facilityId}) async {
-    if (facilityId != null) {
-      state = state.setLoading();
-
-      await request<List<dynamic>>(
-        url: getRoomsUrl(facilityId: facilityId), // تم تعديل المعامل هنا
-        method: Method.get,
-      ).then((value) async {
-        List<Room> rooms = Room.fromJsonList(value.data ?? []);
-
-        state = state.copyWith(data: rooms, meta: value.meta);
-        state = state.setLoaded();
-      }).catchError((error) {
-        state = state.setError(error.toString());
-      });
+  Future fetch({required int facilityId, r.Room? room}) async {
+    if (room != null) {
+      state = state.copyWith(data: room);
+      state = state.setLoaded();
+      return;
     }
+
+    state = state.setLoading();
+    await request<r.Room>(
+      url: getRoomUrl(facilityId: facilityId),
+      method: Method.get,
+    ).then((value) async {
+      state = state.copyWith(meta: value.meta, data: value.data);
+    });
   }
 
-  Future save(Room room) async {
+  Future save(r.Room room) async {
     state = state.setLoading();
-    await request<Room>(
-      url: room.isCreate() ? addRoomUrl() : updateRoomUrl(room.id),
+    await request<r.Room>(
+      url: room.isCreate()
+          ? addRoomUrl()
+          : updateRoomUrl(roomId: room.id),
       method: room.isCreate() ? Method.post : Method.put,
       body: room.toJson(),
     ).then((value) async {
       state = state.copyWith(meta: value.meta);
       if (value.isLoaded()) {
-        state = state.copyWith();
+        state = state.copyWith(data: value.data);
         ref.read(roomsProvider.notifier).addOrUpdateRoom(value.data!);
       }
     });
-  }
-
-  void addOrUpdateRoom(Room room) {
-    if (state.data!.any((e) => e.id == room.id)) {
-      var index = state.data!.indexWhere((e) => e.id == room.id);
-      state.data![index] = room;
-    } else {
-      state.data!.add(room);
-    }
-    state = state.copyWith(data: state.data);
   }
 }

@@ -16,11 +16,11 @@ class FacilityType {
         name = '',
         desc = '';
 
-  factory FacilityType.fromJson(Map<String, dynamic> json) {
+  factory FacilityType.fromJson(Map<String, dynamic> jsonMap) {
     return FacilityType(
-      id: json['id'] ?? 0,
-      name: json['name'] ?? '',
-      desc: json['desc'] ?? '',
+      id: jsonMap['id'] ?? 0,
+      name: jsonMap['name'] ?? '',
+      desc: jsonMap['desc'] ?? '',
     );
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helpers/general_helper.dart';
 import '../providers/facility/facility_provider.dart';
 import '../utils/assets.dart';
+import '../utils/routes.dart';
 import '../utils/theme.dart';
 import '../widgets/view_widget.dart';
 import '../models/facility.dart';
@@ -124,16 +125,30 @@ class _ChaletsPageState extends ConsumerState<ChaletsPage> {
         ),
         trailing:
             Icon(Icons.arrow_forward_ios, color: CustomTheme.primaryColor),
+        // onTap: () {
+        //   Navigator.pushNamed(
+        //     context,
+        //     Routes.chaletDetails,
+        //     arguments: facilityId,
+        //   );
+        // },
+        // onTap: () {
+         // Navigator.push(
+           // context,
+           // MaterialPageRoute(
+             // builder: (context) => ChaletDetailsPage(room: room),
+           // ),
+        //  );
+
+       // },
         onTap: () {
-          Navigator.push(
+          Navigator.pushNamed(
             context,
-            MaterialPageRoute(
-              builder: (context) => ChaletDetailsPage(
-                facilityId: facility.id,  // Pass the facilityId here
-              ),
-            ),
+            Routes.chaletDetails,
+            arguments: facility.id,
           );
         },
+
 
       ),
     );

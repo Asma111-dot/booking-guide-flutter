@@ -29,17 +29,17 @@ class Room {
         price_per_night = 0.0,
         desc = '';
 
-  factory Room.fromJson(Map<String, dynamic> json) {
+  factory Room.fromJson(Map<String, dynamic> jsonMap) {
     return Room(
-      id: json['id'] ?? 0,
-      facilityId: json['facility_id'] ?? 0,
-      name: json['name'] ?? '',
-      type: json['type'] ?? '',
-      capacity: json['capacity'] ?? 0,
-      status: json['status'] ?? '',
+      id: jsonMap['id'] ?? 0,
+      facilityId: jsonMap['facility_id'] ?? 0,
+      name: jsonMap['name'] ?? '',
+      type: jsonMap['type'] ?? '',
+      capacity: jsonMap['capacity'] ?? 0,
+      status: jsonMap['status'] ?? '',
       price_per_night:
-          double.tryParse(json['price_per_night'].toString()) ?? 0.0,
-      desc: json['desc'] ?? '',
+          double.tryParse(jsonMap['price_per_night'].toString()) ?? 0.0,
+      desc: jsonMap['desc'] ?? '',
     );
   }
 

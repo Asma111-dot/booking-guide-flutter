@@ -64,11 +64,11 @@ String getFacilitiesUrl({int? facilityTypeId}) {
 }
 
 //Urls Room
-String getRoomUrl(int roomId) => "${apiUrl}rooms/$roomId";
+String getRoomUrl({required int facilityId}) => "${apiUrl}rooms/$facilityId";
 
 String addRoomUrl() => "${apiUrl}rooms";
 
-String updateRoomUrl(int roomId) => "${apiUrl}rooms/$roomId";
+String updateRoomUrl({required int roomId}) => "${apiUrl}rooms/$roomId";
 
 String deleteRoomUrl(int roomId) => "${apiUrl}rooms/$roomId";
 
@@ -76,3 +76,25 @@ String getRoomsUrl({required int facilityId}) {
   return "${apiUrl}rooms?facility_id=$facilityId";
 }
 
+// String getRoomUrl(String subDomain, int roomId) =>
+//     "${apiPanelUrl(subDomain)}rooms/$roomId";
+//
+// // String addRoomUrl([String subDomain = 'defaultSubDomain']) =>
+// //     "${apiPanelUrl(subDomain)}rooms";
+// //
+// // String updateRoomUrl([String subDomain = 'defaultSubDomain', int? roomId]) =>
+// //     "${apiPanelUrl(subDomain)}customers/$roomId";
+//
+// String addRoomUrl([String subDomain = 'defaultSubDomain']) =>
+//     "${apiPanelUrl(subDomain)}rooms";
+//
+// String updateRoomUrl(String subDomain, int roomId) =>
+//     "${apiPanelUrl(subDomain)}rooms/$roomId";
+//
+// String deleteRoomUrl(int roomId) => "${apiUrl}rooms/$roomId";
+//
+// //String getRoomsUrl(String subDomain) => "${apiPanelUrl(subDomain)}rooms";
+// String getRoomsUrl([String subDomain = 'defaultSubDomain']) =>
+//     "${apiPanelUrl(subDomain)}rooms";
+//
+//

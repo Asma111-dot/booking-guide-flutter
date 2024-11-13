@@ -47,7 +47,7 @@ class WelcomePage extends ConsumerWidget {
             ),
             const SizedBox(height: 20),
             Text(
-               trans().ultimateDestination,
+              trans().ultimateDestination,
               style: const TextStyle(
                 fontSize: 16,
                 color: Colors.white70,

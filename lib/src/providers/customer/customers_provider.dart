@@ -17,6 +17,7 @@ class Customers extends _$Customers {
   @override
   Response<List<Customer>> build(Company company) => const Response<List<Customer>>(data: []);
 
+
   Future fetch({FilterModel? filter, bool reset = false}) async {
     if(!reset && (state.data?.isNotEmpty ?? false) && (state.isLoading() || state.isLast())) {
       return;

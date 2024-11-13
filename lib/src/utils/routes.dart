@@ -1,9 +1,7 @@
-import 'package:booking_guide/src/models/room.dart';
-import 'package:booking_guide/src/pages/chalets_page.dart';
-import 'package:booking_guide/src/pages/hotels_page.dart';
 import 'package:flutter/material.dart';
 
 import '../models/customer.dart';
+import '../models/room.dart';
 import '../pages/chalet_details_page.dart';
 import '../pages/customer_page.dart';
 import '../pages/customers_page.dart';
@@ -58,17 +56,14 @@ class Routes {
           builder: (_) => ChaletsPage(),
           settings: settings,
         );
-      // case chaletDetails:
-      //   // if (args is Map<String, dynamic> &&
-      //   //     args.containsKey('facilityId') &&
-      //   //     args.containsKey('roomId')) {
-      //   //   final facilityId = args['facilityId'] as int;
-      //   //   final roomId = args['roomId'] as int;
-      //     return MaterialPageRoute(
-      //       builder: (_) => ChaletDetailsPage(room: args as Room),
-      //       settings: settings,
-      //     );
-        case hotels:
+      case Routes.chaletDetails:
+        final int facilityId = settings.arguments as int;
+        return MaterialPageRoute(
+          builder: (_) => ChaletDetailsPage(facilityId: facilityId),
+          settings: settings,
+        );
+
+      case hotels:
         return MaterialPageRoute(
           builder: (_) => HotelsPage(),
           settings: settings,
