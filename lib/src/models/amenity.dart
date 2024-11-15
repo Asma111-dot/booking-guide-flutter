@@ -27,6 +27,15 @@ class Amenity {
         price = num.tryParse(jsonMap['price'].toString()) ?? 0.0,
         status = jsonMap['status'] ?? '';
 
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+    "desc": desc,
+    "price": price,
+    "status": status
+  };
+
+
   static List<Amenity> fromJsonList(List<dynamic> items) =>
       items.map((item) => Amenity.fromJson(item)).toList();
 

@@ -6,7 +6,7 @@ import '../models/company.dart';
 import '../models/customer.dart' as m;
 import '../providers/companies/companies_provider.dart';
 import '../providers/customer/customer_provider.dart';
-import '../widgets/back_button.dart';
+import '../widgets/back_button_widget.dart';
 import '../widgets/view_widget.dart';
 
 class CustomerPage extends ConsumerStatefulWidget {

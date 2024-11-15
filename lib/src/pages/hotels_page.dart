@@ -4,7 +4,7 @@ import '../helpers/general_helper.dart';
 import '../providers/facility/facility_provider.dart';
 import '../utils/assets.dart';
 import '../utils/theme.dart';
-import '../widgets/back_button.dart';
+import '../widgets/back_button_widget.dart';
 import '../widgets/view_widget.dart';
 import '../models/facility.dart';
 import 'hotel_details_page.dart';

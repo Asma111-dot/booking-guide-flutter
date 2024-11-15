@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../utils/assets.dart'; // تأكد من أن هذا الملف يحتوي على المسار الصحيح للأيقونات إذا كنت تستخدم أيقونات مخصصة.
 
 class ErrorMessageWidget extends StatelessWidget {
   final String message;
@@ -8,7 +7,7 @@ class ErrorMessageWidget extends StatelessWidget {
   final double? height;
   final Widget? headerWidget;
   final VoidCallback? onTap;
-  final IconData? errorIcon; // أضف هذه السمة الجديدة
+  final IconData? errorIcon;
 
   const ErrorMessageWidget({
     Key? key,
@@ -18,42 +17,44 @@ class ErrorMessageWidget extends StatelessWidget {
     this.height,
     this.headerWidget,
     this.onTap,
-    this.errorIcon, // قم بتمرير الأيقونة هنا
+    this.errorIcon,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height ?? 200,
+      height: height,
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (headerWidget != null) headerWidget!,
-          if (!textOnly)
-            Icon(
-              errorIcon ?? Icons.error, // استخدم الأيقونة المحددة أو الأيقونة الافتراضية
-              size: 120,
-              color: isEmpty ? Colors.grey : Colors.red,
-            ),
-          const SizedBox(height: 16.0),
-          Text(
-            message,
-            style: TextStyle(
-              color: isEmpty ? Colors.grey : Colors.red,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          if (onTap != null) ...[
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (headerWidget != null) headerWidget!,
+            if (!textOnly)
+              Icon(
+                errorIcon ?? Icons.error,
+                size: 120,
+                color: isEmpty ? Colors.grey : Colors.red,
+              ),
             const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: onTap,
-              child: Text('Retry'),
+            Text(
+              message,
+              style: TextStyle(
+                color: isEmpty ? Colors.grey : Colors.red,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
             ),
+            if (onTap != null) ...[
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: onTap,
+                child: Text('Retry'),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }

@@ -39,7 +39,6 @@
   "lightMode": "وضع النهار",
   "darkMode": "وضع الليل",
   "unauthorizedMessage": "ليس لديك إذن لعرض هذا المحتوى.",
-
   "forgotPassword": "نسيت كلمة المرور؟",
   "resetPassword": "إعادة تعيين كلمة المرور",
   "pleaseEnterYourEmail": "يرجى إدخال بريدك الإلكتروني.",
@@ -62,7 +61,6 @@
   "no": "لا",
   "success": "نجاح",
   "error": "خطأ",
-
   "loginSuccessful": "تم تسجيل الدخول بنجاح.",
   "loginFailed": "فشل تسجيل الدخول. يرجى التحقق من بيانات الاعتماد الخاصة بك.",
   "pleaseEnterYourPassword": "يرجى إدخال كلمة المرور.",
@@ -70,17 +68,19 @@
   "invalidCredentials": "بيانات الاعتماد غير صالحة.",
   "profileUpdatedSuccessfully": "تم تحديث الملف الشخصي بنجاح.",
   "profileUpdateFailed": "فشل تحديث الملف الشخصي. يرجى المحاولة مرة أخرى.",
-
   "termsAndConditions": "الشروط والأحكام",
   "agreeToTerms": "أوافق على الشروط والأحكام",
   "submit": "إرسال",
   "button": "زر",
   "accept": "قبول",
   "reject": "رفض",
-
   "terms": "يرجى قراءة الشروط والأحكام بعناية قبل استخدام التطبيق. باستخدامك لهذا التطبيق، فإنك توافق على الالتزام بهذه الشروط.",
   "noFacilityTypesAvailable": "لا توجد أنواع مرافق متاحة",
-  "errorOccurred": "حدث خطأ، يرجى المحاولة مرة أخرى"
-
-
+  "errorOccurred": "حدث خطأ، يرجى المحاولة مرة أخرى",
+  "capacity": "السعة",
+  "status": "الحالة",
+  "price": "السعر",
+  "riyalY": "ر.ي",
+  "amenity": "وسائل الراحة",
+  "bookingNow" : "احجز الأن"
 }

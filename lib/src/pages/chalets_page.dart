@@ -7,7 +7,6 @@ import '../utils/routes.dart';
 import '../utils/theme.dart';
 import '../widgets/view_widget.dart';
 import '../models/facility.dart';
-import 'chalet_details_page.dart';
 
 class ChaletsPage extends ConsumerStatefulWidget {
   const ChaletsPage({Key? key}) : super(key: key);
@@ -29,15 +28,11 @@ class _ChaletsPageState extends ConsumerState<ChaletsPage> {
   Widget build(BuildContext context) {
     final facilitiesState = ref.watch(facilitiesProvider);
 
-    final filteredFacilities =
-        facilitiesState.data?.where((facility) => facility.id == 2).toList() ??
-            [];
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
           trans().chalet,
-          style: TextStyle(color: CustomTheme.placeholderColor),
+          style: TextStyle(color: CustomTheme.shimmerBaseColor),
         ),
         backgroundColor: CustomTheme.primaryColor,
         centerTitle: true,
@@ -125,31 +120,13 @@ class _ChaletsPageState extends ConsumerState<ChaletsPage> {
         ),
         trailing:
             Icon(Icons.arrow_forward_ios, color: CustomTheme.primaryColor),
-        // onTap: () {
-        //   Navigator.pushNamed(
-        //     context,
-        //     Routes.chaletDetails,
-        //     arguments: facilityId,
-        //   );
-        // },
-        // onTap: () {
-         // Navigator.push(
-           // context,
-           // MaterialPageRoute(
-             // builder: (context) => ChaletDetailsPage(room: room),
-           // ),
-        //  );
-
-       // },
         onTap: () {
           Navigator.pushNamed(
             context,
             Routes.chaletDetails,
-            arguments: facility.id,
+            arguments: facility,
           );
         },
-
-
       ),
     );
   }

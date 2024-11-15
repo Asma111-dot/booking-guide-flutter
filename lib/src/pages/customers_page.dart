@@ -9,7 +9,7 @@ import '../providers/companies/companies_provider.dart';
 import '../providers/customer/customers_provider.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
-import '../widgets/back_button.dart';
+import '../widgets/back_button_widget.dart';
 import '../widgets/customer_item_widget.dart';
 import '../widgets/loading_widget.dart';
 import '../widgets/view_widget.dart';

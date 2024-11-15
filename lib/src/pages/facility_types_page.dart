@@ -33,7 +33,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
       appBar: AppBar(
         title: Text(
           trans().welcomeToBooking,
-          style: TextStyle(color: CustomTheme.placeholderColor),
+          style: TextStyle(color: CustomTheme.shimmerBaseColor),
         ),
         backgroundColor: CustomTheme.primaryColor,
         elevation: 0,
@@ -118,9 +118,9 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
       {required String image, required String title}) {
     return Container(
       decoration: BoxDecoration(
-        color: CustomTheme.primaryColor,
+      //  color: CustomTheme.primaryColor,
         border: Border.all(
-            color: CustomTheme.tertiaryColor, width: CustomTheme.borderWidth),
+            color: CustomTheme.primaryColor, width: CustomTheme.borderWidth),
         borderRadius: BorderRadius.circular(CustomTheme.radius),
       ),
       child: Column(
@@ -140,7 +140,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
             child: Text(
               title,
               style: TextStyle(
-                color: CustomTheme.tertiaryColor,
+                color: CustomTheme.primaryColor,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),

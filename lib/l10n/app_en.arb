@@ -39,7 +39,6 @@
   "lightMode": "Light Mode",
   "darkMode": "Dark Mode",
   "unauthorizedMessage": "You do not have permission to view this content.",
-
   "forgotPassword": "Forgot Password?",
   "resetPassword": "Reset Password",
   "pleaseEnterYourEmail": "Please enter your email.",
@@ -62,7 +61,6 @@
   "no": "No",
   "success": "Success",
   "error": "Error",
-
   "loginSuccessful": "Login successful.",
   "loginFailed": "Login failed. Please check your credentials.",
   "pleaseEnterYourPassword": "Please enter your password.",
@@ -70,17 +68,19 @@
   "invalidCredentials": "Invalid credentials.",
   "profileUpdatedSuccessfully": "Profile updated successfully.",
   "profileUpdateFailed": "Profile update failed. Please try again.",
-
   "termsAndConditions": "Terms and Conditions",
   "agreeToTerms": "I agree to the terms and conditions",
   "submit": "Submit",
   "button": "Button",
   "accept": "Accept",
   "reject": "Reject",
-
   "terms": "Please read the terms and conditions carefully before using the application. By using this application, you agree to abide by these terms.",
-
   "noFacilityTypesAvailable": "No facility types available",
-  "errorOccurred": "An error occurred, please try again"
-
+  "errorOccurred": "An error occurred, please try again",
+  "capacity": "capacity",
+  "status": "status",
+  "price": "price",
+  "riyalY": "R.Y",
+  "amenity": "amenity",
+  "bookingNow": "Book Now"
 }

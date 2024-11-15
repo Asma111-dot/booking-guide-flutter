@@ -15,12 +15,12 @@ class CustomTheme {
   // String getFont() => 'Roboto';
 
   static const Color primaryColor =
-      Color.fromARGB(255, 15, 1, 78); // اللون الأساسي
-  static const Color secondaryColor = Color(0xFF03DAC6); // لون ثانوي إضافي
+      Color.fromARGB(255, 15, 1, 78);
+  static const Color secondaryColor = Color(0xFF03DAC6);
   static const tertiaryColor = Color(0xFF2C3E50); // Dark blue
   static const fourthColor = Color(0xffF0F0F0); // Light gray
 
-  static const Color placeholderColor = Color(0xffe0e0e0); // Light gray color
+  static const Color placeholderColor = Color(0xffffff); // Light gray color
   static const Color shimmerBaseColor =
       Color(0xffdcdcdc); // Slightly darker gray color
   static const Color shimmerHighlightColor =

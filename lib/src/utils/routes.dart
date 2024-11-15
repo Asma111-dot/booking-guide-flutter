@@ -1,3 +1,4 @@
+import 'package:booking_guide/src/models/facility.dart';
 import 'package:flutter/material.dart';
 
 import '../models/customer.dart';
@@ -20,6 +21,7 @@ class Routes {
   static const String customer = '/customer';
   static const String facilityTypes = '/facility_types';
   static const String chalets = '/chalets';
+  /// Pass Chalet Model
   static const String chaletDetails = '/chalet_details';
   static const String hotels = '/hotels';
 
@@ -57,9 +59,8 @@ class Routes {
           settings: settings,
         );
       case Routes.chaletDetails:
-        final int facilityId = settings.arguments as int;
         return MaterialPageRoute(
-          builder: (_) => ChaletDetailsPage(facilityId: facilityId),
+          builder: (_) => ChaletDetailsPage(facility: args as Facility),
           settings: settings,
         );
 

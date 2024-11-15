@@ -1,3 +1,6 @@
+import 'media.dart';
+import 'amenity.dart';
+
 class Room {
   final int id;
   final int facilityId;
@@ -5,8 +8,11 @@ class Room {
   final String type;
   final int capacity;
   final String status;
-  final num price_per_night;
+  final num pricePerNight;
   final String desc;
+
+  List<Media> media;
+  List<Amenity> amenity;
 
   Room({
     required this.id,
@@ -15,8 +21,10 @@ class Room {
     required this.type,
     required this.capacity,
     required this.status,
-    required this.price_per_night,
+    required this.pricePerNight,
     required this.desc,
+    this.media = const [],
+    this.amenity = const [],
   });
 
   Room.init()
@@ -26,48 +34,51 @@ class Room {
         type = '',
         capacity = 0,
         status = '',
-        price_per_night = 0.0,
-        desc = '';
+        pricePerNight = 0.0,
+        desc = '',
+        media = [],
+        amenity = [];
 
-  factory Room.fromJson(Map<String, dynamic> jsonMap) {
-    return Room(
-      id: jsonMap['id'] ?? 0,
-      facilityId: jsonMap['facility_id'] ?? 0,
-      name: jsonMap['name'] ?? '',
-      type: jsonMap['type'] ?? '',
-      capacity: jsonMap['capacity'] ?? 0,
-      status: jsonMap['status'] ?? '',
-      price_per_night:
-          double.tryParse(jsonMap['price_per_night'].toString()) ?? 0.0,
-      desc: jsonMap['desc'] ?? '',
-    );
-  }
+  Room.fromJson(Map<String, dynamic> jsonMap)
+      : id = jsonMap['id'] ?? 0,
+        facilityId = jsonMap['facility_id'] ?? 0,
+        name = jsonMap['name'] ?? '',
+        type = jsonMap['type'] ?? '',
+        capacity = jsonMap['capacity'] ?? 0,
+        status = jsonMap['status'] ?? '',
+        pricePerNight =
+            double.tryParse(jsonMap['price_per_night'].toString()) ?? 0.0,
+        desc = jsonMap['desc'] ?? '',
+        media = (jsonMap['media'] as List<dynamic>?)
+                ?.map((item) => Media.fromJson(item))
+                .toList() ??
+            [],
+        amenity = (jsonMap['amenity'] as List<dynamic>?)
+                ?.map((item) => Amenity.fromJson(item))
+                .toList() ??
+            [];
 
-  Map<String, dynamic> toJson() {
-    return {
-      "id": id,
-      "facility_id": facilityId,
-      "name": name,
-      "type": type,
-      "capacity": capacity,
-      "status": status,
-      "price_per_night": price_per_night,
-      "desc": desc,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "facility_id": facilityId,
+        "name": name,
+        "type": type,
+        "capacity": capacity,
+        "status": status,
+        "price_per_night": pricePerNight,
+        "desc": desc,
+        "media": media.map((m) => m.toJson()).toList(),
+        "amenity": amenity.map((a) => a.toJson()).toList(),
+      };
 
-  static List<Room> fromJsonList(List<dynamic> jsonList) {
-    return jsonList
-        .where((json) => json is Map<String, dynamic>)
-        .map((json) => Room.fromJson(json as Map<String, dynamic>))
-        .toList();
-  }
+  static List<Room> fromJsonList(List<dynamic> items) =>
+      items.map((item) => Room.fromJson(item)).toList();
 
   bool isCreate() => id == 0;
 
   @override
   String toString() {
-    return 'Room(id: $id, facilityId: $facilityId, name: "$name", desc: "$desc", status: "$status", type:"$type", capacity: "$capacity", price_per_night: "$price_per_night" )';
+    return 'Room(id: $id, facilityId: $facilityId, name: "$name", desc: "$desc", status: "$status", type:"$type", capacity: "$capacity", price_per_night: "$pricePerNight" )';
   }
 
   @override
@@ -82,7 +93,7 @@ class Room {
             status == other.status &&
             type == other.type &&
             capacity == other.capacity &&
-            price_per_night == other.price_per_night;
+            pricePerNight == other.pricePerNight;
   }
 
   @override
@@ -94,5 +105,5 @@ class Room {
       status.hashCode ^
       type.hashCode ^
       capacity.hashCode ^
-      price_per_night.hashCode;
+      pricePerNight.hashCode;
 }
