@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:booking_guide/src/extensions/theme_extension.dart'; // Ensure you have this extension
+
+import '../extensions/theme_extension.dart'; // Ensure you have this extension
 
 import '../utils/assets.dart';
 import '../utils/theme.dart';

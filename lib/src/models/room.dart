@@ -53,7 +53,7 @@ class Room {
                 ?.map((item) => Media.fromJson(item))
                 .toList() ??
             [],
-        amenity = (jsonMap['amenity'] as List<dynamic>?)
+        amenity = (jsonMap['amenities'] as List<dynamic>?)
                 ?.map((item) => Amenity.fromJson(item))
                 .toList() ??
             [];

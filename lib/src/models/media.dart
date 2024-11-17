@@ -16,9 +16,9 @@ class Media {
         original_url = jsonMap['original_url'] ?? '';
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "original_url": original_url,
-  };
+        "id": id,
+        "original_url": original_url,
+      };
 
   static List<Media> fromJsonList(List<dynamic> items) =>
       items.map((item) => Media.fromJson(item)).toList();

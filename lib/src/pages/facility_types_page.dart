@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../helpers/general_helper.dart';
 import '../models/facility_type.dart';
 import '../providers/facility_type/facility_type_provider.dart';
 import '../utils/assets.dart';
 import '../utils/theme.dart';
+import '../widgets/custom_app_bar.dart';
+import '../widgets/custom_app_bar_clipper.dart';
 import '../widgets/view_widget.dart';
 import '../utils/routes.dart';
 
@@ -30,15 +33,10 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
     final facilityTypesState = ref.watch(facilityTypesProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          trans().welcomeToBooking,
-          style: TextStyle(color: CustomTheme.shimmerBaseColor),
-        ),
-        backgroundColor: CustomTheme.primaryColor,
-        elevation: 0,
-        centerTitle: true,
-      ),
+      // appBar: CustomAppBar(
+      //   appTitle: trans().welcomeToBooking,
+      //   icon: const FaIcon(Icons.arrow_back_ios),
+      // ),
       body: ViewWidget<List<FacilityType>>(
         meta: facilityTypesState.meta,
         data: facilityTypesState.data,
@@ -58,7 +56,25 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
   Widget buildFacilityTypesGrid(List<FacilityType> data, BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 20),
+        CustomAppBarClipper(
+          backgroundColor: CustomTheme.primaryColor,
+          height: 160.0,
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 30, left: 20.0),
+              child: Text(
+                trans().welcomeToBooking,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 0.0),
         Image.asset(
           logoCoverImage,
           width: 150,
@@ -118,7 +134,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
       {required String image, required String title}) {
     return Container(
       decoration: BoxDecoration(
-      //  color: CustomTheme.primaryColor,
+        //  color: CustomTheme.primaryColor,
         border: Border.all(
             color: CustomTheme.primaryColor, width: CustomTheme.borderWidth),
         borderRadius: BorderRadius.circular(CustomTheme.radius),

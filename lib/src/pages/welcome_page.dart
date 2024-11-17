@@ -9,7 +9,7 @@ class WelcomePage extends ConsumerWidget {
   const WelcomePage({super.key});
 
   Future<void> _navigateToNextScreen(BuildContext context) async {
-    await Future.delayed(const Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 3));
     Navigator.pushReplacementNamed(context, Routes.login);
   }
 
@@ -39,7 +39,7 @@ class WelcomePage extends ConsumerWidget {
             ),
             const SizedBox(height: 20),
             Text(
-               "${trans().welcome} ${trans().to} ${trans().appTitle}",
+              "${trans().welcome} ${trans().to} ${trans().appTitle}",
               style: const TextStyle(
                 fontSize: 24,
                 color: Colors.white,
@@ -54,10 +54,10 @@ class WelcomePage extends ConsumerWidget {
                 color: Colors.white70,
               ),
             ),
-            const SizedBox(height: 20),
-            const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-            ),
+            // const SizedBox(height: 20),
+            // const CircularProgressIndicator(
+            //   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            // ),
           ],
         ),
       ),

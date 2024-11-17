@@ -1,14 +1,16 @@
-import 'package:booking_guide/src/models/facility.dart';
-import 'package:booking_guide/src/providers/room/room_provider.dart';
+import 'package:booking_guide/src/utils/assets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../helpers/general_helper.dart';
-import '../utils/assets.dart';
 import '../utils/theme.dart';
-import '../widgets/back_button_widget.dart';
+import '../widgets/custom_app_bar.dart';
 import '../widgets/view_widget.dart';
+import '../providers/room/room_provider.dart';
 import '../models/room.dart' as r;
+import '../models/facility.dart';
 
 class ChaletDetailsPage extends ConsumerStatefulWidget {
   final Facility facility;
@@ -36,14 +38,10 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
   Widget build(BuildContext context) {
     final roomState = ref.watch(roomProvider);
     return Scaffold(
-      appBar: AppBar(
-        leading: const BackButtonWidget(),
-        title: Text(
-          widget.facility.name,
-          style: TextStyle(color: CustomTheme.shimmerBaseColor),
-        ),
-        backgroundColor: CustomTheme.primaryColor,
-        centerTitle: true,
+      backgroundColor: Colors.blueGrey,
+      appBar: CustomAppBar(
+        appTitle: widget.facility.name,
+        icon: const FaIcon(Icons.arrow_back_ios),
       ),
       body: ViewWidget<r.Room>(
         meta: roomState.meta,
@@ -57,10 +55,20 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
             onRefresh: () async => await ref
                 .read(roomProvider.notifier)
                 .fetch(facilityId: widget.facility.id),
-            child: SingleChildScrollView( ///
+            child: SingleChildScrollView(
+              ///
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
+                  // ClipRRect(
+                  //   borderRadius: BorderRadius.circular(15),
+                  //   child: Image.asset(
+                  //     chaletImage,
+                  //     width: double.infinity,
+                  //     height: 200,
+                  //     fit: BoxFit.cover,
+                  //   ),
+                  // ),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     padding: EdgeInsets.all(16),
@@ -79,25 +87,26 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                       children: [
                         room.media.isNotEmpty
                             ? GridView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: room.media.length,
-                          gridDelegate:
-                          SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4,
-                            crossAxisSpacing: 8,
-                            mainAxisSpacing: 8,
-                          ),
-                          itemBuilder: (context, index) {
-                            return CachedNetworkImage(
-                              imageUrl: room.media[index].original_url,
-                              placeholder: (context, url) =>
-                                  CircularProgressIndicator(),
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
-                            );
-                          },
-                        )
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: room.media.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 4,
+                                  crossAxisSpacing: 8,
+                                  mainAxisSpacing: 8,
+                                ),
+                                itemBuilder: (context, index) {
+                                  // print("Media is: ${room.media[index].original_url}");
+                                  return CachedNetworkImage(
+                                    imageUrl: room.media[index].original_url,
+                                    placeholder: (context, url) =>
+                                        CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
+                                  );
+                                },
+                              )
                             : Text('لا توجد وسائط متاحة'),
                         SizedBox(height: 16),
                         Text(
@@ -121,18 +130,18 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                         Text(
                           "${trans().status}: ${room.status}",
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: Colors.blueGrey,
                             fontSize: 16,
                           ),
                         ),
-                        SizedBox(height: 16),
-                        Text(
-                          "${trans().amenity}: ${room.amenity}",
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 14,
-                          ),
-                        ),
+                        // Text(
+                        //   "${trans().status}: ${room.amenity}",
+                        //   style: TextStyle(
+                        //     color: Colors.blueGrey,
+                        //     fontSize: 16,
+                        //   ),
+                        // ),
+                        // SizedBox(height: 16),
                         TabBar(
                           controller: tabController,
                           labelColor: CustomTheme.primaryColor,
@@ -140,8 +149,8 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                           indicatorColor: CustomTheme.primaryColor,
                           tabs: [
                             Tab(text: 'الوصف'),
+                            Tab(text: 'وسائل الراحة'),
                             Tab(text: 'السعر'),
-                            Tab(text: 'الشروط'),
                           ],
                         ),
                         SizedBox(
@@ -150,11 +159,31 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                             controller: tabController,
                             physics: NeverScrollableScrollPhysics(),
                             children: [
+                              SingleChildScrollView(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    room.desc,
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ),
+                              ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  room.desc,
-                                  style: TextStyle(fontSize: 16),
+                                child: Builder(
+                                  builder: (context) {
+                                    //  print("Amenities in UI: ${room.amenity.map((a) => a.name).toList()}");
+
+                                    return Text(
+                                      room.amenity.isNotEmpty
+                                          ? "${trans().amenity}: ${room.amenity.map((a) => a.name).join(', ')}"
+                                          : "${trans().amenity}: ${trans().noAmenities}",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                               Padding(
@@ -164,13 +193,6 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  room.type,
-                                  style: TextStyle(fontSize: 16),
                                 ),
                               ),
                             ],
@@ -209,19 +231,3 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
     );
   }
 }
-
-// room.amenity.isNotEmpty
-// ? Column(
-// children: room.amenity.map((amenity) {
-// return ListTile(
-// title: Text(amenity.name),
-// subtitle: Text(amenity.description ?? ''),
-// );
-// }).toList(),
-// )
-//     : Text('لا توجد وسائل راحة متاحة'),
-// ],
-// ),
-// ),
-//
-// SizedBox(height: 16),

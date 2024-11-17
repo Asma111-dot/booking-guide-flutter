@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../helpers/general_helper.dart';
 import '../providers/facility/facility_provider.dart';
 import '../utils/assets.dart';
 import '../utils/theme.dart';
 import '../widgets/back_button_widget.dart';
+import '../widgets/custom_app_bar.dart';
 import '../widgets/view_widget.dart';
 import '../models/facility.dart';
 import 'hotel_details_page.dart';
@@ -30,14 +32,9 @@ class _HotelsPageState extends ConsumerState<HotelsPage> {
     final facilitiesState = ref.watch(facilitiesProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        leading: BackButtonWidget(), // Add the back button widget here
-        title: Text(
-          trans().hotel,
-          style: TextStyle(color: CustomTheme.placeholderColor),
-        ),
-        backgroundColor: CustomTheme.primaryColor,
-        centerTitle: true,
+      appBar: CustomAppBar(
+        appTitle: trans().hotel,
+        icon: const FaIcon(Icons.arrow_back_ios),
       ),
       body: ViewWidget<List<Facility>>(
         meta: facilitiesState.meta,

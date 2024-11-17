@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'icon_button_widget.dart';
 
@@ -10,11 +11,16 @@ class BackButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(!Navigator.canPop(context)) return const SizedBox(height: 0, width: 0,);
+    if (!Navigator.canPop(context)) return const SizedBox(height: 0, width: 0);
 
     return IconButtonWidget(
-      icon: arrow ? Icons.arrow_back_ios_rounded : Icons.close_rounded,
-      onPressed: onPressed ?? (Navigator.canPop(context) ? () => Navigator.maybePop(context) : () {}),
+      icon: arrow
+          ? FontAwesomeIcons.arrowLeft
+          : FontAwesomeIcons.times,
+      onPressed: onPressed ??
+          (Navigator.canPop(context)
+              ? () => Navigator.maybePop(context)
+              : () {}),
     );
   }
 }

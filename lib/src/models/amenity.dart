@@ -27,14 +27,8 @@ class Amenity {
         price = num.tryParse(jsonMap['price'].toString()) ?? 0.0,
         status = jsonMap['status'] ?? '';
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "desc": desc,
-    "price": price,
-    "status": status
-  };
-
+  Map<String, dynamic> toJson() =>
+      {"id": id, "name": name, "desc": desc, "price": price, "status": status};
 
   static List<Amenity> fromJsonList(List<dynamic> items) =>
       items.map((item) => Amenity.fromJson(item)).toList();
@@ -42,7 +36,7 @@ class Amenity {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is Amenity && runtimeType == other.runtimeType && id == other.id;
+      other is Amenity && runtimeType == other.runtimeType && id == other.id;
 
   @override
   int get hashCode => id.hashCode;

@@ -20,7 +20,7 @@ class CustomTheme {
   static const tertiaryColor = Color(0xFF2C3E50); // Dark blue
   static const fourthColor = Color(0xffF0F0F0); // Light gray
 
-  static const Color placeholderColor = Color(0xffffff); // Light gray color
+  static const Color placeholderColor = Colors.white; // Light gray color
   static const Color shimmerBaseColor =
       Color(0xffdcdcdc); // Slightly darker gray color
   static const Color shimmerHighlightColor =
