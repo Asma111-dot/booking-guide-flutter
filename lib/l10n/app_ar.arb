@@ -81,6 +81,7 @@
   "status": "الحالة",
   "price": "السعر",
   "riyalY": "ر.ي",
+  "description": "الوصف",
   "amenity": "وسائل الراحة",
   "noAmenities": "لا يوجد وسائل راحة متاح حالياَ",
   "bookingNow" : "احجز الأن"

@@ -81,6 +81,7 @@
   "status": "status",
   "price": "price",
   "riyalY": "R.Y",
+  "description": "Description",
   "amenity": "Amenity",
   "noAmenities": "No Amenity Available",
   "bookingNow": "Book Now"

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../helpers/general_helper.dart';
 import '../providers/facility/facility_provider.dart';
 import '../utils/assets.dart';
 import '../utils/theme.dart';
-import '../widgets/back_button_widget.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/view_widget.dart';
 import '../models/facility.dart';
@@ -41,92 +41,135 @@ class _HotelsPageState extends ConsumerState<HotelsPage> {
         data: facilitiesState.data,
         onLoaded: (data) {
           return ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             itemCount: data.length,
             itemBuilder: (context, index) {
               final facility = data[index];
-              return buildFacilityCard(context, facility);
+              return InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          HotelDetailsPage(facility: facility),
+                    ),
+                  );
+                },
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  elevation: 4,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //  Image hotel
+                      ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
+                        ),
+                        child: Image.asset(
+                          hotelImage,
+                          height: 200,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                //Name hotel
+                                Text(
+                                  facility.name,
+                                  style: const TextStyle(
+                                    color: CustomTheme.primaryColor,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    // price
+                                    Text(
+                                      "200",
+                                      //  "\$${facility.price}/Night",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: CustomTheme.tertiaryColor,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 6),
+                                    const Icon(
+                                      FontAwesomeIcons.dollarSign,
+                                      size: 15,
+                                      color: CustomTheme.primaryColor,
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // location
+                                const Icon(Icons.location_on_outlined,
+                                    color: CustomTheme.primaryColor, size: 20),
+                                const SizedBox(width: 4),
+                                Text(
+                                  "الموقع",
+                                  //  facility.location ?? "Unknown Location",
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 14,
+                                  ),
+                                ),
+
+                                // rating & reviewsCount
+                                Row(
+                                  children: [
+                                    Text(
+                                      "4.9",
+                                      //  "${facility.rating ?? 0.0} (${facility.reviewsCount ?? 0} Reviews)",
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    const Icon(Icons.star,
+                                        color: Colors.amber, size: 20),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
             },
           );
         },
-        onLoading: () => Center(child: CircularProgressIndicator()),
+        onLoading: () => const Center(child: CircularProgressIndicator()),
         onEmpty: () => const Center(
-            child: Text(
-         // trans().noHotel,
-              "",
-          style: TextStyle(color: CustomTheme.placeholderColor),
-        )),
+          child: Text(
+            "",
+            style: TextStyle(color: CustomTheme.placeholderColor),
+          ),
+        ),
         showError: true,
         showEmpty: true,
-      ),
-    );
-  }
-
-  Widget buildFacilityCard(BuildContext context, Facility facility) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 6,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: ListTile(
-        contentPadding: EdgeInsets.all(16),
-        leading: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Image.asset(
-            hotelImage,
-            width: 80,
-            height: 80,
-            fit: BoxFit.cover,
-          ),
-        ),
-        title: Text(
-          facility.name,
-          style: TextStyle(
-            color: CustomTheme.primaryColor,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 4),
-            Text(
-              "${facility.desc} ",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            SizedBox(height: 4),
-            Text(
-              "${facility.status}",
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 14,
-              ),
-            ),
-          ],
-        ),
-        trailing:
-            Icon(Icons.arrow_forward_ios, color: CustomTheme.primaryColor),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HotelDetailsPage(facility: facility),
-            ),
-          );
-        },
       ),
     );
   }

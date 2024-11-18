@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../helpers/general_helper.dart';
 import '../providers/facility/facility_provider.dart';
 import '../utils/assets.dart';
@@ -40,91 +41,85 @@ class _ChaletsPageState extends ConsumerState<ChaletsPage> {
         data: facilitiesState.data,
         onLoaded: (data) {
           return ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             itemCount: data.length,
             itemBuilder: (context, index) {
               final facility = data[index];
-              return buildFacilityCard(context, facility);
+              return Container(
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 6,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: ListTile(
+                  contentPadding: const EdgeInsets.all(16),
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.asset(
+                      chaletImage,
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  title: Text(
+                    facility.name,
+                    style: TextStyle(
+                      color: CustomTheme.primaryColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 4),
+                      Text(
+                        facility.desc,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        facility.status,
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      Routes.chaletDetails,
+                      arguments: facility,
+                    );
+                  },
+                ),
+              );
             },
           );
         },
-        onLoading: () => Center(child: CircularProgressIndicator()),
+        onLoading: () => const Center(child: CircularProgressIndicator()),
         onEmpty: () => const Center(
-            child: Text(
-          // trans().noChalet,
-          "",
-          style: TextStyle(color: CustomTheme.placeholderColor),
-        )),
+          child: Text(
+            "",
+            style: TextStyle(color: CustomTheme.placeholderColor),
+          ),
+        ),
         showError: true,
         showEmpty: true,
-      ),
-    );
-  }
-
-  Widget buildFacilityCard(BuildContext context, Facility facility) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 6,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: ListTile(
-        contentPadding: EdgeInsets.all(16),
-        leading: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Image.asset(
-            chaletImage,
-            width: 80,
-            height: 80,
-            fit: BoxFit.cover,
-          ),
-        ),
-        title: Text(
-          facility.name,
-          style: TextStyle(
-            color: CustomTheme.primaryColor,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 4),
-            Text(
-              "${facility.desc}",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            SizedBox(height: 4),
-            Text(
-              " ${facility.status}",
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 14,
-              ),
-            ),
-          ],
-        ),
-        trailing:
-            Icon(Icons.arrow_forward_ios, color: CustomTheme.primaryColor),
-        onTap: () {
-          Navigator.pushNamed(
-            context,
-            Routes.chaletDetails,
-            arguments: facility,
-          );
-        },
       ),
     );
   }
