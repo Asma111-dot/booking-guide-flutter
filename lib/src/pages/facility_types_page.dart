@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../helpers/general_helper.dart';
 import '../models/facility_type.dart';
 import '../providers/facility_type/facility_type_provider.dart';
 import '../utils/assets.dart';
 import '../utils/theme.dart';
-import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_app_bar_clipper.dart';
 import '../widgets/view_widget.dart';
 import '../utils/routes.dart';

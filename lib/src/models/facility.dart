@@ -1,3 +1,5 @@
+import 'room.dart';
+
 class Facility {
   final int id;
   final int facilityTypeId;
@@ -5,12 +7,15 @@ class Facility {
   final String desc;
   final String status;
 
+  List<Room> rooms;
+
   Facility({
     required this.id,
     required this.facilityTypeId,
     required this.name,
     required this.desc,
     required this.status,
+    this.rooms = const [],
   });
 
   Facility.init()
@@ -18,7 +23,8 @@ class Facility {
         facilityTypeId = 0,
         name = '',
         desc = '',
-        status = '';
+        status = '',
+        rooms = [];
 
   factory Facility.fromJson(Map<String, dynamic> jsonMap) {
     return Facility(
@@ -27,6 +33,10 @@ class Facility {
       name: jsonMap['name'] ?? '',
       desc: jsonMap['desc'] ?? '',
       status: jsonMap['status'] ?? '',
+      rooms: (jsonMap['rooms'] as List<dynamic>?)
+          ?.map((item) => Room.fromJson(item))
+          .toList() ??
+          [],
     );
   }
 
@@ -37,6 +47,7 @@ class Facility {
       'name': name,
       'desc': desc,
       'status': status,
+      'rooms': rooms.map((room) => room.toJson()).toList(),
     };
   }
 
@@ -51,7 +62,7 @@ class Facility {
 
   @override
   String toString() {
-    return 'Facility(id: $id, facilityTypeId: $facilityTypeId, name: "$name", desc: "$desc", status: "$status")';
+    return 'Facility(id: $id, facilityTypeId: $facilityTypeId, name: "$name", desc: "$desc", status: "$status", rooms: $rooms)';
   }
 
   @override
@@ -63,7 +74,8 @@ class Facility {
             facilityTypeId == other.facilityTypeId &&
             name == other.name &&
             desc == other.desc &&
-            status == other.status;
+            status == other.status &&
+            rooms == other.rooms;
   }
 
   @override
@@ -72,5 +84,6 @@ class Facility {
       facilityTypeId.hashCode ^
       name.hashCode ^
       desc.hashCode ^
-      status.hashCode;
+      status.hashCode ^
+      rooms.hashCode;
 }

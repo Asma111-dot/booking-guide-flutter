@@ -12,7 +12,7 @@ class Room {
   final String desc;
 
   List<Media> media;
-  List<Amenity> amenity;
+  List<Amenity> amenities;
 
   Room({
     required this.id,
@@ -24,7 +24,7 @@ class Room {
     required this.pricePerNight,
     required this.desc,
     this.media = const [],
-    this.amenity = const [],
+    this.amenities = const [],
   });
 
   Room.init()
@@ -37,7 +37,7 @@ class Room {
         pricePerNight = 0.0,
         desc = '',
         media = [],
-        amenity = [];
+        amenities = [];
 
   Room.fromJson(Map<String, dynamic> jsonMap)
       : id = jsonMap['id'] ?? 0,
@@ -53,7 +53,7 @@ class Room {
                 ?.map((item) => Media.fromJson(item))
                 .toList() ??
             [],
-        amenity = (jsonMap['amenities'] as List<dynamic>?)
+        amenities = (jsonMap['amenities'] as List<dynamic>?)
                 ?.map((item) => Amenity.fromJson(item))
                 .toList() ??
             [];
@@ -68,7 +68,7 @@ class Room {
         "price_per_night": pricePerNight,
         "desc": desc,
         "media": media.map((m) => m.toJson()).toList(),
-        "amenity": amenity.map((a) => a.toJson()).toList(),
+        "amenity": amenities.map((a) => a.toJson()).toList(),
       };
 
   static List<Room> fromJsonList(List<dynamic> items) =>

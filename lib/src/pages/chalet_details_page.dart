@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../helpers/general_helper.dart';
+import '../utils/routes.dart';
 import '../utils/theme.dart';
 import '../widgets/custom_app_bar.dart';
 import '../providers/room/room_provider.dart';
@@ -160,8 +161,8 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    room.amenity.isNotEmpty
-                                        ? "${trans().amenity}: ${room.amenity.map((a) => a.name).join(', ')}"
+                                    room.amenities.isNotEmpty
+                                        ? "${trans().amenity}: ${room.amenities.map((a) => a.name).join(', ')}"
                                         : "${trans().amenity}: ${trans().noAmenities}",
                                     style: const TextStyle(
                                       fontSize: 16,
@@ -200,7 +201,13 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      Routes.reservation,
+                      arguments: room,
+                    );
+                  },
                   child: Text(
                     trans().bookingNow,
                     style: const TextStyle(

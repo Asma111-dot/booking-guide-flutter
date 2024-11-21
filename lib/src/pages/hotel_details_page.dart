@@ -174,8 +174,8 @@ class _HotelDetailsPageState extends ConsumerState<HotelDetailsPage>
                                     //  print("Amenities in UI: ${room.amenity.map((a) => a.name).toList()}");
 
                                     return Text(
-                                      room.amenity.isNotEmpty
-                                          ? "${trans().amenity}: ${room.amenity.map((a) => a.name).join(', ')}"
+                                      room.amenities.isNotEmpty
+                                          ? "${trans().amenity}: ${room.amenities.map((a) => a.name).join(', ')}"
                                           : "${trans().amenity}: ${trans().noAmenities}",
                                       style: TextStyle(
                                         fontSize: 16,

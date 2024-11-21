@@ -1,8 +1,11 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 
+//"http://192.168.1.110/bookings-guide/public/")
 String baseUrl = kDebugMode
-    ? (Platform.isIOS ? "http://localhost:8000/" : "http://10.0.2.2:8000/")
+    ? (Platform.isIOS
+        ? "http://192.168.1.105:8000/"
+        : "http://172.21.0.134/bookings-guide/public/")
     : "http://bookings-guide.com/";
 
 String apiUrl = "${baseUrl}api/";
@@ -76,25 +79,17 @@ String getRoomsUrl({required int facilityId}) {
   return "${apiUrl}rooms?facility_id=$facilityId";
 }
 
-// String getRoomUrl(String subDomain, int roomId) =>
-//     "${apiPanelUrl(subDomain)}rooms/$roomId";
-//
-// // String addRoomUrl([String subDomain = 'defaultSubDomain']) =>
-// //     "${apiPanelUrl(subDomain)}rooms";
-// //
-// // String updateRoomUrl([String subDomain = 'defaultSubDomain', int? roomId]) =>
-// //     "${apiPanelUrl(subDomain)}customers/$roomId";
-//
-// String addRoomUrl([String subDomain = 'defaultSubDomain']) =>
-//     "${apiPanelUrl(subDomain)}rooms";
-//
-// String updateRoomUrl(String subDomain, int roomId) =>
-//     "${apiPanelUrl(subDomain)}rooms/$roomId";
-//
-// String deleteRoomUrl(int roomId) => "${apiUrl}rooms/$roomId";
-//
-// //String getRoomsUrl(String subDomain) => "${apiPanelUrl(subDomain)}rooms";
-// String getRoomsUrl([String subDomain = 'defaultSubDomain']) =>
-//     "${apiPanelUrl(subDomain)}rooms";
-//
-//
+// URLs Reservation
+String getReservationUrl({required int userId}) =>
+    "${apiUrl}reservations?room_id=$userId";
+
+String addReservationUrl() => "${apiUrl}reservations";
+
+String updateReservationUrl({required int userId}) =>
+    "${apiUrl}reservations/$userId";
+
+String deleteReservationUrl(int reservationId) =>
+    "${apiUrl}reservations/$reservationId";
+
+String getReservationsUrl({required int userId}) =>
+    "${apiUrl}reservations?user_id=$userId";
