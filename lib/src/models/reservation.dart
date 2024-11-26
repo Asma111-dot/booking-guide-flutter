@@ -1,4 +1,5 @@
-import 'package:booking_guide/src/extensions/date_formatting.dart';
+import '../models/payment.dart';
+import '../extensions/date_formatting.dart';
 
 class Reservation {
   final int id;
@@ -9,6 +10,8 @@ class Reservation {
   final String status;
   final double totalPrice;
 
+  List<Payment> payments;
+
   Reservation({
     required this.id,
     required this.userId,
@@ -17,6 +20,7 @@ class Reservation {
     required this.checkOutDate,
     required this.status,
     required this.totalPrice,
+    required this.payments,
   });
 
   Reservation.init()
@@ -26,17 +30,26 @@ class Reservation {
         checkInDate = DateTime.now(),
         checkOutDate = DateTime.now(),
         status = '',
-        totalPrice = 0.0;
+        totalPrice = 0.0,
+        payments = [];
 
   factory Reservation.fromJson(Map<String, dynamic> jsonMap) {
     return Reservation(
       id: jsonMap['id'] ?? 0,
       userId: jsonMap['user_id'] ?? 0,
       roomId: jsonMap['room_id'] ?? 0,
-      checkInDate: DateTime.tryParse(jsonMap['check_in_date'] ?? '') ?? DateTime.now(),
-      checkOutDate: DateTime.tryParse(jsonMap['check_out_date'] ?? '') ?? DateTime.now(),
+      checkInDate:
+          DateTime.tryParse(jsonMap['check_in_date'] ?? '') ?? DateTime.now(),
+      checkOutDate:
+          DateTime.tryParse(jsonMap['check_out_date'] ?? '') ?? DateTime.now(),
       status: jsonMap['status'] ?? '',
-      totalPrice: jsonMap['total_price']?.toDouble() ?? 0.0,
+      totalPrice: jsonMap['total_price'] != null
+          ? double.tryParse(jsonMap['total_price'].toString()) ?? 0.0
+          : 0.0,
+      payments: (jsonMap['payments'] as List<dynamic>?)
+              ?.map((item) => Payment.fromJson(item))
+              .toList() ??
+          [],
     );
   }
 
@@ -49,6 +62,7 @@ class Reservation {
       'check_out_date': checkOutDate.toSqlDateOnly(),
       'status': status,
       'total_price': totalPrice,
+      //'payment': payments.map((a) => a.toJson()).toList(),
     };
   }
 
@@ -60,6 +74,11 @@ class Reservation {
   }
 
   bool isCreate() => id == 0;
+
+  bool get isPaid {
+    return payments.isNotEmpty &&
+        payments.every((payment) => payment.status == 'paid');
+  }
 
   @override
   String toString() {
@@ -90,5 +109,3 @@ class Reservation {
       status.hashCode ^
       totalPrice.hashCode;
 }
-
-

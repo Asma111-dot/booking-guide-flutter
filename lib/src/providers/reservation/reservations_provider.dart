@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/reservation.dart';
 import '../../models/logic/filter_model.dart';
 import '../../models/response/response.dart';
+import '../../models/user.dart';
 import '../../services/request_service.dart';
 import '../../utils/urls.dart';
 
@@ -14,9 +15,10 @@ final reservationsFilterProvider = StateProvider((ref) => const FilterModel());
 @Riverpod(keepAlive: false)
 class Reservations extends _$Reservations {
   @override
-  Response<List<Reservation>> build() => const Response<List<Reservation>>(data: []);
+  Response<List<Reservation>> build(User user) =>
+      const Response<List<Reservation>>(data: []);
 
-  Future fetch({required int userId, FilterModel? filter, bool reset = false}) async {
+  Future fetch({FilterModel? filter, bool reset = false}) async {
     if (!reset &&
         (state.data?.isNotEmpty ?? false) &&
         (state.isLoading() || state.isLast())) {
@@ -29,7 +31,7 @@ class Reservations extends _$Reservations {
     }
 
     await request<List<Reservation>>(
-      url: getReservationsUrl(userId: userId),
+      url: getReservationsUrl(),
       method: Method.get,
       body: {
         'page': reset ? 1 : (state.meta.currentPage ?? 0) + 1,

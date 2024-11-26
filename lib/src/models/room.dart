@@ -1,5 +1,6 @@
 import 'media.dart';
 import 'amenity.dart';
+import 'reservation.dart';
 
 class Room {
   final int id;
@@ -13,6 +14,7 @@ class Room {
 
   List<Media> media;
   List<Amenity> amenities;
+  List<Reservation> reservations;
 
   Room({
     required this.id,
@@ -25,6 +27,7 @@ class Room {
     required this.desc,
     this.media = const [],
     this.amenities = const [],
+    this.reservations = const [],
   });
 
   Room.init()
@@ -37,7 +40,8 @@ class Room {
         pricePerNight = 0.0,
         desc = '',
         media = [],
-        amenities = [];
+        amenities = [],
+        reservations = [];
 
   Room.fromJson(Map<String, dynamic> jsonMap)
       : id = jsonMap['id'] ?? 0,
@@ -56,6 +60,10 @@ class Room {
         amenities = (jsonMap['amenities'] as List<dynamic>?)
                 ?.map((item) => Amenity.fromJson(item))
                 .toList() ??
+            [],
+        reservations = (jsonMap['reservations'] as List<dynamic>?)
+                ?.map((item) => Reservation.fromJson(item))
+                .toList() ??
             [];
 
   Map<String, dynamic> toJson() => {
@@ -69,6 +77,7 @@ class Room {
         "desc": desc,
         "media": media.map((m) => m.toJson()).toList(),
         "amenity": amenities.map((a) => a.toJson()).toList(),
+        "reservation": reservations.map((a) => a.toJson()).toList(),
       };
 
   static List<Room> fromJsonList(List<dynamic> items) =>

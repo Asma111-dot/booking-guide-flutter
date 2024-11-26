@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 
-//"http://192.168.1.110/bookings-guide/public/")
+//  : "http://192.168.1.102/bookings-guide/public/")
 String baseUrl = kDebugMode
     ? (Platform.isIOS
         ? "http://192.168.1.105:8000/"
+        // : "http://10.0.2.2/")
         : "http://172.21.0.134/bookings-guide/public/")
     : "http://bookings-guide.com/";
 
@@ -80,16 +81,17 @@ String getRoomsUrl({required int facilityId}) {
 }
 
 // URLs Reservation
-String getReservationUrl({required int userId}) =>
-    "${apiUrl}reservations?room_id=$userId";
+String getReservationUrl(int reservationId) =>
+    "${apiUrl}reservations/$reservationId";
 
-String addReservationUrl() => "${apiUrl}reservations";
+String addReservationUrl() =>
+    "${apiUrl}reservations";
 
-String updateReservationUrl({required int userId}) =>
-    "${apiUrl}reservations/$userId";
+String updateReservationUrl( int reservationId) =>
+    "${apiUrl}reservations/$reservationId";
 
 String deleteReservationUrl(int reservationId) =>
     "${apiUrl}reservations/$reservationId";
 
-String getReservationsUrl({required int userId}) =>
-    "${apiUrl}reservations?user_id=$userId";
+String getReservationsUrl() =>
+    "${apiUrl}reservations";

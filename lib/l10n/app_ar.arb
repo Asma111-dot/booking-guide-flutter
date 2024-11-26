@@ -2,7 +2,7 @@
   "appTitle": "دليل الحجوزات",
   "welcome": "مرحباً",
   "to": "في",
-  "welcomeToBooking": "مرحبا بكم في دليل الحجوزات",
+  "welcomeToBooking": "مرحبا بك في دليل الحجوزات",
   "ultimateDestination": "وجهتك النهائية للحجوزات",
   "chooseOne": "قم باختيار أحد الخيارات للتمتع بخدمات التطبيق",
   "hotel": "فنادق",
@@ -84,5 +84,8 @@
   "description": "الوصف",
   "amenity": "وسائل الراحة",
   "noAmenities": "لا يوجد وسائل راحة متاح حالياَ",
-  "bookingNow" : "احجز الأن"
+  "bookingNow" : "احجز الأن",
+  "showAvailableDays" : "عرض الأيام المتاحة",
+  "availabilityCalendar": "قائمة الحجوزات",
+  "next": "التالي"
 }

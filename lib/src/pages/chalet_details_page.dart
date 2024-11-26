@@ -45,7 +45,7 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
         icon: const FaIcon(Icons.arrow_back_ios),
       ),
       body: ViewWidget<r.Room>(
-        meta: roomState.meta,
+      meta: roomState.meta,
         data: roomState.data,
         refresh: () async => await ref
             .read(roomProvider.notifier)
@@ -202,14 +202,15 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                   onPressed: () {
+                  //  print(room.reservations);
                     Navigator.pushNamed(
                       context,
-                      Routes.reservation,
-                      arguments: room,
+                      Routes.availabilityCalendar,
+                      arguments: room.reservations,
                     );
                   },
                   child: Text(
-                    trans().bookingNow,
+                    trans().showAvailableDays,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

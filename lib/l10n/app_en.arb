@@ -84,5 +84,8 @@
   "description": "Description",
   "amenity": "Amenity",
   "noAmenities": "No Amenity Available",
-  "bookingNow": "Book Now"
+  "bookingNow": "Book Now",
+  "showAvailableDays": "Show available days",
+  "availabilityCalendar": "List bookings",
+  "next": "Next"
 }

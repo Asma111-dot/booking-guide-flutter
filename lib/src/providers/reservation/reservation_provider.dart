@@ -1,7 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../models/reservation.dart' as r;
+import '../../models/reservation.dart' as res;
 import '../../models/response/response.dart';
+import '../../models/user.dart';
 import '../../services/request_service.dart';
 import '../../utils/urls.dart';
 import 'reservations_provider.dart';
@@ -12,13 +13,15 @@ part 'reservation_provider.g.dart';
 class Reservation extends _$Reservation {
 
   @override
-  Response<r.Reservation> build() => const Response<r.Reservation>();
+  Response<res.Reservation> build(User user, int id) =>
+      const Response<res.Reservation>();
 
-  setData(r.Reservation reservation) {
+
+  setData(res.Reservation reservation) {
     state = state.copyWith(data: reservation);
   }
 
-  Future fetch({required int userId, r.Reservation? reservation}) async {
+  Future fetch({res.Reservation? reservation}) async {
     if (reservation != null) {
       state = state.copyWith(data: reservation);
       state = state.setLoaded();
@@ -26,27 +29,29 @@ class Reservation extends _$Reservation {
     }
 
     state = state.setLoading();
-    await request<r.Reservation>(
-      url: getReservationUrl(userId: userId),
+    await request<res.Reservation>(
+      url: getReservationUrl(id),
       method: Method.get,
     ).then((value) async {
       state = state.copyWith(meta: value.meta, data: value.data);
     });
   }
 
-  Future save(r.Reservation reservation) async {
+  Future save(res.Reservation reservation) async {
     state = state.setLoading();
-    await request<r.Reservation>(
+    await request<res.Reservation>(
       url: reservation.isCreate()
           ? addReservationUrl()
-          : updateReservationUrl(userId: reservation.userId),
+          : updateReservationUrl(reservation.id),
       method: reservation.isCreate() ? Method.post : Method.put,
       body: reservation.toJson(),
     ).then((value) async {
       state = state.copyWith(meta: value.meta);
       if (value.isLoaded()) {
         state = state.copyWith(data: value.data);
-        ref.read(reservationsProvider.notifier).addOrUpdateReservation(value.data!);
+        ref
+            .read(reservationsProvider(user).notifier)
+            .addOrUpdateReservation(value.data!);
       }
     });
   }

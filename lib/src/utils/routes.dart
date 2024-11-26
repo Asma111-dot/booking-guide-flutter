@@ -1,8 +1,10 @@
-import 'package:booking_guide/src/models/facility.dart';
 import 'package:flutter/material.dart';
 
 import '../models/customer.dart';
+import '../models/reservation.dart' as res;
+import '../models/facility.dart';
 import '../models/room.dart';
+import '../pages/availability_calendar_page.dart';
 import '../pages/chalet_details_page.dart';
 import '../pages/customer_page.dart';
 import '../pages/customers_page.dart';
@@ -15,6 +17,7 @@ import '../pages/reservation_page.dart';
 import '../pages/welcome_page.dart';
 import '../pages/layouts/chalets_page.dart';
 import '../pages/hotels_page.dart';
+import '../providers/reservation/reservation_provider.dart';
 
 final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 
@@ -30,6 +33,7 @@ class Routes {
   static const String hotelDetails = '/hotel_details';
   static const String reservation = '/reservation';
   static const String myAccount = '/account';
+  static const String availabilityCalendar = '/availability_calendar';
   static const String myBookings = '/my_reservations';
 
   static Route? generate(RouteSettings settings) {
@@ -80,19 +84,27 @@ class Routes {
           builder: (_) => HotelDetailsPage(facility: args as Facility),
           settings: settings,
         );
-      case reservation:
-        return MaterialPageRoute(
-          builder: (_) => ReservationPage(room: args as Room),
-          settings: settings,
-        );
       case myAccount:
         return MaterialPageRoute(
-          builder: (_) =>  AccountPage(),
+          builder: (_) => AccountPage(),
           settings: settings,
         );
       case myBookings:
         return MaterialPageRoute(
           builder: (_) => const MyReservationsPage(),
+          settings: settings,
+        );
+      case availabilityCalendar:
+        return MaterialPageRoute(
+          builder: (_) => AvailabilityCalendarPage(
+            reservations: args as List<res.Reservation>,
+          ),
+          settings: settings,
+        );
+
+      case reservation:
+        return MaterialPageRoute(
+          builder: (_) => ReservationPage(room: args as Room),
           settings: settings,
         );
       default:
