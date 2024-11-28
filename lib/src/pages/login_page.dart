@@ -175,7 +175,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 });
                               }
                               await ref.read(loginProvider.notifier).submit();
-                              return;
                             }
                             setState(() => autoValidate = true);
                           },

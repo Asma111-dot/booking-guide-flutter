@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../helpers/general_helper.dart';
@@ -10,7 +11,16 @@ class WelcomePage extends ConsumerWidget {
 
   Future<void> _navigateToNextScreen(BuildContext context) async {
     await Future.delayed(const Duration(seconds: 3));
-    Navigator.pushReplacementNamed(context, Routes.login);
+
+    final box = await Hive.openBox('auth');
+    final isFirstVisit = box.get('isFirstVisit', defaultValue: true);
+
+    if (isFirstVisit) {
+      await box.put('isFirstVisit', false);
+      Navigator.pushReplacementNamed(context, Routes.login);
+    } else {
+      Navigator.pushReplacementNamed(context, Routes.facilityTypes);
+    }
   }
 
   @override
@@ -54,10 +64,6 @@ class WelcomePage extends ConsumerWidget {
                 color: Colors.white70,
               ),
             ),
-            // const SizedBox(height: 20),
-            // const CircularProgressIndicator(
-            //   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-            // ),
           ],
         ),
       ),

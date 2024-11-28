@@ -1,17 +1,17 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 
-//  : "http://192.168.1.102/bookings-guide/public/")
 String baseUrl = kDebugMode
     ? (Platform.isIOS
         ? "http://192.168.1.105:8000/"
-        // : "http://10.0.2.2/")
-        : "http://172.21.0.134/bookings-guide/public/")
+        // : "http://192.168.1.102/bookings-guide/public/")
+// : "http://10.0.2.2/")
+: "http://172.21.0.134/bookings-guide/public/")
     : "http://bookings-guide.com/";
 
 String apiUrl = "${baseUrl}api/";
 
-String apiPanelUrl(String subDomain) => "${apiUrl}app/$subDomain";
+String apiPanelUrl(String subDomain) => "${apiUrl}app/$subDomain";//do net use
 
 // URLs Users
 String loginUrl() => "${apiUrl}login";
@@ -84,14 +84,12 @@ String getRoomsUrl({required int facilityId}) {
 String getReservationUrl(int reservationId) =>
     "${apiUrl}reservations/$reservationId";
 
-String addReservationUrl() =>
-    "${apiUrl}reservations";
+String addReservationUrl() => "${apiUrl}reservations";
 
-String updateReservationUrl( int reservationId) =>
+String updateReservationUrl(int reservationId) =>
     "${apiUrl}reservations/$reservationId";
 
 String deleteReservationUrl(int reservationId) =>
     "${apiUrl}reservations/$reservationId";
 
-String getReservationsUrl() =>
-    "${apiUrl}reservations";
+String getReservationsUrl() => "${apiUrl}reservations";

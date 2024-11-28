@@ -104,9 +104,12 @@ class Routes {
 
       case reservation:
         return MaterialPageRoute(
-          builder: (_) => ReservationPage(room: args as Room),
+          builder: (_) => ReservationPage(
+            reservations: args as List<res.Reservation>,
+          ),
           settings: settings,
         );
+
       default:
         return null;
     }

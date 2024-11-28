@@ -1,11 +1,12 @@
-import 'package:booking_guide/src/models/room.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ReservationPage extends ConsumerStatefulWidget {
-  final Room room;
+import '../models/reservation.dart';
 
-  const ReservationPage({Key? key, required this.room}) : super(key: key);
+class ReservationPage extends ConsumerStatefulWidget {
+  final List<Reservation> reservations;
+
+  const ReservationPage({Key? key, required this.reservations}) : super(key: key);
 
   @override
   ConsumerState<ReservationPage> createState() => _ReservationPageState();
