@@ -58,7 +58,7 @@ class User extends _$User {
       hideLoading();
     });
   }
-
+//if to ues logout
   Future logout() async {
 
     showLoading();

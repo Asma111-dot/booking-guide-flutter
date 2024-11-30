@@ -33,7 +33,7 @@ class Login extends _$Login {
     setToken(value.meta.accessToken ?? "");
     ref.read(userProvider.notifier).saveUserLocally(value.data!);
     //navKey.currentState!.pushNamedAndRemoveUntil(Routes.customers, (r) => false);
-    navKey.currentState?.pushNamedAndRemoveUntil(Routes.facilityTypes, (r) => true);
+    navKey.currentState?.pushNamedAndRemoveUntil(Routes.facilityTypes, (r) => false);
 
   }
 }

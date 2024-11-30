@@ -44,6 +44,7 @@ class _ChaletsPageState extends ConsumerState<ChaletsPage> {
           meta: facilitiesState.meta,
           data: facilitiesState.data,
           onLoaded: (data) {
+         //   print("الحالة الحالية للبيانات: ${facilitiesState.meta?.status}");
             return ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: data.length,
@@ -51,7 +52,6 @@ class _ChaletsPageState extends ConsumerState<ChaletsPage> {
                 final facility = data[index];
                 final firstRoom =
                     facility.rooms.isNotEmpty ? facility.rooms.first : null;
-
                 return Container(
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   decoration: BoxDecoration(
@@ -70,16 +70,19 @@ class _ChaletsPageState extends ConsumerState<ChaletsPage> {
                     leading: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: firstRoom != null && firstRoom.media.isNotEmpty
-                          ? CachedNetworkImage(
-                              imageUrl: firstRoom.media.first.original_url,
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) =>
-                                  const CircularProgressIndicator(),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            )
+                          ? (() {
+                              print(firstRoom.media.first.original_url);
+                              return CachedNetworkImage(
+                                imageUrl: firstRoom.media.first.original_url,
+                                width: 80,
+                                height: 80,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) =>
+                                    const CircularProgressIndicator(),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
+                              );
+                            })()
                           : Image.asset(
                               chaletImage,
                               width: 80,

@@ -55,7 +55,7 @@ bool compareVersions(String current, String minimum) {
     return isHigher;
   }
 }
-
+// logout
 Future clearAllLocalDataAndNavigate() async {
   await clearCurrentUser();
   await clearSettings();
