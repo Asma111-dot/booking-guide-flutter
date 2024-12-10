@@ -29,9 +29,11 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
   void initState() {
     super.initState();
     tabController = TabController(length: 3, vsync: this);
-    Future.microtask(() {
-      ref.read(roomProvider.notifier).fetch(facilityId: widget.facility.id);
-    });
+    Future.microtask(() async {
+      final value = await ref
+          .read(roomProvider.notifier)
+          .fetch(roomId: widget.facility.rooms.first.id);
+  });
   }
 
   @override
@@ -45,11 +47,11 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
         icon: const FaIcon(Icons.arrow_back_ios),
       ),
       body: ViewWidget<r.Room>(
-      meta: roomState.meta,
+        meta: roomState.meta,
         data: roomState.data,
         refresh: () async => await ref
             .read(roomProvider.notifier)
-            .fetch(facilityId: widget.facility.id),
+            .fetch(roomId: widget.facility.rooms.first.id),
         forceShowLoaded: roomState.data != null,
         onLoaded: (room) {
           return Stack(
@@ -112,20 +114,21 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            "${trans().capacity}: ${room.capacity}",
+                            "${trans().capacity}: ${room.capacity} ${trans().person}",
                             style: const TextStyle(
                               fontSize: 18,
+                              color: Colors.blueGrey,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            "${trans().status}: ${room.status}",
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey,
-                            ),
-                          ),
+                          // const SizedBox(height: 8),
+                          // Text(
+                          //   "${trans().status}: ${room.status}",
+                          //   style: const TextStyle(
+                          //     fontSize: 16,
+                          //     color: Colors.grey,
+                          //   ),
+                          // ),
                           const SizedBox(height: 16),
                           TabBar(
                             controller: tabController,
@@ -149,6 +152,7 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                             child: TabBarView(
                               controller: tabController,
                               children: [
+                                // اTab 1: Description
                                 SingleChildScrollView(
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -158,11 +162,15 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                                     ),
                                   ),
                                 ),
+
+                                // Tab 2: Amenities
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
                                     room.amenities.isNotEmpty
-                                        ? "${trans().amenity}: ${room.amenities.map((a) => a.name).join(', ')}"
+                                        ? room.amenities
+                                            .map((a) => a.name)
+                                            .join('\n')
                                         : "${trans().amenity}: ${trans().noAmenities}",
                                     style: const TextStyle(
                                       fontSize: 16,
@@ -170,16 +178,66 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    '${trans().price}: ${room.pricePerNight.toStringAsFixed(2)} ${trans().riyalY}',
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+
+                                // Tab 3: Prices
+                                Expanded(
+                                  child: ListView(
+                                    children: room.roomPrices.isNotEmpty
+                                        ? room.roomPrices.map((price) {
+                                      return Container(
+                                        margin: const EdgeInsets.symmetric(vertical: 8.0),
+                                        padding: const EdgeInsets.all(16.0),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.grey.withOpacity(0.3)),
+                                          borderRadius: BorderRadius.circular(12),
+                                          color: Colors.transparent,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black.withOpacity(0.1),
+                                              blurRadius: 10,
+                                              offset: Offset(0, 4),
+                                            ),
+                                          ],
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "${price.amount} ${trans().riyalY}",
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              price.period,
+                                              style: const TextStyle(fontSize: 14),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              "${trans().deposit} ${price.deposit} ${price.currency}",
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }).toList()
+                                        : [
+                                      Text(
+                                        "${trans().price}: ${trans().priceNotAvailable}",
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
+                                )
+
                               ],
                             ),
                           ),
@@ -202,12 +260,12 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                   onPressed: () {
-                  //  print(room.reservations);
-                    Navigator.pushNamed(
-                      context,
-                      Routes.availabilityCalendar,
-                      arguments: room.reservations,
-                    );
+                    //  print(room.reservations);
+                    //   Navigator.pushNamed(
+                    //     context,
+                    //     Routes.availabilityCalendar,
+                    //     arguments: room.reservations,
+                    //   );
                   },
                   child: Text(
                     trans().showAvailableDays,

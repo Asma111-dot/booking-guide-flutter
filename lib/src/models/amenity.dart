@@ -1,9 +1,10 @@
 class Amenity {
-  final int id;
-  final String name;
-  final String desc;
-  final num price;
-  final String status;
+  int id;
+  String name;
+  String desc;
+  num price;
+  String status;
+  String? icon;
 
   Amenity({
     required this.id,
@@ -11,6 +12,7 @@ class Amenity {
     required this.desc,
     required this.price,
     required this.status,
+    required this.icon,
   });
 
   Amenity.init()
@@ -18,17 +20,27 @@ class Amenity {
         name = '',
         desc = '',
         price = 0.0,
-        status = '';
+        status = '',
+        icon = '';
 
   Amenity.fromJson(Map<String, dynamic> jsonMap)
       : id = int.tryParse(jsonMap['id'].toString()) ?? 0,
         name = jsonMap['name'] ?? '',
         desc = jsonMap['desc'] ?? '',
         price = num.tryParse(jsonMap['price'].toString()) ?? 0.0,
-        status = jsonMap['status'] ?? '';
+        status = jsonMap['status'] ?? '',
+        icon = jsonMap['icon'] ?? '';
 
-  Map<String, dynamic> toJson() =>
-      {"id": id, "name": name, "desc": desc, "price": price, "status": status};
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "desc": desc,
+        "price": price,
+        "status": status,
+        "icon": icon
+      };
+
+  bool isCreate() => id == 0;
 
   static List<Amenity> fromJsonList(List<dynamic> items) =>
       items.map((item) => Amenity.fromJson(item)).toList();

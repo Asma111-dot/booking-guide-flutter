@@ -1,12 +1,12 @@
 class Payment {
-  final int id;
-  final int reservationId;
-  final int transactionTypeId;
-  final int paymentMethodId;
-  final double amount;
-  final DateTime date;
-  final String status;
-  final Map<String, dynamic> response;
+   int id;
+   int reservationId;
+   int transactionTypeId;
+   int paymentMethodId;
+   double amount;
+   DateTime date;
+   String status;
+   Map<String, dynamic> response;
 
   Payment({
     required this.id,

@@ -20,19 +20,27 @@ class Facilities extends _$Facilities {
   Future fetch({required int facilityTypeId}) async {
     state = state.setLoading();
 
-    await request<List<dynamic>>(
-      url: getFacilitiesUrl(facilityTypeId: facilityTypeId),
-      method: Method.get,
-    ).then((value) async {
-      List<Facility> facilities = Facility.fromJsonList(value.data ?? [])
-          .where((facility) => facility.facilityTypeId == facilityTypeId)
-          .toList();
+    try{
+      await request<List<dynamic>>(
+        url: getFacilitiesUrl(facilityTypeId: facilityTypeId),
+        method: Method.get,
+      ).then((value) async {
+        List<Facility> facilities = Facility.fromJsonList(value.data ?? [])
+            .where((facility) => facility.facilityTypeId == facilityTypeId)
+            .toList();
 
-      state = state.copyWith(data: facilities, meta: value.meta);
-      state = state.setLoaded();
-    }).catchError((error) {
-      state = state.setError(error.toString());
-    });
+        state = state.copyWith(data: facilities, meta: value.meta);
+        state = state.setLoaded();
+      }).catchError((error) {
+        state = state.setError(error.toString());
+        print(error);
+      });
+    }catch(e,s){
+       print(e);
+       print(s);
+    }
+
+
   }
 
   Future save(Facility facility) async {

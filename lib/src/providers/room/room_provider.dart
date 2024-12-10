@@ -10,7 +10,6 @@ part 'room_provider.g.dart';
 
 @Riverpod(keepAlive: false)
 class Room extends _$Room {
-
   @override
   Response<r.Room> build() => const Response<r.Room>();
 
@@ -18,7 +17,7 @@ class Room extends _$Room {
     state = state.copyWith(data: room);
   }
 
-  Future fetch({required int facilityId, r.Room? room}) async {
+  Future fetch({required int roomId, r.Room? room}) async {
     if (room != null) {
       state = state.copyWith(data: room);
       state = state.setLoaded();
@@ -26,28 +25,36 @@ class Room extends _$Room {
     }
 
     state = state.setLoading();
-    await request<r.Room>(
-      url: getRoomUrl(facilityId: facilityId),
-      method: Method.get,
-    ).then((value) async {
+    try {
+      final value = await request<r.Room>(
+        url: getRoomUrl(roomId: roomId),
+        method: Method.get,
+      );
       state = state.copyWith(meta: value.meta, data: value.data);
-    });
+    } catch (e) {
+      state = state.setError();
+      print("Error fetching room: $e");
+    }
   }
 
   Future save(r.Room room) async {
     state = state.setLoading();
-    await request<r.Room>(
-      url: room.isCreate()
-          ? addRoomUrl()
-          : updateRoomUrl(roomId: room.id),
-      method: room.isCreate() ? Method.post : Method.put,
-      body: room.toJson(),
-    ).then((value) async {
+    try {
+      final value = await request<r.Room>(
+        url: room.isCreate()
+            ? addRoomUrl()
+            : updateRoomUrl(roomId: room.id),
+        method: room.isCreate() ? Method.post : Method.put,
+        body: room.toJson(),
+      );
       state = state.copyWith(meta: value.meta);
       if (value.isLoaded()) {
         state = state.copyWith(data: value.data);
         ref.read(roomsProvider.notifier).addOrUpdateRoom(value.data!);
       }
-    });
+    } catch (e) {
+      state = state.setError();
+      print("Error saving room: $e");
+    }
   }
 }

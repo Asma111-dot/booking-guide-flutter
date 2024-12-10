@@ -2,20 +2,20 @@ import '../models/payment.dart';
 import '../extensions/date_formatting.dart';
 
 class Reservation {
-  final int id;
-  final int userId;
-  final int roomId;
-  final DateTime checkInDate;
-  final DateTime checkOutDate;
-  final String status;
-  final double totalPrice;
+   int id;
+   int userId;
+   int roomPriceId;
+   DateTime checkInDate;
+   DateTime checkOutDate;
+   String status;
+   double totalPrice;
 
   List<Payment> payments;
 
   Reservation({
     required this.id,
     required this.userId,
-    required this.roomId,
+    required this.roomPriceId,
     required this.checkInDate,
     required this.checkOutDate,
     required this.status,
@@ -26,7 +26,7 @@ class Reservation {
   Reservation.init()
       : id = 0,
         userId = 0,
-        roomId = 0,
+        roomPriceId = 0,
         checkInDate = DateTime.now(),
         checkOutDate = DateTime.now(),
         status = '',
@@ -37,7 +37,7 @@ class Reservation {
     return Reservation(
       id: jsonMap['id'] ?? 0,
       userId: jsonMap['user_id'] ?? 0,
-      roomId: jsonMap['room_id'] ?? 0,
+      roomPriceId: jsonMap['room_price_id'] ?? 0,
       checkInDate:
           DateTime.tryParse(jsonMap['check_in_date'] ?? '') ?? DateTime.now(),
       checkOutDate:
@@ -57,7 +57,7 @@ class Reservation {
     return {
       'id': id,
       'user_id': userId,
-      'room_id': roomId,
+      'room_price_id': roomPriceId,
       'check_in_date': checkInDate.toSqlDateOnly(),
       'check_out_date': checkOutDate.toSqlDateOnly(),
       'status': status,
@@ -82,7 +82,7 @@ class Reservation {
 
   @override
   String toString() {
-    return 'Reservation(id: $id, userId: $userId, roomId: $roomId, checkInDate: "$checkInDate", checkOutDate: "$checkOutDate", status: "$status", totalPrice: $totalPrice)';
+    return 'Reservation(id: $id, userId: $userId, roomPriceId: $roomPriceId, checkInDate: "$checkInDate", checkOutDate: "$checkOutDate", status: "$status", totalPrice: $totalPrice)';
   }
 
   @override
@@ -92,7 +92,7 @@ class Reservation {
             runtimeType == other.runtimeType &&
             id == other.id &&
             userId == other.userId &&
-            roomId == other.roomId &&
+            roomPriceId == other.roomPriceId &&
             checkInDate == other.checkInDate &&
             checkOutDate == other.checkOutDate &&
             status == other.status &&
@@ -103,7 +103,7 @@ class Reservation {
   int get hashCode =>
       id.hashCode ^
       userId.hashCode ^
-      roomId.hashCode ^
+      roomPriceId.hashCode ^
       checkInDate.hashCode ^
       checkOutDate.hashCode ^
       status.hashCode ^

@@ -1,6 +1,6 @@
 class Media {
-  final int id;
-  final String original_url;
+   int id;
+   String original_url;
 
   Media({
     required this.id,

@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import '../models/customer.dart';
 import '../models/reservation.dart' as res;
 import '../models/facility.dart';
+import '../models/facility_type.dart';
 import '../models/room.dart';
-import '../pages/availability_calendar_page.dart';
+import '../pages/price_calendar_page.dart';
 import '../pages/chalet_details_page.dart';
 import '../pages/customer_page.dart';
 import '../pages/customers_page.dart';
+import '../pages/layouts/chalets_page.dart';
+import '../pages/hotels_page.dart';
 import '../pages/facility_types_page.dart';
 import '../pages/hotel_details_page.dart';
 import '../pages/layouts/account_page.dart';
@@ -15,8 +18,6 @@ import '../pages/layouts/my_reservations_page.dart';
 import '../pages/login_page.dart';
 import '../pages/reservation_page.dart';
 import '../pages/welcome_page.dart';
-import '../pages/layouts/chalets_page.dart';
-import '../pages/hotels_page.dart';
 import '../providers/reservation/reservation_provider.dart';
 
 final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
@@ -96,7 +97,7 @@ class Routes {
         );
       case availabilityCalendar:
         return MaterialPageRoute(
-          builder: (_) => AvailabilityCalendarPage(
+          builder: (_) => PriceAndCalendarPage(
             reservations: args as List<res.Reservation>,
           ),
           settings: settings,

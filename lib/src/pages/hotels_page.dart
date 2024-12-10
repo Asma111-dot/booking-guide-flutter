@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../helpers/general_helper.dart';
 import '../providers/facility/facility_provider.dart';
@@ -19,6 +21,44 @@ class HotelsPage extends ConsumerStatefulWidget {
 }
 
 class _HotelsPageState extends ConsumerState<HotelsPage> {
+  late GoogleMapController mapController;
+  LatLng? _selectedLocation;
+
+  void _showMapDialog(Facility facility, List<Facility> facilities) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: SizedBox(
+            height: 500,
+            child: GoogleMap(
+              initialCameraPosition: CameraPosition(
+                target: LatLng(
+                  facility.latitude ?? 15.5520,
+                  facility.longitude ?? 48.5164,
+                ),
+                zoom: 12,
+              ),
+              markers: facilities.map((facility) {
+                return Marker(
+                  markerId: MarkerId(facility.id.toString()),
+                  position: LatLng(
+                    facility.latitude ?? 0.0,
+                    facility.longitude ?? 0.0,
+                  ),
+                  infoWindow: InfoWindow(title: facility.name),
+                );
+              }).toSet(),
+              onMapCreated: (controller) {
+                mapController = controller;
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -70,12 +110,30 @@ class _HotelsPageState extends ConsumerState<HotelsPage> {
                           topLeft: Radius.circular(15),
                           topRight: Radius.circular(15),
                         ),
-                        child: Image.asset(
-                          hotelImage,
-                          height: 200,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
+                        child:
+                            facility.logo != null && facility.logo!.isNotEmpty
+                                ? CachedNetworkImage(
+                                    imageUrl: facility.logo!,
+                                    height: 200,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                    placeholder: (context, url) => const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        Image.asset(
+                                      hotelImage,
+                                      height: 200,
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : Image.asset(
+                                    hotelImage,
+                                    height: 200,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -120,20 +178,29 @@ class _HotelsPageState extends ConsumerState<HotelsPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                // location
-                                const Icon(Icons.location_on_outlined,
-                                    color: CustomTheme.primaryColor, size: 20),
-                                const SizedBox(width: 4),
-                                Text(
-                                  "الموقع",
-                                  //  facility.location ?? "Unknown Location",
-                                  style: const TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 14,
-                                  ),
+                                Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        _showMapDialog(facility, data);
+                                      },
+                                      child: const Icon(
+                                        Icons.location_on_outlined,
+                                        color: CustomTheme.primaryColor,
+                                        size: 20,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      facility.address ?? '${trans().address}',
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-
-                                // rating & reviewsCount
+                                // Reviews
                                 Row(
                                   children: [
                                     Text(
@@ -145,8 +212,11 @@ class _HotelsPageState extends ConsumerState<HotelsPage> {
                                       ),
                                     ),
                                     const SizedBox(width: 4),
-                                    const Icon(Icons.star,
-                                        color: Colors.amber, size: 20),
+                                    const Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                      size: 20,
+                                    ),
                                   ],
                                 ),
                               ],

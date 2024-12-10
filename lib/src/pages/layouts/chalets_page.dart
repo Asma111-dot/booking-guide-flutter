@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../helpers/general_helper.dart';
 import '../../providers/facility/facility_provider.dart';
@@ -11,9 +12,12 @@ import '../../utils/theme.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../../widgets/view_widget.dart';
 import '../../models/facility.dart';
+import '../../models/facility_type.dart';
 import 'main_layout.dart';
 
 class ChaletsPage extends ConsumerStatefulWidget {
+  //final FacilityType facilityType;
+
   const ChaletsPage({Key? key}) : super(key: key);
 
   @override
@@ -21,6 +25,44 @@ class ChaletsPage extends ConsumerStatefulWidget {
 }
 
 class _ChaletsPageState extends ConsumerState<ChaletsPage> {
+  late GoogleMapController mapController;
+  LatLng? _selectedLocation;
+
+  void _showMapDialog(Facility facility, List<Facility> facilities) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: SizedBox(
+            height: 500,
+            child: GoogleMap(
+              initialCameraPosition: CameraPosition(
+                target: LatLng(
+                  facility.latitude ?? 15.5520,
+                  facility.longitude ?? 48.5164,
+                ),
+                zoom: 12,
+              ),
+              markers: facilities.map((facility) {
+                return Marker(
+                  markerId: MarkerId(facility.id.toString()),
+                  position: LatLng(
+                    facility.latitude ?? 0.0,
+                    facility.longitude ?? 0.0,
+                  ),
+                  infoWindow: InfoWindow(title: facility.name),
+                );
+              }).toSet(),
+              onMapCreated: (controller) {
+                mapController = controller;
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -32,7 +74,6 @@ class _ChaletsPageState extends ConsumerState<ChaletsPage> {
   @override
   Widget build(BuildContext context) {
     final facilitiesState = ref.watch(facilitiesProvider);
-
     return MainLayout(
       currentIndex: 0,
       child: Scaffold(
@@ -40,263 +81,119 @@ class _ChaletsPageState extends ConsumerState<ChaletsPage> {
           appTitle: trans().chalet,
           icon: const FaIcon(Icons.arrow_back_ios),
         ),
-        body: ViewWidget<List<Facility>>(
-          meta: facilitiesState.meta,
-          data: facilitiesState.data,
-          onLoaded: (data) {
-         //   print("الحالة الحالية للبيانات: ${facilitiesState.meta?.status}");
-            return ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                final facility = data[index];
-                final firstRoom =
-                    facility.rooms.isNotEmpty ? facility.rooms.first : null;
-                return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 6,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(16),
-                    leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: firstRoom != null && firstRoom.media.isNotEmpty
-                          ? (() {
-                              print(firstRoom.media.first.original_url);
-                              return CachedNetworkImage(
-                                imageUrl: firstRoom.media.first.original_url,
-                                width: 80,
-                                height: 80,
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) =>
-                                    const CircularProgressIndicator(),
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons.error),
-                              );
-                            })()
-                          : Image.asset(
-                              chaletImage,
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
+        body: Column(
+          children: [
+            Expanded(
+              child: ViewWidget<List<Facility>>(
+                meta: facilitiesState.meta,
+                data: facilitiesState.data,
+                onLoaded: (data) {
+                  return ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      final facility = data[index];
+                      final firstRoom = facility.rooms.isNotEmpty
+                          ? facility.rooms.first
+                          : null;
+                      final firstPrice =
+                          firstRoom?.roomPrices?.first?.amount ?? 0.0;
+                      // print("رابط الصورة: ${facility.logo}");
+
+                      return Container(
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 6,
+                              offset: Offset(0, 2),
                             ),
-                    ),
-                    title: Text(
-                      facility.name,
-                      style: TextStyle(
-                        color: CustomTheme.primaryColor,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 4),
-                        Text(
-                          facility.desc,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          ],
                         ),
-                        if (firstRoom != null) ...[
-                          const SizedBox(height: 4),
-                          Text(
-                            'Price: \$${firstRoom.pricePerNight}',
-                            style: const TextStyle(
-                              color: Colors.green,
-                              fontSize: 14,
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.all(16),
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: CachedNetworkImage(
+                              imageUrl: facility.logo ?? '',
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  Image.asset(chaletImage, fit: BoxFit.cover),
+                            ),
+                          ),
+                          title: Text(
+                            facility.name,
+                            style: TextStyle(
+                              color: CustomTheme.primaryColor,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ],
-                        const SizedBox(height: 4),
-                        Text(
-                          facility.status,
-                          style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 14,
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                firstPrice > 0
+                                    ? '${trans().priceStartFrom}: ${firstPrice}${trans().riyalY}'
+                                    : '${trans().priceNotAvailable}',
+                                style: TextStyle(
+                                  color: firstPrice > 0
+                                      ? Colors.amberAccent
+                                      : Colors.redAccent,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                facility.address ?? '${trans().address}',
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
                           ),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.location_on_outlined),
+                            onPressed: () {
+                              _showMapDialog(facility, data);
+                            },
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              Routes.chaletDetails,
+                              arguments: facility,
+                            );
+                          },
                         ),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        Routes.chaletDetails,
-                        arguments: facility,
                       );
                     },
+                  );
+                },
+                onLoading: () =>
+                    const Center(child: CircularProgressIndicator()),
+                onEmpty: () => const Center(
+                  child: Text(
+                    "لا توجد بيانات",
+                    style: TextStyle(color: CustomTheme.placeholderColor),
                   ),
-                );
-              },
-            );
-          },
-          onLoading: () => const Center(child: CircularProgressIndicator()),
-          onEmpty: () => const Center(
-            child: Text(
-              "",
-              style: TextStyle(color: CustomTheme.placeholderColor),
+                ),
+                showError: true,
+                showEmpty: true,
+              ),
             ),
-          ),
-          showError: true,
-          showEmpty: true,
+          ],
         ),
       ),
     );
   }
 }
-
-// class ChaletsPage extends ConsumerStatefulWidget {
-//   const ChaletsPage({Key? key}) : super(key: key);
-//
-//   @override
-//   ConsumerState createState() => _ChaletsPageState();
-// }
-//
-// class _ChaletsPageState extends ConsumerState<ChaletsPage> {
-//   @override
-//   void initState() {
-//     super.initState();
-//     Future.microtask(() {
-//       ref.read(facilitiesProvider.notifier).fetch(facilityTypeId: 2);
-//     });
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final facilitiesState = ref.watch(facilitiesProvider);
-//
-//     return MainLayout(
-//       currentIndex: 0, // الصفحة الرئيسية
-//       child: Scaffold(
-//         appBar: CustomAppBar(
-//           appTitle: trans().chalet,
-//           icon: const FaIcon(Icons.arrow_back_ios),
-//         ),
-//         body: ViewWidget<List<Facility>>(
-//           meta: facilitiesState.meta,
-//           data: facilitiesState.data,
-//           onLoaded: (data) {
-//             return ListView.builder(
-//               padding: const EdgeInsets.symmetric(horizontal: 16),
-//               itemCount: data.length,
-//               itemBuilder: (context, index) {
-//                 final facility = data[index];
-//                 final firstRoom =
-//                 facility.rooms.isNotEmpty ? facility.rooms.first : null;
-//
-//                 return Container(
-//                   margin: const EdgeInsets.symmetric(vertical: 8),
-//                   decoration: BoxDecoration(
-//                     color: Colors.white,
-//                     borderRadius: BorderRadius.circular(15),
-//                     boxShadow: const [
-//                       BoxShadow(
-//                         color: Colors.black26,
-//                         blurRadius: 6,
-//                         offset: Offset(0, 2),
-//                       ),
-//                     ],
-//                   ),
-//                   child: ListTile(
-//                     contentPadding: const EdgeInsets.all(16),
-//                     leading: ClipRRect(
-//                       borderRadius: BorderRadius.circular(10),
-//                       child: firstRoom != null && firstRoom.media.isNotEmpty
-//                           ? CachedNetworkImage(
-//                         imageUrl: firstRoom.media.first.original_url,
-//                         width: 80,
-//                         height: 80,
-//                         fit: BoxFit.cover,
-//                         placeholder: (context, url) =>
-//                         const CircularProgressIndicator(),
-//                         errorWidget: (context, url, error) =>
-//                         const Icon(Icons.error),
-//                       )
-//                           : Image.asset(
-//                         chaletImage,
-//                         width: 80,
-//                         height: 80,
-//                         fit: BoxFit.cover,
-//                       ),
-//                     ),
-//                     title: Text(
-//                       facility.name,
-//                       style: TextStyle(
-//                         color: CustomTheme.primaryColor,
-//                         fontSize: 18,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                     ),
-//                     subtitle: Column(
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         const SizedBox(height: 4),
-//                         Text(
-//                           facility.desc,
-//                           style: const TextStyle(
-//                             color: Colors.black,
-//                             fontSize: 16,
-//                             fontWeight: FontWeight.w500,
-//                           ),
-//                         ),
-//                         if (firstRoom != null) ...[
-//                           const SizedBox(height: 4),
-//                           Text(
-//                             'Price: \$${firstRoom.pricePerNight}',
-//                             style: const TextStyle(
-//                               color: Colors.green,
-//                               fontSize: 14,
-//                               fontWeight: FontWeight.bold,
-//                             ),
-//                           ),
-//                         ],
-//                         const SizedBox(height: 4),
-//                         Text(
-//                           facility.status,
-//                           style: const TextStyle(
-//                             color: Colors.grey,
-//                             fontSize: 14,
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                     onTap: () {
-//                       Navigator.pushNamed(
-//                         context,
-//                         Routes.chaletDetails,
-//                         arguments: facility,
-//                       );
-//                     },
-//                   ),
-//                 );
-//               },
-//             );
-//           },
-//           onLoading: () => const Center(child: CircularProgressIndicator()),
-//           onEmpty: () => const Center(
-//             child: Text(
-//               "",
-//               style: TextStyle(color: CustomTheme.placeholderColor),
-//             ),
-//           ),
-//           showError: true,
-//           showEmpty: true,
-//         ),
-//       ),
-//     );
-//   }
-// }
-//

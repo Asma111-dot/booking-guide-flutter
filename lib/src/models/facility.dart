@@ -1,11 +1,16 @@
 import 'room.dart';
 
 class Facility {
-  final int id;
-  final int facilityTypeId;
-  final String name;
-  final String desc;
-  final String status;
+  int id;
+  int facilityTypeId;
+  String name;
+  String desc;
+  String status;
+  String? address; // Nullable
+  double? latitude;
+  double? longitude;
+  String? geojson;
+  String? logo;
 
   List<Room> rooms;
 
@@ -15,6 +20,11 @@ class Facility {
     required this.name,
     required this.desc,
     required this.status,
+    this.address,
+    this.latitude,
+    this.longitude,
+    this.geojson,
+    this.logo,
     this.rooms = const [],
   });
 
@@ -24,18 +34,29 @@ class Facility {
         name = '',
         desc = '',
         status = '',
+        address = null,
+        latitude = null,
+        longitude = null,
+        geojson = null,
+        logo = null,
         rooms = [];
 
   factory Facility.fromJson(Map<String, dynamic> jsonMap) {
+   // print(" jsonMap  =${jsonMap}");
     return Facility(
       id: jsonMap['id'] ?? 0,
       facilityTypeId: jsonMap['facility_type_id'] ?? 0,
       name: jsonMap['name'] ?? '',
       desc: jsonMap['desc'] ?? '',
       status: jsonMap['status'] ?? '',
+      address: jsonMap['address'],
+      latitude: double.tryParse(jsonMap['latitude']?.toString() ?? ''),
+      longitude: double.tryParse(jsonMap['longitude']?.toString() ?? ''),
+      geojson: jsonMap['geojson'],
+      logo: jsonMap['logo'],
       rooms: (jsonMap['rooms'] as List<dynamic>?)
-          ?.map((item) => Room.fromJson(item))
-          .toList() ??
+              ?.map((item) => Room.fromJson(item))
+              .toList() ??
           [],
     );
   }
@@ -47,6 +68,11 @@ class Facility {
       'name': name,
       'desc': desc,
       'status': status,
+      'address': address,
+      'latitude': latitude,
+      'longitude': longitude,
+      'geojson': geojson,
+      'logo': logo,
       'rooms': rooms.map((room) => room.toJson()).toList(),
     };
   }
@@ -62,7 +88,7 @@ class Facility {
 
   @override
   String toString() {
-    return 'Facility(id: $id, facilityTypeId: $facilityTypeId, name: "$name", desc: "$desc", status: "$status", rooms: $rooms)';
+    return 'Facility(id: $id, facilityTypeId: $facilityTypeId, name: "$name", desc: "$desc", status: "$status", address: "$address", latitude: $latitude, longitude: $longitude, geojson: "$geojson",logo: "$logo", rooms: $rooms)';
   }
 
   @override
@@ -75,6 +101,11 @@ class Facility {
             name == other.name &&
             desc == other.desc &&
             status == other.status &&
+            address == other.address &&
+            latitude == other.latitude &&
+            longitude == other.longitude &&
+            geojson == other.geojson &&
+            logo == other.logo &&
             rooms == other.rooms;
   }
 
@@ -85,5 +116,9 @@ class Facility {
       name.hashCode ^
       desc.hashCode ^
       status.hashCode ^
+      address.hashCode ^
+      latitude.hashCode ^
+      longitude.hashCode ^
+      geojson.hashCode ^
       rooms.hashCode;
 }

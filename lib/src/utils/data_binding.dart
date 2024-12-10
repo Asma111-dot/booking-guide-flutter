@@ -5,8 +5,10 @@ import '../models/facility.dart';
 import '../models/reservation.dart';
 import '../models/response/meta.dart';
 import '../models/room.dart';
+import '../models/room_price.dart';
 import '../models/user.dart';
 import '../models/facility_type.dart';
+import '../models/payment.dart';
 
 model<T>(dynamic map) {
   if (map is Map<String, dynamic>) {
@@ -27,8 +29,12 @@ model<T>(dynamic map) {
         return Facility.fromJson(map);
       case 'Room':
         return Room.fromJson(map);
+      case 'RoomPrice':
+        return RoomPrice.fromJson(map);
       case 'Reservation':
         return Reservation.fromJson(map);
+      case 'Payment':
+        return Payment.fromJson(map);
       default:
         return map;
     }
@@ -54,8 +60,12 @@ listModel<T>(dynamic data) {
         return Facility.fromJsonList(list);
       case 'List<Room>':
         return Room.fromJsonList(list);
+      case 'List<RoomPrice>':
+        return RoomPrice.fromJsonList(list);
       case 'List<Reservation>':
         return Reservation.fromJsonList(list);
+      case 'List<Payment>':
+        return Payment.fromJsonList(list);
       default:
         return list;
     }

@@ -101,13 +101,13 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
             itemBuilder: (context, index) {
               final facilityType = data.reversed.toList()[index];
               final image =
-                  facilityType.name == 'hotel' ? hotelImage : chaletImage;
+                  facilityType.name == 'فنادق' ? hotelImage : chaletImage;
 
               return GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(
                     context,
-                    facilityType.name == 'hotel'
+                    facilityType.name == 'فنادق'
                         ? Routes.hotels
                         : Routes.chalets,
                   );
@@ -115,9 +115,9 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                 child: buildFacilityTypeCard(
                   context,
                   image: image,
-                  title: facilityType.name == 'hotel'
-                      ? trans().hotel
-                      : trans().chalet,
+                  title: facilityType.name == 'فنادق'
+                      ? facilityType.name
+                      : facilityType.name,
                 ),
               );
             },
@@ -156,7 +156,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
               style: TextStyle(
                 color: CustomTheme.primaryColor,
                 fontSize: 16,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),

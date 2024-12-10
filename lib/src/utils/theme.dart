@@ -15,6 +15,7 @@ class CustomTheme {
   // String getFont() => 'Roboto';
 
   static const Color primaryColor =
+      // Color.Hex('#1D4ED8');
       Color.fromARGB(255, 15, 1, 78);
   static const Color secondaryColor = Color(0xFF03DAC6);
   static const tertiaryColor = Color(0xFF2C3E50); // Dark blue

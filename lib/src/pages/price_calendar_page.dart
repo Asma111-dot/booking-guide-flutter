@@ -13,10 +13,10 @@ import '../widgets/view_widget.dart';
 import '../models/reservation.dart' as res;
 import '../models/user.dart' as model;
 
-class AvailabilityCalendarPage extends ConsumerStatefulWidget {
+class PriceAndCalendarPage extends ConsumerStatefulWidget {
   final List<res.Reservation> reservations;
 
-  const AvailabilityCalendarPage({Key? key, required this.reservations})
+  const PriceAndCalendarPage({Key? key, required this.reservations})
       : super(key: key);
 
   @override
@@ -25,7 +25,7 @@ class AvailabilityCalendarPage extends ConsumerStatefulWidget {
 }
 
 class _AvailabilityCalendarPageState
-    extends ConsumerState<AvailabilityCalendarPage> //class parent
+    extends ConsumerState<PriceAndCalendarPage> //class parent
     with
         SingleTickerProviderStateMixin {
   model.User user() => ref.read(userProvider).data!;

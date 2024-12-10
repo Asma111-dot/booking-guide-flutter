@@ -66,7 +66,7 @@ class _MainLayoutState extends State<MainLayout> {
           });
         },
         children: <Widget>[
-          const ChaletsPage(),
+         // const ChaletsPage(facilityType:facilitytype ),
           const MyReservationsPage(),
           AccountPage(),
         ],

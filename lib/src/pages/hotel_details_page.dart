@@ -29,7 +29,7 @@ class _HotelDetailsPageState extends ConsumerState<HotelDetailsPage>
     super.initState();
     tabController = TabController(length: 3, vsync: this);
     Future.microtask(() {
-      ref.read(roomProvider.notifier).fetch(facilityId: widget.facility.id);
+      ref.read(roomProvider.notifier).fetch(roomId: widget.facility.rooms.first.id);
     });
   }
 
@@ -47,13 +47,13 @@ class _HotelDetailsPageState extends ConsumerState<HotelDetailsPage>
         data: roomState.data,
         refresh: () async => await ref
             .read(roomProvider.notifier)
-            .fetch(facilityId: widget.facility.id),
+            .fetch(roomId: widget.facility.rooms.first.id),
         forceShowLoaded: roomState.data != null,
         onLoaded: (room) {
           return RefreshIndicator(
             onRefresh: () async => await ref
                 .read(roomProvider.notifier)
-                .fetch(facilityId: widget.facility.id),
+                .fetch(roomId: widget.facility.rooms.first.id),
             child: SingleChildScrollView(
               ///
               padding: const EdgeInsets.all(16),
@@ -188,7 +188,8 @@ class _HotelDetailsPageState extends ConsumerState<HotelDetailsPage>
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  '${trans().price}: ${room.pricePerNight.toStringAsFixed(2)} ${trans().riyalY}',
+                                  '',
+                                //  '${trans().price}: ${room.pricePerNight.toStringAsFixed(2)} ${trans().riyalY}',
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),
