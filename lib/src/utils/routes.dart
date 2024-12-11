@@ -5,6 +5,7 @@ import '../models/reservation.dart' as res;
 import '../models/facility.dart';
 import '../models/facility_type.dart';
 import '../models/room.dart';
+import '../models/room_price.dart';
 import '../pages/price_calendar_page.dart';
 import '../pages/chalet_details_page.dart';
 import '../pages/customer_page.dart';
@@ -34,7 +35,7 @@ class Routes {
   static const String hotelDetails = '/hotel_details';
   static const String reservation = '/reservation';
   static const String myAccount = '/account';
-  static const String availabilityCalendar = '/availability_calendar';
+  static const String priceAndCalendar = '/price_calendar';
   static const String myBookings = '/my_reservations';
 
   static Route? generate(RouteSettings settings) {
@@ -95,10 +96,10 @@ class Routes {
           builder: (_) => const MyReservationsPage(),
           settings: settings,
         );
-      case availabilityCalendar:
+      case priceAndCalendar:
         return MaterialPageRoute(
           builder: (_) => PriceAndCalendarPage(
-            reservations: args as List<res.Reservation>,
+            roomPrices: args as List<RoomPrice>,
           ),
           settings: settings,
         );

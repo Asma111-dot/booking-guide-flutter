@@ -1,25 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'room_provider.dart';
+part of 'room_price_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$roomHash() => r'ea92e8f8f254860596fee8639a54e58e18ca9686';
+String _$roomPriceHash() => r'd0a439c6c3db85963b8713501536564ec3c4bc3d';
 
-/// See also [Room].
-@ProviderFor(Room)
-final roomProvider =
-    AutoDisposeNotifierProvider<Room, Response<r.Room>>.internal(
-  Room.new,
-  name: r'roomProvider',
+/// See also [RoomPrice].
+@ProviderFor(RoomPrice)
+final roomPriceProvider =
+    AutoDisposeNotifierProvider<RoomPrice, Response<p.RoomPrice>>.internal(
+  RoomPrice.new,
+  name: r'roomPriceProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$roomHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$roomPriceHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$Room = AutoDisposeNotifier<Response<r.Room>>;
+typedef _$RoomPrice = AutoDisposeNotifier<Response<p.RoomPrice>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

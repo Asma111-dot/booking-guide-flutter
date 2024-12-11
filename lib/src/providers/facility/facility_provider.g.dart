@@ -6,7 +6,7 @@ part of 'facility_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$facilitiesHash() => r'6be493b8287073f9442e7b97af78b06ee4a1cf1e';
+String _$facilitiesHash() => r'690272103ffd3338414b51e05f95684361caa9db';
 
 /// See also [Facilities].
 @ProviderFor(Facilities)

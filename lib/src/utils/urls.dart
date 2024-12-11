@@ -4,9 +4,9 @@ import 'package:flutter/foundation.dart';
 String baseUrl = kDebugMode
     ? (Platform.isIOS
         ? "http://192.168.1.105:8000/"
-// : "http://192.168.1.102/bookings-guide/public/")//my home
-     //   : "http://10.0.2.2:8000/")//
-     : "http://172.21.0.134/bookings-guide/public/")//Qk
+        : "http://192.168.1.102/bookings-guide/public/") //my home
+//   : "http://10.0.2.2:8000/")
+//  : "http://172.21.0.134/bookings-guide/public/")//Qk
     : "http://bookings-guide.com/";
 
 String apiUrl = "${baseUrl}api/";
@@ -68,7 +68,6 @@ String getFacilitiesUrl({int? facilityTypeId}) {
 }
 
 //Urls Room
-// String getRoomUrl({required int facilityId}) => "${apiUrl}rooms?facility_id=$facilityId";
 String getRoomUrl({required int roomId}) => "${apiUrl}rooms/$roomId";
 
 String addRoomUrl() => "${apiUrl}rooms";
@@ -82,13 +81,16 @@ String getRoomsUrl({required int facilityId}) {
 }
 
 //Urls Room Price
-String getRoomPriceUrl({required int roomId}) => "${apiUrl}room-prices/$roomId";
+String getRoomPriceUrl({required int roomPriceId}) =>
+    "${apiUrl}room-prices/$roomPriceId";
 
 String addRoomPriceUrl() => "${apiUrl}room-prices";
 
-String updateRoomPriceUrl({required int roomPriceId}) => "${apiUrl}room-prices/$roomPriceId";
+String updateRoomPriceUrl({required int roomPriceId}) =>
+    "${apiUrl}room-prices/$roomPriceId";
 
-String deleteRoomPriceUrl(int roomPriceId) => "${apiUrl}room-prices/$roomPriceId";
+String deleteRoomPriceUrl(int roomPriceId) =>
+    "${apiUrl}room-prices/$roomPriceId";
 
 String getRoomPricesUrl({required int roomId}) {
   return "${apiUrl}room-prices?roomId=$roomId";

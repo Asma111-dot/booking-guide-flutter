@@ -41,9 +41,7 @@ class Room extends _$Room {
     state = state.setLoading();
     try {
       final value = await request<r.Room>(
-        url: room.isCreate()
-            ? addRoomUrl()
-            : updateRoomUrl(roomId: room.id),
+        url: room.isCreate() ? addRoomUrl() : updateRoomUrl(roomId: room.id),
         method: room.isCreate() ? Method.post : Method.put,
         body: room.toJson(),
       );

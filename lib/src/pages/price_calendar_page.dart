@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../models/room_price.dart';
 import '../providers/auth/user_provider.dart';
 import '../providers/reservation/reservations_provider.dart';
 import '../helpers/general_helper.dart';
@@ -14,9 +15,10 @@ import '../models/reservation.dart' as res;
 import '../models/user.dart' as model;
 
 class PriceAndCalendarPage extends ConsumerStatefulWidget {
-  final List<res.Reservation> reservations;
+  // final List<res.Reservation> reservations;
+  final List<RoomPrice> roomPrices;
 
-  const PriceAndCalendarPage({Key? key, required this.reservations})
+  const PriceAndCalendarPage({Key? key, required this.roomPrices})
       : super(key: key);
 
   @override
@@ -172,29 +174,29 @@ class _AvailabilityCalendarPageState
                               return SizedBox();
                             }
                           },
-                          disabledBuilder: (context, date, focusedDay) {
-                            if (_isDateReserved(date)) {
-                              return Center(
-                                child: Text(
-                                  '${date.day}',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    decoration: TextDecoration.lineThrough,
-                                  ),
-                                ),
-                              );
-                            } else {
-                              return Center(
-                                child: Text(
-                                  '${date.day}',
-                                  style: TextStyle(
-                                    color: Colors.green,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              );
-                            }
-                          },
+                          // disabledBuilder: (context, date, focusedDay) {
+                          //   if (_isDateReserved(date)) {
+                          //     return Center(
+                          //       child: Text(
+                          //         '${date.day}',
+                          //         style: TextStyle(
+                          //           color: Colors.grey,
+                          //           decoration: TextDecoration.lineThrough,
+                          //         ),
+                          //       ),
+                          //     );
+                          //   } else {
+                          //     return Center(
+                          //       child: Text(
+                          //         '${date.day}',
+                          //         style: TextStyle(
+                          //           color: Colors.green,
+                          //           fontWeight: FontWeight.bold,
+                          //         ),
+                          //       ),
+                          //     );
+                          //   }
+                          // },
                         ),
                       ),
                     ),
@@ -268,13 +270,13 @@ class _AvailabilityCalendarPageState
     );
   }
 
-  bool _isDateReserved(DateTime date) {
-    return widget.reservations.any((reservation) =>
-        date.isAtSameMomentAs(reservation.checkInDate) ||
-        (date.isAfter(reservation.checkInDate) &&
-            date.isBefore(reservation.checkOutDate)));
-  }
-}
+//   bool _isDateReserved(DateTime date) {
+//     // return widget.reservations.any((reservation) =>
+//     //     date.isAtSameMomentAs(reservation.checkInDate) ||
+//     //     (date.isAfter(reservation.checkInDate) &&
+//     //         date.isBefore(reservation.checkOutDate)));
+//   }
+// }
 
 Map<DateTime, List<res.Reservation>> _generateEvents(
     List<res.Reservation> reservations) {
@@ -323,4 +325,4 @@ Widget _buildPriceCard(String title, String price) {
       ],
     ),
   );
-}
+}}
