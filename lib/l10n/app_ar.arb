@@ -91,6 +91,9 @@
   "noAmenities": "لا يوجد وسائل راحة متاح حالياَ",
   "bookingNow" : "احجز الأن",
   "showAvailableDays" : "عرض الأيام المتاحة",
+  "selectDateAndPrice": "اختيار الايام والسعر",
   "availabilityCalendar": "قائمة الحجوزات",
+  "continueBooking": "إستكمال الحجز",
+  "dateNotAvailable": "التاريخ غير متاح",
   "next": "التالي"
 }

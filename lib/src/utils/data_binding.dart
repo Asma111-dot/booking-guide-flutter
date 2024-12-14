@@ -11,7 +11,7 @@ import '../models/facility_type.dart';
 import '../models/payment.dart';
 
 model<T>(dynamic map) {
-  if (map is Map<String, dynamic>) {
+  try{  if (map is Map<String, dynamic>) {
     switch (T.toString()) {
       case 'Company':
         return Company.fromJson(map);
@@ -30,6 +30,7 @@ model<T>(dynamic map) {
       case 'Room':
         return Room.fromJson(map);
       case 'RoomPrice':
+        print("asma");
         return RoomPrice.fromJson(map);
       case 'Reservation':
         return Reservation.fromJson(map);
@@ -38,6 +39,10 @@ model<T>(dynamic map) {
       default:
         return map;
     }
+  }
+  }
+  catch(x){
+    print("price data:$x");
   }
   return map;
 }

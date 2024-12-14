@@ -18,7 +18,7 @@ class RoomPrices extends _$RoomPrices {
       const Response<List<RoomPrice>>(data: []);
 
   Future fetch(
-      {required int roomId, FilterModel? filter, bool reset = false}) async {
+      {required int roomPriceId, FilterModel? filter, bool reset = false}) async {
     if (!reset &&
         (state.data?.isNotEmpty ?? false) &&
         (state.isLoading() || state.isLast())) {
@@ -31,7 +31,7 @@ class RoomPrices extends _$RoomPrices {
     }
 
     await request<List<RoomPrice>>(
-      url: getRoomPricesUrl(roomId: roomId),
+      url: getRoomPricesUrl(roomPriceId: roomPriceId),
       method: Method.get,
       body: {
         'page': reset ? 1 : (state.meta.currentPage ?? 0) + 1,
