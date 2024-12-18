@@ -96,21 +96,40 @@ class Routes {
           builder: (_) => const MyReservationsPage(),
           settings: settings,
         );
+
+
       case priceAndCalendar:
+        final roomId = settings.arguments as int;
         return MaterialPageRoute(
-          builder: (_) => PriceAndCalendarPage(
-            roomPrices: args as List<RoomPrice>,
-          ),
+          builder: (_) => PriceAndCalendarPage(roomId: roomId),
           settings: settings,
         );
 
+
+
+      //   case priceAndCalendar:
+      //   return MaterialPageRoute(
+      //     builder: (_) {
+      //       final roomPrice = args as RoomPrice;
+      //       return PriceAndCalendarPage(
+      //         roomId: roomPrice.id,
+      //       );
+      //     },
+      //     settings: settings,
+      //   );
+
+
       case reservation:
         return MaterialPageRoute(
-          builder: (_) => ReservationPage(
-            reservations: args as List<res.Reservation>,
-          ),
+          builder: (_) {
+            final args = settings.arguments as List<res.Reservation>;
+            return ReservationPage(
+              reservations: args,
+            );
+          },
           settings: settings,
         );
+
 
       default:
         return null;

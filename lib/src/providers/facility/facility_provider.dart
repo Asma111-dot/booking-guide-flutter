@@ -20,7 +20,7 @@ class Facilities extends _$Facilities {
   Future fetch({required int facilityTypeId}) async {
     state = state.setLoading();
 
-    try{
+    try {
       await request<List<dynamic>>(
         url: getFacilitiesUrl(facilityTypeId: facilityTypeId),
         method: Method.get,
@@ -35,12 +35,10 @@ class Facilities extends _$Facilities {
         state = state.setError(error.toString());
         print(error);
       });
-    }catch(e,s){
-       print(e);
-       print(s);
+    } catch (e, s) {
+      print(e);
+      print(s);
     }
-
-
   }
 
   Future save(Facility facility) async {

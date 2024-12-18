@@ -6,22 +6,6 @@ part of 'room_price_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$roomPriceSubmitHash() => r'304a9807ecb0fb41e9373f78867cf88ee53b2a0e';
-
-/// See also [RoomPriceSubmit].
-@ProviderFor(RoomPriceSubmit)
-final roomPriceSubmitProvider =
-    NotifierProvider<RoomPriceSubmit, Response<p.RoomPrice>>.internal(
-  RoomPriceSubmit.new,
-  name: r'roomPriceSubmitProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$roomPriceSubmitHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$RoomPriceSubmit = Notifier<Response<p.RoomPrice>>;
 String _$roomPriceHash() => r'701b0cde14fcc996d4b27e656a4baa4af59cd5c6';
 
 /// See also [RoomPrice].

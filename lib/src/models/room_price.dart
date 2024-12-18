@@ -37,8 +37,8 @@ class RoomPrice {
         reservations = [];
 
   factory RoomPrice.fromJson(Map<String, dynamic> jsonMap) {
-    log(" jsonMap room =${jsonMap}");
-    print(" jsonMap  =${jsonMap}");
+   // log(" jsonMap room =${jsonMap}");
+   // print(" jsonMap  =${jsonMap}");
 
     return RoomPrice(
       id: jsonMap['id'] ?? 0,

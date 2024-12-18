@@ -6,7 +6,7 @@ String baseUrl = kDebugMode
         ? "http://192.168.1.105:8000/"
         : "http://192.168.1.102/bookings-guide/public/") //my home
 //   : "http://10.0.2.2:8000/")
-  //: "http://172.21.0.134/bookings-guide/public/")//Qk
+//     : "http://172.21.0.134/bookings-guide/public/") //Qk
     : "http://bookings-guide.com/";
 
 String apiUrl = "${baseUrl}api/";
@@ -81,7 +81,7 @@ String getRoomsUrl({required int facilityId}) {
 }
 
 //Urls Room Price
-String roomPriceSubmitUrl() => "${apiUrl}room-prices";
+String roomPriceSaveUrl() => "${apiUrl}room-prices";
 
 String getRoomPriceUrl({required int roomPriceId}) =>
     "${apiUrl}room-prices/$roomPriceId";
@@ -94,12 +94,19 @@ String updateRoomPriceUrl({required int roomPriceId}) =>
 String deleteRoomPriceUrl(int roomPriceId) =>
     "${apiUrl}room-prices/$roomPriceId";
 
-String getRoomPricesUrl({required int roomPriceId}) {
-  return "${apiUrl}room-prices/$roomPriceId";
+String getRoomPricesUrl({int? roomId}) {
+  String url = "${apiUrl}room-prices";
+  if (roomId != null) {
+    url += "?rooms=$roomId";
+  }
+  return url;
 }
+// String getRoomPricesUrl({required int roomPriceId}) {
+//   return "${apiUrl}room-prices/$roomPriceId";
+// }
 
 // URLs Reservation
-String reseravtionSubmitUrl() => "${apiUrl}reservations";
+String reseravtionSaveUrl() => "${apiUrl}reservations";
 
 String getReservationUrl(int reservationId) =>
     "${apiUrl}reservations/$reservationId";
