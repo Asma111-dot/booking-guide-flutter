@@ -6,6 +6,7 @@ import '../models/facility.dart';
 import '../models/facility_type.dart';
 import '../models/room.dart';
 import '../models/room_price.dart';
+import '../models/user.dart';
 import '../pages/price_calendar_page.dart';
 import '../pages/chalet_details_page.dart';
 import '../pages/customer_page.dart';
@@ -17,9 +18,9 @@ import '../pages/hotel_details_page.dart';
 import '../pages/layouts/account_page.dart';
 import '../pages/layouts/my_reservations_page.dart';
 import '../pages/login_page.dart';
+import '../pages/reservation_details_page.dart';
 import '../pages/reservation_page.dart';
 import '../pages/welcome_page.dart';
-import '../providers/reservation/reservation_provider.dart';
 
 final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 
@@ -35,8 +36,9 @@ class Routes {
   static const String hotelDetails = '/hotel_details';
   static const String reservation = '/reservation';
   static const String myAccount = '/account';
-  static const String priceAndCalendar = '/price_calendar';
   static const String myBookings = '/my_reservations';
+  static const String priceAndCalendar = '/price_calendar';
+  static const String reservationDetails = '/reservation_details';
 
   static Route? generate(RouteSettings settings) {
     final args = settings.arguments;
@@ -96,41 +98,23 @@ class Routes {
           builder: (_) => const MyReservationsPage(),
           settings: settings,
         );
-
-
       case priceAndCalendar:
         final roomId = settings.arguments as int;
         return MaterialPageRoute(
           builder: (_) => PriceAndCalendarPage(roomId: roomId),
           settings: settings,
         );
-
-
-
-      //   case priceAndCalendar:
-      //   return MaterialPageRoute(
-      //     builder: (_) {
-      //       final roomPrice = args as RoomPrice;
-      //       return PriceAndCalendarPage(
-      //         roomId: roomPrice.id,
-      //       );
-      //     },
-      //     settings: settings,
-      //   );
-
-
       case reservation:
         return MaterialPageRoute(
-          builder: (_) {
-            final args = settings.arguments as List<res.Reservation>;
-            return ReservationPage(
-              reservations: args,
-            );
-          },
+          builder: (_) => ReservationPage(roomPrice: args as RoomPrice),
           settings: settings,
         );
 
-
+      case reservationDetails:
+        return MaterialPageRoute(
+          builder: (_) => ReservationDetailsPage(),
+          settings: settings,
+        );
       default:
         return null;
     }

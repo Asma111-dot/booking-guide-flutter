@@ -1,34 +1,44 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../extensions/date_formatting.dart';
 import '../../models/response/response.dart';
-import '../../models/room_price.dart' ;
+import '../../models/room_price.dart';
 import '../../services/request_service.dart';
 import '../../utils/urls.dart';
 
 part 'room_price_save_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-class RoomPriceSaveProvider extends _$RoomPriceSaveProvider {
+class RoomPriceSave extends _$RoomPriceSave {
   @override
   Response<RoomPrice> build() => Response(data: RoomPrice.init());
 
-  Future<void> saveRoomPrice() async {
+  Future saveRoomPrice(RoomPrice roomPrice, DateTime dateTime) async {
     state = state.setLoading();
-    await request<RoomPrice>(
-      url: roomPriceSaveUrl(),
-      method: Method.post,
-      body: await state.data!.toJson(),
-    ).then((response) async {
+
+    try {
+      final response = await request<RoomPrice>(
+        url: reseravtionSaveUrl(),
+        method: Method.post,
+        body: {
+          'room_price_id': roomPrice.id,
+          'check_in_date': dateTime.toSql()
+        },
+      );
+
       state = state.copyWith(meta: response.meta);
+
       if (response.isLoaded()) {
         await onSaveSuccess(response);
+      } else {
+        state = state.setError('حدث خطأ أثناء الحفظ');
       }
-    }).catchError((error) {
-      state = state.setError(error);
-    });
+    } catch (error) {
+      state = state.setError('حدث خطأ: $error');
+    }
   }
 
-  Future<void> onSaveSuccess(Response<RoomPrice> response) async {
+  Future onSaveSuccess(Response<RoomPrice> response) async {
     state = state.copyWith(data: response.data);
   }
 }

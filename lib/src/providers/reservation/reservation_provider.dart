@@ -11,17 +11,15 @@ part 'reservation_provider.g.dart';
 
 @Riverpod(keepAlive: false)
 class Reservation extends _$Reservation {
-
   @override
-  Response<res.Reservation> build(User user, int id) =>
+  Response<res.Reservation> build() =>
       const Response<res.Reservation>();
-
 
   setData(res.Reservation reservation) {
     state = state.copyWith(data: reservation);
   }
 
-  Future fetch({res.Reservation? reservation}) async {
+  Future fetch({required int reservationId ,res.Reservation? reservation}) async {
     if (reservation != null) {
       state = state.copyWith(data: reservation);
       state = state.setLoaded();
@@ -30,7 +28,7 @@ class Reservation extends _$Reservation {
 
     state = state.setLoading();
     await request<res.Reservation>(
-      url: getReservationUrl(id),
+      url: getReservationUrl(reservationId: reservationId),
       method: Method.get,
     ).then((value) async {
       state = state.copyWith(meta: value.meta, data: value.data);
@@ -50,7 +48,7 @@ class Reservation extends _$Reservation {
       if (value.isLoaded()) {
         state = state.copyWith(data: value.data);
         ref
-            .read(reservationsProvider(user).notifier)
+            .read(reservationsProvider.notifier)
             .addOrUpdateReservation(value.data!);
       }
     });

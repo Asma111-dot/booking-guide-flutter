@@ -15,7 +15,7 @@ final reservationsFilterProvider = StateProvider((ref) => const FilterModel());
 @Riverpod(keepAlive: false)
 class Reservations extends _$Reservations {
   @override
-  Response<List<Reservation>> build(User user) =>
+  Response<List<Reservation>> build() =>
       const Response<List<Reservation>>(data: []);
 
   Future fetch({FilterModel? filter, bool reset = false}) async {

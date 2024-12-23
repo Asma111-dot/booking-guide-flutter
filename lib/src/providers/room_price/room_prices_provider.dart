@@ -4,7 +4,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../models/logic/filter_model.dart';
 import '../../models/response/response.dart';
 import '../../models/room_price.dart';
-import '../../services/http_service.dart';
 import '../../services/request_service.dart';
 import '../../utils/urls.dart';
 
@@ -22,7 +21,6 @@ class RoomPrices extends _$RoomPrices {
     state = state.copyWith();
   }
 
-  // final x=  HttpService.instance.dio.get('http://192.168.8.142/bookings-guide/public/api/room-prices/1');
   Future fetch({
     required int roomId,
   }) async {
@@ -98,3 +96,5 @@ class RoomPrices extends _$RoomPrices {
     state = state.copyWith(data: state.data);
   }
 }
+//اعمل هانا inti بحيث ينحفظ البيانات لوما اكمل عملية الحجز بشكل كامل
+//يوز اقدر اعملها في لارفل داخل الاوث auth بحيث يمررها بشكل تلاقي

@@ -3,147 +3,153 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../helpers/general_helper.dart';
-import '../models/reservation.dart';
+import '../models/reservation.dart' as res;
+import '../models/room_price.dart';
+import '../providers/reservation/reservation_save_provider.dart';
+import '../utils/routes.dart';
 import '../widgets/custom_app_bar.dart';
 
 class ReservationPage extends ConsumerStatefulWidget {
-  final List<Reservation> reservations;
+  final RoomPrice roomPrice;
 
-  const ReservationPage({Key? key, required this.reservations}) : super(key: key);
+  const ReservationPage({
+    Key? key,
+    required this.roomPrice,
+  }) : super(key: key);
 
   @override
   ConsumerState<ReservationPage> createState() => _ReservationPageState();
 }
 
 class _ReservationPageState extends ConsumerState<ReservationPage> {
-  final _formKey = GlobalKey<FormState>();
-  int adultsCount = 0;
-  int childrenCount = 0;
-  String personType = 'عائلة (رجال ونساء)';
+  late TextEditingController adultsController;
+  late TextEditingController childrenController;
 
-  final List<String> personTypes = [
-    'عائلة (رجال ونساء)',
-    'أفراد (رجال فقط)',
-    'أفراد (نساء فقط)',
-    'أخرى'
-  ];
+  @override
+  void initState() {
+    super.initState();
+    adultsController = TextEditingController();
+    childrenController = TextEditingController();
+
+    Future.microtask(() {
+      final reservation = widget.roomPrice.reservations.first;
+      ref.read(formProvider.notifier).updateField(
+        roomPriceId: widget.roomPrice.id,
+        checkInDate: reservation.checkInDate,
+        checkOutDate: reservation.checkOutDate,
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final formState = ref.watch(formProvider);
+
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: CustomAppBar(
-        appTitle: trans().availabilityCalendar,
+        appTitle: "استكمال الحجز",
         icon: const FaIcon(Icons.arrow_back_ios),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'بيانات الأشخاص في الحجز',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text("نوع الحضور:"),
+            DropdownButtonFormField<String>(
+              value: formState.bookingType.isEmpty || ![
+                'Family (Women and Men)',
+                'Women Only',
+                'Men Only'
+              ].contains(formState.bookingType)
+                  ? 'Family (Women and Men)'
+                  : formState.bookingType,
+              items: [
+                DropdownMenuItem(
+                  value: 'Family (Women and Men)',
+                  child: Text('Family (Women and Men)'),
+                ),
+                DropdownMenuItem(
+                  value: 'Women Only',
+                  child: Text('Women Only'),
+                ),
+                DropdownMenuItem(
+                  value: 'Men Only',
+                  child: Text('Men Only'),
+                ),
+              ],
+              onChanged: (value) {
+                ref.read(formProvider.notifier).updateField(bookingType: value);
+              },
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
               ),
-              SizedBox(height: 8),
-              Text(
-                'قم بتحديد نوع الحضور وعدد الأشخاص الحاضرين للحجز',
-                style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 30),
+            TextField(
+              controller: adultsController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: "عدد الكبار",
+                border: OutlineInputBorder(),
               ),
-              SizedBox(height: 30),
-              DropdownButtonFormField<String>(
-                value: personType,
-                decoration: InputDecoration(labelText: 'نوع الأشخاص'),
-                items: personTypes.map((type) {
-                  return DropdownMenuItem<String>(
-                    value: type,
-                    child: Text(type),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    personType = value!;
-                  });
-                },
+              onChanged: (value) {
+                ref
+                    .read(formProvider.notifier)
+                    .updateField(adultsCount: int.tryParse(value));
+                print("عدد الكبار: ${int.tryParse(value)}");
+              },
+            ),
+            const SizedBox(height: 30),
+            TextField(
+              controller: childrenController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: "عدد الأطفال",
+                border: OutlineInputBorder(),
               ),
-              SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('كبار', style: TextStyle(fontSize: 18)),
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            if (adultsCount > 0) adultsCount--;
-                          });
-                        },
-                        icon: Icon(Icons.remove),
-                      ),
-                      Text('$adultsCount', style: TextStyle(fontSize: 18)),
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            adultsCount++;
-                          });
-                        },
-                        icon: Icon(Icons.add),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('أطفال (اختياري)', style: TextStyle(fontSize: 18)),
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            if (childrenCount > 0) childrenCount--;
-                          });
-                        },
-                        icon: Icon(Icons.remove),
-                      ),
-                      Text('$childrenCount', style: TextStyle(fontSize: 18)),
-                      IconButton(
-                        onPressed: () {
-                          childrenCount++;
-                        },
-                        icon: Icon(Icons.add),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text('السابق'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('تم الحجز بنجاح')),
-                        );
-                      }
-                    },
-                    child: Text('التالي'),
-                  ),
-                ],
-              ),
-            ],
-          ),
+              onChanged: (value) {
+               ref
+                    .read(formProvider.notifier)
+                    .updateField(childrenCount: int.tryParse(value));
+                print("عدد الأطفال: ${int.tryParse(value)}");
+              },
+            ),
+            const Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("السابق"),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    print("Reservation data being sent:");
+                    print("Room price id: ${formState.roomPriceId}");
+                    print("In date : ${formState.checkInDate}");
+                    print("out date : ${formState.checkOutDate}");
+                    print("Booking type : ${formState.bookingType}");
+                    print("Adults : ${formState.adultsCount}");
+                    print("Children : ${formState.childrenCount}");
+
+                    await ref
+                        .read(reservationSaveProvider.notifier)
+                        .saveReservation(formState);
+
+                    Navigator.pushNamed(
+                      context,
+                      Routes.reservationDetails,
+                    );
+                  },
+                  child: const Text("التالي"),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

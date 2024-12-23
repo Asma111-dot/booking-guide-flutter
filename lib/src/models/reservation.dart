@@ -3,31 +3,30 @@ import '../extensions/date_formatting.dart';
 
 class Reservation {
   int id;
-  int userId;
-  int roomPriceId;
+  int? userId;
+  int? roomPriceId;
   DateTime checkInDate;
   DateTime checkOutDate;
-  String status;
-  double totalPrice;
-
+  String? status;
+  double? totalPrice;
   String bookingType;
-  int adultsCount;
-  int childrenCount;
+  int? adultsCount;
+  int? childrenCount;
 
   List<Payment> payments;
 
   Reservation({
     required this.id,
-    required this.userId,
-    required this.roomPriceId,
+     this.userId,
+     this.roomPriceId,
     required this.checkInDate,
     required this.checkOutDate,
-    required this.status,
-    required this.totalPrice,
+     this.status,
+     this.totalPrice,
     required this.bookingType,
-    required this.adultsCount,
-    required this.childrenCount,
-    required this.payments,
+     this.adultsCount,
+     this.childrenCount,
+    this.payments = const [],
   });
 
   Reservation.init()
@@ -84,6 +83,29 @@ class Reservation {
         .where((json) => json is Map<String, dynamic>)
         .map((json) => Reservation.fromJson(json as Map<String, dynamic>))
         .toList();
+  }
+  Reservation copyWith({
+    int? id,
+    int? userId,
+    int? roomPriceId,
+    DateTime? checkInDate,
+    DateTime? checkOutDate,
+    String? status,
+    String? bookingType,
+    int? adultsCount,
+    int? childrenCount,
+  }) {
+    return Reservation(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      roomPriceId: roomPriceId ?? this.roomPriceId,
+      checkInDate: checkInDate ?? this.checkInDate,
+      checkOutDate: checkOutDate ?? this.checkOutDate,
+      status: status ?? this.status,
+      bookingType: bookingType ?? this.bookingType,
+      adultsCount: adultsCount ?? this.adultsCount,
+      childrenCount: childrenCount ?? this.childrenCount,
+    );
   }
 
   bool isCreate() => id == 0;
