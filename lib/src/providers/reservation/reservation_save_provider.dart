@@ -19,6 +19,7 @@ class FormNotifier extends StateNotifier<Reservation> {
         ));
 
   void updateField({
+    required int id,
     int? userId,
     int? roomPriceId,
     DateTime? checkInDate,
@@ -29,6 +30,7 @@ class FormNotifier extends StateNotifier<Reservation> {
     int? childrenCount,
   }) {
     state = state.copyWith(
+      id: id,
       userId: userId,
       roomPriceId: roomPriceId,
       checkInDate: checkInDate,
@@ -69,6 +71,12 @@ class ReservationSave extends _$ReservationSave {
       payments: [],
     );
     state = state.copyWith(data: reservationDraft);
+
+    print("بيانات الحجز التي يتم إرسالها:");
+    print("User ID: ${formState.userId}");
+    print("Room Price ID: ${formState.roomPriceId}");
+    print("Check-In Date: ${formState.checkInDate}");
+    print("Check-Out Date: ${formState.checkOutDate}");
   }
 
   /// Save Reservation Permanently
@@ -87,6 +95,15 @@ class ReservationSave extends _$ReservationSave {
       childrenCount: formState.childrenCount,
       payments: [],
     );
+    print("بيانات الحجز التي يتم إرسالها:");
+    print("User ID: ${formState.userId}");
+    print("Room Price ID: ${formState.roomPriceId}");
+    print("Check-In Date: ${formState.checkInDate}");
+    print("Check-Out Date: ${formState.checkOutDate}");
+    print("Booking Type: ${formState.bookingType}");
+    print("Adults Count: ${formState.adultsCount}");
+    print("Children Count: ${formState.childrenCount}");
+
     // Future<void> saveReservation(FormState formState) async {
     //   state = state.setLoading();
     await request<Reservation>(

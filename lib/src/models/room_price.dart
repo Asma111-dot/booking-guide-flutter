@@ -4,6 +4,7 @@ import 'dart:developer';
 class RoomPrice {
   int id;
   int roomId;
+  int capacity;
   double amount;
   double? deposit;
   String currency;
@@ -16,6 +17,7 @@ class RoomPrice {
   RoomPrice({
     required this.id,
     required this.roomId,
+    required this.capacity,
     required this.amount,
     this.deposit,
     required this.currency,
@@ -28,6 +30,7 @@ class RoomPrice {
   RoomPrice.init()
       : id = 0,
         roomId = 0,
+        capacity = 0,
         amount = 0.0,
         deposit = null,
         currency = '',
@@ -37,12 +40,13 @@ class RoomPrice {
         reservations = [];
 
   factory RoomPrice.fromJson(Map<String, dynamic> jsonMap) {
-   // log(" jsonMap room =${jsonMap}");
-   // print(" jsonMap  =${jsonMap}");
+    // log(" jsonMap room =${jsonMap}");
+    // print(" jsonMap  =${jsonMap}");
 
     return RoomPrice(
       id: jsonMap['id'] ?? 0,
       roomId: jsonMap['room_id'] ?? 0,
+      capacity: jsonMap['capacity'] ?? 0,
       amount: double.tryParse(jsonMap['amount']?.toString() ?? '0.0') ?? 0.0,
       deposit: double.tryParse(jsonMap['deposit']?.toString() ?? '') ?? null,
       currency: jsonMap['currency'] ?? '',
@@ -56,16 +60,17 @@ class RoomPrice {
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'room_id': roomId,
-    'amount': amount,
-    'deposit': deposit,
-    'currency': currency,
-    'period': period,
-    'time_from': timeFrom,
-    'time_to': timeTo,
-    'reservations': reservations.map((r) => r.toJson()).toList(),
-  };
+        'id': id,
+        'room_id': roomId,
+        'capacity': capacity,
+        'amount': amount,
+        'deposit': deposit,
+        'currency': currency,
+        'period': period,
+        'time_from': timeFrom,
+        'time_to': timeTo,
+        'reservations': reservations.map((r) => r.toJson()).toList(),
+      };
 
   bool isCreate() => id == 0;
 
@@ -75,7 +80,7 @@ class RoomPrice {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is RoomPrice && runtimeType == other.runtimeType && id == other.id;
+      other is RoomPrice && runtimeType == other.runtimeType && id == other.id;
 
   @override
   int get hashCode => id.hashCode;

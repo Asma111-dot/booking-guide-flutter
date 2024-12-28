@@ -185,15 +185,15 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              const SizedBox(height: 8),
-                              Text(
-                                "${trans().capacity}: ${room.capacity} ${trans().person}",
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.blueGrey,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                              // const SizedBox(height: 8),
+                              // Text(
+                              //   "${trans().capacity}: ${room.capacity} ${trans().person}",
+                              //   style: const TextStyle(
+                              //     fontSize: 18,
+                              //     color: Colors.blueGrey,
+                              //     fontWeight: FontWeight.w500,
+                              //   ),
+                              // ),
                               const SizedBox(height: 16),
                               TabBar(
                                 controller: tabController,
@@ -213,7 +213,7 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                                 ],
                               ),
                               SizedBox(
-                                height: 120,
+                                height: 300,
                                 child: TabBarView(
                                   controller: tabController,
                                   children: [
@@ -227,7 +227,6 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                                         ),
                                       ),
                                     ),
-
                                     // Tab 2: Amenities
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -280,7 +279,7 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                                                       16.0),
                                                   decoration: BoxDecoration(
                                                     border: Border.all(
-                                                      color: Colors.grey
+                                                      color: CustomTheme.primaryColor
                                                           .withOpacity(0.3),
                                                     ),
                                                     borderRadius:
@@ -301,13 +300,38 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                                                         CrossAxisAlignment
                                                             .start,
                                                     children: [
+                                                      //amount
                                                       Row(
                                                         children: [
                                                           const Icon(
-                                                            FontAwesomeIcons
-                                                                .calendar,
+                                                            Icons
+                                                                .monetization_on_outlined,
                                                             color: CustomTheme
                                                                 .primaryColor,
+                                                            size: 16,
+                                                          ),
+                                                          const SizedBox(width: 8),
+                                                          Text(
+                                                            "${price.amount} ${trans().riyalY}",
+                                                            style:
+                                                            const TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .bold,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(height: 8),
+                                                      //period
+                                                      Row(
+                                                        children: [
+                                                          const Icon(
+                                                            Icons.calendar_today,
+                                                            color: CustomTheme
+                                                                .primaryColor,
+                                                            size: 16,
                                                           ),
                                                           const SizedBox(
                                                               width: 8),
@@ -321,29 +345,49 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                                                         ],
                                                       ),
                                                       const SizedBox(height: 8),
+                                                      //capacity
                                                       Row(
                                                         children: [
                                                           const Icon(
-                                                            FontAwesomeIcons
-                                                                .dollarSign,
+                                                            Icons.groups_2_outlined,
                                                             color: CustomTheme
                                                                 .primaryColor,
+                                                            size: 16,
                                                           ),
-                                                          const SizedBox(
-                                                              width: 8),
+                                                          const SizedBox(width: 8),
                                                           Text(
-                                                            "${price.amount} ${trans().riyalY}",
+                                                          "${price.capacity} ${trans().person}",
                                                             style:
                                                                 const TextStyle(
                                                               fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
                                                             ),
                                                           ),
                                                         ],
                                                       ),
                                                       const SizedBox(height: 8),
+                                                     // deposit
+                                                      Row(
+                                                        children: [
+                                                          const Icon(
+                                                            Icons
+                                                                .money_off_sharp,
+                                                            color: CustomTheme
+                                                                .primaryColor,
+                                                            size: 16,
+                                                          ),
+                                                          const SizedBox(
+                                                              width: 8),
+                                                          Text(
+                                                            "${trans().deposit} ${price.deposit} ${trans().riyalY}",
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 14,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(height: 8),
+                                                      //time
                                                       Row(
                                                         children: [
                                                           Icon(
@@ -357,32 +401,8 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                                                           Text(
                                                             '${price.timeFrom ?? '--:--'} - ${price.timeTo ?? '--:--'}',
                                                             style:
-                                                                const TextStyle(
+                                                            const TextStyle(
                                                               fontSize: 14,
-                                                              color:
-                                                                  Colors.grey,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(height: 8),
-                                                      Row(
-                                                        children: [
-                                                          const Icon(
-                                                            FontAwesomeIcons
-                                                                .coins,
-                                                            color: CustomTheme
-                                                                .primaryColor,
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 8),
-                                                          Text(
-                                                            "${trans().deposit} ${price.deposit} ${trans().riyalY}",
-                                                            style:
-                                                                const TextStyle(
-                                                              fontSize: 14,
-                                                              color:
-                                                                  Colors.grey,
                                                             ),
                                                           ),
                                                         ],

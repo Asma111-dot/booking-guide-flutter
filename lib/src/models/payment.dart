@@ -1,3 +1,5 @@
+import '../extensions/date_formatting.dart';
+
 class Payment {
    int id;
    int reservationId;
@@ -49,7 +51,7 @@ class Payment {
       'transaction_type_id': transactionTypeId,
       'payment_method_id': paymentMethodId,
       'amount': amount,
-      'date': date.toIso8601String(),
+      'date': date.toSqlDateOnly(),
       'status': status,
       'response': response,
     };

@@ -17,15 +17,15 @@ class Reservation {
 
   Reservation({
     required this.id,
-     this.userId,
-     this.roomPriceId,
+    this.userId,
+    this.roomPriceId,
     required this.checkInDate,
     required this.checkOutDate,
-     this.status,
-     this.totalPrice,
+    this.status,
+    this.totalPrice,
     required this.bookingType,
-     this.adultsCount,
-     this.childrenCount,
+    this.adultsCount,
+    this.childrenCount,
     this.payments = const [],
   });
 
@@ -37,28 +37,37 @@ class Reservation {
         checkOutDate = DateTime.now(),
         status = '',
         totalPrice = 0.0,
-        bookingType = 'Family (Women and Men)',
+        bookingType = '',
         adultsCount = 0,
         childrenCount = 0,
         payments = [];
 
   factory Reservation.fromJson(Map<String, dynamic> jsonMap) {
+    if (jsonMap['user_id'] != null) {
+      print('The user_id is: ${jsonMap['user_id']}');
+    } else {
+      print('Warning: user_id is null or missing!');
+    }
     return Reservation(
       id: jsonMap['id'] ?? 0,
       userId: jsonMap['user_id'] ?? 0,
       roomPriceId: jsonMap['room_price_id'] ?? 0,
-      checkInDate: DateTime.tryParse(jsonMap['check_in_date'] ?? '') ?? DateTime.now(),
-      checkOutDate: DateTime.tryParse(jsonMap['check_out_date'] ?? '') ?? DateTime.now(),
-      status: jsonMap['status'] ?? '',
+      // checkInDate:
+      //     DateTime.tryParse(jsonMap['check_in_date'] ?? '') ?? DateTime.now(),
+      // checkOutDate:
+      //     DateTime.tryParse(jsonMap['check_out_date'] ?? '') ?? DateTime.now(),
+      checkInDate: DateTime.parse(jsonMap['check_in_date']),
+      checkOutDate: DateTime.parse(jsonMap['check_out_date']),
+      status: jsonMap['status'],
       totalPrice: jsonMap['total_price'] != null
           ? double.tryParse(jsonMap['total_price'].toString()) ?? 0.0
           : 0.0,
-      bookingType: jsonMap['booking_type'] ?? 'Family (Women and Men)',
+      bookingType: jsonMap['booking_type'] ?? '',
       adultsCount: jsonMap['adults_count'] ?? 0,
       childrenCount: jsonMap['children_count'] ?? 0,
       payments: (jsonMap['payments'] as List<dynamic>?)
-          ?.map((item) => Payment.fromJson(item))
-          .toList() ??
+              ?.map((item) => Payment.fromJson(item))
+              .toList() ??
           [],
     );
   }
@@ -84,6 +93,7 @@ class Reservation {
         .map((json) => Reservation.fromJson(json as Map<String, dynamic>))
         .toList();
   }
+
   Reservation copyWith({
     int? id,
     int? userId,

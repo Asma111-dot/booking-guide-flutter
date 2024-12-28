@@ -1,5 +1,5 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:booking_guide/src/extensions/string_formatting.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'filter_model.freezed.dart';
 

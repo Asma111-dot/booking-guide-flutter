@@ -116,15 +116,6 @@ class _HotelDetailsPageState extends ConsumerState<HotelDetailsPage>
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 8),
-                        Text(
-                          "${trans().capacity}: ${room.capacity}",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
                         SizedBox(height: 4),
                         Text(
                           "${trans().status}: ${room.status}",

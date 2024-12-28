@@ -25,7 +25,6 @@ class PriceAndCalendarPage extends ConsumerStatefulWidget {
 
 class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
   DateTime? selectedDay;
-
   // List<RoomPrice> selectedPrices = [];
   RoomPrice? selectedPrice;
   Map<DateTime, List<dynamic>> events = {};
@@ -45,7 +44,7 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
     if (roomPrices != null && roomPrices.isNotEmpty) {
       final defaultPrice = roomPrices.first;
       print('Default Price: $defaultPrice');
-      _populateEvents(selectedPrice: defaultPrice);
+      _populateEvents();
     } else {
       print('No room prices available');
       setState(() {
@@ -65,8 +64,6 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
       return;
     }
 
-    print('Selected Price: $selectedPrice');
-    print('Reservations: ${selectedPrice.reservations}');
     for (var reservation in selectedPrice.reservations) {
       try {
         final checkInDate = reservation.checkInDate is String
@@ -91,14 +88,11 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
     }
 
     ref.read(formProvider.notifier).updateField(
+      id: 0,
       roomPriceId: selectedPrice.id,
       checkInDate: DateTime.now(),
       checkOutDate: DateTime.now(),
     );
-
-    print('Updated Room Price ID: ${selectedPrice.id}');
-    print('Updated Check-In Date: ${DateTime.now()}');
-    print('Updated Check-Out Date: ${DateTime.now()}');
 
     setState(() {});
   }
@@ -216,6 +210,7 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
                 onPressed: selectedDay != null && selectedPrice != null
                     ? () async {
                   ref.read(formProvider.notifier).updateField(
+                    id: 0,
                     roomPriceId: selectedPrice!.id,
                     checkInDate: selectedDay,
                     checkOutDate: selectedDay,
@@ -271,13 +266,13 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
       onTap: () {
         setState(() {
           selectedPrice = roomPrice;
-          _populateEvents();
+          _populateEvents(selectedPrice: selectedPrice);
         });
       },
       child: Container(
         width: MediaQuery.of(context).size.width * 0.5,
         margin: const EdgeInsets.symmetric(horizontal: 8),
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: selectedPrice == roomPrice
               ? CustomTheme.primaryColor
@@ -292,69 +287,92 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
             ),
           ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.calendar_today,
-                    size: 16, color: _getColor(roomPrice)),
-                const SizedBox(width: 4),
-                Flexible(
-                  child: Text(
-                    roomPrice.period,
-                    style: _getTextStyle(roomPrice),
-                    overflow: TextOverflow.ellipsis,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //amount
+              Row(
+                children: [
+                  Icon(Icons.monetization_on_outlined,
+                      size: 16, color: _getColor(roomPrice)),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Text(
+                      "${roomPrice.amount} ${trans().riyalY}",
+                      style: _getTextStyle(roomPrice),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
-            Row(
-              children: [
-                Icon(Icons.access_time, size: 16, color: _getColor(roomPrice)),
-                const SizedBox(width: 4),
-                Flexible(
-                  child: Text(
-                    '${roomPrice.timeFrom ?? '--:--'} - ${roomPrice.timeTo ?? '--:--'}',
-                    style: _getTextStyle(roomPrice),
-                    overflow: TextOverflow.ellipsis,
+                ],
+              ),
+              const SizedBox(height: 4),
+              //period
+              Row(
+                children: [
+                  Icon(Icons.calendar_today,
+                      size: 16, color: _getColor(roomPrice)),
+                  const SizedBox(width: 4),
+                  Flexible(
+                    child: Text(
+                      roomPrice.period,
+                      style: _getTextStyle(roomPrice),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
-            Row(
-              children: [
-                Icon(Icons.monetization_on_outlined,
-                    size: 16, color: _getColor(roomPrice)),
-                const SizedBox(width: 8),
-                Flexible(
-                  child: Text(
-                    "${roomPrice.amount} ${trans().riyalY}",
-                    style: _getTextStyle(roomPrice),
-                    overflow: TextOverflow.ellipsis,
+                ],
+              ),
+              const SizedBox(height: 4),
+              //capacity
+              Row(
+                children: [
+                  Icon(Icons.groups_2_outlined,
+                      size: 16, color: _getColor(roomPrice)),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Text(
+                      "${roomPrice.capacity} ${trans().person}",
+                      style: _getTextStyle(roomPrice),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
-            Row(
-              children: [
-                Icon(Icons.money_off_sharp,
-                    size: 16, color: _getColor(roomPrice)),
-                const SizedBox(width: 8),
-                Flexible(
-                  child: Text(
-                    "${trans().deposit} ${roomPrice.deposit} ${trans().riyalY}",
-                    style: _getTextStyle(roomPrice),
-                    overflow: TextOverflow.ellipsis,
+                ],
+              ),
+              const SizedBox(height: 4),
+              //deposit
+              Row(
+                children: [
+                  Icon(Icons.money_off_sharp,
+                      size: 16, color: _getColor(roomPrice)),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Text(
+                      "${trans().deposit} ${roomPrice.deposit} ${trans().riyalY}",
+                      style: _getTextStyle(roomPrice),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              //time
+              Row(
+                children: [
+                  Icon(Icons.access_time, size: 16, color: _getColor(roomPrice)),
+                  const SizedBox(width: 4),
+                  Flexible(
+                    child: Text(
+                      '${roomPrice.timeFrom ?? '--:--'} - ${roomPrice.timeTo ?? '--:--'}',
+                      style: _getTextStyle(roomPrice),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+
+        )
       ),
     );
   }

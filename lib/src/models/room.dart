@@ -9,7 +9,6 @@ class Room {
   int facilityId;
   String name;
   String type;
-  int capacity;
   String status;
   String desc;
 
@@ -22,7 +21,6 @@ class Room {
     required this.facilityId,
     required this.name,
     required this.type,
-    required this.capacity,
     required this.status,
     required this.desc,
     this.media = const [],
@@ -35,7 +33,6 @@ class Room {
         facilityId = 0,
         name = '',
         type = '',
-        capacity = 0,
         status = '',
         desc = '',
         media = [],
@@ -52,7 +49,6 @@ class Room {
     facilityId : jsonMap['facility_id'] ?? 0,
     name : jsonMap['name'] ?? '',
     type : jsonMap['type'] ?? '',
-    capacity : jsonMap['capacity'] ?? 0,
     status : jsonMap['status'] ?? '',
     desc : jsonMap['desc'] ?? '',
       // media : Media.fromJsonList(jsonMap['media'])??[],
@@ -78,7 +74,6 @@ class Room {
     'facility_id': facilityId,
     'name': name,
     'type': type,
-    'capacity': capacity,
     'status': status,
     'desc': desc,
     'media': media.map((m) => m.toJson()).toList(),
@@ -93,7 +88,7 @@ class Room {
 
   @override
   String toString() {
-    return 'Room(id: $id, facilityId: $facilityId, name: "$name", type: "$type", capacity: $capacity, status: "$status", desc: "$desc", roomPrices: $roomPrices)';
+    return 'Room(id: $id, facilityId: $facilityId, name: "$name", type: "$type", status: "$status", desc: "$desc", roomPrices: $roomPrices)';
   }
 
   @override
@@ -105,7 +100,6 @@ class Room {
             facilityId == other.facilityId &&
             name == other.name &&
             type == other.type &&
-            capacity == other.capacity &&
             status == other.status &&
             desc == other.desc &&
             roomPrices == other.roomPrices;
@@ -117,7 +111,6 @@ class Room {
       facilityId.hashCode ^
       name.hashCode ^
       type.hashCode ^
-      capacity.hashCode ^
       status.hashCode ^
       desc.hashCode ^
       roomPrices.hashCode;

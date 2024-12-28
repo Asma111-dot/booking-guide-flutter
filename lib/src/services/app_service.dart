@@ -1,8 +1,10 @@
-import 'dart:io';
+import 'dart:io';// تحديد هل االنظام  يعمل عليه التطبيق (Android أو iOS).
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:open_store/open_store.dart';
+
+//الحصول ع معلومات الجهاز والتطبيق وفتح متجر التطبيقات
 
 Future<void> openStore() async{
   await OpenStore.instance.open(
@@ -22,6 +24,7 @@ Future<PackageInfo> packageInfo(){
 
 Future<String> deviceName() async{
   var device = await deviceInfo();
+
   if(device is AndroidDeviceInfo){
     return device.model;
   }
