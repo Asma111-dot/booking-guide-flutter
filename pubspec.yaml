@@ -63,6 +63,8 @@ dependencies:
   table_calendar: ^3.1.2
   google_maps_flutter: ^2.10.0
   syncfusion_flutter_datepicker: ^28.1.33
+  googleapis: ^13.2.0
+  googleapis_auth: ^1.6.0
 
 dev_dependencies:
   flutter_test:

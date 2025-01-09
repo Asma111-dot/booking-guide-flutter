@@ -1,3 +1,5 @@
+import 'package:booking_guide/src/storage/auth_storage.dart';
+
 import '../models/payment.dart';
 import '../extensions/date_formatting.dart';
 
@@ -75,7 +77,7 @@ class Reservation {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'user_id': userId,
+      'user_id': currentUser()?.id,
       'room_price_id': roomPriceId,
       'check_in_date': checkInDate.toSqlDateOnly(),
       'check_out_date': checkOutDate.toSqlDateOnly(),
@@ -92,30 +94,6 @@ class Reservation {
         .where((json) => json is Map<String, dynamic>)
         .map((json) => Reservation.fromJson(json as Map<String, dynamic>))
         .toList();
-  }
-
-  Reservation copyWith({
-    int? id,
-    int? userId,
-    int? roomPriceId,
-    DateTime? checkInDate,
-    DateTime? checkOutDate,
-    String? status,
-    String? bookingType,
-    int? adultsCount,
-    int? childrenCount,
-  }) {
-    return Reservation(
-      id: id ?? this.id,
-      userId: userId ?? this.userId,
-      roomPriceId: roomPriceId ?? this.roomPriceId,
-      checkInDate: checkInDate ?? this.checkInDate,
-      checkOutDate: checkOutDate ?? this.checkOutDate,
-      status: status ?? this.status,
-      bookingType: bookingType ?? this.bookingType,
-      adultsCount: adultsCount ?? this.adultsCount,
-      childrenCount: childrenCount ?? this.childrenCount,
-    );
   }
 
   bool isCreate() => id == 0;
@@ -159,4 +137,5 @@ class Reservation {
       bookingType.hashCode ^
       adultsCount.hashCode ^
       childrenCount.hashCode;
+
 }

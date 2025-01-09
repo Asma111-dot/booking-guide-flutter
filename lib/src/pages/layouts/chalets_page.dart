@@ -141,7 +141,7 @@ class _ChaletsPageState extends ConsumerState<ChaletsPage> {
                             children: [
                               Text(
                                 firstPrice > 0
-                                    ? '${trans().priceStartFrom}: ${firstPrice}${trans().riyalY}'
+                                    ? '${trans().priceStartFrom} ${firstPrice}${trans().riyalY}'
                                     : '${trans().priceNotAvailable}',
                                 style: TextStyle(
                                   color: firstPrice > 0

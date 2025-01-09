@@ -94,6 +94,7 @@
   "availabilityCalendar": "List bookings",
   "selectDateAndPrice": "Select Date And Price",
   "continueBooking": "Continue Booking",
+  "completeTheReservation": "Complete the reservation",
   "dateNotAvailable": "Date Not Available",
   "next": "Next"
 }

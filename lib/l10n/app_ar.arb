@@ -94,6 +94,7 @@
   "selectDateAndPrice": "اختيار الايام والسعر",
   "availabilityCalendar": "قائمة الحجوزات",
   "continueBooking": "إستكمال الحجز",
+"completeTheReservation": "إتمام الحجز",
   "dateNotAvailable": "التاريخ غير متاح",
   "next": "التالي"
 }

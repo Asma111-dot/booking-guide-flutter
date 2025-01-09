@@ -4,12 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../helpers/general_helper.dart';
-import '../models/reservation.dart' as res;
 import '../models/room_price.dart';
-import '../providers/auth/user_provider.dart';
 import '../providers/reservation/reservation_save_provider.dart';
 import '../providers/room_price/room_prices_provider.dart';
 import '../utils/routes.dart';
+import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar.dart';
 
 class ReservationPage extends ConsumerStatefulWidget {
@@ -28,6 +27,7 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
   late TextEditingController adultsController;
   late TextEditingController childrenController;
   String bookingType = 'Family (Women and Men)';
+  final GlobalKey<FormState> reservationKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -35,30 +35,8 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
     adultsController = TextEditingController();
     childrenController = TextEditingController();
 
-    // Future.microtask(() async {
-    //   final roomId = widget.roomPrice.reservations.first.id;
-    //   final reservation = widget.roomPrice.reservations.first;
-    //
-    //   await ref.read(roomPricesProvider.notifier).fetch(roomId: roomId);
-    //   ref.read(reservationProvider.notifier).fetch(reservationId: roomId);
-    //   ref.read(formProvider.notifier).updateField(
-    //     roomPriceId: widget.roomPrice.id,
-    //     checkInDate: reservation.checkInDate,
-    //     checkOutDate: reservation.checkOutDate,
-    //     id: reservation.id,
-    //     bookingType: reservation.bookingType,
-    //     adultsCount: reservation.adultsCount,
-    //     childrenCount: reservation.childrenCount,
-    //   );
-    // });
     Future.microtask(() {
-      final reservation = widget.roomPrice.reservations.first;
-      ref.read(formProvider.notifier).updateField(
-        id: reservation.id,
-        roomPriceId: widget.roomPrice.id,
-            checkInDate: reservation.checkInDate,
-            checkOutDate: reservation.checkOutDate,
-          );
+      final reservation1 = widget.roomPrice.reservations.first;
     });
   }
 
@@ -71,9 +49,8 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final formState = ref.watch(formProvider);
+    final reservation = ref.watch(reservationSaveProvider);
     final roomPriceState = ref.watch(roomPricesProvider);
-    final currentUserId = ref.watch(userProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -93,7 +70,7 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("نوع الحضور:"),
+              // const Text("نوع الحضور:"),
               DropdownButtonFormField<String>(
                 value: bookingType,
                 items: const [
@@ -111,61 +88,91 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                   ),
                 ],
                 onChanged: (value) {
-                  // setState(() {
-                  //   bookingType = value!;
-                  // });
-                  ref.read(formProvider.notifier).updateField(bookingType: value, id: 0);
+                  print("نوع الحجز الحالي: $value");
+                  setState(() {
+                    bookingType = value!;
+                  });
                 },
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+                // readOnly: reservation.isLoading(),
+                decoration: InputDecoration(
+                  labelText: "نوع الحجز",
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 30),
-              TextField(
-                  controller: adultsController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: "عدد الكبار",
-                    border: OutlineInputBorder(),
-                  ),
-                  onChanged: (value) {
-                    ref.read(formProvider.notifier).updateField(
-                          adultsCount: int.tryParse(value),id: 0);
-                    print("عدد الكبار: ${int.tryParse(value)}");
-                  }),
+              TextFormField(
+                controller: adultsController,
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  print("عدد الكبار الحالي: $value");
+                  setState(() {});
+                },
+                // readOnly: reservation.isLoading(),
+                decoration: const InputDecoration(
+                  labelText: "عدد الكبار",
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) =>
+                    value!.isEmpty ? "الرجاء إدخال عدد الكبار" : null,
+              ),
               const SizedBox(height: 30),
-              TextField(
-                  controller: childrenController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: "عدد الأطفال",
-                    border: OutlineInputBorder(),
-                  ),
-                  onChanged: (value) {
-                    ref
-                        .read(formProvider.notifier)
-                        .updateField(childrenCount: int.tryParse(value), id: 0);
-                    print("عدد الأطفال: ${int.tryParse(value)}");
-                  }),
-              const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text("السابق"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await ref
-                          .read(reservationSaveProvider.notifier)
-                          .saveReservation(formState);
+              TextFormField(
+                controller: childrenController,
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  print("عدد الأطفال الحالي: $value");
+                  setState(() {});
+                },
+                // readOnly: reservation.isLoading(),
+                decoration: const InputDecoration(
+                  labelText: "عدد الأطفال",
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) =>
+                    value!.isEmpty ? "الرجاء إدخال عدد الأطفال" : null,
+              ),
+              const SizedBox(height: 32),
 
-                      Navigator.pushNamed(context, Routes.reservationDetails);
-                    },
-                    child: const Text("التالي"),
-                  ),
-                ],
+              // ElevatedButton(
+              //   onPressed: reservation.isLoading()
+              //       ? null
+              //       : () async {
+              //     if (reservationKey.currentState!.validate()) {
+              //       await ref.read(reservationSaveProvider.notifier).saveReservation(
+              //         reservation.data!,
+              //       );
+              //     }
+              //   },
+              //   child: reservation.isLoading()
+              //       ? const CircularProgressIndicator()
+              //       : const Text('إتمام الحجز'),
+              // ),
+
+              Hero(
+                tag: 'reservation',
+                child: Button(
+                    width: double.infinity,
+                    title: trans().completeTheReservation,
+                    disable: reservation.isLoading(),
+                    onPressed: () async {
+                      if (reservationKey.currentState!.validate()) {
+                        print(
+                            "حالة الحجز قبل الحفظ: ${reservation.isLoading()}");
+                        print("بيانات الحجز قبل الحفظ: ${reservation.data}");
+                        if (reservation.data != null) {
+                          await ref
+                              .read(reservationSaveProvider.notifier)
+                              .saveReservation(reservation.data!);
+
+                          Navigator.pushNamed(
+                              context, Routes.reservationDetails);
+                        } else {
+                          print("بيانات الحجز غير موجودة.");
+                        }
+                      } else {
+                        print("النموذج غير صالح.");
+                      }
+                    }),
               ),
             ],
           ),
@@ -174,4 +181,3 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
     );
   }
 }
-

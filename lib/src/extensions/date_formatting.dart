@@ -21,7 +21,7 @@ extension StringFormatting on DateTime {
 
   //SQL (YYYY-MM-DD) only Data
   String toSqlDateOnly() {
-    return "${year.toString().padLeft(2, '0')}"
+    return "${year.toString().padLeft(4, '0')}"
         "-${month.toString().padLeft(2, '0')}"
         "-${day.toString().padLeft(2, '0')}";
   }
