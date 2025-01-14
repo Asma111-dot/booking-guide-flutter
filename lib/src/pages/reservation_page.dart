@@ -1,4 +1,3 @@
-import 'package:booking_guide/src/widgets/view_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,6 +9,7 @@ import '../providers/room_price/room_prices_provider.dart';
 import '../utils/routes.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar.dart';
+import '../widgets/view_widget.dart';
 
 class ReservationPage extends ConsumerStatefulWidget {
   final RoomPrice roomPrice;
@@ -26,18 +26,14 @@ class ReservationPage extends ConsumerStatefulWidget {
 class _ReservationPageState extends ConsumerState<ReservationPage> {
   late TextEditingController adultsController;
   late TextEditingController childrenController;
-  String bookingType = 'Family (Women and Men)';
   final GlobalKey<FormState> reservationKey = GlobalKey<FormState>();
+  String? bookingType;
 
   @override
   void initState() {
     super.initState();
     adultsController = TextEditingController();
     childrenController = TextEditingController();
-
-    Future.microtask(() {
-      final reservation1 = widget.roomPrice.reservations.first;
-    });
   }
 
   @override
@@ -62,119 +58,167 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
         meta: roomPriceState.meta,
         data: roomPriceState.data,
         refresh: () => ref.read(roomPricesProvider.notifier).fetch(
-              roomId: widget.roomPrice.reservations.first.id,
-            ),
+          roomId: widget.roomPrice.reservations.first.id,
+        ),
         forceShowLoaded: roomPriceState.data != null,
         onLoaded: (data) => Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // const Text("نوع الحضور:"),
-              DropdownButtonFormField<String>(
-                value: bookingType,
-                items: const [
-                  DropdownMenuItem(
-                    value: 'Family (Women and Men)',
-                    child: Text('Family (Women and Men)'),
+          child: Form(
+            key: reservationKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // نوع الحجز
+                DropdownButtonFormField<String>(
+                  value: bookingType,
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'Family (Women and Men)',
+                      child: Text('عائلي(نساء ورجال)'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'Women Only',
+                      child: Text('نساء فقط'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'Men Only',
+                      child: Text('رجال فقط'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'Companies',
+                      child: Text('شركة'),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      bookingType = value!;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    labelText: "نوع الحجز",
+                    border: const OutlineInputBorder(),
                   ),
-                  DropdownMenuItem(
-                    value: 'Women Only',
-                    child: Text('Women Only'),
+                  validator: (value) => value == null ? 'الرجاء اختيار نوع الحجز' : null,
+                ),
+                const SizedBox(height: 30),
+
+                // عدد الكبار
+                TextFormField(
+                  controller: adultsController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: "عدد الكبار",
+                    border: OutlineInputBorder(),
                   ),
-                  DropdownMenuItem(
-                    value: 'Men Only',
-                    child: Text('Men Only'),
+                  validator: (value) => value!.isEmpty ? "الرجاء إدخال عدد الكبار" : null,
+                ),
+                const SizedBox(height: 30),
+
+                // عدد الأطفال
+                TextFormField(
+                  controller: childrenController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: "عدد الأطفال",
+                    border: OutlineInputBorder(),
                   ),
-                ],
-                onChanged: (value) {
-                  print("نوع الحجز الحالي: $value");
-                  setState(() {
-                    bookingType = value!;
-                  });
-                },
-                // readOnly: reservation.isLoading(),
-                decoration: InputDecoration(
-                  labelText: "نوع الحجز",
-                  border: const OutlineInputBorder(),
+                  validator: (value) => value!.isEmpty ? "الرجاء إدخال عدد الأطفال" : null,
                 ),
-              ),
-              const SizedBox(height: 30),
-              TextFormField(
-                controller: adultsController,
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  print("عدد الكبار الحالي: $value");
-                  setState(() {});
-                },
-                // readOnly: reservation.isLoading(),
-                decoration: const InputDecoration(
-                  labelText: "عدد الكبار",
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) =>
-                    value!.isEmpty ? "الرجاء إدخال عدد الكبار" : null,
-              ),
-              const SizedBox(height: 30),
-              TextFormField(
-                controller: childrenController,
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  print("عدد الأطفال الحالي: $value");
-                  setState(() {});
-                },
-                // readOnly: reservation.isLoading(),
-                decoration: const InputDecoration(
-                  labelText: "عدد الأطفال",
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) =>
-                    value!.isEmpty ? "الرجاء إدخال عدد الأطفال" : null,
-              ),
-              const SizedBox(height: 32),
+                const SizedBox(height: 32),
+                ElevatedButton(
+                  onPressed: reservation.isLoading()
+                      ? null
+                      : () async {
+                    if (reservationKey.currentState!.validate()) {
+                      // استخراج القيم المدخلة في الحقول
+                      final adultsCount = adultsController.text.isNotEmpty
+                          ? int.parse(adultsController.text)
+                          : 0;
 
-              // ElevatedButton(
-              //   onPressed: reservation.isLoading()
-              //       ? null
-              //       : () async {
-              //     if (reservationKey.currentState!.validate()) {
-              //       await ref.read(reservationSaveProvider.notifier).saveReservation(
-              //         reservation.data!,
-              //       );
-              //     }
-              //   },
-              //   child: reservation.isLoading()
-              //       ? const CircularProgressIndicator()
-              //       : const Text('إتمام الحجز'),
-              // ),
+                      final childrenCount = childrenController.text.isNotEmpty
+                          ? int.parse(childrenController.text)
+                          : 0;
 
-              Hero(
-                tag: 'reservation',
-                child: Button(
-                    width: double.infinity,
-                    title: trans().completeTheReservation,
-                    disable: reservation.isLoading(),
-                    onPressed: () async {
-                      if (reservationKey.currentState!.validate()) {
-                        print(
-                            "حالة الحجز قبل الحفظ: ${reservation.isLoading()}");
-                        print("بيانات الحجز قبل الحفظ: ${reservation.data}");
-                        if (reservation.data != null) {
-                          await ref
-                              .read(reservationSaveProvider.notifier)
-                              .saveReservation(reservation.data!);
+                      final bookingType = this.bookingType ?? ''; // هنا يتم التأكد من نوع الحجز
 
-                          Navigator.pushNamed(
-                              context, Routes.reservationDetails);
-                        } else {
-                          print("بيانات الحجز غير موجودة.");
-                        }
-                      } else {
-                        print("النموذج غير صالح.");
+                      // تحقق من أن جميع الحقول تمت تعبئتها بشكل صحيح
+                      if (bookingType.isEmpty || adultsCount == 0 || childrenCount == 0) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('الرجاء إكمال البيانات بشكل صحيح')),
+                        );
+                        return;
                       }
-                    }),
-              ),
-            ],
+
+                      try {
+                        // إرسال البيانات مع الحجز
+                        await ref.read(reservationSaveProvider.notifier).saveReservation(
+                          reservation.data!, // الحجز الذي سيتم حفظه
+                          adultsCount: adultsCount, // عدد الكبار
+                          childrenCount: childrenCount, // عدد الأطفال
+                          bookingType: bookingType, // نوع الحجز
+                        );
+
+                        // عرض رسالة تأكيد عند الحفظ بنجاح
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('تم الحفظ بنجاح')),
+                        );
+
+                        // التوجيه إلى صفحة تفاصيل الحجز بعد الحفظ بنجاح
+                        Navigator.pushNamed(context, Routes.reservationDetails);
+                      } catch (error) {
+                        // في حال حدوث خطأ أثناء الحفظ
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('حدث خطأ أثناء الحفظ')),
+                        );
+                      }
+                    } else {
+                      // في حال كانت البيانات غير صالحة
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('الرجاء إكمال البيانات بشكل صحيح')),
+                      );
+                    }
+                  },
+                  child: reservation.isLoading()
+                      ? const CircularProgressIndicator()
+                      : const Text('إتمام الحجز'),
+                ),
+
+                // زر إتمام الحجز
+                // ElevatedButton(
+                //   onPressed: reservation.isLoading()
+                //       ? null
+                //       : () async {
+                //     if (reservationKey.currentState!.validate()) {
+                //       // حفظ البيانات بعد التحقق
+                //       try {
+                //         await ref.read(reservationSaveProvider.notifier).saveReservation(
+                //           reservation.data!, // الحجز الذي سيتم حفظه
+                //         );
+                //         // عرض رسالة تأكيد عند الحفظ بنجاح
+                //         ScaffoldMessenger.of(context).showSnackBar(
+                //           SnackBar(content: Text('تم الحفظ بنجاح')),
+                //         );
+                //         // التوجيه إلى صفحة تفاصيل الحجز بعد الحفظ بنجاح
+                //         Navigator.pushNamed(context, Routes.reservationDetails);
+                //       } catch (error) {
+                //         // في حال حدوث خطأ أثناء الحفظ
+                //         ScaffoldMessenger.of(context).showSnackBar(
+                //           SnackBar(content: Text('حدث خطأ أثناء الحفظ')),
+                //         );
+                //       }
+                //     } else {
+                //       // في حال كانت البيانات غير صالحة
+                //       ScaffoldMessenger.of(context).showSnackBar(
+                //         SnackBar(content: Text('الرجاء إكمال البيانات بشكل صحيح')),
+                //       );
+                //     }
+                //   },
+                //   child: reservation.isLoading()
+                //       ? const CircularProgressIndicator()
+                //       : const Text('إتمام الحجز'),
+                // ),
+              ],
+            ),
           ),
         ),
       ),

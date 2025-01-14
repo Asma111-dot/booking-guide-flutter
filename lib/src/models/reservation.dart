@@ -1,7 +1,7 @@
-import 'package:booking_guide/src/storage/auth_storage.dart';
+import 'package:booking_guide/src/extensions/date_formatting.dart';
 
-import '../models/payment.dart';
-import '../extensions/date_formatting.dart';
+import '../storage/auth_storage.dart';
+import 'payment.dart';
 
 class Reservation {
   int id;
@@ -45,21 +45,16 @@ class Reservation {
         payments = [];
 
   factory Reservation.fromJson(Map<String, dynamic> jsonMap) {
-    if (jsonMap['user_id'] != null) {
-      print('The user_id is: ${jsonMap['user_id']}');
-    } else {
+    if (jsonMap['user_id'] == null) {
       print('Warning: user_id is null or missing!');
     }
+
     return Reservation(
       id: jsonMap['id'] ?? 0,
       userId: jsonMap['user_id'] ?? 0,
       roomPriceId: jsonMap['room_price_id'] ?? 0,
-      // checkInDate:
-      //     DateTime.tryParse(jsonMap['check_in_date'] ?? '') ?? DateTime.now(),
-      // checkOutDate:
-      //     DateTime.tryParse(jsonMap['check_out_date'] ?? '') ?? DateTime.now(),
-      checkInDate: DateTime.parse(jsonMap['check_in_date']),
-      checkOutDate: DateTime.parse(jsonMap['check_out_date']),
+      checkInDate: DateTime.tryParse(jsonMap['check_in_date'] ?? '') ?? DateTime.now(),
+      checkOutDate: DateTime.tryParse(jsonMap['check_out_date'] ?? '') ?? DateTime.now(),
       status: jsonMap['status'],
       totalPrice: jsonMap['total_price'] != null
           ? double.tryParse(jsonMap['total_price'].toString()) ?? 0.0
@@ -68,8 +63,8 @@ class Reservation {
       adultsCount: jsonMap['adults_count'] ?? 0,
       childrenCount: jsonMap['children_count'] ?? 0,
       payments: (jsonMap['payments'] as List<dynamic>?)
-              ?.map((item) => Payment.fromJson(item))
-              .toList() ??
+          ?.map((item) => Payment.fromJson(item))
+          .toList() ??
           [],
     );
   }
@@ -137,5 +132,4 @@ class Reservation {
       bookingType.hashCode ^
       adultsCount.hashCode ^
       childrenCount.hashCode;
-
 }

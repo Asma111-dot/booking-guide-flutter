@@ -101,7 +101,7 @@ class Routes {
       case priceAndCalendar:
         final roomId = settings.arguments as int;
         return MaterialPageRoute(
-          builder: (_) => PriceAndCalendarPage(roomId: roomId),
+          builder: (_) => PriceAndCalendarPage(roomId: roomId,),
           settings: settings,
         );
       case reservation:

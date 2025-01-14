@@ -13,6 +13,7 @@ import '../widgets/custom_app_bar.dart';
 import '../providers/room/room_provider.dart';
 import '../models/facility.dart';
 import '../models/room.dart' as r;
+import '../widgets/room_price_widget.dart';
 import '../widgets/view_widget.dart';
 
 class ChaletDetailsPage extends ConsumerStatefulWidget {
@@ -272,156 +273,20 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                                       child: ListView(
                                         children: room.roomPrices.isNotEmpty
                                             ? room.roomPrices.map((price) {
-                                                return Container(
-                                                  margin: const EdgeInsets
-                                                      .symmetric(vertical: 8.0),
-                                                  padding: const EdgeInsets.all(
-                                                      16.0),
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                      color: CustomTheme.primaryColor
-                                                          .withOpacity(0.3),
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                    color: Colors.white,
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors.black
-                                                            .withOpacity(0.1),
-                                                        blurRadius: 10,
-                                                        offset: Offset(0, 4),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      //amount
-                                                      Row(
-                                                        children: [
-                                                          const Icon(
-                                                            Icons
-                                                                .monetization_on_outlined,
-                                                            color: CustomTheme
-                                                                .primaryColor,
-                                                            size: 16,
-                                                          ),
-                                                          const SizedBox(width: 8),
-                                                          Text(
-                                                            "${price.amount} ${trans().riyalY}",
-                                                            style:
-                                                            const TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .bold,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(height: 8),
-                                                      //period
-                                                      Row(
-                                                        children: [
-                                                          const Icon(
-                                                            Icons.calendar_today,
-                                                            color: CustomTheme
-                                                                .primaryColor,
-                                                            size: 16,
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 8),
-                                                          Text(
-                                                            price.period,
-                                                            style:
-                                                                const TextStyle(
-                                                              fontSize: 14,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(height: 8),
-                                                      //capacity
-                                                      Row(
-                                                        children: [
-                                                          const Icon(
-                                                            Icons.groups_2_outlined,
-                                                            color: CustomTheme
-                                                                .primaryColor,
-                                                            size: 16,
-                                                          ),
-                                                          const SizedBox(width: 8),
-                                                          Text(
-                                                          "${price.capacity} ${trans().person}",
-                                                            style:
-                                                                const TextStyle(
-                                                              fontSize: 16,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(height: 8),
-                                                     // deposit
-                                                      Row(
-                                                        children: [
-                                                          const Icon(
-                                                            Icons
-                                                                .money_off_sharp,
-                                                            color: CustomTheme
-                                                                .primaryColor,
-                                                            size: 16,
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 8),
-                                                          Text(
-                                                            "${trans().deposit} ${price.deposit} ${trans().riyalY}",
-                                                            style:
-                                                                const TextStyle(
-                                                              fontSize: 14,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(height: 8),
-                                                      //time
-                                                      Row(
-                                                        children: [
-                                                          Icon(
-                                                            Icons.access_time,
-                                                            size: 16,
-                                                            color: CustomTheme
-                                                                .primaryColor,
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 4),
-                                                          Text(
-                                                            '${price.timeFrom ?? '--:--'} - ${price.timeTo ?? '--:--'}',
-                                                            style:
-                                                            const TextStyle(
-                                                              fontSize: 14,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
-                                              }).toList()
+                                          return RoomPriceWidget(price: price);
+                                        }).toList()
                                             : [
-                                                Text(
-                                                  "${trans().price}: ${trans().priceNotAvailable}",
-                                                  style: const TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ],
+                                          Text(
+                                            "${trans().price}: ${trans().priceNotAvailable}",
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     )
+
                                   ],
                                 ),
                               ),

@@ -118,8 +118,9 @@ class _ChaletsPageState extends ConsumerState<ChaletsPage> {
                           leading: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: CachedNetworkImage(
-                              imageUrl: facility.logo ?? '',
-                              width: 100,
+                              //imageUrl: facility.logo ?? '',
+                          imageUrl: facility.logo?.isNotEmpty == true ? facility.logo! : '',
+                            width: 100,
                               height: 100,
                               fit: BoxFit.cover,
                               placeholder: (context, url) =>
