@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:booking_guide/src/models/facility.dart';
+
 import 'media.dart';
 import 'amenity.dart';
 import 'room_price.dart';
@@ -16,6 +18,8 @@ class Room {
   List<Amenity> amenities;
   List<RoomPrice> roomPrices;
 
+  Facility? facility;
+
   Room({
     required this.id,
     required this.facilityId,
@@ -26,6 +30,7 @@ class Room {
     this.media = const [],
     this.amenities = const [],
     this.roomPrices = const [],
+    this.facility,
   });
 
   Room.init()
@@ -37,7 +42,8 @@ class Room {
         desc = '',
         media = [],
         amenities = [],
-        roomPrices = [];
+        roomPrices = [],
+  facility = null;
 
 
   factory Room.fromJson(Map<String, dynamic> jsonMap) {
@@ -63,6 +69,8 @@ class Room {
         .map((item) => RoomPrice.fromJson(item))
         .toList() ??
         [],
+      facility: jsonMap['facility'] != null
+    ? Facility.fromJson(jsonMap['facility']) : null,
 
     );
 
@@ -79,6 +87,7 @@ class Room {
     'media': media.map((m) => m.toJson()).toList(),
     'amenities': amenities.map((a) => a.toJson()).toList(),
     'room_prices': roomPrices.map((r) => r.toJson()).toList(),
+    'facility': facility?.toJson(),
   };
 
   static List<Room> fromJsonList(List<dynamic> items) =>

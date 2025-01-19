@@ -2,6 +2,7 @@ import 'package:booking_guide/src/extensions/date_formatting.dart';
 
 import '../storage/auth_storage.dart';
 import 'payment.dart';
+import 'room_price.dart';
 
 class Reservation {
   int id;
@@ -17,6 +18,8 @@ class Reservation {
 
   List<Payment> payments;
 
+  RoomPrice? roomPrice;
+
   Reservation({
     required this.id,
     this.userId,
@@ -29,6 +32,7 @@ class Reservation {
     this.adultsCount,
     this.childrenCount,
     this.payments = const [],
+    this.roomPrice
   });
 
   Reservation.init()
@@ -42,7 +46,8 @@ class Reservation {
         bookingType = '',
         adultsCount = 0,
         childrenCount = 0,
-        payments = [];
+        payments = [],
+  roomPrice = null;
 
   factory Reservation.fromJson(Map<String, dynamic> jsonMap) {
     if (jsonMap['user_id'] == null) {
@@ -66,6 +71,8 @@ class Reservation {
           ?.map((item) => Payment.fromJson(item))
           .toList() ??
           [],
+      roomPrice: jsonMap['room_price'] != null
+          ? RoomPrice.fromJson(jsonMap['room_price']) : null,
     );
   }
 
@@ -81,6 +88,7 @@ class Reservation {
       'booking_type': bookingType,
       'adults_count': adultsCount,
       'children_count': childrenCount,
+      'room_price': roomPrice?.toJson(),
     };
   }
 

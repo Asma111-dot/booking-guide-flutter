@@ -92,7 +92,6 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
   @override
   Widget build(BuildContext context) {
     final roomPriceState = ref.watch(roomPricesProvider);
-    final reservation = ref.watch(reservationSaveProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,

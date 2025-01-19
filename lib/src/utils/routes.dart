@@ -40,6 +40,7 @@ class Routes {
   static const String priceAndCalendar = '/price_calendar';
   static const String reservationDetails = '/reservation_details';
 
+
   static Route? generate(RouteSettings settings) {
     final args = settings.arguments;
     switch (settings.name) {
@@ -111,8 +112,10 @@ class Routes {
         );
 
       case reservationDetails:
+        final roomPriceId = settings.arguments as int;
+
         return MaterialPageRoute(
-          builder: (_) => ReservationDetailsPage(),
+          builder: (_) => ReservationDetailsPage(roomPriceId: roomPriceId,),
           settings: settings,
         );
       default:

@@ -95,6 +95,17 @@
   "availabilityCalendar": "قائمة الحجوزات",
   "continueBooking": "إستكمال الحجز",
 "completeTheReservation": "إتمام الحجز",
+  "reservationDetails": "تفاصيل الحجز",
   "dateNotAvailable": "التاريخ غير متاح",
+  "booking_type": "نوع الحجز",
+  "family": "عائلي(نساء ورجال)",
+  "women": "نساء فقط",
+  "men": "رجال فقط",
+  "companies": "شركة",
+  "please_choose_booking_type": "الرجاء اختيار نوع الحجز",
+  "adults_count": "عدد الكبار",
+  "please_enter_adults_count": "الرجاء إدخال عدد الكبار",
+  "children_count": "عدد الأطفال",
+  "please_enter_children_count": "الرجاء إدخال عدد الأطفال",
   "next": "التالي"
 }

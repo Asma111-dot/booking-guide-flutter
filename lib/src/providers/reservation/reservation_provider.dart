@@ -1,8 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../models/reservation.dart' as res;
+import '../../models/response/meta.dart';
 import '../../models/response/response.dart';
-import '../../models/user.dart';
 import '../../services/request_service.dart';
 import '../../utils/urls.dart';
 import 'reservations_provider.dart';
@@ -19,20 +19,31 @@ class Reservation extends _$Reservation {
     state = state.copyWith(data: reservation);
   }
 
-  Future fetch({required int reservationId ,res.Reservation? reservation}) async {
+  Future fetch({required int roomPriceId, res.Reservation? reservation}) async {
     if (reservation != null) {
       state = state.copyWith(data: reservation);
-      state = state.setLoaded();
-      return;
+      //state = state.setLoaded();
+     // return;
     }
 
     state = state.setLoading();
     await request<res.Reservation>(
-      url: getReservationUrl(reservationId: reservationId),
+      url: getReservationUrl(reservationId: roomPriceId),
       method: Method.get,
     ).then((value) async {
-      state = state.copyWith(meta: value.meta, data: value.data);
+      //state = state.copyWith(meta: value.meta, data: value.data);
+      if(value.isLoaded()) {
+        state = state.copyWith(data: value.data);
+        saveReservationLocally(value.data!);
+      }
     });
+  }
+
+  Future saveReservationLocally(res.Reservation reservation) async {
+    state = state.setLoading();
+    state = state.copyWith(data: reservation);
+     // await saveCurrentProfile(reservation);
+     // state = state.setLoaded();
   }
 
   Future save(res.Reservation reservation) async {
@@ -47,10 +58,18 @@ class Reservation extends _$Reservation {
       state = state.copyWith(meta: value.meta);
       if (value.isLoaded()) {
         state = state.copyWith(data: value.data);
+
         ref
             .read(reservationsProvider.notifier)
             .addOrUpdateReservation(value.data!);
       }
     });
   }
+  void updateStateWithNewData(res.Reservation reservation) {
+    state = state.copyWith(
+      data: reservation,
+      meta: state.meta.copyWith(status: Status.loaded),
+    );
+  }
+
 }

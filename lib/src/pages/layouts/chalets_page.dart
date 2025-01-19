@@ -16,7 +16,6 @@ import '../../models/facility_type.dart';
 import 'main_layout.dart';
 
 class ChaletsPage extends ConsumerStatefulWidget {
-  //final FacilityType facilityType;
 
   const ChaletsPage({Key? key}) : super(key: key);
 
@@ -26,7 +25,6 @@ class ChaletsPage extends ConsumerStatefulWidget {
 
 class _ChaletsPageState extends ConsumerState<ChaletsPage> {
   late GoogleMapController mapController;
-  LatLng? _selectedLocation;
 
   void _showMapDialog(Facility facility, List<Facility> facilities) {
     showDialog(

@@ -95,6 +95,17 @@
   "selectDateAndPrice": "Select Date And Price",
   "continueBooking": "Continue Booking",
   "completeTheReservation": "Complete the reservation",
+  "reservationDetails": "Reservation Details",
   "dateNotAvailable": "Date Not Available",
+  "booking_type": "Booking Type",
+  "family": "Family(Man and Women)",
+  "women": "Women Only",
+  "men": "Men Only",
+  "companies": "Company",
+  "please_choose_booking_type": "Please choose the booking type",
+  "adults_count": "Number of Adults",
+  "please_enter_adults_count": "Please enter the number of adults",
+  "children_count": "Number of Children",
+  "please_enter_children_count": "Please enter the number of children",
   "next": "Next"
 }

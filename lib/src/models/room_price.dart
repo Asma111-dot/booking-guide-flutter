@@ -1,5 +1,6 @@
 import 'reservation.dart';
 import 'dart:developer';
+import 'room.dart';
 
 class RoomPrice {
   int id;
@@ -14,6 +15,8 @@ class RoomPrice {
 
   List<Reservation> reservations;
 
+  Room? room;
+
   RoomPrice({
     required this.id,
     required this.roomId,
@@ -25,6 +28,7 @@ class RoomPrice {
     this.timeFrom, // Nullable
     this.timeTo,
     this.reservations = const [],
+    this.room
   });
 
   RoomPrice.init()
@@ -37,7 +41,8 @@ class RoomPrice {
         period = '',
         timeFrom = null,
         timeTo = null,
-        reservations = [];
+        reservations = [],
+  room = null;
 
   factory RoomPrice.fromJson(Map<String, dynamic> jsonMap) {
     return RoomPrice(
@@ -53,6 +58,8 @@ class RoomPrice {
       reservations: (jsonMap['reservations'] as List<dynamic>? ?? [])
           .map((item) => Reservation.fromJson(item))
           .toList(),
+      room: jsonMap['room'] != null
+          ? Room.fromJson(jsonMap['room']) : null,
     );
   }
 
@@ -67,6 +74,7 @@ class RoomPrice {
     'time_from': timeFrom,
     'time_to': timeTo,
     'reservations': reservations.map((r) => r.toJson()).toList(),
+    'room': room?.toJson(),
   };
 
   bool isCreate() => id == 0;
