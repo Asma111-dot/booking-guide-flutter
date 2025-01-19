@@ -232,11 +232,8 @@ class _HotelsPageState extends ConsumerState<HotelsPage> {
           );
         },
         onLoading: () => const Center(child: CircularProgressIndicator()),
-        onEmpty: () => const Center(
-          child: Text(
-            "",
-            style: TextStyle(color: CustomTheme.placeholderColor),
-          ),
+        onEmpty: () =>  Center(
+          child: Text(trans().no_data),
         ),
         showError: true,
         showEmpty: true,

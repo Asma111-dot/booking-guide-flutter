@@ -107,5 +107,6 @@
   "please_enter_adults_count": "Please enter the number of adults",
   "children_count": "Number of Children",
   "please_enter_children_count": "Please enter the number of children",
-  "next": "Next"
+  "next": "Next",
+  "no_data": "No Data Available"
 }

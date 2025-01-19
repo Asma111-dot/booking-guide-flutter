@@ -31,10 +31,6 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
     final facilityTypesState = ref.watch(facilityTypesProvider);
 
     return Scaffold(
-      // appBar: CustomAppBar(
-      //   appTitle: trans().welcomeToBooking,
-      //   icon: const FaIcon(Icons.arrow_back_ios),
-      // ),
       body: ViewWidget<List<FacilityType>>(
         meta: facilityTypesState.meta,
         data: facilityTypesState.data,

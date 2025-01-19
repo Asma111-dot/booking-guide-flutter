@@ -122,64 +122,11 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                   ),
                   validator: (value) => value!.isEmpty ? trans().please_enter_children_count : null,
                 ),
-                const SizedBox(height: 32),
-                // ElevatedButton(
-                //   onPressed: reservation.isLoading()
-                //       ? null
-                //       : () async {
-                //     if (reservationKey.currentState!.validate()) {
-                //       final adultsCount = adultsController.text.isNotEmpty
-                //           ? int.parse(adultsController.text)
-                //           : 0;
-                //       final childrenCount = childrenController.text.isNotEmpty
-                //           ? int.parse(childrenController.text)
-                //           : 0;
-                //       final bookingType = this.bookingType ?? '';
-                //
-                //       if (bookingType.isEmpty || adultsCount == 0 || childrenCount == 0) {
-                //         ScaffoldMessenger.of(context).showSnackBar(
-                //           SnackBar(content: Text('الرجاء إكمال البيانات بشكل صحيح')),
-                //         );
-                //         return;
-                //       }
-                //
-                //       try {
-                //         await ref.read(reservationSaveProvider.notifier).saveReservation(
-                //           reservation.data!,
-                //           adultsCount: adultsCount,
-                //           childrenCount: childrenCount,
-                //           bookingType: bookingType,
-                //         );
-                //
-                //         ScaffoldMessenger.of(context).showSnackBar(
-                //           SnackBar(content: Text('تم الحفظ بنجاح')),
-                //         );
-                //
-                //         // التوجيه إلى صفحة تفاصيل الحجز
-                //         // Navigator.pushNamed(
-                //         //   context,
-                //         //   Routes.reservationDetails, // استخدم المسار المحدد
-                //         //   arguments: widget.roomPrice.id, // تمرير roomPriceId كمعرّف
-                //        // );
-                //       } catch (error) {
-                //         ScaffoldMessenger.of(context).showSnackBar(
-                //           SnackBar(content: Text('حدث خطأ أثناء الحفظ')),
-                //         );
-                //       }
-                //     } else {
-                //       ScaffoldMessenger.of(context).showSnackBar(
-                //         SnackBar(content: Text('الرجاء إكمال البيانات بشكل صحيح')),
-                //       );
-                //     }
-                //   },
-                //   child: reservation.isLoading()
-                //       ? const CircularProgressIndicator()
-                //       :  Text(trans().completeTheReservation),
-                // ),
-                ElevatedButton(
-                  onPressed: reservation.isLoading()
-                      ? null
-                      : () async {
+                Button(
+                  width: double.infinity,
+                  title: trans().completeTheReservation,
+                  disable: reservation.isLoading(),
+                  onPressed: () async {
                     if (reservationKey.currentState!.validate()) {
                       final adultsCount = adultsController.text.isNotEmpty
                           ? int.parse(adultsController.text)
@@ -204,23 +151,20 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                           bookingType: bookingType,
                         );
 
-                        // عرض رسالة تأكيد عند الحفظ بنجاح
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('تم الحفظ بنجاح')),
                         );
 
-                        // استدعاء تفاصيل الحجز بعد الحفظ
                         final reservationData = reservation.data;
                         await ref.read(reservationProvider.notifier).fetch(
                           roomPriceId: reservationData?.roomPriceId ?? 0,
                         );
 
-                        // الانتقال إلى صفحة تفاصيل الحجز
                         Navigator.pushNamedAndRemoveUntil(
                           context,
-                          Routes.reservationDetails,  // استخدم المسار المحدد
-                              (r) => false,  // حذف جميع الصفحات السابقة
-                          arguments: reservationData?.roomPriceId, // تمرير roomPriceId كمعرّف
+                          Routes.reservationDetails,
+                              (r) => false,
+                          arguments: reservationData?.roomPriceId,
                         );
                       } catch (error) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -233,45 +177,8 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                       );
                     }
                   },
-                  child: reservation.isLoading()
-                      ? const CircularProgressIndicator()
-                      : Text(trans().completeTheReservation),
                 ),
 
-                // زر إتمام الحجز
-                // ElevatedButton(
-                //   onPressed: reservation.isLoading()
-                //       ? null
-                //       : () async {
-                //     if (reservationKey.currentState!.validate()) {
-                //       // حفظ البيانات بعد التحقق
-                //       try {
-                //         await ref.read(reservationSaveProvider.notifier).saveReservation(
-                //           reservation.data!, // الحجز الذي سيتم حفظه
-                //         );
-                //         // عرض رسالة تأكيد عند الحفظ بنجاح
-                //         ScaffoldMessenger.of(context).showSnackBar(
-                //           SnackBar(content: Text('تم الحفظ بنجاح')),
-                //         );
-                //         // التوجيه إلى صفحة تفاصيل الحجز بعد الحفظ بنجاح
-                //         Navigator.pushNamed(context, Routes.reservationDetails);
-                //       } catch (error) {
-                //         // في حال حدوث خطأ أثناء الحفظ
-                //         ScaffoldMessenger.of(context).showSnackBar(
-                //           SnackBar(content: Text('حدث خطأ أثناء الحفظ')),
-                //         );
-                //       }
-                //     } else {
-                //       // في حال كانت البيانات غير صالحة
-                //       ScaffoldMessenger.of(context).showSnackBar(
-                //         SnackBar(content: Text('الرجاء إكمال البيانات بشكل صحيح')),
-                //       );
-                //     }
-                //   },
-                //   child: reservation.isLoading()
-                //       ? const CircularProgressIndicator()
-                //       : const Text('إتمام الحجز'),
-                // ),
               ],
             ),
           ),

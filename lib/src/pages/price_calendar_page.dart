@@ -9,6 +9,7 @@ import '../providers/reservation/reservation_save_provider.dart';
 import '../providers/room_price/room_prices_provider.dart';
 import '../utils/routes.dart';
 import '../utils/theme.dart';
+import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_calendar_widget.dart';
 import '../widgets/room_price_two_widget.dart';
@@ -158,70 +159,52 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
               );
             },
             onLoading: () => const Center(child: CircularProgressIndicator()),
-            onEmpty: () => const Center(
-              child: Text("لا توجد بيانات"),
+            onEmpty: () =>  Center(
+              child: Text(trans().no_data),
             ),
             showError: true,
             showEmpty: true,
           ),
           Align(
-            alignment: Alignment.bottomLeft,
+            alignment: Alignment.bottomCenter,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: FloatingActionButton.extended(
-                backgroundColor: (selectedDay != null &&
-                    selectedPrice != null &&
-                    !(events[selectedDay]?.isNotEmpty ?? false)) ||
-                    hasSuccessfulAttempt
-                    ? CustomTheme.primaryColor
-                    : Colors.grey.shade400,
-                onPressed: (selectedDay != null &&
-                    selectedPrice != null &&
-                    !(events[selectedDay]?.isNotEmpty ?? false)) ||
-                    hasSuccessfulAttempt
-                    ? () async {
-                  setState(() {
-                    hasSuccessfulAttempt = true;
-                  });
-                  print("Selected Day: $selectedDay");
-                  print("Selected Price: $selectedPrice");
+              child: Button(
+                width: double.infinity,
+                title: trans().continueBooking,
+                disable: (selectedDay == null ||
+                    selectedPrice == null ||
+                    (events[selectedDay]?.isNotEmpty ?? false)) && !hasSuccessfulAttempt,
+                onPressed: () async {
+                  if (selectedDay != null &&
+                      selectedPrice != null &&
+                      !(events[selectedDay]?.isNotEmpty ?? false)) {
+                    setState(() {
+                      hasSuccessfulAttempt = true;
+                    });
 
-                  ref.read(reservationSaveProvider.notifier).saveReservationDraft(
-                    Reservation(
-                      roomPriceId: selectedPrice!.id,
-                      checkInDate: selectedDay!,
-                      checkOutDate: selectedDay!,
-                      id: 0,
-                      bookingType: '',
-                    ),
-                  );
+                    print("Selected Day: $selectedDay");
+                    print("Selected Price: $selectedPrice");
 
-                  //await ref.read(reservationSaveProvider.notifier).saveReservationDraft(reservation.data!);
-
-                  Navigator.pushNamed(context, Routes.reservation, arguments: selectedPrice);
-                }
-                    : () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('يرجى اختيار يوم وسعر غير محجوزين أولاً'),
-                    ),
-                  );
-                },
-                label: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      trans().continueBooking,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                    ref.read(reservationSaveProvider.notifier).saveReservationDraft(
+                      Reservation(
+                        roomPriceId: selectedPrice!.id,
+                        checkInDate: selectedDay!,
+                        checkOutDate: selectedDay!,
+                        id: 0,
+                        bookingType: '',
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    const Icon(Icons.arrow_forward),
-                  ],
-                ),
+                    );
+
+                    Navigator.pushNamed(context, Routes.reservation, arguments: selectedPrice);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('يرجى اختيار يوم وسعر غير محجوزين أولاً'),
+                      ),
+                    );
+                  }
+                },
               ),
             ),
           ),

@@ -180,11 +180,9 @@ class _ChaletsPageState extends ConsumerState<ChaletsPage> {
                 },
                 onLoading: () =>
                     const Center(child: CircularProgressIndicator()),
-                onEmpty: () => const Center(
-                  child: Text(
-                    "لا توجد بيانات",
-                    style: TextStyle(color: CustomTheme.placeholderColor),
-                  ),
+                onEmpty: () =>  Center(
+                  child: Text(trans().no_data),
+
                 ),
                 showError: true,
                 showEmpty: true,

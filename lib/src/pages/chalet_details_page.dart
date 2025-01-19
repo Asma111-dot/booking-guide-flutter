@@ -9,6 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../helpers/general_helper.dart';
 import '../utils/routes.dart';
 import '../utils/theme.dart';
+import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar.dart';
 import '../providers/room/room_provider.dart';
 import '../models/facility.dart';
@@ -136,9 +137,9 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                         imageUrl: room.media[index].original_url,
                         fit: BoxFit.cover,
                         placeholder: (context, url) =>
-                            const Center(child: CircularProgressIndicator()),
+                        const Center(child: CircularProgressIndicator()),
                         errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
+                        const Icon(Icons.error),
                       );
                     },
                   ),
@@ -186,15 +187,6 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              // const SizedBox(height: 8),
-                              // Text(
-                              //   "${trans().capacity}: ${room.capacity} ${trans().person}",
-                              //   style: const TextStyle(
-                              //     fontSize: 18,
-                              //     color: Colors.blueGrey,
-                              //     fontWeight: FontWeight.w500,
-                              //   ),
-                              // ),
                               const SizedBox(height: 16),
                               TabBar(
                                 controller: tabController,
@@ -218,7 +210,7 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                                 child: TabBarView(
                                   controller: tabController,
                                   children: [
-                                    // اTab 1: Description
+                                    // Tab 1: Description
                                     SingleChildScrollView(
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
@@ -292,46 +284,32 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                               ),
                             ],
                           )));
+
                 },
               ),
               Positioned(
                 bottom: 16,
                 left: 16,
                 right: 16,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: CustomTheme.primaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                  ),
-                  onPressed: () {
+                child: Button(
+                  width: double.infinity,  // Make the button fill the width
+                  title: trans().showAvailableDays,
+                  disable: false,  // Set condition to enable/disable button
+                  onPressed: () async{
                     Navigator.pushNamed(
                       context,
                       Routes.priceAndCalendar,
                       arguments: room.id,
                     );
                   },
-                  child: Text(
-                    trans().showAvailableDays,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
                 ),
               ),
             ],
           );
         },
         onLoading: () => const Center(child: CircularProgressIndicator()),
-        onEmpty: () => const Center(
-          child: Text(
-            "لا توجد بيانات",
-            style: TextStyle(color: CustomTheme.placeholderColor),
-          ),
+        onEmpty: () => Center(
+          child: Text(trans().no_data),
         ),
         showError: true,
         showEmpty: true,

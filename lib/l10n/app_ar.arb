@@ -107,5 +107,6 @@
   "please_enter_adults_count": "الرجاء إدخال عدد الكبار",
   "children_count": "عدد الأطفال",
   "please_enter_children_count": "الرجاء إدخال عدد الأطفال",
-  "next": "التالي"
+  "next": "التالي",
+  "no_data": "لا توجد بيانات"
 }
