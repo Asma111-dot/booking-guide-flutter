@@ -1,3 +1,5 @@
+import 'package:booking_guide/src/extensions/date_formatting.dart';
+import 'package:booking_guide/src/extensions/string_formatting.dart';
 import 'package:flutter/material.dart';
 
 import '../helpers/general_helper.dart';
@@ -61,7 +63,7 @@ class RoomPriceWidget extends StatelessWidget {
               _buildRow(Icons.money_off_sharp,
                   "${trans().deposit} ${roomPrice.deposit} ${trans().riyalY}"),
               _buildRow(Icons.access_time,
-                  '${roomPrice.timeFrom ?? '--:--'} - ${roomPrice.timeTo ?? '--:--'}'),
+                  '${roomPrice.timeFrom?.fromTimeToDateTime()?.toTimeView() ?? '--:--'} - ${roomPrice.timeTo?.fromTimeToDateTime()?.toTimeView() ?? '--:--'}'),
             ],
           ),
         ),

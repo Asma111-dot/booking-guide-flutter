@@ -58,6 +58,11 @@ extension StringFormatting on DateTime {
     return DateFormat('d MMMM y - hh:mm a', locale()).format(this).toString();
   }
 
+  /// [OUTPUT EXAMPLE] July 02, 1996 | Saturday
+  String toDateDateView() {
+    return DateFormat('EEEE - d MMMM y', locale()).format(this).toString();
+  }
+
   /// [OUTPUT EXAMPLE] July 1996
   String toMonthYearView() {
     return DateFormat('MMMM y', locale()).format(this).toString();

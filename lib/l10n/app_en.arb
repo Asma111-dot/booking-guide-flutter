@@ -108,5 +108,13 @@
   "children_count": "Number of Children",
   "please_enter_children_count": "Please enter the number of children",
   "next": "Next",
-  "no_data": "No Data Available"
+  "no_data": "No Data Available",
+  "reservation_date": "Reservation Date",
+  "period": "Period",
+  "access_time": "Time",
+  "attendance_type": "Attendance Type",
+  "total_price": "Total price",
+  "amount_to_be_paid": "Amount to be paid",
+  "payment_now": "Payment Now",
+  "payment": "Complete Payment"
 }

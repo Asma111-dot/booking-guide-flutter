@@ -30,25 +30,6 @@ class RoomPriceWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // amount
-          Row(
-            children: [
-              const Icon(
-                Icons.monetization_on_outlined,
-                color: CustomTheme.primaryColor,
-                size: 16,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                "${price.amount} ${trans().riyalY}",
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
           // period
           Row(
             children: [
@@ -66,60 +47,80 @@ class RoomPriceWidget extends StatelessWidget {
               ),
             ],
           ),
+          // amount
           const SizedBox(height: 8),
-          // capacity
           Row(
             children: [
               const Icon(
-                Icons.groups_2_outlined,
+                Icons.monetization_on_outlined,
                 color: CustomTheme.primaryColor,
                 size: 16,
               ),
               const SizedBox(width: 8),
               Text(
-                "${price.capacity} ${trans().person}",
+                "${price.amount} ${trans().riyalY}",
                 style: const TextStyle(
                   fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ),
+
+          const SizedBox(height: 8),
+          // capacity
+          // Row(
+          //   children: [
+          //     const Icon(
+          //       Icons.groups_2_outlined,
+          //       color: CustomTheme.primaryColor,
+          //       size: 16,
+          //     ),
+          //     const SizedBox(width: 8),
+          //     Text(
+          //       "${price.capacity} ${trans().person}",
+          //       style: const TextStyle(
+          //         fontSize: 16,
+          //       ),
+          //     ),
+          //   ],
+          // ),
           const SizedBox(height: 8),
           // deposit
-          Row(
-            children: [
-              const Icon(
-                Icons.money_off_sharp,
-                color: CustomTheme.primaryColor,
-                size: 16,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                "${trans().deposit} ${price.deposit} ${trans().riyalY}",
-                style: const TextStyle(
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
+          // Row(
+          //   children: [
+          //     const Icon(
+          //       Icons.money_off_sharp,
+          //       color: CustomTheme.primaryColor,
+          //       size: 16,
+          //     ),
+          //     const SizedBox(width: 8),
+          //     Text(
+          //       "${trans().deposit} ${price.deposit} ${trans().riyalY}",
+          //       style: const TextStyle(
+          //         fontSize: 14,
+          //       ),
+          //     ),
+          //   ],
+          // ),
           const SizedBox(height: 8),
           // time
-          Row(
-            children: [
-              Icon(
-                Icons.access_time,
-                size: 16,
-                color: CustomTheme.primaryColor,
-              ),
-              const SizedBox(width: 4),
-              Text(
-                '${price.timeFrom ?? '--:--'} - ${price.timeTo ?? '--:--'}',
-                style: const TextStyle(
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
+          // Row(
+          //   children: [
+          //     Icon(
+          //       Icons.access_time,
+          //       size: 16,
+          //       color: CustomTheme.primaryColor,
+          //     ),
+          //     const SizedBox(width: 4),
+          //     Text(
+          //       '${price.timeFrom ?? '--:--'} - ${price.timeTo ?? '--:--'}',
+          //       style: const TextStyle(
+          //         fontSize: 14,
+          //       ),
+          //     ),
+          //   ],
+          // ),
         ],
       ),
     );

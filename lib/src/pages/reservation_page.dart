@@ -29,6 +29,7 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
   late TextEditingController childrenController;
   final GlobalKey<FormState> reservationKey = GlobalKey<FormState>();
   String? bookingType;
+ // bool isLoading = false;
 
   @override
   void initState() {
@@ -71,21 +72,21 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
               children: [
                 DropdownButtonFormField<String>(
                   value: bookingType,
-                  items:  [
+                  items: [
                     DropdownMenuItem(
-                      value: 'Family (Women and Men)',
+                      value: 'عائلة',
                       child: Text(trans().family),
                     ),
                     DropdownMenuItem(
-                      value: 'Women Only',
+                      value: 'نساء',
                       child: Text(trans().women),
                     ),
                     DropdownMenuItem(
-                      value: 'Men Only',
+                      value: 'رجال',
                       child: Text(trans().men),
                     ),
                     DropdownMenuItem(
-                      value: 'Companies',
+                      value: 'شركة',
                       child: Text(trans().companies),
                     ),
                   ],
@@ -100,7 +101,7 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                   ),
                   validator: (value) => value == null ? trans().please_choose_booking_type : null,
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 15),
 
                 TextFormField(
                   controller: adultsController,
@@ -111,7 +112,7 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                   ),
                   validator: (value) => value!.isEmpty ? trans().please_enter_adults_count : null,
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 15),
 
                 TextFormField(
                   controller: childrenController,
@@ -122,9 +123,19 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                   ),
                   validator: (value) => value!.isEmpty ? trans().please_enter_children_count : null,
                 ),
+                const SizedBox(height: 15),
+
+                const Spacer(),
+
                 Button(
                   width: double.infinity,
                   title: trans().completeTheReservation,
+                  icon: Icon(
+                    Icons.arrow_forward,
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                  iconAfterText: true,
                   disable: reservation.isLoading(),
                   onPressed: () async {
                     if (reservationKey.currentState!.validate()) {
@@ -149,10 +160,6 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                           adultsCount: adultsCount,
                           childrenCount: childrenCount,
                           bookingType: bookingType,
-                        );
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('تم الحفظ بنجاح')),
                         );
 
                         final reservationData = reservation.data;

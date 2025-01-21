@@ -24,7 +24,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
-        appTitle: trans().availabilityCalendar,
+        appTitle: trans().payment,
         icon: const FaIcon(Icons.arrow_back_ios),
       ),
       body: Padding(

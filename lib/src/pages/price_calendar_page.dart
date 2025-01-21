@@ -172,6 +172,12 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
               child: Button(
                 width: double.infinity,
                 title: trans().continueBooking,
+                icon: Icon(
+                  Icons.arrow_forward,
+                  size: 20,
+                  color: Colors.white,
+                ),
+                 iconAfterText: true,
                 disable: (selectedDay == null ||
                     selectedPrice == null ||
                     (events[selectedDay]?.isNotEmpty ?? false)) && !hasSuccessfulAttempt,

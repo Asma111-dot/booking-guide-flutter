@@ -87,8 +87,8 @@
   "priceNotAvailable": "السعر غير متوفر",
   "address": "العنوان",
   "description": "الوصف",
-  "amenity": "وسائل الراحة",
-  "noAmenities": "لا يوجد وسائل راحة متاح حالياَ",
+  "amenity": "المرافق",
+  "noAmenities": "لا يوجد المرافق متاح حالياَ",
   "bookingNow" : "احجز الأن",
   "showAvailableDays" : "عرض الأيام المتاحة",
   "selectDateAndPrice": "اختيار الايام والسعر",
@@ -108,5 +108,13 @@
   "children_count": "عدد الأطفال",
   "please_enter_children_count": "الرجاء إدخال عدد الأطفال",
   "next": "التالي",
-  "no_data": "لا توجد بيانات"
+  "no_data": "لا توجد بيانات",
+  "reservation_date": "تاريخ الحجز",
+  "period": "الفترة",
+  "access_time": "الوقت",
+  "attendance_type": "نوع الحضور",
+  "total_price": "إجمالي السعر",
+  "amount_to_be_paid": "المبلغ المستوجب دفعة",
+  "payment_now": "الدفع الان",
+  "payment": "إتمام الدفع"
 }

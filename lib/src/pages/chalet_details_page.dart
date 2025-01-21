@@ -292,16 +292,22 @@ class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
                 left: 16,
                 right: 16,
                 child: Button(
-                  width: double.infinity,  // Make the button fill the width
-                  title: trans().showAvailableDays,
-                  disable: false,  // Set condition to enable/disable button
-                  onPressed: () async{
+                  width: double.infinity,
+                  disable: false,
+                  onPressed: () async {
                     Navigator.pushNamed(
                       context,
                       Routes.priceAndCalendar,
                       arguments: room.id,
                     );
                   },
+                  title: trans().showAvailableDays,
+                  icon: Icon(
+                    Icons.calendar_today,
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                //  iconAfterText: true,
                 ),
               ),
             ],
