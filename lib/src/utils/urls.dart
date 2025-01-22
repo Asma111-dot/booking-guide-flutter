@@ -3,10 +3,10 @@ import 'package:flutter/foundation.dart';
 
 String baseUrl = kDebugMode
     ? (Platform.isIOS
-    ? "http://192.168.1.105:8000/"
-// : "http://192.168.1.102/bookings-guide/public/") //my home
+        ? "http://192.168.1.105:8000/"
+        : "http://192.168.1.102/bookings-guide/public/") //my home
 //   : "http://10.0.2.2:8000/")
-    : "http://172.21.0.134/bookings-guide/public/") //Qk
+//     : "http://172.21.0.134/bookings-guide/public/") //Qk
     : "http://bookings-guide.com/";
 
 String apiUrl = "${baseUrl}api/";

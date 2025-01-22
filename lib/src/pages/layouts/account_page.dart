@@ -5,77 +5,81 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/theme.dart';
+import '../layouts/main_layout.dart';  // تأكد من استيراد MainLayout هنا
 
 class AccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Text(
-          'Chalet Hub',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+    return MainLayout(  // إضافة MainLayout هنا
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          title: Text(
+            'Chalet Hub',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+          backgroundColor: Colors.white,
         ),
-        backgroundColor: Colors.white,
+        // الجسم مغلق الآن للتعليق عليه
+        // body: Padding(
+        //   padding: const EdgeInsets.all(16.0),
+        //   child: Column(
+        //     children: [
+        //       Expanded(
+        //         child: ListView(
+        //           children: [
+        //             UserHeader(name: 'Asmaa  '),
+        //             MenuItem(
+        //               text: 'Personal Data',
+        //               icon: FontAwesomeIcons.user,
+        //               onTap: () {},
+        //             ),
+        //             MenuItem(
+        //               text: 'Favorites',
+        //               icon: FontAwesomeIcons.heart,
+        //               onTap: () {},
+        //             ),
+        //             MenuItem(
+        //               text: 'Policies and Terms ',
+        //               icon: FontAwesomeIcons.fileContract,
+        //               onTap: () {
+        //                 Navigator.push(
+        //                   context,
+        //                   MaterialPageRoute(
+        //                       builder: (context) => PoliciesPage()),
+        //                 );
+        //               },
+        //             ),
+        //             MenuItem(
+        //               text: 'Submit a Complaint or Suggestion ',
+        //               icon: FontAwesomeIcons.commentDots,
+        //               onTap: () {
+        //                 _showComplaintBottomSheet(context);
+        //               },
+        //             ),
+        //             MenuItem(
+        //               text: 'Communication Channels and Technical Support',
+        //               icon: FontAwesomeIcons.headset,
+        //               onTap: () {
+        //                 _showCommunicationBottomSheet(context);
+        //               },
+        //             ),
+        //             MenuItem(
+        //               text: 'Log Out',
+        //               icon: FontAwesomeIcons.signOutAlt,
+        //               onTap: () {
+        //                 _showLogoutDialog(context);
+        //               },
+        //             ),
+        //             SocialMediaIcons(), // إضافة رموز مواقع التواصل الاجتماعي
+        //           ],
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ),
-      // body: Padding(
-      //   padding: const EdgeInsets.all(16.0),
-      //   child: Column(
-      //     children: [
-      //       Expanded(
-      //         child: ListView(
-      //           children: [
-      //             UserHeader(name: 'Asmaa  '),
-      //             MenuItem(
-      //               text: 'Personal Data',
-      //               icon: FontAwesomeIcons.user,
-      //               onTap: () {},
-      //             ),
-      //             MenuItem(
-      //               text: 'Favorites',
-      //               icon: FontAwesomeIcons.heart,
-      //               onTap: () {},
-      //             ),
-      //             MenuItem(
-      //               text: 'Policies and Terms ',
-      //               icon: FontAwesomeIcons.fileContract,
-      //               onTap: () {
-      //                 Navigator.push(
-      //                   context,
-      //                   MaterialPageRoute(
-      //                       builder: (context) => PoliciesPage()),
-      //                 );
-      //               },
-      //             ),
-      //             MenuItem(
-      //               text: 'Submit a Complaint or Suggestion ',
-      //               icon: FontAwesomeIcons.commentDots,
-      //               onTap: () {
-      //                 _showComplaintBottomSheet(context);
-      //               },
-      //             ),
-      //             MenuItem(
-      //               text: 'Communication Channels and Technical Support',
-      //               icon: FontAwesomeIcons.headset,
-      //               onTap: () {
-      //                 _showCommunicationBottomSheet(context);
-      //               },
-      //             ),
-      //             MenuItem(
-      //               text: 'Log Out',
-      //               icon: FontAwesomeIcons.signOutAlt,
-      //               onTap: () {
-      //                 _showLogoutDialog(context);
-      //               },
-      //             ),
-      //             SocialMediaIcons(), // إضافة رموز مواقع التواصل الاجتماعي
-      //           ],
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }
@@ -126,7 +130,7 @@ class AccountPage extends StatelessWidget {
 //     },
 //   );
 // }
-//
+
 // void _showComplaintBottomSheet(BuildContext context) {
 //   showModalBottomSheet(
 //     // backgroundColor: Config.primaryColor,
@@ -173,7 +177,7 @@ class AccountPage extends StatelessWidget {
 //     },
 //   );
 // }
-//
+
 // void _showCommunicationBottomSheet(BuildContext context) {
 //   showModalBottomSheet(
 //     context: context,
@@ -228,12 +232,12 @@ class AccountPage extends StatelessWidget {
 //     },
 //   );
 // }
-//
+
 // class UserHeader extends StatelessWidget {
 //   final String name;
-//
+
 //   UserHeader({required this.name});
-//
+
 //   @override
 //   Widget build(BuildContext context) {
 //     return Column(
@@ -253,14 +257,14 @@ class AccountPage extends StatelessWidget {
 //     );
 //   }
 // }
-//
+
 // class MenuItem extends StatelessWidget {
 //   final String text;
 //   final IconData icon;
 //   final VoidCallback onTap;
-//
+
 //   MenuItem({required this.text, required this.icon, required this.onTap});
-//
+
 //   @override
 //   Widget build(BuildContext context) {
 //     return ListTile(
@@ -279,7 +283,7 @@ class AccountPage extends StatelessWidget {
 //     );
 //   }
 // }
-//
+
 // class SocialMediaIcons extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context) {
@@ -326,7 +330,7 @@ class AccountPage extends StatelessWidget {
 //       ),
 //     );
 //   }
-//
+
 //   void _launchURL(String url) async {
 //     if (await canLaunch(url)) {
 //       await launch(url);
@@ -335,10 +339,10 @@ class AccountPage extends StatelessWidget {
 //     }
 //   }
 // }
-//
+
 // class PoliciesPage extends StatelessWidget {
 //   const PoliciesPage({Key? key}) : super(key: key);
-//
+
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(

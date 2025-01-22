@@ -28,7 +28,6 @@ class _MainLayoutState extends State<MainLayout> {
 
   @override
   Widget build(BuildContext context) {
-    // إذا تم تمرير `child`، استخدمه بدلاً من PageView
     if (widget.child != null) {
       return Scaffold(
         body: widget.child,
@@ -66,7 +65,7 @@ class _MainLayoutState extends State<MainLayout> {
           });
         },
         children: <Widget>[
-         // const ChaletsPage(facilityType:facilitytype ),
+         const ChaletsPage( ),
           const MyReservationsPage(),
           AccountPage(),
         ],

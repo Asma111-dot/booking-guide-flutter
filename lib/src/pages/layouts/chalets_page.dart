@@ -2,21 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../filters/action_buttons_row.dart';
 import '../../helpers/general_helper.dart';
 import '../../providers/facility/facility_provider.dart';
 import '../../utils/assets.dart';
 import '../../utils/routes.dart';
 import '../../utils/theme.dart';
 import '../../widgets/custom_app_bar.dart';
+import '../../widgets/map_dialog_widget.dart';
 import '../../widgets/view_widget.dart';
 import '../../models/facility.dart';
-import '../../models/facility_type.dart';
 import 'main_layout.dart';
 
 class ChaletsPage extends ConsumerStatefulWidget {
-
   const ChaletsPage({Key? key}) : super(key: key);
 
   @override
@@ -24,38 +23,14 @@ class ChaletsPage extends ConsumerStatefulWidget {
 }
 
 class _ChaletsPageState extends ConsumerState<ChaletsPage> {
-  late GoogleMapController mapController;
 
   void _showMapDialog(Facility facility, List<Facility> facilities) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          child: SizedBox(
-            height: 500,
-            child: GoogleMap(
-              initialCameraPosition: CameraPosition(
-                target: LatLng(
-                  facility.latitude ?? 15.5520,
-                  facility.longitude ?? 48.5164,
-                ),
-                zoom: 12,
-              ),
-              markers: facilities.map((facility) {
-                return Marker(
-                  markerId: MarkerId(facility.id.toString()),
-                  position: LatLng(
-                    facility.latitude ?? 0.0,
-                    facility.longitude ?? 0.0,
-                  ),
-                  infoWindow: InfoWindow(title: facility.name),
-                );
-              }).toSet(),
-              onMapCreated: (controller) {
-                mapController = controller;
-              },
-            ),
-          ),
+        return MapDialog(
+          facility: facility,
+          facilities: facilities,
         );
       },
     );
@@ -81,6 +56,10 @@ class _ChaletsPageState extends ConsumerState<ChaletsPage> {
         ),
         body: Column(
           children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ActionButtonsRow(),
+            ),
             Expanded(
               child: ViewWidget<List<Facility>>(
                 meta: facilitiesState.meta,
@@ -95,7 +74,7 @@ class _ChaletsPageState extends ConsumerState<ChaletsPage> {
                           ? facility.rooms.first
                           : null;
                       final firstPrice =
-                          firstRoom?.roomPrices?.first?.amount ?? 0.0;
+                          firstRoom?.roomPrices.first.amount ?? 0.0;
                       // print("رابط الصورة: ${facility.logo}");
 
                       return Container(
@@ -117,8 +96,10 @@ class _ChaletsPageState extends ConsumerState<ChaletsPage> {
                             borderRadius: BorderRadius.circular(20),
                             child: CachedNetworkImage(
                               //imageUrl: facility.logo ?? '',
-                          imageUrl: facility.logo?.isNotEmpty == true ? facility.logo! : '',
-                            width: 100,
+                              imageUrl: facility.logo?.isNotEmpty == true
+                                  ? facility.logo!
+                                  : '',
+                              width: 100,
                               height: 100,
                               fit: BoxFit.cover,
                               placeholder: (context, url) =>
@@ -180,9 +161,8 @@ class _ChaletsPageState extends ConsumerState<ChaletsPage> {
                 },
                 onLoading: () =>
                     const Center(child: CircularProgressIndicator()),
-                onEmpty: () =>  Center(
+                onEmpty: () => Center(
                   child: Text(trans().no_data),
-
                 ),
                 showError: true,
                 showEmpty: true,
