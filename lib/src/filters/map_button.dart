@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../src/utils/theme.dart';
+import '../utils/theme.dart';
 
 class MapButton extends StatelessWidget {
   final VoidCallback onPressed;

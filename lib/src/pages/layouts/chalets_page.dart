@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-import '../../../filters/action_buttons_row.dart';
+import '../../filters/action_buttons_row.dart';
 import '../../helpers/general_helper.dart';
 import '../../providers/facility/facility_provider.dart';
 import '../../utils/assets.dart';

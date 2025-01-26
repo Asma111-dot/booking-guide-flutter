@@ -1,12 +1,9 @@
+import 'package:booking_guide/src/pages/payment_page.dart';
 import 'package:flutter/material.dart';
 
 import '../models/customer.dart';
-import '../models/reservation.dart' as res;
 import '../models/facility.dart';
-import '../models/facility_type.dart';
-import '../models/room.dart';
 import '../models/room_price.dart';
-import '../models/user.dart';
 import '../pages/price_calendar_page.dart';
 import '../pages/chalet_details_page.dart';
 import '../pages/customer_page.dart';
@@ -39,6 +36,7 @@ class Routes {
   static const String myBookings = '/my_reservations';
   static const String priceAndCalendar = '/price_calendar';
   static const String reservationDetails = '/reservation_details';
+  static const String payment = '/payment';
 
 
   static Route? generate(RouteSettings settings) {
@@ -118,6 +116,13 @@ class Routes {
           builder: (_) => ReservationDetailsPage(roomPriceId: roomPriceId,),
           settings: settings,
         );
+
+      case payment:
+        return MaterialPageRoute(
+          builder: (_) => PaymentPage(reservationId: args as int),
+          settings: settings,
+        );
+
       default:
         return null;
     }

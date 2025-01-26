@@ -31,13 +31,23 @@ class Payment {
         status = '',
         response = {};
 
-  factory Payment.fromJson(Map<String, dynamic> jsonMap) {
+   Payment.basic({required this.reservationId})
+       : id = 0,
+         transactionTypeId = 0,
+         paymentMethodId = 0,
+         amount = 0.0,
+         date = DateTime.now(),
+         status = '',
+         response = {};
+
+   factory Payment.fromJson(Map<String, dynamic> jsonMap) {
     return Payment(
       id: jsonMap['id'] ?? 0,
       reservationId: jsonMap['reservation_id'] ?? 0,
       transactionTypeId: jsonMap['transaction_type_id'] ?? 0,
       paymentMethodId: jsonMap['payment_method_id'] ?? 0,
-      amount: jsonMap['amount']?.toDouble() ?? 0.0,
+      // amount: jsonMap['amount']?.toDouble() ?? 0.0,
+      amount: double.tryParse(jsonMap['amount'].toString()) ?? 0.0, // Ensure double parsing
       date: DateTime.tryParse(jsonMap['date'] ?? '') ?? DateTime.now(),
       status: jsonMap['status'] ?? '',
       response: jsonMap['response'] ?? {},
@@ -50,7 +60,7 @@ class Payment {
       'reservation_id': reservationId,
       'transaction_type_id': transactionTypeId,
       'payment_method_id': paymentMethodId,
-      'amount': amount,
+      'amount': amount.toString(),
       'date': date.toSqlDateOnly(),
       'status': status,
       'response': response,

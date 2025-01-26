@@ -20,6 +20,7 @@ const unauthorizedJson = "${_lottieBase}unauthorized.json";
 const logoCoverImage = "${_imageBase}logo_cover.png";
 const chaletImage = "${_imageBase}chalet.jpg";
 const hotelImage = "${_imageBase}hotel.jpg";
+const floosakImage = "${_imageBase}floosak.png";
 
 // Icons -----------------------------------------------------------------------
 const externalLinkIcon = Feather.external_link;

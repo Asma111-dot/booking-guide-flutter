@@ -366,3 +366,87 @@
 // ),
 // ),
 // ),
+// body: Padding(
+// padding: const EdgeInsets.all(16.0),
+// child: Column(
+// crossAxisAlignment: CrossAxisAlignment.start,
+// children: [
+// Text(
+// 'وسائل الدفع',
+// style: TextStyle(
+// fontSize: 18,
+// fontWeight: FontWeight.bold,
+// ),
+// ),
+// const SizedBox(height: 16),
+// GestureDetector(
+// onTap: () {
+// setState(() {
+// selectedPaymentMethod = 'فلوسك';
+// });
+// },
+// child: Container(
+// decoration: BoxDecoration(
+// color: selectedPaymentMethod == 'فلوسك'
+// ? Colors.grey[300]
+//     : Colors.grey[200],
+// borderRadius: BorderRadius.circular(8),
+// border: Border.all(
+// color: selectedPaymentMethod == 'فلوسك'
+// ? CustomTheme.primaryColor
+//     : Colors.grey,
+// width: 1,
+// ),
+// ),
+// padding: const EdgeInsets.symmetric(
+// horizontal: 16,
+// vertical: 12,
+// ),
+// child: Row(
+// children: [
+// Image.asset(
+// floosakImage,
+// width: 40,
+// height: 40,
+// errorBuilder: (context, error, stackTrace) {
+// return Icon(Icons.error,
+// color: Colors.red,
+// size: 40);
+// },
+// ),
+// const SizedBox(width: 16),
+// Flexible(
+// child: Text(
+// 'فلوسك',
+// style: TextStyle(
+// fontSize: 16,
+// fontWeight: FontWeight.bold,
+// color: Colors.black,
+// ),
+// overflow: TextOverflow.ellipsis,
+// ),
+// ),
+// ],
+// ),
+// ),
+// ),
+// const Spacer(),
+// Button(
+// width: MediaQuery.of(context).size.width - 40,
+// title: 'إتمام الحجز',
+// disable: false,
+// icon: Icon(
+// Icons.arrow_forward,
+// size: 20,
+// color: Colors.white,
+// ),
+// iconAfterText: true,
+// onPressed: () async {
+// if (selectedPaymentMethod == 'فلوسك') {
+// print('تم اختيار وسيلة الدفع: فلوسك');
+// }
+// },
+// ),
+// ],
+// ),
+// ),

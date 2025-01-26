@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/reservation/reservation_provider.dart';
 import '../models/reservation.dart' as res;
+import '../utils/routes.dart';
 import '../utils/theme.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar_clipper.dart';
 import '../extensions/date_formatting.dart';
 import '../widgets/custom_row_widget.dart';
 import '../widgets/view_widget.dart';
-import 'payment_page.dart';
 
 class ReservationDetailsPage extends ConsumerStatefulWidget {
   final int roomPriceId;
@@ -147,7 +147,7 @@ class _ReservationDetailsPageState
                 CustomRowWidget(
                   icon: Icons.calendar_today,
                   label: trans().reservation_date,
-                  value: data.checkInDate.toDateDateView() ,
+                  value: data.checkInDate.toDateDateView(),
                 ),
 
                 const SizedBox(height: 12),
@@ -163,7 +163,7 @@ class _ReservationDetailsPageState
                   icon: Icons.access_time,
                   label: trans().access_time,
                   value:
-                  "${data.roomPrice?.timeFrom?.fromTimeToDateTime()?.toTimeView() ?? '--:--'} - ${data.roomPrice?.timeTo?.fromTimeToDateTime()?.toTimeView() ?? '--:--'}",
+                      "${data.roomPrice?.timeFrom?.fromTimeToDateTime()?.toTimeView() ?? '--:--'} - ${data.roomPrice?.timeTo?.fromTimeToDateTime()?.toTimeView() ?? '--:--'}",
                 ),
 
                 const SizedBox(height: 15),
@@ -174,7 +174,7 @@ class _ReservationDetailsPageState
                 CustomRowWidget(
                   icon: Icons.personal_injury_outlined,
                   label: trans().attendance_type,
-                  value: data.bookingType  ,
+                  value: data.bookingType,
                 ),
                 const SizedBox(height: 12),
                 //
@@ -200,11 +200,34 @@ class _ReservationDetailsPageState
                   label: trans().total_price,
                   value: data.totalPrice?.toString() ?? 'غير متوفر',
                 ),
+
                 const SizedBox(height: 12),
                 CustomRowWidget(
                   icon: Icons.money_off_csred,
                   label: "${trans().amount_to_be_paid} (${trans().deposit})",
                   value: data.roomPrice?.deposit?.toString() ?? 'غير متوفر',
+                ),
+
+                const SizedBox(height: 20),
+                Center(
+                  child: Button(
+                    width: MediaQuery.of(context).size.width - 40,
+                    title: trans().payment_now,
+                    icon: Icon(
+                      Icons.arrow_forward,
+                      size: 20,
+                      color: Colors.white,
+                    ),
+                    iconAfterText: true,
+                    disable: false,
+                    onPressed: () async {
+                      Navigator.pushNamed(
+                        context,
+                        Routes.payment,
+                        arguments: data.id,
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
@@ -217,31 +240,27 @@ class _ReservationDetailsPageState
         showError: true,
         showEmpty: true,
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Button(
-          width: MediaQuery.of(context).size.width - 40,
-          title: trans().payment_now,
-          icon: Icon(
-            Icons.arrow_forward,
-            size: 20,
-            color: Colors.white,
-          ),
-          iconAfterText: true,
-          disable: false,
-          onPressed: () async {
-            final reservation = reservationState.data;
-            if (reservation != null) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PaymentPage(reservation: reservation),
-                ),
-              );
-            }
-          },
-        ),
-      ),
+      // bottomNavigationBar: Padding(
+      //   padding: const EdgeInsets.all(20.0),
+      //   child: Button(
+      //     width: MediaQuery.of(context).size.width - 40,
+      //     title: trans().payment_now,
+      //     icon: Icon(
+      //       Icons.arrow_forward,
+      //       size: 20,
+      //       color: Colors.white,
+      //     ),
+      //     iconAfterText: true,
+      //     disable: false,
+      //     onPressed: () async {
+      //       Navigator.pushNamed(
+      //         context,
+      //         Routes.payment,
+      //         arguments: reservationId, // قم بتمرير `reservationId` المناسب
+      //       );
+      //     },
+      //   ),
+      // ),
     );
   }
 }
