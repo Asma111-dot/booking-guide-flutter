@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../models/payment.dart';
 import '../../models/response/response.dart';
 import '../../services/request_service.dart';
+import '../../utils/routes.dart';
 import '../../utils/urls.dart';
 
 part 'payment_confirm_provider.g.dart';
@@ -23,6 +24,12 @@ class PaymentConfirm extends _$PaymentConfirm {
       if (response.isLoaded()) {
         state = state.copyWith(data: response.data, meta: response.meta);
         print("تم تأكيد الدفع بنجاح مع ID: $paymentId");
+        // Navigate to payment details page
+        navKey.currentState?.pushNamedAndRemoveUntil(
+          Routes.paymentDetails,
+          (r) => false,
+          arguments: paymentId,
+        );
       } else {
         print("خطأ أثناء التأكيد في: ${response.meta.message}");
       }

@@ -29,7 +29,8 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
   late TextEditingController childrenController;
   final GlobalKey<FormState> reservationKey = GlobalKey<FormState>();
   String? bookingType;
- // bool isLoading = false;
+
+  // bool isLoading = false;
 
   @override
   void initState() {
@@ -60,8 +61,8 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
         meta: roomPriceState.meta,
         data: roomPriceState.data,
         refresh: () => ref.read(roomPricesProvider.notifier).fetch(
-          roomId: widget.roomPrice.reservations.first.id,
-        ),
+              roomId: widget.roomPrice.reservations.first.id,
+            ),
         forceShowLoaded: roomPriceState.data != null,
         onLoaded: (data) => Padding(
           padding: const EdgeInsets.all(16.0),
@@ -99,34 +100,37 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                     labelText: trans().booking_type,
                     border: const OutlineInputBorder(),
                   ),
-                  validator: (value) => value == null ? trans().please_choose_booking_type : null,
+                  validator: (value) =>
+                      value == null ? trans().please_choose_booking_type : null,
                 ),
                 const SizedBox(height: 15),
-
                 TextFormField(
                   controller: adultsController,
                   keyboardType: TextInputType.number,
-                  decoration:  InputDecoration(
+                  decoration: InputDecoration(
                     labelText: trans().adults_count,
                     border: OutlineInputBorder(),
                   ),
-                  validator: (value) => value!.isEmpty ? trans().please_enter_adults_count : null,
+                  validator: (value) =>
+                      value!.isEmpty ? trans().please_enter_adults_count : null,
                 ),
                 const SizedBox(height: 15),
-
                 TextFormField(
                   controller: childrenController,
                   keyboardType: TextInputType.number,
-                  decoration:  InputDecoration(
+                  decoration: InputDecoration(
                     labelText: trans().children_count,
                     border: OutlineInputBorder(),
                   ),
-                  validator: (value) => value!.isEmpty ? trans().please_enter_children_count : null,
+                  validator: (value) {
+                    if (value != null &&
+                        value.isNotEmpty &&
+                        int.tryParse(value) == null) {}
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 15),
-
                 const Spacer(),
-
                 Button(
                   width: double.infinity,
                   title: trans().completeTheReservation,
@@ -147,30 +151,33 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                           : 0;
                       final bookingType = this.bookingType ?? '';
 
-                      if (bookingType.isEmpty || adultsCount == 0 || childrenCount == 0) {
+                      if (bookingType.isEmpty || adultsCount == 0) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('الرجاء إكمال البيانات بشكل صحيح')),
+                          SnackBar(
+                              content: Text('الرجاء إكمال البيانات بشكل صحيح')),
                         );
                         return;
                       }
 
                       try {
-                        await ref.read(reservationSaveProvider.notifier).saveReservation(
-                          reservation.data!,
-                          adultsCount: adultsCount,
-                          childrenCount: childrenCount,
-                          bookingType: bookingType,
-                        );
+                        await ref
+                            .read(reservationSaveProvider.notifier)
+                            .saveReservation(
+                              reservation.data!,
+                              adultsCount: adultsCount,
+                              childrenCount: childrenCount,
+                              bookingType: bookingType,
+                            );
 
                         final reservationData = reservation.data;
                         await ref.read(reservationProvider.notifier).fetch(
-                          roomPriceId: reservationData?.roomPriceId ?? 0,
-                        );
+                              roomPriceId: reservationData?.roomPriceId ?? 0,
+                            );
 
                         Navigator.pushNamedAndRemoveUntil(
                           context,
                           Routes.reservationDetails,
-                              (r) => false,
+                          (r) => false,
                           arguments: reservationData?.roomPriceId,
                         );
                       } catch (error) {
@@ -180,12 +187,12 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('الرجاء إكمال البيانات بشكل صحيح')),
+                        SnackBar(
+                            content: Text('الرجاء إكمال البيانات بشكل صحيح')),
                       );
                     }
                   },
                 ),
-
               ],
             ),
           ),

@@ -58,7 +58,7 @@ class RoomPriceWidget extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                "${price.amount} ${trans().riyalY}",
+              "${price.amount?.toInt() ?? 0} ${trans().riyalY}",
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

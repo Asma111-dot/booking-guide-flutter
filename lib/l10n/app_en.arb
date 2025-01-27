@@ -105,8 +105,9 @@
   "please_choose_booking_type": "Please choose the booking type",
   "adults_count": "Number of Adults",
   "please_enter_adults_count": "Please enter the number of adults",
-  "children_count": "Number of Children",
+  "children_count": "Number of Children(Optional)",
   "please_enter_children_count": "Please enter the number of children",
+  "not_available": "Not Available",
   "next": "Next",
   "no_data": "No Data Available",
   "reservation_date": "Reservation Date",
@@ -116,5 +117,7 @@
   "total_price": "Total price",
   "amount_to_be_paid": "Amount to be paid",
   "payment_now": "Payment Now",
-  "payment": "Complete Payment"
+  "payment": "Complete Payment",
+  "payment_details": "Payment Details",
+  "payment_date": "Payment Date"
 }

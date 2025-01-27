@@ -1,25 +1,28 @@
 import '../extensions/date_formatting.dart';
+import 'reservation.dart';
 
 class Payment {
-   int id;
-   int reservationId;
-   int transactionTypeId;
-   int paymentMethodId;
-   double amount;
-   DateTime date;
-   String status;
-   Map<String, dynamic> response;
+  int id;
+  int reservationId;
+  int transactionTypeId;
+  int paymentMethodId;
+  double amount;
+  DateTime date;
+  String status;
+  Map<String, dynamic> response;
 
-  Payment({
-    required this.id,
-    required this.reservationId,
-    required this.transactionTypeId,
-    required this.paymentMethodId,
-    required this.amount,
-    required this.date,
-    required this.status,
-    required this.response,
-  });
+  Reservation? reservation;
+
+  Payment(
+      {required this.id,
+      required this.reservationId,
+      required this.transactionTypeId,
+      required this.paymentMethodId,
+      required this.amount,
+      required this.date,
+      required this.status,
+      required this.response,
+      this.reservation});
 
   Payment.init()
       : id = 0,
@@ -29,28 +32,33 @@ class Payment {
         amount = 0.0,
         date = DateTime.now(),
         status = '',
+        response = {},
+        reservation = null;
+
+  Payment.basic({required this.reservationId})
+      : id = 0,
+        transactionTypeId = 0,
+        paymentMethodId = 0,
+        amount = 0.0,
+        date = DateTime.now(),
+        status = '',
         response = {};
 
-   Payment.basic({required this.reservationId})
-       : id = 0,
-         transactionTypeId = 0,
-         paymentMethodId = 0,
-         amount = 0.0,
-         date = DateTime.now(),
-         status = '',
-         response = {};
-
-   factory Payment.fromJson(Map<String, dynamic> jsonMap) {
+  factory Payment.fromJson(Map<String, dynamic> jsonMap) {
     return Payment(
       id: jsonMap['id'] ?? 0,
       reservationId: jsonMap['reservation_id'] ?? 0,
       transactionTypeId: jsonMap['transaction_type_id'] ?? 0,
       paymentMethodId: jsonMap['payment_method_id'] ?? 0,
       // amount: jsonMap['amount']?.toDouble() ?? 0.0,
-      amount: double.tryParse(jsonMap['amount'].toString()) ?? 0.0, // Ensure double parsing
+      amount: double.tryParse(jsonMap['amount'].toString()) ?? 0.0,
+      // Ensure double parsing
       date: DateTime.tryParse(jsonMap['date'] ?? '') ?? DateTime.now(),
       status: jsonMap['status'] ?? '',
       response: jsonMap['response'] ?? {},
+      reservation: jsonMap['reservation'] != null
+          ? Reservation.fromJson(jsonMap['reservation'])
+          : null,
     );
   }
 
@@ -64,6 +72,7 @@ class Payment {
       'date': date.toSqlDateOnly(),
       'status': status,
       'response': response,
+      'reservation': reservation?.toString(),
     };
   }
 

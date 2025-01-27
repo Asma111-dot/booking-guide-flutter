@@ -20,20 +20,19 @@ class Reservation {
 
   RoomPrice? roomPrice;
 
-  Reservation({
-    required this.id,
-    this.userId,
-    this.roomPriceId,
-    required this.checkInDate,
-    required this.checkOutDate,
-    this.status,
-    this.totalPrice,
-    required this.bookingType,
-    this.adultsCount,
-    this.childrenCount,
-    this.payments = const [],
-    this.roomPrice
-  });
+  Reservation(
+      {required this.id,
+      this.userId,
+      this.roomPriceId,
+      required this.checkInDate,
+      required this.checkOutDate,
+      this.status,
+      this.totalPrice,
+      required this.bookingType,
+      this.adultsCount,
+      this.childrenCount,
+      this.payments = const [],
+      this.roomPrice});
 
   Reservation.init()
       : id = 0,
@@ -47,7 +46,7 @@ class Reservation {
         adultsCount = 0,
         childrenCount = 0,
         payments = [],
-  roomPrice = null;
+        roomPrice = null;
 
   factory Reservation.fromJson(Map<String, dynamic> jsonMap) {
     if (jsonMap['user_id'] == null) {
@@ -58,8 +57,10 @@ class Reservation {
       id: jsonMap['id'] ?? 0,
       userId: jsonMap['user_id'] ?? 0,
       roomPriceId: jsonMap['room_price_id'] ?? 0,
-      checkInDate: DateTime.tryParse(jsonMap['check_in_date'] ?? '') ?? DateTime.now(),
-      checkOutDate: DateTime.tryParse(jsonMap['check_out_date'] ?? '') ?? DateTime.now(),
+      checkInDate:
+          DateTime.tryParse(jsonMap['check_in_date'] ?? '') ?? DateTime.now(),
+      checkOutDate:
+          DateTime.tryParse(jsonMap['check_out_date'] ?? '') ?? DateTime.now(),
       status: jsonMap['status'],
       totalPrice: jsonMap['total_price'] != null
           ? double.tryParse(jsonMap['total_price'].toString()) ?? 0.0
@@ -68,11 +69,12 @@ class Reservation {
       adultsCount: jsonMap['adults_count'] ?? 0,
       childrenCount: jsonMap['children_count'] ?? 0,
       payments: (jsonMap['payments'] as List<dynamic>?)
-          ?.map((item) => Payment.fromJson(item))
-          .toList() ??
+              ?.map((item) => Payment.fromJson(item))
+              .toList() ??
           [],
       roomPrice: jsonMap['room_price'] != null
-          ? RoomPrice.fromJson(jsonMap['room_price']) : null,
+          ? RoomPrice.fromJson(jsonMap['room_price'])
+          : null,
     );
   }
 

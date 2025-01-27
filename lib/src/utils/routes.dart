@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../models/customer.dart';
 import '../models/facility.dart';
 import '../models/room_price.dart';
+import '../pages/payment_details_page.dart';
 import '../pages/price_calendar_page.dart';
 import '../pages/chalet_details_page.dart';
 import '../pages/customer_page.dart';
@@ -37,6 +38,7 @@ class Routes {
   static const String priceAndCalendar = '/price_calendar';
   static const String reservationDetails = '/reservation_details';
   static const String payment = '/payment';
+  static const String paymentDetails = '/payment_details';
 
 
   static Route? generate(RouteSettings settings) {
@@ -120,6 +122,11 @@ class Routes {
       case payment:
         return MaterialPageRoute(
           builder: (_) => PaymentPage(reservationId: args as int),
+          settings: settings,
+        );
+      case paymentDetails:
+        return MaterialPageRoute(
+          builder: (_) => PaymentDetailsPage(paymentId: args as int),
           settings: settings,
         );
 

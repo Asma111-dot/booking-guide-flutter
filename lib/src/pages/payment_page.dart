@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../helpers/general_helper.dart';
 import '../providers/payment/payment_confirm_provider.dart';
-import '../providers/payment/payment_provider.dart';
+import '../providers/payment/payment_save_provider.dart';
 import '../utils/assets.dart';
 import '../utils/theme.dart';
 import '../widgets/button_widget.dart';
@@ -23,11 +23,11 @@ class PaymentPage extends ConsumerStatefulWidget {
 class _PaymentPageState extends ConsumerState<PaymentPage> {
   String? selectedPaymentMethod;
   int? paymentId;
-
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
-    final paymentState = ref.watch(paymentProvider.notifier);
+    final paymentState = ref.watch(paymentSaveProvider.notifier);
     final paymentConfirm = ref.watch(paymentConfirmProvider.notifier);
 
     return Scaffold(
@@ -117,105 +117,113 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
         child: Button(
           width: MediaQuery.of(context).size.width - 40,
           title: 'إتمام الحجز',
-          disable: selectedPaymentMethod == null,
-          icon: const Icon(
-            Icons.arrow_forward,
-            size: 20,
-            color: Colors.white,
-          ),
+          disable: selectedPaymentMethod == null || isLoading,
+          icon: isLoading
+              ? const CircularProgressIndicator(color: CustomTheme.primaryColor)
+              : const Icon(
+                  Icons.arrow_forward,
+                  size: 20,
+                  color: Colors.white,
+                ),
           iconAfterText: true,
-          onPressed: selectedPaymentMethod == null
+          onPressed: selectedPaymentMethod == null || isLoading
               ? null
               : () async {
-            if (selectedPaymentMethod == 'فلوسك') {
-              final payment = pay.Payment.basic(
-                reservationId: widget.reservationId,
-              );
-
-              // حفظ payment و أخذ paymentId
-              await paymentState.savePayment(payment);
-              final currentState = ref.read(paymentProvider);
-
-              if (currentState.isLoaded()) {
-                paymentId = currentState.data?.id;
-
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    final TextEditingController confirmationController =
-                    TextEditingController();
-
-                    return AlertDialog(
-                      title: const Text('تأكيد الدفع'),
-                      content: TextField(
-                        controller: confirmationController,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          hintText: 'أدخل رقم التأكيد',
-                        ),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('إلغاء'),
-                        ),
-                        TextButton(
-                          onPressed: () async {
-                            final confirmationCode =
-                            int.tryParse(confirmationController.text);
-
-                            if (confirmationCode != null) {
-                              Navigator.of(context).pop();
-
-                              if (paymentId != null) {
-                                await paymentConfirm.confirmPayment(
-                                  paymentId!,
-                                  confirmationCode,
-                                );
-
-                                final confirmState =
-                                ref.read(paymentConfirmProvider);
-
-                                if (confirmState.isLoaded()) {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(
-                                    const SnackBar(
-                                      content: Text('تم تأكيد الدفع بنجاح!'),
-                                    ),
-                                  );
-                                } else {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        confirmState.meta.message ??
-                                            'حدث خطأ أثناء الدفع',
-                                      ),
-                                    ),
-                                  );
-                                }
-                              }
-                            }
-                          },
-                          child: const Text('تأكيد'),
-                        ),
-                      ],
+                  setState(() {
+                    isLoading = true;
+                  });
+                  if (selectedPaymentMethod == 'فلوسك') {
+                    final payment = pay.Payment.basic(
+                      reservationId: widget.reservationId,
                     );
-                  },
-                );
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      currentState.meta.message ?? 'حدث خطأ أثناء الدفع',
-                    ),
-                  ),
-                );
-              }
-            }
-          },
+
+                    await paymentState.savePayment(payment);
+                    final currentState = ref.read(paymentSaveProvider);
+
+                    if (currentState.isLoaded()) {
+                      paymentId = currentState.data?.id;
+
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          final TextEditingController confirmationController =
+                              TextEditingController();
+
+                          return AlertDialog(
+                            title: const Text('تأكيد الدفع'),
+                            content: TextField(
+                              controller: confirmationController,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                hintText: 'أدخل رقم التأكيد',
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('إلغاء'),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  final confirmationCode =
+                                      int.tryParse(confirmationController.text);
+
+                                  if (confirmationCode != null) {
+                                    Navigator.of(context).pop();
+
+                                    if (paymentId != null) {
+                                      await paymentConfirm.confirmPayment(
+                                        paymentId!,
+                                        confirmationCode,
+                                      );
+
+                                      final confirmState =
+                                          ref.read(paymentConfirmProvider);
+
+                                      if (confirmState.isLoaded()) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content:
+                                                Text('تم تأكيد الدفع بنجاح!'),
+                                          ),
+                                        );
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              confirmState.meta.message ??
+                                                  'حدث خطأ أثناء الدفع',
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  }
+                                },
+                                child: const Text('تأكيد'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            currentState.meta.message ?? 'حدث خطأ أثناء الدفع',
+                          ),
+                        ),
+                      );
+                    }
+                  }
+                  setState(() {
+                    isLoading = false;
+                  });
+                },
         ),
       ),
     );

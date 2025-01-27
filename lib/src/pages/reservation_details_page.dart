@@ -1,7 +1,7 @@
 import 'package:booking_guide/src/extensions/string_formatting.dart';
-import 'package:booking_guide/src/helpers/general_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../helpers/general_helper.dart';
 import '../providers/reservation/reservation_provider.dart';
 import '../models/reservation.dart' as res;
 import '../utils/routes.dart';
@@ -113,7 +113,7 @@ class _ReservationDetailsPageState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "  ${data.roomPrice?.room?.facility?.name ?? 'غير متوفر'}",
+                            "  ${data.roomPrice?.room?.facility?.name ?? trans().not_available}",
                             style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -128,7 +128,7 @@ class _ReservationDetailsPageState
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                " ${data.roomPrice?.room?.facility?.address ?? 'غير متوفر'}",
+                                " ${data.roomPrice?.room?.facility?.address ?? trans().not_available}",
                                 style: const TextStyle(fontSize: 16),
                               ),
                             ],
@@ -155,7 +155,7 @@ class _ReservationDetailsPageState
                 CustomRowWidget(
                   icon: Icons.playlist_add_check_rounded,
                   label: trans().period,
-                  value: data.roomPrice?.period ?? 'غير متوفر',
+                  value: data.roomPrice?.period ?? trans().not_available,
                 ),
                 const SizedBox(height: 12),
                 // Time
@@ -181,13 +181,17 @@ class _ReservationDetailsPageState
                 CustomRowWidget(
                   icon: Icons.groups_2_outlined,
                   label: trans().adults_count,
-                  value: data.adultsCount?.toString() ?? 'غير متوفر',
+                  value: data.adultsCount != null
+                      ? '${data.adultsCount.toString()} ${trans().person}'
+                      : trans().not_available,
                 ),
                 const SizedBox(height: 12),
                 CustomRowWidget(
                   icon: Icons.groups_2,
                   label: trans().children_count,
-                  value: data.childrenCount?.toString() ?? 'غير متوفر',
+                  value: data.childrenCount != null
+                      ? '${data.childrenCount.toString()} ${trans().person}'
+                      : trans().not_available,
                 ),
 
                 const SizedBox(height: 15),
@@ -198,14 +202,18 @@ class _ReservationDetailsPageState
                 CustomRowWidget(
                   icon: Icons.price_check_rounded,
                   label: trans().total_price,
-                  value: data.totalPrice?.toString() ?? 'غير متوفر',
+                  value: data.totalPrice != null
+                      ? '${data.totalPrice?.toInt()} ${trans().riyalY}'
+                      : trans().not_available,
                 ),
 
                 const SizedBox(height: 12),
                 CustomRowWidget(
                   icon: Icons.money_off_csred,
                   label: "${trans().amount_to_be_paid} (${trans().deposit})",
-                  value: data.roomPrice?.deposit?.toString() ?? 'غير متوفر',
+                  value: data.roomPrice?.deposit != null
+                      ? '${data.roomPrice!.deposit?.toInt()} ${trans().riyalY}'
+                      : trans().not_available,
                 ),
 
                 const SizedBox(height: 20),
