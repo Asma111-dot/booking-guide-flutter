@@ -26,6 +26,12 @@ class WelcomePage extends ConsumerWidget {
     });
 
     return Scaffold(
+    // body:  Container(
+    //     decoration: BoxDecoration(
+    //       gradient: primaryGradient,
+    //     ),
+    //   );
+
       body: Container(
         width: double.infinity,
         decoration: const BoxDecoration(

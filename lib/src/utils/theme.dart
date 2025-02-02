@@ -13,10 +13,27 @@ class CustomTheme {
   String getFont() => 'Baloo_Bhaijaan_2';
 
   // String getFont() => 'Roboto';
+// اللون الأساسي يمكن أن يكون أحد اللونين
+//   static const Color primaryColor = Color(0xFF007BA7); // أزرق سماوي
+//
+// // التدرج اللوني
+//   static const LinearGradient primaryGradient = LinearGradient(
+//     colors: [
+//       Color(0xFF092668), // أزرق داكن
+//       Color(0xFF007BA7), // أزرق سماوي
+//     ],
+//     begin: Alignment.topLeft,
+//     end: Alignment.bottomRight,
+//   );
+  // Container(
+  // decoration: BoxDecoration(
+  // gradient: primaryGradient,
+  // ),
+  // );
 
   static const Color primaryColor =
       // Color.Hex('#1D4ED8');
-      Color.fromARGB(255, 15, 1, 78);
+      Color.fromARGB(239, 2, 14, 39);
   static const Color secondaryColor = Color(0xFF03DAC6);
   static const tertiaryColor = Color(0xFF2C3E50); // Dark blue
   static const fourthColor = Color(0xffF0F0F0); // Light gray

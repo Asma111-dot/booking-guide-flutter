@@ -18,7 +18,7 @@ class RoomPriceSave extends _$RoomPriceSave {
 
     try {
       final response = await request<RoomPrice>(
-        url: reseravtionSaveUrl(),
+        url: reservationSaveUrl(),
         method: Method.post,
         body: {
           'room_price_id': roomPrice.id,

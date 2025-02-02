@@ -119,5 +119,12 @@
   "payment_now": "Payment Now",
   "payment": "Complete Payment",
   "payment_details": "Payment Details",
-  "payment_date": "Payment Date"
+    "paid_amount": "Paid Amount",
+  "payment_date": "Payment Date",
+  "chalet_name": "Chalet Name",
+    "check_in_date": "Check-in Date",
+    "check_out_date": "Check-out Date",
+      "close_and_go_back": "Close",
+  "share": "Share"
+
 }

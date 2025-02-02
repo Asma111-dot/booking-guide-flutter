@@ -3,10 +3,12 @@ import 'package:flutter/foundation.dart';
 
 String baseUrl = kDebugMode
     ? (Platform.isIOS
-        ? "http://192.168.1.105:8000/"
-        // : "http://192.168.1.104/bookings-guide/public/") //my home
-//   : "http://10.0.2.2:8000/")
-    : "http://172.21.0.134/bookings-guide/public/") //Qk
+        ? "http://192.168.1.106:8000/"
+        // : "http://192.168.1.100/bookings-guide/public/") //my home
+  : "http://10.0.2.2:8000/")
+  //   : "http://172.21.0.177:8000/") //Qk//in phone
+  //   : "http://172.21.0.177/bookings-guide/public/") //Qk//in phone
+
     : "http://bookings-guide.com/";
 
 String apiUrl = "${baseUrl}api/";
@@ -106,7 +108,7 @@ String getRoomPricesUrl({int? roomId}) {
 // }
 
 // URLs Reservation
-String reseravtionSaveUrl() => "${apiUrl}reservations";
+String reservationSaveUrl() => "${apiUrl}reservations";
 
 String getReservationUrl({required int reservationId}) =>
     "${apiUrl}reservations/$reservationId";

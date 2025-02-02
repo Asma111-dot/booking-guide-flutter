@@ -119,5 +119,11 @@
   "payment_now": "الدفع الان",
   "payment": "إتمام الدفع",
   "payment_details": "تفاصيل الدفع",
-  "payment_date": "تاريخ الدفع"
+    "paid_amount": "المبلغ المدفوع",
+  "payment_date": "تاريخ الدفع",
+  "chalet_name":"اسم الشالية",
+  "check_in_date": "تاريخ الدخول",
+    "check_out_date": "تاريخ الخروج",
+      "close_and_go_back": "إغلاق",
+        "share": "مشاركة"
 }

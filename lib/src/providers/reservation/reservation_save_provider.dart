@@ -57,7 +57,7 @@ class ReservationSave extends _$ReservationSave {
 
     try {
       final response = await request<res.Reservation>(
-        url: reseravtionSaveUrl(),
+        url: reservationSaveUrl(),
         method: Method.post,
         body: requestBody,
       );
