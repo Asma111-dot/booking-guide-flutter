@@ -248,7 +248,7 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
               width: (MediaQuery.of(context).size.width - 50) / 2,
               title: trans().close_and_go_back,
               icon: const Icon(
-                Icons.keyboard_arrow_right_sharp,
+                Icons.close,
                 size: 20,
                 color: Colors.white,
               ),

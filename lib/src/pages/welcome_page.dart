@@ -36,7 +36,7 @@ class WelcomePage extends ConsumerWidget {
         width: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [CustomTheme.primaryColor, Colors.lightBlueAccent],
+            colors: [Colors.white, Colors.lightBlueAccent],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -63,7 +63,7 @@ class WelcomePage extends ConsumerWidget {
               trans().ultimateDestination,
               style: const TextStyle(
                 fontSize: 16,
-                color: Colors.white70,
+                color: Colors.black54,
               ),
             ),
           ],

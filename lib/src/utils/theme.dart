@@ -33,7 +33,7 @@ class CustomTheme {
 
   static const Color primaryColor =
       // Color.Hex('#1D4ED8');
-      Color.fromARGB(239, 2, 14, 39);
+      Color.fromARGB(232, 17, 75, 151);
   static const Color secondaryColor = Color(0xFF03DAC6);
   static const tertiaryColor = Color(0xFF2C3E50); // Dark blue
   static const fourthColor = Color(0xffF0F0F0); // Light gray

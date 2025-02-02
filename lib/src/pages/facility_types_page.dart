@@ -80,7 +80,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w500,
-            color: CustomTheme.primaryColor,
+            color: Colors.black54,
           ),
         ),
         SizedBox(height: 20),

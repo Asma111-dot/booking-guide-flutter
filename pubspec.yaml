@@ -65,6 +65,14 @@ dependencies:
   googleapis: ^13.2.0
   googleapis_auth: ^1.6.0
   share_plus: ^10.1.4
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+    android: true
+    ios: true
+    image_path: "assets/images/logo_cover.png"
+    adaptive_icon_foreground: "assets/images/logo_cover.png"
+    adaptive_icon_background: "#FFFFFF"
 
 dev_dependencies:
   flutter_test:
