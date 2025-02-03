@@ -125,5 +125,8 @@
   "check_in_date": "تاريخ الدخول",
     "check_out_date": "تاريخ الخروج",
       "close_and_go_back": "إغلاق",
-        "share": "مشاركة"
+        "share": "مشاركة",
+        "other_details":"تفاصيل أخرى",
+        "remaining_amount":"المبلغ المتبقي"
+
 }

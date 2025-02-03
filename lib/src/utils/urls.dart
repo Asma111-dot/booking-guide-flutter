@@ -4,10 +4,11 @@ import 'package:flutter/foundation.dart';
 String baseUrl = kDebugMode
     ? (Platform.isIOS
         ? "http://192.168.1.106:8000/"
-        // : "http://192.168.1.100/bookings-guide/public/") //my home
-  : "http://10.0.2.2:8000/")
+        // : "http://192.168.1.103/booking-guide/public/") //my home
+    :"http://192.168.1.103:8000/") //my home
+  // : "http://10.0.2.2:8000/")//all
   //   : "http://172.21.0.177:8000/") //Qk//in phone
-  //   : "http://172.21.0.177/bookings-guide/public/") //Qk//in phone
+  //   : "http://172.21.0.177/booking-guide/public/") //Qk//in phone
 
     : "http://bookings-guide.com/";
 

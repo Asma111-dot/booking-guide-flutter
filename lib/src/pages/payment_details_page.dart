@@ -142,7 +142,10 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                   const SizedBox(height: 10),
                   Text(
                     trans().payment_details,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(color: CustomTheme.primaryColor),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(color: CustomTheme.primaryColor),
                   ),
                   const SizedBox(height: 15),
                   CustomRowWidget(
@@ -167,7 +170,10 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                   const SizedBox(height: 10),
                   Text(
                     trans().reservationDetails,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(color: CustomTheme.primaryColor),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(color: CustomTheme.primaryColor),
                   ),
                   const SizedBox(height: 12),
                   if (reservation != null) ...[
@@ -219,11 +225,40 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                       label: trans().children_count,
                       value: "${reservation.childrenCount} ${trans().person}",
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 15),
+                    const Divider(color: Colors.grey),
+                    const SizedBox(height: 10),
+                    Text(
+                      trans().other_details,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(color: CustomTheme.primaryColor),
+                    ),
+                    const SizedBox(height: 12),
+
                     CustomRowWidget(
                       icon: Icons.money,
                       label: trans().total_price,
-                      value: "${reservation.totalPrice?.toInt()} ${trans().riyalY}",
+                      value:
+                          "${reservation.totalPrice?.toInt()} ${trans().riyalY}",
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    CustomRowWidget(
+                      icon: Icons.paid,
+                      label: trans().paid_amount,
+                      value: "${data.amount.toInt()} ${trans().riyalY}",
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    CustomRowWidget(
+                      icon: Icons.price_check,
+                      label: trans().remaining_amount,
+                      value:
+                          "${(reservation.totalPrice?.toInt() ?? 0) - (data.amount.toInt() ?? 0)} ${trans().riyalY}",
                     ),
                   ] else
                     Text(trans().not_available),
@@ -258,7 +293,7 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   Routes.facilityTypes,
-                      (r) => false,
+                  (r) => false,
                 );
               },
             ),
@@ -278,7 +313,8 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
             //   },
             // ),
             ShareButton(
-              textToShare: "جرب تطبيقنا الجديد للحجوزات! 🌟",
+           //   textToShare: "جرب تطبيقنا الجديد للحجوزات! 🌟",
+                textToShare: "جرب تطبيقنا الآن! 📲 https://play.google.com/store/apps/details?id=com.mybooking",
             ),
           ],
         ),

@@ -125,6 +125,8 @@
     "check_in_date": "Check-in Date",
     "check_out_date": "Check-out Date",
       "close_and_go_back": "Close",
-  "share": "Share"
+  "share": "Share",
+  "other_details":"Other Details",
+  "remaining_amount":"Remaining Amount"
 
 }
