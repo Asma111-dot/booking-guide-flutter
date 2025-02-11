@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'account_page.dart';
-import 'chalets_page.dart';
+import '../chalets_page.dart';
 import 'my_reservations_page.dart';
 import '../../utils/theme.dart';
 

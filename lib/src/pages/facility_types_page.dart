@@ -6,7 +6,6 @@ import '../models/facility_type.dart';
 import '../providers/facility_type/facility_type_provider.dart';
 import '../utils/assets.dart';
 import '../utils/theme.dart';
-import '../widgets/custom_app_bar_clipper.dart';
 import '../widgets/view_widget.dart';
 import '../utils/routes.dart';
 
@@ -35,11 +34,10 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
         meta: facilityTypesState.meta,
         data: facilityTypesState.data,
         onLoaded: (data) {
-          return buildFacilityTypesGrid(data, context);
+          return buildFacilityTypesGrid(context);
         },
         onLoading: () => Center(child: CircularProgressIndicator()),
-        onEmpty: () =>
-            const Center(child: Text('No facility types available.')),
+        onEmpty: () => const Center(child: Text('لا توجد أقسام متاحة حالياً.')),
         requireLogin: false,
         showError: true,
         showEmpty: true,
@@ -47,117 +45,84 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
     );
   }
 
-  Widget buildFacilityTypesGrid(List<FacilityType> data, BuildContext context) {
+  Widget buildFacilityTypesGrid(BuildContext context) {
+    final List<Map<String, String>> facilityTypes = [
+      {'name': 'شاليهات', 'image': chaletImage, 'route': Routes.chalets},
+      {'name': 'فنادق', 'image': hotelImage, 'route': Routes.hotels},
+    ];
+
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CustomAppBarClipper(
-          backgroundColor: CustomTheme.primaryColor,
-          height: 160.0,
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 30, left: 20.0),
-              child: Text(
-                trans().welcomeToBooking,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+        SizedBox(height: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            trans().facilityTypes,
+            style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: CustomTheme.primaryColor,
             ),
           ),
         ),
-        SizedBox(height: 0.0),
-        Image.asset(
-          logoCoverImage,
-          width: 150,
-          height: 150,
-        ),
-        const SizedBox(height: 20),
-        Text(
-          trans().chooseOne,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-            color: Colors.black54,
-          ),
-        ),
-        SizedBox(height: 20),
         Expanded(
           child: GridView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               mainAxisSpacing: 20,
               crossAxisSpacing: 20,
-              childAspectRatio: 3 / 4,
+              childAspectRatio: 1,
             ),
-            itemCount: data.reversed.length,
+            itemCount: facilityTypes.length,
             itemBuilder: (context, index) {
-              final facilityType = data.reversed.toList()[index];
-              final image =
-                  facilityType.name == 'فنادق' ? hotelImage : chaletImage;
-
+              final facilityType = facilityTypes[index];
               return GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    facilityType.name == 'فنادق'
-                        ? Routes.hotels
-                        : Routes.chalets,
-                  );
+                  Navigator.pushNamed(context, facilityType['route']!);
                 },
-                child: buildFacilityTypeCard(
-                  context,
-                  image: image,
-                  title: facilityType.name == 'فنادق'
-                      ? facilityType.name
-                      : facilityType.name,
+                child: Column(
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 4,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Image.asset(
+                          facilityType['image']!,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      facilityType['name']!,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: CustomTheme.primaryColor,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
               );
             },
           ),
         ),
-        SizedBox(height: 20),
       ],
-    );
-  }
-
-  Widget buildFacilityTypeCard(BuildContext context,
-      {required String image, required String title}) {
-    return Container(
-      decoration: BoxDecoration(
-        //  color: CustomTheme.primaryColor,
-        border: Border.all(
-            color: CustomTheme.primaryColor, width: CustomTheme.borderWidth),
-        borderRadius: BorderRadius.circular(CustomTheme.radius),
-      ),
-      child: Column(
-        children: [
-          ClipRRect(
-            borderRadius:
-                BorderRadius.vertical(top: Radius.circular(CustomTheme.radius)),
-            child: Image.asset(
-              image,
-              height: 120,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(8),
-            child: Text(
-              title,
-              style: TextStyle(
-                color: CustomTheme.primaryColor,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

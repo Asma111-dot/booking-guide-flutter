@@ -9,19 +9,19 @@ import '../widgets/facility_widget.dart';
 import '../widgets/view_widget.dart';
 import '../models/facility.dart';
 
-class HotelsPage extends ConsumerStatefulWidget {
-  const HotelsPage({Key? key}) : super(key: key);
+class ChaletsPage extends ConsumerStatefulWidget {
+  const ChaletsPage({Key? key}) : super(key: key);
 
   @override
-  ConsumerState createState() => _HotelsPageState();
+  ConsumerState createState() => _ChaletsPageState();
 }
 
-class _HotelsPageState extends ConsumerState<HotelsPage> {
+class _ChaletsPageState extends ConsumerState<ChaletsPage> {
   @override
   void initState() {
     super.initState();
     Future.microtask(() {
-      ref.read(facilitiesProvider.notifier).fetch(facilityTypeId: 1);
+      ref.read(facilitiesProvider.notifier).fetch(facilityTypeId: 2);
     });
   }
 
@@ -30,7 +30,7 @@ class _HotelsPageState extends ConsumerState<HotelsPage> {
     final facilitiesState = ref.watch(facilitiesProvider);
     return Scaffold(
       appBar: CustomAppBar(
-        appTitle: trans().hotel,
+        appTitle: trans().chalet,
         icon: const FaIcon(Icons.arrow_back_ios),
       ),
       body: Column(

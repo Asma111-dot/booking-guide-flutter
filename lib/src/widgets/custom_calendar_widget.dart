@@ -36,7 +36,7 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
         showNavigationArrow: true,
         showTodayButton: false,
         selectionMode: DateRangePickerSelectionMode.single,
-        onSelectionChanged: (args) {
+        onSelectionChanged: (args) async {
           final selectedDate = args.value as DateTime;
 
           if (widget.events[selectedDate]?.isNotEmpty ?? false) {
@@ -46,6 +46,7 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
               selectedDay = selectedDate;
             });
             widget.onDateSelected(selectedDate);
+
           }
         },
         monthViewSettings: DateRangePickerMonthViewSettings(

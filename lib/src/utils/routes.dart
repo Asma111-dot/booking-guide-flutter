@@ -9,7 +9,7 @@ import '../pages/price_calendar_page.dart';
 import '../pages/chalet_details_page.dart';
 import '../pages/customer_page.dart';
 import '../pages/customers_page.dart';
-import '../pages/layouts/chalets_page.dart';
+import '../pages/chalets_page.dart';
 import '../pages/hotels_page.dart';
 import '../pages/facility_types_page.dart';
 import '../pages/hotel_details_page.dart';
