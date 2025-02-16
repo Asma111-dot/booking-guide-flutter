@@ -17,16 +17,16 @@ import '../models/room.dart' as r;
 import '../widgets/room_price_widget.dart';
 import '../widgets/view_widget.dart';
 
-class ChaletDetailsPage extends ConsumerStatefulWidget {
+class RoomDetailsPage extends ConsumerStatefulWidget {
   final Facility facility;
 
-  const ChaletDetailsPage({Key? key, required this.facility}) : super(key: key);
+  const RoomDetailsPage({Key? key, required this.facility}) : super(key: key);
 
   @override
-  _ChaletDetailsPageState createState() => _ChaletDetailsPageState();
+  _RoomDetailsPageState createState() => _RoomDetailsPageState();
 }
 
-class _ChaletDetailsPageState extends ConsumerState<ChaletDetailsPage>
+class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
   late PageController pageController;
