@@ -1,8 +1,8 @@
 {
-  "appTitle": "Booking Guide",
+  "appTitle": "My Booking",
   "welcome": "Welcome",
   "to": "to",
-  "welcomeToBooking": "Welcome to the booking guide",
+  "welcomeToBooking": "Welcome to my booking ",
   "ultimateDestination": "Your ultimate destination for reservations",
   "chooseOne": "Choose one of the options to enjoy the application services",
   "facilityTypes": "Facility Types",
@@ -128,6 +128,9 @@
       "close_and_go_back": "Close",
   "share": "Share",
   "other_details":"Other Details",
-  "remaining_amount":"Remaining Amount"
-
+  "remaining_amount":"Remaining Amount",
+   "map": "Map",
+    "booking": "Booking",
+    "persons": "Person",
+      "imageGallery": "Image Gallery"
 }

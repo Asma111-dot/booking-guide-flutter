@@ -5,6 +5,7 @@ import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../helpers/general_helper.dart';
 import '../utils/theme.dart';
+import 'navigation_menu.dart'; // استيراد NavigationMenu
 
 class WelcomePage extends ConsumerWidget {
   const WelcomePage({super.key});
@@ -12,10 +13,13 @@ class WelcomePage extends ConsumerWidget {
   Future<void> _navigateToNextScreen(BuildContext context) async {
     await Future.delayed(const Duration(seconds: 3));
 
-    if (!isLoggedIn()) {
-      Navigator.pushReplacementNamed(context, Routes.login);
+    if (isLoggedIn()) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => NavigationMenu()),
+      );
     } else {
-      Navigator.pushReplacementNamed(context, Routes.facilityTypes);
+      Navigator.pushReplacementNamed(context, Routes.login);
     }
   }
 
@@ -26,12 +30,6 @@ class WelcomePage extends ConsumerWidget {
     });
 
     return Scaffold(
-    // body:  Container(
-    //     decoration: BoxDecoration(
-    //       gradient: primaryGradient,
-    //     ),
-    //   );
-
       body: Container(
         width: double.infinity,
         decoration: const BoxDecoration(
@@ -66,6 +64,8 @@ class WelcomePage extends ConsumerWidget {
                 color: Colors.black54,
               ),
             ),
+            const SizedBox(height: 40),
+            const CircularProgressIndicator(),
           ],
         ),
       ),

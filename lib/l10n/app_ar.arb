@@ -1,11 +1,11 @@
 {
-  "appTitle": "دليل الحجوزات",
+  "appTitle": " حجوزاتي",
   "welcome": "مرحباً",
   "to": "في",
-  "welcomeToBooking": "مرحبا بك في دليل الحجوزات",
+  "welcomeToBooking": "مرحبا بك في تطبيقنا",
   "ultimateDestination": "وجهتك النهائية للحجوزات",
   "chooseOne": "قم باختيار أحد الخيارات للتمتع بخدمات التطبيق",
-  "facilityTypes": "الأقسام",
+  "facilityTypes": "المنشئات",
   "hotel": "فنادق",
   "noHotel": "لا توجد فنادق متاحة حالياً.",
   "chalet": "شاليهات",
@@ -128,6 +128,10 @@
       "close_and_go_back": "إغلاق",
         "share": "مشاركة",
         "other_details":"تفاصيل أخرى",
-        "remaining_amount":"المبلغ المتبقي"
+        "remaining_amount":"المبلغ المتبقي",
+ "map": "الخريطة",
+  "booking": "الحجوزات",
+  "persons": "الحساب",
+    "imageGallery": "معرض الصور"
 
 }

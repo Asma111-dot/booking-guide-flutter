@@ -1,19 +1,18 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 
-// String baseUrl = kDebugMode
-//     ? (Platform.isIOS
-//         ? "http://192.168.1.106:8000/"
 //         // : "http://192.168.1.103/booking-guide/public/") //my home
 //     // :"http://192.168.1.103:8000/") //my home
-//   : "http://10.0.2.2:8000/")//all
-//   //   : "http://172.21.0.177:8000/") //Qk//in phone
-//   //   : "http://172.21.0.177/booking-guide/public/") //Qk//in phone
-//
+
+// String baseUrl = kDebugMode
+//     ? "http://${Platform.isIOS ? "localhost" : "10.0.2.2"}:8000/"
 //     : "http://bookings-guide.com/";
+
 String baseUrl = kDebugMode
-    ? "http://${Platform.isIOS ? "localhost" : "10.0.2.2"}:8000/"
-    : "http://bookings-guide.com/";
+    ? (Platform.isIOS
+    ? "http://localhost:8000/" // إذا كان التطبيق يعمل على iOS
+    : "http://192.168.1.101:8000/") // إذا كان التطبيق يعمل على Android
+    : "http://bookings-guide.com/"; // إذا كان التطبيق في وضع الإنتاج
 
 String apiUrl = "${baseUrl}api/";
 
@@ -56,6 +55,7 @@ String deleteFacilityTypeUrl(int facilityTypeId) =>
 
 String getFacilityTypesUrl() => "${apiUrl}facility-types";
 
+
 // URLs Facility
 String getFacilityUrl(int facilityId) => "${apiUrl}facilities/$facilityId";
 
@@ -70,6 +70,25 @@ String getFacilitiesUrl({int? facilityTypeId}) {
   if (facilityTypeId != null) {
     url += "?facility_type_id=$facilityTypeId";
   }
+  return url;
+}
+
+// URLs Facility Search
+String searchFacilitiesUrl({
+  String? name,
+}) {
+  String url = "${apiUrl}facilities/search";
+  Map<String, String> queryParams = {};
+
+  if (name != null && name.isNotEmpty) {
+    queryParams['name'] = name;
+  }
+
+  // Adding query parameters to the URL
+  if (queryParams.isNotEmpty) {
+    url += '?' + Uri(queryParameters: queryParams).query;
+  }
+
   return url;
 }
 

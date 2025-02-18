@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../helpers/general_helper.dart';
 import '../models/facility.dart';
 import '../providers/facility/facility_provider.dart';
-import '../utils/assets.dart';
+import '../providers/facility/search_facility_provider.dart';
 import '../utils/theme.dart';
 import '../widgets/view_widget.dart';
 import 'facility_page.dart';
+import 'facility_search_page.dart';
 
 class FacilityTypesPage extends ConsumerStatefulWidget {
   FacilityTypesPage({Key? key}) : super(key: key);
@@ -37,18 +37,22 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
   @override
   Widget build(BuildContext context) {
     final facilitiesState = ref.watch(facilitiesProvider);
+    final searchResults = ref.watch(searchFacilitiesProvider);
 
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Expanded(
+          //   child: FacilitySearch(),
+          // ),
           SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text(
               trans().facilityTypes,
               style: TextStyle(
-                fontSize: 30,
+                fontSize: 25,
                 fontWeight: FontWeight.bold,
                 color: CustomTheme.primaryColor,
               ),
@@ -70,7 +74,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
           Expanded(
             child: ViewWidget<List<Facility>>(
               meta: facilitiesState.meta,
-              data: facilitiesState.data,
+              data: searchResults.data?.isEmpty ?? true ? facilitiesState.data : searchResults.data, // إظهار نتائج البحث إذا كانت موجودة
               onLoaded: (data) {
                 return ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
