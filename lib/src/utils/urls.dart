@@ -4,15 +4,15 @@ import 'package:flutter/foundation.dart';
 //         // : "http://192.168.1.103/booking-guide/public/") //my home
 //     // :"http://192.168.1.103:8000/") //my home
 
-// String baseUrl = kDebugMode
-//     ? "http://${Platform.isIOS ? "localhost" : "10.0.2.2"}:8000/"
-//     : "http://bookings-guide.com/";
-
 String baseUrl = kDebugMode
-    ? (Platform.isIOS
-    ? "http://localhost:8000/" // إذا كان التطبيق يعمل على iOS
-    : "http://192.168.1.101:8000/") // إذا كان التطبيق يعمل على Android
-    : "http://bookings-guide.com/"; // إذا كان التطبيق في وضع الإنتاج
+    ? "http://${Platform.isIOS ? "localhost" : "10.0.2.2"}:8000/"
+    : "http://bookings-guide.com/";
+
+// String baseUrl = kDebugMode
+//     ? (Platform.isIOS
+//     ? "http://localhost:8000/" // إذا كان التطبيق يعمل على iOS
+//     : "http://192.168.1.101:8000/") // إذا كان التطبيق يعمل على Android
+//     : "http://bookings-guide.com/"; // إذا كان التطبيق في وضع الإنتاج
 
 String apiUrl = "${baseUrl}api/";
 

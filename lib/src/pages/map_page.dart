@@ -1,36 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/facility.dart';
+import '../helpers/general_helper.dart';
+import '../models/facility.dart' as f;
 import '../providers/facility/facility_provider.dart';
+import '../utils/theme.dart';
 import '../widgets/view_widget.dart';
 
 class MapPage extends ConsumerStatefulWidget {
-  const MapPage({Key? key}) : super(key: key);
+  final int facilityId;
+
+  const MapPage({Key? key, required this.facilityId}) : super(key: key);
 
   @override
   ConsumerState<MapPage> createState() => _MapPageState();
 }
 
 class _MapPageState extends ConsumerState<MapPage> {
-  late GoogleMapController mapController;
+  GoogleMapController? mapController;
+
+  getProvider() => facilitiesProvider(FacilityTarget.maps);
 
   @override
   void initState() {
     super.initState();
-    // تحميل البيانات عند بدء الصفحة
     Future.microtask(() {
-      ref.read(facilitiesProvider.notifier).fetch(facilityTypeId: 2);
+      ref.read(getProvider().notifier).fetch(facilityId: widget.facilityId);
     });
+  }
+
+  void moveToLocation(List<f.Facility> data) {
+    if (data.isNotEmpty && mapController != null) {
+      double avgLat = data.map((f) => f.latitude ?? 0.0).reduce((a, b) => a + b) / data.length;
+      double avgLng = data.map((f) => f.longitude ?? 0.0).reduce((a, b) => a + b) / data.length;
+      mapController!.animateCamera(CameraUpdate.newLatLng(LatLng(avgLat, avgLng)));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final facilitiesState = ref.watch(facilitiesProvider);
+    final facilitiesState = ref.watch(getProvider());
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('خريطة المنشآت'),
+        centerTitle: true,
+        title: Text(
+          trans().map,
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            color: CustomTheme.primaryColor,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Column(
         children: [
@@ -42,69 +65,43 @@ class _MapPageState extends ConsumerState<MapPage> {
             ),
           ),
           Expanded(
-            child: ViewWidget<List<Facility>>(
+            child: ViewWidget<List<f.Facility>>(
               meta: facilitiesState.meta,
               data: facilitiesState.data,
               refresh: () async {
-                await ref.read(facilitiesProvider.notifier).fetch(facilityTypeId: 2);
-                setState(() {});  // تحديث الحالة لإعادة تحميل الماركرات
+                await ref.read(getProvider().notifier).fetch(facilityId: widget.facilityId);
+                setState(() {});
               },
               forceShowLoaded: facilitiesState.data != null,
               onLoaded: (data) {
                 print("عدد المنشآت: ${data.length}");
-                // التأكد من إحداثيات كل منشأة
                 data.forEach((facility) {
                   print("منشأة: ${facility.name}, إحداثيات: (${facility.latitude}, ${facility.longitude})");
                 });
 
-                // تأكد من أن البيانات تحتوي على إحداثيات صحيحة
                 final Set<Marker> markers = data.map((facility) {
-                  final marker = Marker(
+                  return Marker(
                     markerId: MarkerId(facility.id.toString()),
-                    position: LatLng(
-                      facility.latitude ?? 0.0,
-                      facility.longitude ?? 0.0,
-                    ),
+                    position: LatLng(facility.latitude ?? 0.0, facility.longitude ?? 0.0),
                     infoWindow: InfoWindow(
                       title: facility.name,
                       snippet: facility.address,
                     ),
                   );
-                  print("Marker ID: ${facility.id}, Position: ${marker.position}");
-                  return marker;
                 }).toSet();
 
-                // حساب إحداثيات الكاميرا لتناسب الماركرات
-                // double minLat = double.infinity;
-                // double maxLat = -double.infinity;
-                // double minLng = double.infinity;
-                // double maxLng = -double.infinity;
-                //
-                // for (var facility in data) {
-                //   minLat = facility.latitude! < minLat ? facility.latitude! : minLat;
-                //   maxLat = facility.latitude! > maxLat ? facility.latitude! : maxLat;
-                //   minLng = facility.longitude! < minLng ? facility.longitude! : minLng;
-                //   maxLng = facility.longitude! > maxLng ? facility.longitude! : maxLng;
-                // }
-                //
-                // // تعيين الكاميرا لتناسب إحداثيات الماركرات
-                // LatLngBounds bounds = LatLngBounds(
-                //   southwest: LatLng(minLat, minLng),
-                //   northeast: LatLng(maxLat, maxLng),
-                // );
+                if (data.isNotEmpty) {
+                  moveToLocation(data);
+                }
 
                 return GoogleMap(
                   initialCameraPosition: CameraPosition(
-                    target: LatLng(15.382585, 47.060712),
-                    // target: LatLng(
-                    //     (minLat + maxLat) / 2, (minLng + maxLng) / 2),
+                    target: LatLng(15.3520, 44.2075),
                     zoom: 10,
                   ),
-                  markers: markers, // تأكد من أن الماركرات يتم تمريرها هنا
+                  markers: markers,
                   onMapCreated: (controller) {
                     mapController = controller;
-                    // ضبط الكاميرا لتناسب الماركرات
-                   // mapController.moveCamera(CameraUpdate.newLatLngBounds(bounds, 50));
                   },
                 );
               },

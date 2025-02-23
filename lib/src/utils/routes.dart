@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../models/facility.dart';
 import '../models/room_price.dart';
+import '../pages/map_page.dart';
 import '../pages/payment_details_page.dart';
 import '../pages/price_calendar_page.dart';
 import '../pages/room_details_page.dart';
@@ -18,8 +19,8 @@ class Routes {
   static const String welcome = '/welcome';
   static const String login = '/login';
   static const String facilityTypes = '/facility_types';
-  static const String chalets = '/chalets';
-  static const String chaletDetails = '/chalet_details';
+  static const String facilities = '/facilities';
+  static const String roomDetails = '/room_details';
   static const String hotelDetails = '/hotel_details';
   static const String reservation = '/reservation';
   static const String myAccount = '/account';
@@ -28,7 +29,7 @@ class Routes {
   static const String reservationDetails = '/reservation_details';
   static const String payment = '/payment';
   static const String paymentDetails = '/payment_details';
-
+  static const String mapPage = '/map';
 
   static Route? generate(RouteSettings settings) {
     final args = settings.arguments;
@@ -38,42 +39,32 @@ class Routes {
           builder: (_) => const WelcomePage(),
           settings: settings,
         );
+
       case login:
         return MaterialPageRoute(
           builder: (_) => const LoginPage(),
           settings: settings,
         );
+
       case facilityTypes:
         return MaterialPageRoute(
           builder: (_) => FacilityTypesPage(),
           settings: settings,
         );
-      // case chalets:
-      //   return MaterialPageRoute(
-      //     builder: (_) => ChaletsPage(),
-      //     settings: settings,
-      //   );
-      case chaletDetails:
+
+      case roomDetails:
         return MaterialPageRoute(
           builder: (_) => RoomDetailsPage(facility: args as Facility),
           settings: settings,
         );
-      // case hotels:
-      //   return MaterialPageRoute(
-      //     builder: (_) => HotelsPage(),
-      //     settings: settings,
-      //   );
-      // case hotelDetails:
-      //   return MaterialPageRoute(
-      //     builder: (_) => HotelDetailsPage(facility: args as Facility),
-      //     settings: settings,
-      //   );
+
       case priceAndCalendar:
         final roomId = settings.arguments as int;
         return MaterialPageRoute(
           builder: (_) => PriceAndCalendarPage(roomId: roomId,),
           settings: settings,
         );
+
       case reservation:
         return MaterialPageRoute(
           builder: (_) => ReservationPage(roomPrice: args as RoomPrice),
@@ -87,7 +78,6 @@ class Routes {
           builder: (_) => ReservationDetailsPage(roomPriceId: roomPriceId,),
           settings: settings,
         );
-
       case payment:
         return MaterialPageRoute(
           builder: (_) => PaymentPage(reservationId: args as int),
@@ -96,6 +86,13 @@ class Routes {
       case paymentDetails:
         return MaterialPageRoute(
           builder: (_) => PaymentDetailsPage(paymentId: args as int),
+          settings: settings,
+        );
+
+      case mapPage:
+        final facilityTypeId = args as int? ?? 0;
+        return MaterialPageRoute(
+          builder: (_) => MapPage(facilityId: facilityTypeId),
           settings: settings,
         );
 

@@ -1,4 +1,3 @@
-
 import 'package:collection/collection.dart';
 
 enum Alert {success, error, warning, info}

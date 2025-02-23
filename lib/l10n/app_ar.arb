@@ -132,6 +132,7 @@
  "map": "الخريطة",
   "booking": "الحجوزات",
   "persons": "الحساب",
-    "imageGallery": "معرض الصور"
+    "imageGallery": "معرض الصور",
+    "favorite":"المفضلة"
 
 }

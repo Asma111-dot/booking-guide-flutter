@@ -7,10 +7,10 @@ import '../utils/routes.dart';
 import '../utils/theme.dart';
 import '../widgets/save_widget.dart';
 
-class FacilityWidget extends StatelessWidget {
+class FacilityPage extends StatelessWidget {
   final Facility facility;
 
-  const FacilityWidget({
+  const FacilityPage({
     Key? key,
     required this.facility,
   }) : super(key: key);
@@ -21,7 +21,7 @@ class FacilityWidget extends StatelessWidget {
     final firstPrice = (firstRoom?.roomPrices.isNotEmpty == true)
         ? firstRoom!.roomPrices.first.amount
         : 0.0;
-    final defaultImage = facility.name == 'hotel' ? hotelImage : chaletImage;
+    final defaultImage = facility.facilityTypeId == 1 ? hotelImage : chaletImage; // ✅ استخدام facilityTypeId
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -78,12 +78,12 @@ class FacilityWidget extends StatelessWidget {
             const SizedBox(height: 4),
             Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.location_on_outlined,
                   color: Colors.grey,
                   size: 16,
                 ),
-                SizedBox(width: 4),
+                const SizedBox(width: 4),
                 Text(
                   facility.address ?? '${trans().address}',
                   style: const TextStyle(
@@ -105,9 +105,9 @@ class FacilityWidget extends StatelessWidget {
         onTap: () {
           Navigator.pushNamed(
             context,
-            facility.name == 'hotel'
+            facility.facilityTypeId == 1
                 ? Routes.hotelDetails
-                : Routes.chaletDetails,
+                : Routes.roomDetails,
             arguments: facility,
           );
         },

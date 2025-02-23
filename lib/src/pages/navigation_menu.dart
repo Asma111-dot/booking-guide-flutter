@@ -5,6 +5,7 @@ import '../utils/theme.dart';
 import 'booking_page.dart';
 import 'facility_search_page.dart';
 import 'facility_types_page.dart';
+import 'favorites_page.dart';
 import 'map_page.dart';
 import 'person_page.dart';
 
@@ -34,7 +35,9 @@ class NavigationMenu extends StatelessWidget {
                   child: Obx(() => BottomNavigationBar(
                     currentIndex: controller.selectedIndex.value,
                     onTap: (index) {
-                      controller.selectedIndex.value = index;
+                      if (index >= 0 && index < controller.screens.length) {
+                        controller.selectedIndex.value = index;
+                      }
                     },
                     type: BottomNavigationBarType.fixed,
                     backgroundColor: Colors.white,
@@ -56,8 +59,12 @@ class NavigationMenu extends StatelessWidget {
                         label: trans().booking,
                       ),
                       BottomNavigationBarItem(
+                        icon: const Icon(Icons.favorite_outline_outlined),
+                        label: trans().favorite,
+                      ),
+                      BottomNavigationBarItem(
                         icon: const Icon(Icons.person_2_outlined),
-                        label: trans().person,
+                        label: trans().persons,
                       ),
                     ],
                   )),
@@ -76,9 +83,9 @@ class NavigationController extends GetxController {
 
   final List<Widget> screens = [
     FacilityTypesPage(),
-    MapPage(),
+    MapPage(facilityId: 1),
     BookingPage(),
+    FavoritesPage(),
     PersonPage(),
-    // FacilitySearch(),
   ];
 }
