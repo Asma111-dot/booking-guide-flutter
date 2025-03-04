@@ -11,6 +11,7 @@ class Facility {
   double? longitude;
   String? geojson;
   String? logo;
+  bool isFavorite; // Ensure it's bool
 
   List<Room> rooms;
 
@@ -25,9 +26,11 @@ class Facility {
     this.longitude,
     this.geojson,
     this.logo,
+    this.isFavorite = false, // Default value is false
     this.rooms = const [],
   });
 
+  /// **منشأة افتراضية (للإنشاء الجديد)**
   Facility.init()
       : id = 0,
         facilityTypeId = 0,
@@ -39,10 +42,42 @@ class Facility {
         longitude = null,
         geojson = null,
         logo = null,
+        isFavorite = false, // Ensure it's false by default
         rooms = [];
 
+  /// **إنشاء نسخة جديدة من المنشأة مع تعديلات مخصصة**
+  Facility copyWith({
+    int? id,
+    int? facilityTypeId,
+    String? name,
+    String? desc,
+    String? status,
+    String? address,
+    double? latitude,
+    double? longitude,
+    String? geojson,
+    String? logo,
+    List<Room>? rooms,
+    bool? isFavorite, // Added this field
+  }) {
+    return Facility(
+      id: id ?? this.id,
+      facilityTypeId: facilityTypeId ?? this.facilityTypeId,
+      name: name ?? this.name,
+      desc: desc ?? this.desc,
+      status: status ?? this.status,
+      address: address ?? this.address,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+      geojson: geojson ?? this.geojson,
+      logo: logo ?? this.logo,
+      rooms: rooms ?? this.rooms,
+      isFavorite: isFavorite ?? this.isFavorite, // Ensure it's handled
+    );
+  }
+
+  /// **إنشاء كائن `Facility` من JSON**
   factory Facility.fromJson(Map<String, dynamic> jsonMap) {
-   // print(" jsonMap  =${jsonMap}");
     return Facility(
       id: jsonMap['id'] ?? 0,
       facilityTypeId: jsonMap['facility_type_id'] ?? 0,
@@ -55,12 +90,16 @@ class Facility {
       geojson: jsonMap['geojson'],
       logo: jsonMap['logo'],
       rooms: (jsonMap['rooms'] as List<dynamic>?)
-              ?.map((item) => Room.fromJson(item))
-              .toList() ??
+          ?.map((item) => Room.fromJson(item))
+          .toList() ??
           [],
+      isFavorite: (jsonMap['is_favorite'] is int) // ✅ تحويل int إلى bool
+          ? jsonMap['is_favorite'] == 1
+          : jsonMap['is_favorite'] ?? false,
     );
   }
 
+  /// **تحويل كائن `Facility` إلى JSON**
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -73,10 +112,12 @@ class Facility {
       'longitude': longitude,
       'geojson': geojson,
       'logo': logo,
+      'is_favorite': isFavorite, // Ensure it's included
       'rooms': rooms.map((room) => room.toJson()).toList(),
     };
   }
 
+  /// **تحويل قائمة JSON إلى قائمة `Facility`**
   static List<Facility> fromJsonList(List<dynamic> jsonList) {
     return jsonList
         .where((json) => json is Map<String, dynamic>)
@@ -84,13 +125,15 @@ class Facility {
         .toList();
   }
 
+  /// **هل المنشأة جديدة أم لا**
   bool isCreate() => id == 0;
 
   @override
   String toString() {
-    return 'Facility(id: $id, facilityTypeId: $facilityTypeId, name: "$name", desc: "$desc", status: "$status", address: "$address", latitude: $latitude, longitude: $longitude, geojson: "$geojson",logo: "$logo", rooms: $rooms)';
+    return 'Facility(id: $id, facilityTypeId: $facilityTypeId, name: "$name", desc: "$desc", status: "$status", address: "$address", latitude: $latitude, longitude: $longitude, geojson: "$geojson", logo: "$logo", isFavorite: $isFavorite, rooms: $rooms)';
   }
 
+  /// **مقارنة كائنيْن من نوع `Facility`**
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
@@ -106,6 +149,7 @@ class Facility {
             longitude == other.longitude &&
             geojson == other.geojson &&
             logo == other.logo &&
+            isFavorite == other.isFavorite && // Ensure it's included in comparison
             rooms == other.rooms;
   }
 
@@ -120,5 +164,7 @@ class Facility {
       latitude.hashCode ^
       longitude.hashCode ^
       geojson.hashCode ^
+      logo.hashCode ^
+      isFavorite.hashCode ^ // Ensure it's included here too
       rooms.hashCode;
 }

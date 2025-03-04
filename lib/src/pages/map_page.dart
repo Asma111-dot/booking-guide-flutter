@@ -25,7 +25,7 @@ class _MapPageState extends ConsumerState<MapPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      ref.read(getProvider().notifier).fetch(facilityId: widget.facilityId);
+      ref.read(getProvider().notifier).fetch(facilityTypeId: widget.facilityId);
     });
   }
 
@@ -69,7 +69,8 @@ class _MapPageState extends ConsumerState<MapPage> {
               meta: facilitiesState.meta,
               data: facilitiesState.data,
               refresh: () async {
-                await ref.read(getProvider().notifier).fetch(facilityId: widget.facilityId);
+                await
+                ref.read(getProvider().notifier).fetch(facilityTypeId: widget.facilityId);
                 setState(() {});
               },
               forceShowLoaded: facilitiesState.data != null,

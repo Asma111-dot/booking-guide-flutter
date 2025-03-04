@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../helpers/general_helper.dart';
 import '../models/facility.dart';
+import '../providers/favorite/favorite_provider.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../utils/theme.dart';
 import '../widgets/save_widget.dart';
 
-class FacilityPage extends StatelessWidget {
+class FacilityPage extends ConsumerWidget {
   final Facility facility;
 
   const FacilityPage({
@@ -16,12 +18,17 @@ class FacilityPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final firstRoom = facility.rooms.isNotEmpty ? facility.rooms.first : null;
     final firstPrice = (firstRoom?.roomPrices.isNotEmpty == true)
         ? firstRoom!.roomPrices.first.amount
         : 0.0;
-    final defaultImage = facility.facilityTypeId == 1 ? hotelImage : chaletImage; // ✅ استخدام facilityTypeId
+    final defaultImage =
+    facility.facilityTypeId == 1 ? hotelImage : chaletImage;
+
+    // مراقبة حالة المفضلة
+    final favorites = ref.watch(favoritesProvider);
+    final isSaved = favorites.data?.any((f) => f.id == facility.id) ?? false;
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -33,7 +40,7 @@ class FacilityPage extends StatelessWidget {
             color: Colors.black26,
             blurRadius: 6,
             offset: Offset(0, 2),
-          ),
+          )
         ],
       ),
       child: ListTile(
@@ -100,13 +107,14 @@ class FacilityPage extends StatelessWidget {
           child: SaveButtonWidget(
             itemId: facility.id,
             iconColor: CustomTheme.primaryColor,
+            facilityTypeId: facility.facilityTypeId,
           ),
         ),
         onTap: () {
           Navigator.pushNamed(
             context,
             facility.facilityTypeId == 1
-                ? Routes.hotelDetails
+                ? Routes.roomDetails
                 : Routes.roomDetails,
             arguments: facility,
           );

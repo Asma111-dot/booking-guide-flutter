@@ -17,23 +17,27 @@ class FacilityTypesPage extends ConsumerStatefulWidget {
 }
 
 class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
-  int selectedFacilityType = 2;
+  int selectedFacilityType = 1;
+  FacilityTarget currentTarget = FacilityTarget.hotels;
 
-  get getProvider => facilitiesProvider(FacilityTarget.maps);
+  get getProvider => facilitiesProvider(currentTarget);
 
   @override
   void initState() {
     super.initState();
     Future.microtask(() {
-      ref.read(getProvider.notifier).fetch(facilityTypeId: selectedFacilityType);
+      ref.read(facilitiesProvider(currentTarget).notifier)
+          .fetch(facilityTypeId: selectedFacilityType);
     });
   }
 
   void _onFacilityTypeChange(int facilityTypeId) {
     setState(() {
       selectedFacilityType = facilityTypeId;
+      currentTarget = facilityTypeId == 1 ? FacilityTarget.hotels : FacilityTarget.chalets;
     });
-    ref.read(getProvider.notifier).fetch(facilityTypeId: facilityTypeId);
+    ref.read(facilitiesProvider(currentTarget).notifier)
+        .fetch(facilityTypeId: facilityTypeId);
   }
 
   @override
@@ -58,10 +62,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Expanded(
-          //   child: FacilitySearch(),
-          // ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text(
@@ -73,23 +74,24 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
               ),
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 _buildTypeButtonWithIcon(context, 'شاليهات', 2, Icons.pool),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 _buildTypeButtonWithIcon(context, 'فنادق', 1, Icons.hotel),
               ],
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Expanded(
             child: ViewWidget<List<Facility>>(
               meta: facilitiesState.meta,
-              data: searchResults.data?.isEmpty ?? true ? facilitiesState.data : searchResults.data, // إظهار نتائج البحث إذا كانت موجودة
+              data: (searchResults.data?.isEmpty ?? true)
+                  ? facilitiesState.data
+                  : searchResults.data, // إظهار نتائج البحث إذا كانت موجودة
               onLoaded: (data) {
                 return ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -113,16 +115,10 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
 
   Widget _buildTypeButtonWithIcon(BuildContext context, String title, int typeId, IconData icon) {
     final bool isSelected = selectedFacilityType == typeId;
-
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          selectedFacilityType = typeId;
-        });
-        ref.read(facilitiesProvider(FacilityTarget.favorites).notifier).fetch(facilityTypeId: typeId);
-      },
+      onTap: () => _onFacilityTypeChange(typeId),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
           color: isSelected ? CustomTheme.primaryColor.withOpacity(0.1) : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
@@ -134,7 +130,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
               color: isSelected ? CustomTheme.primaryColor : Colors.grey,
               size: 24,
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Text(
               title,
               style: TextStyle(

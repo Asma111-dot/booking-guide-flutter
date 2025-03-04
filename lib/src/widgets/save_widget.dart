@@ -1,37 +1,45 @@
-import 'package:booking_guide/src/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/facility/favorites_facility_provider.dart';
+import '../providers/favorite/favorite_provider.dart';
+import '../storage/auth_storage.dart';
+import '../utils/theme.dart';
 
 class SaveButtonWidget extends ConsumerWidget {
   final int itemId;
   final Color iconColor;
+  final int facilityTypeId;
 
   const SaveButtonWidget({
     Key? key,
     required this.itemId,
-    required this.iconColor,
+    this.iconColor = CustomTheme.primaryColor,
+    required this.facilityTypeId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final favorites = ref.watch(favoritesProvider);
-
-    bool isSaved = favorites.contains(itemId);
+    final isSaved = favorites.data?.any((facility) => facility.id == itemId) ?? false;
 
     return IconButton(
       icon: Icon(
-        isSaved ? Icons.bookmark_rounded : Icons.bookmark_border_rounded,
-        color: isSaved ? CustomTheme.primaryColor : iconColor,
+        isSaved ? Icons.favorite : Icons.favorite_border,
+        color: isSaved ? Colors.red : iconColor,
       ),
-      onPressed: () {
-        ref.read(favoritesProvider.notifier).toggleFavorite(itemId);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(isSaved ? 'تمت الإزالة من المفضلة' : 'تمت الإضافة إلى المفضلة'),
-            duration: const Duration(seconds: 1),
-          ),
-        );
+      onPressed: () async {
+        final userId = currentUser()?.id;
+        if (userId == null) return;
+
+        final notifier = ref.read(favoritesProvider.notifier);
+
+        if (isSaved) {
+          await notifier.removeFavorite(userId, itemId);
+        } else {
+          await notifier.addFavorite(userId, itemId);
+        }
+
+        // إعادة تحميل البيانات لتحديث الواجهة
+        ref.invalidate(favoritesProvider);
       },
     );
   }
