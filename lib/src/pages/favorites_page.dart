@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/facility.dart';
 import '../providers/facility/facility_provider.dart';
+import '../providers/favorite/favorite_provider.dart';
+import '../storage/auth_storage.dart';
 import '../utils/theme.dart';
 import '../widgets/favorites_card.dart';
 
@@ -16,14 +18,31 @@ class FavoritesPage extends ConsumerStatefulWidget {
 }
 
 class _FavoritesScreenState extends ConsumerState<FavoritesPage> {
-  int selectedType = 0; // 0 = الكل، 1 = فنادق، 2 = شاليهات
+  int selectedType = 0;
+  // 0 = الكل، 1 = فنادق، 2 = شاليهات
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   Future.microtask(() {
+  //     ref.read(facilitiesProvider(FacilityTarget.favorites).notifier).fetch(userId: widget.userId, facilityTypeId: widget.facilityTypeId);
+  //   });
+  // }
+ // @override
+  // void initState() {
+  //   super.initState();
+  //   Future.microtask(() {
+  //     ref.read(favoritesProvider.notifier).fetchFavorites(widget.userId);
+  //   });
+  // }
 
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      ref.read(facilitiesProvider(FacilityTarget.favorites).notifier).fetch(userId: widget.userId, facilityTypeId: widget.facilityTypeId);
-    });
+    final userId = currentUser()?.id;
+    if (userId != null) {
+      ref.read(favoritesProvider.notifier).fetchFavorites(userId);
+    }
   }
 
   @override
@@ -70,7 +89,6 @@ class _FavoritesScreenState extends ConsumerState<FavoritesPage> {
     );
   }
 
-  /// ✅ **أزرار تصفية المنشآت**
   Widget _buildFilterButtons() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -87,7 +105,6 @@ class _FavoritesScreenState extends ConsumerState<FavoritesPage> {
     );
   }
 
-  /// ✅ **زر تصفية حسب النوع**
   Widget _buildTypeButton(String title, int type, IconData icon) {
     final bool isSelected = selectedType == type;
     return GestureDetector(

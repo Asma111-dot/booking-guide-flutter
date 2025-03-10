@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/favorite/favorite_provider.dart';
 import '../storage/auth_storage.dart';
-import '../utils/theme.dart';
 
 class SaveButtonWidget extends ConsumerWidget {
   final int itemId;
@@ -12,14 +11,16 @@ class SaveButtonWidget extends ConsumerWidget {
   const SaveButtonWidget({
     Key? key,
     required this.itemId,
-    this.iconColor = CustomTheme.primaryColor,
+    this.iconColor = Colors.blue,
     required this.facilityTypeId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final favorites = ref.watch(favoritesProvider);
-    final isSaved = favorites.data?.any((facility) => facility.id == itemId) ?? false;
+    final favoritesState = ref.watch(favoritesProvider);
+    final notifier = ref.read(favoritesProvider.notifier);
+
+    final isSaved = favoritesState.data?.any((f) => f.id == itemId) ?? false;
 
     return IconButton(
       icon: Icon(
@@ -30,15 +31,11 @@ class SaveButtonWidget extends ConsumerWidget {
         final userId = currentUser()?.id;
         if (userId == null) return;
 
-        final notifier = ref.read(favoritesProvider.notifier);
-
         if (isSaved) {
           await notifier.removeFavorite(userId, itemId);
         } else {
           await notifier.addFavorite(userId, itemId);
         }
-
-        // إعادة تحميل البيانات لتحديث الواجهة
         ref.invalidate(favoritesProvider);
       },
     );

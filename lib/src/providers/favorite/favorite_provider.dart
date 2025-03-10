@@ -6,78 +6,74 @@ import '../../models/response/response.dart';
 import '../../services/request_service.dart';
 import '../../utils/urls.dart';
 
-part 'favorite_provider.g.dart'; // هذا السطر مهم
+part 'favorite_provider.g.dart';
 
 @Riverpod(keepAlive: false)
 class Favorites extends _$Favorites {
-  List<int> favoriteIds = []; // قائمة لتخزين معرفات المفضلات
+  List<int> favoriteIds = [];
 
   @override
   Response<List<Facility>> build() => const Response<List<Facility>>(data: []);
 
-  /// جلب قائمة المفضلات
   Future fetchFavorites(int userId) async {
     state = state.setLoading();
 
     try {
-      await request<List<dynamic>>(
+      final response = await request<Map<String, dynamic>>(
         url: getFavoritesUrl(userId),
         method: Method.get,
-      ).then((value) {
-        favoriteIds = (value.data ?? []).map((e) => e['facility_id'] as int).toList();
+      );
 
-        // تحديث الحالة بقائمة المفضلات
-        state = state.copyWith(data: state.data, meta: value.meta);
-        state = state.setLoaded();
-      });
+      final favoritesData = response.data?['favorites'] as List<dynamic>? ?? [];
+
+      favoriteIds = favoritesData.map((e) => e['id'] as int).toList();
+
+      List<Facility> facilities =
+          favoritesData.map((e) => Facility.fromJson(e)).toList();
+
+      state = state.copyWith(data: facilities, meta: response.meta);
+      state = state.setLoaded();
     } catch (e) {
       state = state.setError(e.toString());
     }
   }
 
-  /// إضافة منشأة إلى المفضلة
   Future addFavorite(int userId, int facilityId) async {
     try {
       await request<void>(
         url: addFavoriteUrl(userId, facilityId),
         method: Method.post,
-      ).then((_) {
-        favoriteIds.add(facilityId);
+      );
 
-        // تحديث الحالة بإضافة المنشأة إلى المفضلة
-        state = state.copyWith(
-          data: state.data?.map((facility) {
-            if (facility.id == facilityId) {
-              return facility.copyWith(isFavorite: true);
-            }
-            return facility;
-          }).toList(),
-        );
-      });
+      state = state.copyWith(
+        data: [
+          ...(state.data ?? []),
+          Facility(
+            id: facilityId,
+            name: 'منشأة غير معروفة',
+            desc: 'وصف غير متوفر',
+            status: 'متاح',
+            facilityTypeId: 1,
+            isFavorite: true,
+          ),
+        ],
+      );
     } catch (e) {
       state = state.setError(e.toString());
     }
   }
 
-  /// إزالة منشأة من المفضلة
   Future removeFavorite(int userId, int facilityId) async {
     try {
       await request<void>(
         url: removeFavoriteUrl(userId, facilityId),
         method: Method.delete,
-      ).then((_) {
-        favoriteIds.remove(facilityId);
+      );
 
-        // تحديث الحالة بإزالة المنشأة من المفضلة
-        state = state.copyWith(
-          data: state.data?.map((facility) {
-            if (facility.id == facilityId) {
-              return facility.copyWith(isFavorite: false);
-            }
-            return facility;
-          }).toList(),
-        );
-      });
+      state = state.copyWith(
+        data:
+            state.data?.where((facility) => facility.id != facilityId).toList(),
+      );
     } catch (e) {
       state = state.setError(e.toString());
     }

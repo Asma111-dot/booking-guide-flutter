@@ -1,5 +1,6 @@
-
-enum FacilityTarget {all,hotels,chalets,favorites, maps,searches,filters}
+enum FacilityTarget {
+  all, hotels, chalets, favorites, maps, searches, filters;
+}
 
 extension FacilityTargetExtension on FacilityTarget {
   int? get facilityTypeId {

@@ -17,28 +17,25 @@ class Facilities extends _$Facilities {
   Response<List<Facility>> build(FacilityTarget target) =>
       const Response<List<Facility>>(data: []);
 
-  /// تحديث بيانات المنشآت
   setData(Facility facility) {
-    final updatedList = <Facility>[...(state.data ?? [])];
-    final index = updatedList.indexWhere((e) => e.id == facility.id);
-    if (index != -1) {
-      updatedList[index] = facility;
-    } else {
-      updatedList.add(facility);
-    }
-    state = state.copyWith(data: updatedList);
+    state = state.copyWith();
   }
 
-  /// جلب المنشآت
+  // setData(Facility facility) {
+  //   final updatedList = <Facility>[...(state.data ?? [])];
+  //   final index = updatedList.indexWhere((e) => e.id == facility.id);
+  //   if (index != -1) {
+  //     updatedList[index] = facility;
+  //   } else {
+  //     updatedList.add(facility);
+  //   }
+  //   state = state.copyWith(data: updatedList);
+  // }
   Future fetch({required int facilityTypeId, int? userId}) async {
     state = state.setLoading();
+    print("🔄 Fetching facilities for type: $facilityTypeId");
 
-    String url;
-    if (target == FacilityTarget.all || target == FacilityTarget.maps) {
-      url = getFacilitiesUrl();
-    } else {
-      url = getFacilitiesUrl(facilityTypeId: facilityTypeId);
-    }
+    String url = getFacilitiesUrl(facilityTypeId: facilityTypeId);
 
     try {
       await request<List<dynamic>>(
@@ -47,38 +44,73 @@ class Facilities extends _$Facilities {
       ).then((value) async {
         List<Facility> facilities = Facility.fromJsonList(value.data ?? []);
 
-        if (target == FacilityTarget.hotels || target == FacilityTarget.chalets) {
-          int typeId = target.facilityTypeId!;
-          facilities = facilities.where((facility) => facility.facilityTypeId == typeId).toList();
-        } else if (target != FacilityTarget.all && target != FacilityTarget.maps) {
-          facilities = facilities.where((facility) => facility.facilityTypeId == facilityTypeId).toList();
-        }
+        print("📌 Facilities fetched: ${facilities.length}");
 
-        if (target == FacilityTarget.maps) {
-          facilities = facilities
-              .where((facility) =>
-          facility.latitude != null && facility.longitude != null)
-              .toList();
-        } else if (target == FacilityTarget.searches) {
-          // لا شيء هنا؟
-        }
-        // else if (target == FacilityTarget.favorites && userId != null) {
-        //   await fetchFavorites(userId); // جلب قائمة معرفات المفضلات
-        //   facilities = facilities.where((facility) => favoriteIds.contains(facility.id)).toList();
-        // }
+        // التأكد من أن التصفية تعتمد على الـ facilityTypeId وليس FacilityTarget
+        facilities = facilities.where((facility) => facility.facilityTypeId == facilityTypeId).toList();
 
         state = state.copyWith(data: facilities, meta: value.meta);
+        print("✅ Facilities updated: ${state.data?.length}");
+
         state = state.setLoaded();
       }).catchError((error) {
         state = state.setError(error.toString());
+        print("❌ Error fetching facilities: $error");
       });
     } catch (e, s) {
-      print(e);
-      print(s);
+      print("⚠️ Exception: $e\n$s");
     }
   }
 
   // Future fetch({required int facilityTypeId, int? userId}) async {
+  //     state = state.setLoading();
+  //     print("Fetching facilities for type: $facilityTypeId"); // Debug print
+  //
+  //     String url;
+  //     if (target == FacilityTarget.all || target == FacilityTarget.maps) {
+  //       url = getFacilitiesUrl();
+  //     } else {
+  //       url = getFacilitiesUrl(facilityTypeId: facilityTypeId);
+  //     }
+  //
+  //     try {
+  //       await request<List<dynamic>>(
+  //         url: url,
+  //         method: Method.get,
+  //       ).then((value) async {
+  //         List<Facility> facilities = Facility.fromJsonList(value.data ?? []);
+  //         print("Facilities fetched: ${facilities.length}"); // Debug print
+  //
+  //         if (target == FacilityTarget.hotels || target == FacilityTarget.chalets) {
+  //           int typeId = target.facilityTypeId!;
+  //           facilities = facilities.where((facility) => facility.facilityTypeId == typeId).toList();
+  //         } else if (target != FacilityTarget.all && target != FacilityTarget.maps) {
+  //           facilities = facilities.where((facility) => facility.facilityTypeId == facilityTypeId).toList();
+  //         }
+  //
+  //         if (target == FacilityTarget.maps) {
+  //           facilities = facilities
+  //               .where((facility) =>
+  //           facility.latitude != null && facility.longitude != null)
+  //               .toList();
+  //         }
+  //
+  //         state = state.copyWith(data: facilities, meta: value.meta);
+  //         print("Facilities updated: ${state.data?.length}"); // Debug print
+  //
+  //         state = state.setLoaded();
+  //         print("Facilities state updated"); // Debug print
+  //       }).catchError((error) {
+  //         state = state.setError(error.toString());
+  //         print("Error fetching facilities: $error"); // Debug print
+  //       });
+  //     } catch (e, s) {
+  //       print(e);
+  //       print(s);
+  //     }
+  //   }
+
+    // Future fetch({required int facilityTypeId, int? userId}) async {
   //   state = state.setLoading();
   //
   //   String url;
@@ -107,7 +139,13 @@ class Facilities extends _$Facilities {
   //             .where((facility) =>
   //         facility.latitude != null && facility.longitude != null)
   //             .toList();
+  //       } else if (target == FacilityTarget.searches) {
+  //         // لا شيء هنا؟
   //       }
+  //       // else if (target == FacilityTarget.favorites && userId != null) {
+  //       //   await fetchFavorites(userId); // جلب قائمة معرفات المفضلات
+  //       //   facilities = facilities.where((facility) => favoriteIds.contains(facility.id)).toList();
+  //       // }
   //
   //       state = state.copyWith(data: facilities, meta: value.meta);
   //       state = state.setLoaded();
@@ -120,7 +158,6 @@ class Facilities extends _$Facilities {
   //   }
   // }
 
-  /// حفظ المنشأة
   Future save(Facility facility) async {
     state = state.setLoading();
     await request<Facility>(
@@ -137,7 +174,6 @@ class Facilities extends _$Facilities {
     });
   }
 
-  /// إضافة أو تحديث منشأة في القائمة
   void addOrUpdateFacility(Facility facility) {
     final updatedList = <Facility>[...(state.data ?? [])];
     final index = updatedList.indexWhere((e) => e.id == facility.id);
