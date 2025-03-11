@@ -31,95 +31,108 @@ class FacilityWidget extends ConsumerWidget {
     final favorites = ref.watch(favoritesProvider);
     final isSaved = favorites.data?.any((f) => f.id == facility.id) ?? false;
 
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 6,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: ListTile(
-        contentPadding: const EdgeInsets.all(16),
-        leading: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: CachedNetworkImage(
-            imageUrl: facility.logo?.isNotEmpty == true ? facility.logo! : defaultImage,
-            width: 100,
-            height: 100,
-            fit: BoxFit.cover,
-            placeholder: (context, url) => const CircularProgressIndicator(),
-            errorWidget: (context, url, error) => Image.asset(
-              defaultImage,
-              height: 200,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        title: Text(
-          facility.name,
-          style: TextStyle(
-            color: CustomTheme.primaryColor,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              firstPrice > 0
-                  ? '${trans().priceStartFrom} ${firstPrice}${trans().riyalY}'
-                  : '${trans().priceNotAvailable}',
-              style: TextStyle(
-                color: firstPrice > 0 ? Colors.amber : Colors.redAccent,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Row(
-              children: [
-                Icon(
-                  Icons.location_on_outlined,
-                  color: Colors.grey,
-                  size: 16,
-                ),
-                SizedBox(width: 4),
-                Text(
-                  facility.address ?? '${trans().address}',
-                  style: const TextStyle(
-                    color: CustomTheme.tertiaryColor,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          facility.name == 'hotel' ? Routes.roomDetails : Routes.roomDetails,
+          arguments: facility,
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 6,
+              offset: Offset(0, 2),
             ),
           ],
         ),
-        trailing: SizedBox(
-          width: 40,
-          child: SaveButtonWidget(
-            itemId: facility.id,
-            iconColor: CustomTheme.primaryColor,
-            facilityTypeId: facility.facilityTypeId,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: CachedNetworkImage(
+                  imageUrl: facility.logo?.isNotEmpty == true ? facility.logo! : defaultImage,
+                  width: 110,
+                  height: 110,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => SizedBox(
+                    width: 110,
+                    height: 110,
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                  errorWidget: (context, url, error) => Image.asset(
+                    defaultImage,
+                    width: 110,
+                    height: 110,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      facility.name,
+                      style: TextStyle(
+                        color: CustomTheme.primaryColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      firstPrice > 0
+                          ? '${trans().priceStartFrom} ${firstPrice}${trans().riyalY}'
+                          : '${trans().priceNotAvailable}',
+                      style: TextStyle(
+                        color: firstPrice > 0 ? Colors.amber : Colors.redAccent,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on_outlined,
+                          color: Colors.grey,
+                          size: 16,
+                        ),
+                        SizedBox(width: 4),
+                        Text(
+                          facility.address ?? '${trans().address}',
+                          style: const TextStyle(
+                            color: CustomTheme.tertiaryColor,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 40,
+                child: SaveButtonWidget(
+                  itemId: facility.id,
+                  iconColor: CustomTheme.primaryColor,
+                  facilityTypeId: facility.facilityTypeId,
+                ),
+              ),
+            ],
           ),
         ),
-        onTap: () {
-          Navigator.pushNamed(
-            context,
-            facility.name == 'hotel'
-                ? Routes.roomDetails
-                : Routes.roomDetails,
-            arguments: facility,
-          );
-        },
       ),
     );
   }
