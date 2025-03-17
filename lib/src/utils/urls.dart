@@ -168,3 +168,4 @@ String refundPaymentUrl(int paymentId) =>
 String getFavoritesUrl(int userId) => '/users/$userId/favorites';
 String addFavoriteUrl(int userId, int facilityId) => '/users/$userId/favorites/$facilityId';
 String removeFavoriteUrl(int userId, int facilityId) => '/users/$userId/favorites/$facilityId';
+String clearFavoritesUrl(int userId) => '/users/$userId/favorites/clear';

@@ -30,7 +30,6 @@ class Facility {
     this.rooms = const [],
   });
 
-  /// **منشأة افتراضية (للإنشاء الجديد)**
   Facility.init()
       : id = 0,
         facilityTypeId = 0,
@@ -45,7 +44,6 @@ class Facility {
         isFavorite = false, // Ensure it's false by default
         rooms = [];
 
-  /// **إنشاء نسخة جديدة من المنشأة مع تعديلات مخصصة**
   Facility copyWith({
     int? id,
     int? facilityTypeId,
@@ -76,7 +74,6 @@ class Facility {
     );
   }
 
-  /// **إنشاء كائن `Facility` من JSON**
   factory Facility.fromJson(Map<String, dynamic> jsonMap) {
     return Facility(
       id: jsonMap['id'] ?? 0,
@@ -99,7 +96,6 @@ class Facility {
     );
   }
 
-  /// **تحويل كائن `Facility` إلى JSON**
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -117,7 +113,6 @@ class Facility {
     };
   }
 
-  /// **تحويل قائمة JSON إلى قائمة `Facility`**
   static List<Facility> fromJsonList(List<dynamic> jsonList) {
     return jsonList
         .where((json) => json is Map<String, dynamic>)
@@ -125,7 +120,6 @@ class Facility {
         .toList();
   }
 
-  /// **هل المنشأة جديدة أم لا**
   bool isCreate() => id == 0;
 
   @override
@@ -133,7 +127,6 @@ class Facility {
     return 'Facility(id: $id, facilityTypeId: $facilityTypeId, name: "$name", desc: "$desc", status: "$status", address: "$address", latitude: $latitude, longitude: $longitude, geojson: "$geojson", logo: "$logo", isFavorite: $isFavorite, rooms: $rooms)';
   }
 
-  /// **مقارنة كائنيْن من نوع `Facility`**
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||

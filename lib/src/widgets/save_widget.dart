@@ -17,10 +17,8 @@ class SaveButtonWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final favoritesState = ref.watch(favoritesProvider);
-    final notifier = ref.read(favoritesProvider.notifier);
-
-    final isSaved = favoritesState.data?.any((f) => f.id == itemId) ?? false;
+    final favoriteNotifier = ref.read(favoritesProvider.notifier);
+    final bool isSaved = favoriteNotifier.isFavorite(itemId);
 
     return IconButton(
       icon: Icon(
@@ -32,11 +30,10 @@ class SaveButtonWidget extends ConsumerWidget {
         if (userId == null) return;
 
         if (isSaved) {
-          await notifier.removeFavorite(userId, itemId);
+          await favoriteNotifier.removeFavorite(ref, userId, itemId);
         } else {
-          await notifier.addFavorite(userId, itemId);
+          await favoriteNotifier.addFavorite(ref, userId, itemId);
         }
-        ref.invalidate(favoritesProvider);
       },
     );
   }

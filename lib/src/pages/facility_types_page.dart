@@ -32,7 +32,18 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
 
   @override
   Widget build(BuildContext context) {
+    // final facilityTypesState = ref.watch(facilityTypesProvider);
     final facilityTypesState = ref.watch(facilityTypesProvider);
+
+    if (facilityTypesState.data != null &&
+        facilityTypesState.data!.isNotEmpty &&
+        selectedFacilityType == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          selectedFacilityType = facilityTypesState.data!.first.id;
+        });
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -83,7 +94,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                     }).toList(),
                   ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 0),
           Expanded(
             child: selectedFacilityType == null
                 ? const Center(child: Text("اختر نوع المنشأة"))
@@ -114,7 +125,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
               color: isSelected ? CustomTheme.primaryColor : Colors.grey,
               size: 24,
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 10),
             Text(
               title,
               style: TextStyle(

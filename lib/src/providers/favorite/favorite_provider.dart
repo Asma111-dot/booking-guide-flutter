@@ -15,7 +15,7 @@ class Favorites extends _$Favorites {
   @override
   Response<List<Facility>> build() => const Response<List<Facility>>(data: []);
 
-  Future fetchFavorites(int userId) async {
+  Future<void> fetchFavorites(int userId) async {
     state = state.setLoading();
 
     try {
@@ -29,7 +29,7 @@ class Favorites extends _$Favorites {
       favoriteIds = favoritesData.map((e) => e['id'] as int).toList();
 
       List<Facility> facilities =
-          favoritesData.map((e) => Facility.fromJson(e)).toList();
+      favoritesData.map((e) => Facility.fromJson(e)).toList();
 
       state = state.copyWith(data: facilities, meta: response.meta);
       state = state.setLoaded();
@@ -38,44 +38,77 @@ class Favorites extends _$Favorites {
     }
   }
 
-  Future addFavorite(int userId, int facilityId) async {
+  Future<void> addFavorite(WidgetRef ref, int userId, int facilityId) async {
     try {
       await request<void>(
         url: addFavoriteUrl(userId, facilityId),
         method: Method.post,
       );
 
-      state = state.copyWith(
-        data: [
-          ...(state.data ?? []),
-          Facility(
-            id: facilityId,
-            name: 'منشأة غير معروفة',
-            desc: 'وصف غير متوفر',
-            status: 'متاح',
-            facilityTypeId: 1,
-            isFavorite: true,
-          ),
-        ],
-      );
+      // تحديث القائمة الحالية
+      final updatedFacilities = [
+        ...?state.data,
+        Facility(
+          id: facilityId,
+          name: 'منشأة غير معروفة',
+          desc: 'وصف غير متوفر',
+          status: 'متاح',
+          facilityTypeId: 1,
+          isFavorite: true,
+        ),
+      ];
+
+      // تحديث المفضلات
+      favoriteIds.add(facilityId);
+
+      // تحديث حالة Riverpod
+      state = state.copyWith(data: updatedFacilities);
+
+      // إعادة بناء UI
+      ref.invalidate(favoritesProvider);
     } catch (e) {
       state = state.setError(e.toString());
     }
   }
 
-  Future removeFavorite(int userId, int facilityId) async {
+  Future<void> removeFavorite(WidgetRef ref, int userId, int facilityId) async {
     try {
       await request<void>(
         url: removeFavoriteUrl(userId, facilityId),
         method: Method.delete,
       );
 
-      state = state.copyWith(
-        data:
-            state.data?.where((facility) => facility.id != facilityId).toList(),
-      );
+      final updatedFacilities =
+      state.data?.where((facility) => facility.id != facilityId).toList();
+
+      favoriteIds.remove(facilityId);
+
+      state = state.copyWith(data: updatedFacilities);
+
+      ref.invalidate(favoritesProvider);
     } catch (e) {
       state = state.setError(e.toString());
     }
+  }
+
+  Future<void> clearFavorites(WidgetRef ref, int userId) async {
+    try {
+      await request<void>(
+        url: clearFavoritesUrl(userId),
+        method: Method.delete,
+      );
+
+      favoriteIds.clear();
+
+      state = state.copyWith(data: []);
+
+      ref.invalidate(favoritesProvider);
+    } catch (e) {
+      state = state.setError(e.toString());
+    }
+  }
+
+  bool isFavorite(int facilityId) {
+    return favoriteIds.contains(facilityId);
   }
 }
