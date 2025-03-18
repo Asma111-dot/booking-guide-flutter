@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../helpers/general_helper.dart';
 import '../models/facility.dart';
 import '../providers/facility/facility_provider.dart';
+import '../providers/favorite/favorite_provider.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../utils/theme.dart';
@@ -22,7 +23,12 @@ class FacilityWidget extends ConsumerWidget {
     final firstPrice = (firstRoom?.roomPrices.isNotEmpty == true)
         ? firstRoom!.roomPrices.first.amount
         : 0.0;
-    final facilitiesNotifier = ref.read(facilitiesProvider(FacilityTarget.favorites).notifier);
+
+    final favoritesState = ref.watch(favoritesProvider.notifier);
+
+    final favoritesNotifier = ref.read(favoritesProvider.notifier);
+
+    final isFavorite = ref.watch(favoritesProvider).data?.any((f) => f.id == facility.id) ?? false;
 
     return GestureDetector(
       onTap: () {
@@ -98,7 +104,7 @@ class FacilityWidget extends ConsumerWidget {
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
-                          facility.address ?? '${trans().address}',
+                            facility.address ?? '${trans().address}',
                             style: TextStyle(color: CustomTheme.tertiaryColor, fontSize: 14),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -108,33 +114,25 @@ class FacilityWidget extends ConsumerWidget {
                   ],
                 ),
               ),
-              Consumer(
-                builder: (context, ref, child) {
-                  final facilitiesState = ref.watch(facilitiesProvider(FacilityTarget.all));
-                  final isFavorite = facilitiesState.data
-                      ?.any((f) => f.id == facility.id && f.isFavorite) ?? false;
+              IconButton(
+                icon: Icon(
+                  ref.watch(favoritesProvider).data?.any((f) => f.id == facility.id) ?? false
+                      ? Icons.favorite
+                      : Icons.favorite_border,
+                  color: ref.watch(favoritesProvider).data?.any((f) => f.id == facility.id) ?? false
+                      ? Colors.red
+                      : Colors.grey,
+                ),
+                onPressed: () async {
+                  await ref.read(favoritesProvider.notifier).toggleFavorite(ref, facility.facilityTypeId, facility);
 
-                  return IconButton(
-                    icon: Icon(
-                      isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: isFavorite ? Colors.red : Colors.grey,
-                    ),
-                    onPressed: () {
-                      facilitiesNotifier.toggleFavorite(facility);
-                    },
-                    // onPressed: () async {
-                    //   final facilitiesNotifier = ref.read(facilitiesProvider(FacilityTarget.all).notifier);
-                    //
-                    //   if (ref.read(facilitiesProvider(FacilityTarget.all)).data?.isEmpty ?? true) {
-                    //     print("🚨 لا توجد بيانات، سيتم جلبها أولاً...");
-                    //     await facilitiesNotifier.fetch(facilityTypeId: 1);
-                    //   }
-                    //
-                    //   facilitiesNotifier.toggleFavorite(facility);
-                    // },
-                  );
+                  // ✅ إجبار `FavoritesPage` على التحديث بعد الضغط على زر القلب
+                  // ref.read(facilitiesProvider(FacilityTarget.favorites).notifier).fetch(
+                  //   facilityTypeId: facility.facilityTypeId, // أي معرف مناسب للمفضلة
+                  // );
                 },
               ),
+
             ],
           ),
         ),

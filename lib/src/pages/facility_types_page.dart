@@ -98,7 +98,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
           Expanded(
             child: selectedFacilityType == null
                 ? const Center(child: Text("اختر نوع المنشأة"))
-                : FacilityPage(selectedFacilityType: selectedFacilityType ?? 0),
+                : FacilityPage(facilityTypeId: selectedFacilityType ?? 0),
           ),
         ],
       ),

@@ -6,6 +6,7 @@ import '../../models/facility.dart';
 import '../../models/response/response.dart';
 import '../../services/request_service.dart';
 import '../../utils/urls.dart';
+import '../favorite/favorite_provider.dart';
 
 export '../../enums/facility_targets.dart';
 
@@ -16,31 +17,6 @@ class Facilities extends _$Facilities {
   @override
   Response<List<Facility>> build(FacilityTarget target) =>
       const Response<List<Facility>>(data: []);
-
-  final Set<int> favoriteIds = {};
-
-  void toggleFavorite(Facility facility) {
-    print("🔄 قبل التحديث: ${state.data}");
-
-    final updatedList = state.data?.map((f) {
-      if (f.id == facility.id) {
-        print(
-            "✨ تغيير حالة المفضلة للعنصر: ${facility.id}, الحالة الجديدة: ${!f.isFavorite}");
-        return f.copyWith(isFavorite: !f.isFavorite);
-      }
-      return f;
-    }).toList();
-
-    state = state.copyWith(data: updatedList);
-
-    print("✅ بعد التحديث: ${state.data}");
-  }
-
-  List<Facility> get favoriteFacilities =>
-      state.data
-          ?.where((facility) => favoriteIds.contains(facility.id))
-          .toList() ??
-      [];
 
   setData(Facility facility) {
     state = state.copyWith();
@@ -66,11 +42,12 @@ class Facilities extends _$Facilities {
           facilities = facilities
               .where((facility) => facility.facilityTypeId == facilityTypeId)
               .toList();
-        } else if (target == FacilityTarget.favorites && userId != null) {
-          facilities = facilities
-              .where((facility) => favoriteIds.contains(facility.id))
-              .toList();
-        }else if (target == FacilityTarget.searches) {
+        } else if (target == FacilityTarget.favorites) {
+          final favoritesState = ref.read(favoritesProvider);
+          final favoriteIds = favoritesState.data?.map((f) => f.id).toSet() ?? {};
+
+          facilities = facilities.where((facility) => favoriteIds.contains(facility.id)).toList();
+        } else if (target == FacilityTarget.searches) {
           // لا شيء هنا؟
         }
 

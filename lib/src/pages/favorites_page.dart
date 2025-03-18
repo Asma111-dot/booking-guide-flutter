@@ -23,7 +23,17 @@ class FavoritesPage extends ConsumerWidget {
           final facility = facilities[index];
           return ListTile(
             title: Text(facility.name),
-            trailing: Icon(Icons.favorite, color: Colors.red),
+            trailing: IconButton(
+              icon: Icon(Icons.favorite, color: Colors.red),
+              onPressed: () async {
+                await ref.read(favoritesProvider.notifier).toggleFavorite(ref, 1, facility);
+
+                // ✅ إعادة تحميل القائمة بعد التحديث
+                ref.read(facilitiesProvider(FacilityTarget.favorites).notifier).fetch(
+                  facilityTypeId: 1,
+                );
+              },
+            ),
           );
         },
       ),

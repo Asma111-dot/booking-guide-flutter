@@ -3,14 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../helpers/general_helper.dart';
 import '../providers/facility/facility_provider.dart';
+import '../providers/favorite/favorite_provider.dart';
 import '../widgets/facility_widget.dart';
 import '../widgets/view_widget.dart';
 import '../models/facility.dart';
 
 class FacilityPage extends ConsumerStatefulWidget {
-  final int selectedFacilityType;
+  final int facilityTypeId;
 
-  const FacilityPage({Key? key, required this.selectedFacilityType})
+  const FacilityPage({Key? key, required this.facilityTypeId})
       : super(key: key);
 
   @override
@@ -24,7 +25,7 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
   void initState() {
     super.initState();
 
-    switch (widget.selectedFacilityType) {
+    switch (widget.facilityTypeId) {
       case 1:
         currentTarget = FacilityTarget.hotels;
         break;
@@ -38,17 +39,20 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
 
     Future.microtask(() {
       ref.read(facilitiesProvider(currentTarget).notifier)
-          .fetch(facilityTypeId: widget.selectedFacilityType);
+          .fetch(facilityTypeId: widget.facilityTypeId);
+      ref.read(favoritesProvider.notifier).fetchFavorites(1);
     });
   }
 
   @override
   void didUpdateWidget(covariant FacilityPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.selectedFacilityType != oldWidget.selectedFacilityType) {
+    if (widget.facilityTypeId != oldWidget.facilityTypeId) {
       Future.microtask(() {
         ref.read(facilitiesProvider(currentTarget).notifier)
-            .fetch(facilityTypeId: widget.selectedFacilityType);
+            .fetch(facilityTypeId: widget.facilityTypeId);
+        ref.read(favoritesProvider.notifier).fetchFavorites(1);
+
       });
     }
   }
