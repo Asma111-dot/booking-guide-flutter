@@ -85,8 +85,7 @@ class NavigationController extends GetxController {
     FacilityTypesPage(),
     MapPage(facilityId: 1),
     BookingPage(),
-    FavoritesPage(),
-  //  FavoritesPage(userId: 1, facilityTypeId: 0), // تعديل التمرير هنا
+   FavoritesPage(userId: 1, facilityTypeId: 0), // تعديل التمرير هنا
     PersonPage(),
   ];
 }

@@ -5,6 +5,7 @@ import '../helpers/general_helper.dart';
 import '../models/facility.dart';
 import '../providers/facility/facility_provider.dart';
 import '../providers/favorite/favorite_provider.dart';
+import '../storage/auth_storage.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../utils/theme.dart';
@@ -24,11 +25,11 @@ class FacilityWidget extends ConsumerWidget {
         ? firstRoom!.roomPrices.first.amount
         : 0.0;
 
-    final favoritesState = ref.watch(favoritesProvider.notifier);
-
-    final favoritesNotifier = ref.read(favoritesProvider.notifier);
-
-    final isFavorite = ref.watch(favoritesProvider).data?.any((f) => f.id == facility.id) ?? false;
+    // final isFavorite = facility.isFavorite == 1 ||
+    //     ref.watch(favoritesProvider).data!.any((f) => f.id == facility.id) ?? false;
+    final isFavorite = ref.watch(favoritesProvider.select((state) {
+      return state.data?.any((f) => f.id == facility.id) ?? facility.isFavorite;
+    }));
 
     return GestureDetector(
       onTap: () {
@@ -114,24 +115,36 @@ class FacilityWidget extends ConsumerWidget {
                   ],
                 ),
               ),
-              IconButton(
-                icon: Icon(
-                  ref.watch(favoritesProvider).data?.any((f) => f.id == facility.id) ?? false
-                      ? Icons.favorite
-                      : Icons.favorite_border,
-                  color: ref.watch(favoritesProvider).data?.any((f) => f.id == facility.id) ?? false
-                      ? Colors.red
-                      : Colors.grey,
-                ),
-                onPressed: () async {
-                  await ref.read(favoritesProvider.notifier).toggleFavorite(ref, facility.facilityTypeId, facility);
 
-                  // ✅ إجبار `FavoritesPage` على التحديث بعد الضغط على زر القلب
-                  // ref.read(facilitiesProvider(FacilityTarget.favorites).notifier).fetch(
-                  //   facilityTypeId: facility.facilityTypeId, // أي معرف مناسب للمفضلة
-                  // );
-                },
-              ),
+      IconButton(
+      icon: Icon(
+      isFavorite ? Icons.favorite : Icons.favorite_border,
+      color: isFavorite ? Colors.red : Colors.grey,
+    ),
+    onPressed: () async {
+      int? userId = currentUser()?.id;
+    await ref.read(favoritesProvider.notifier).toggleFavorite(ref, userId!, facility);
+    },
+    ),
+
+    // IconButton(
+              //   icon: Icon(
+              //     ref.watch(favoritesProvider).data?.any((f) => f.id == facility.id) ?? false
+              //         ? Icons.favorite
+              //         : Icons.favorite_border,
+              //     color: ref.watch(favoritesProvider).data?.any((f) => f.id == facility.id) ?? false
+              //         ? Colors.red
+              //         : Colors.grey,
+              //   ),
+              //   onPressed: () async {
+              //     await ref.read(favoritesProvider.notifier).toggleFavorite(ref, facility.facilityTypeId, facility);
+              //
+              //     // ✅ إجبار `FavoritesPage` على التحديث بعد الضغط على زر القلب
+              //     // ref.read(facilitiesProvider(FacilityTarget.favorites).notifier).fetch(
+              //     //   facilityTypeId: facility.facilityTypeId, // أي معرف مناسب للمفضلة
+              //     // );
+              //   },
+              // ),
 
             ],
           ),

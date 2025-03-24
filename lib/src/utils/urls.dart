@@ -146,7 +146,6 @@ String deleteReservationUrl(int reservationId) =>
 
 String getReservationsUrl() => "${apiUrl}reservations";
 
-
 // URLs Payment
 String getPaymentUrl({required int paymentId}) => "${apiUrl}payments/$paymentId";
 
@@ -165,7 +164,8 @@ String refundPaymentUrl(int paymentId) =>
     "${apiUrl}payments/$paymentId/refund";
 
 // URLs Favorite
-String getFavoritesUrl(int userId) => '/users/$userId/favorites';
-String addFavoriteUrl(int userId, int facilityId) => '/users/$userId/favorites/$facilityId';
-String clearFavoritesUrl(int userId) => '/users/$userId/favorites/clear';
-String removeFavoriteUrl(int userId, int facilityId) => '/users/$userId/favorites/$facilityId';
+String getFavoritesUrl({int? userId}) => '${apiUrl}users/$userId/favorites';
+String addFavoriteUrl(int userId, int facilityId) => '${apiUrl}users/$userId/favorites/$facilityId';
+String clearFavoritesUrl(int userId) => '${apiUrl}users/$userId/favorites/clear';
+String removeFavoriteUrl(int userId, int facilityId) => '${apiUrl}users/$userId/favorites/$facilityId';
+

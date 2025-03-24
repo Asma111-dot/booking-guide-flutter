@@ -17,6 +17,7 @@ const welcomeJson = "${_lottieBase}welcome.json";
 const unauthorizedJson = "${_lottieBase}unauthorized.json";
 
 // Images ----------------------------------------------------------------------
+const defaultAvatar = "${_imageBase}default_avatar.jpg";
 const logoCoverImage = "${_imageBase}logo_cover.png";
 const chaletImage = "${_imageBase}chalet.jpg";
 const hotelImage = "${_imageBase}hotel.jpg";

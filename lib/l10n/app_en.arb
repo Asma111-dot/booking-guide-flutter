@@ -133,5 +133,10 @@
     "booking": "Booking",
     "persons": "Person",
       "imageGallery": "Image Gallery",
-      "favorite":"Favorite"
+      "favorite":"Favorite",
+        "hello_user": "Hello,",
+          "search": "Search",
+          "notifications": "Notifications",
+          "selectFacilityType": "Select a facility type"
+
 }

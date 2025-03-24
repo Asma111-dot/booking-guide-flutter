@@ -4,15 +4,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helpers/general_helper.dart';
 import '../providers/facility/facility_provider.dart';
 import '../providers/favorite/favorite_provider.dart';
+import '../storage/auth_storage.dart';
 import '../widgets/facility_widget.dart';
 import '../widgets/view_widget.dart';
 import '../models/facility.dart';
 
 class FacilityPage extends ConsumerStatefulWidget {
   final int facilityTypeId;
+  final String searchQuery;
 
-  const FacilityPage({Key? key, required this.facilityTypeId})
-      : super(key: key);
+  const FacilityPage({
+    Key? key,
+    required this.facilityTypeId,
+    this.searchQuery = '',
+  }) : super(key: key);
 
   @override
   ConsumerState createState() => _FacilityPageState();
@@ -36,11 +41,14 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
         currentTarget = FacilityTarget.all;
         break;
     }
-
     Future.microtask(() {
       ref.read(facilitiesProvider(currentTarget).notifier)
           .fetch(facilityTypeId: widget.facilityTypeId);
-      ref.read(favoritesProvider.notifier).fetchFavorites(1);
+
+      int? userId = currentUser()?.id;
+      if (userId != null) {
+        ref.read(favoritesProvider.notifier).fetchFavorites(userId);
+      }
     });
   }
 
@@ -51,8 +59,9 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
       Future.microtask(() {
         ref.read(facilitiesProvider(currentTarget).notifier)
             .fetch(facilityTypeId: widget.facilityTypeId);
-        ref.read(favoritesProvider.notifier).fetchFavorites(1);
 
+        int? userId = currentUser()?.id;
+        ref.read(favoritesProvider.notifier).fetchFavorites(userId!);
       });
     }
   }
@@ -64,12 +73,28 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
     return ViewWidget<List<Facility>>(
       meta: facilitiesState.meta,
       data: facilitiesState.data,
+      // onLoaded: (data) {
+      //   return ListView.builder(
+      //     padding: const EdgeInsets.symmetric(horizontal: 16),
+      //     itemCount: data.length,
+      //     itemBuilder: (context, index) {
+      //       final facility = data[index];
+      //       return FacilityWidget(facility: facility);
+      //     },
+      //   );
+      // },
       onLoaded: (data) {
+        final filteredFacilities = data.where((facility) {
+          return facility.name
+              .toLowerCase()
+              .contains(widget.searchQuery.toLowerCase());
+        }).toList();
+
         return ListView.builder(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          itemCount: data.length,
+          itemCount: filteredFacilities.length,
           itemBuilder: (context, index) {
-            final facility = data[index];
+            final facility = filteredFacilities[index];
             return FacilityWidget(facility: facility);
           },
         );

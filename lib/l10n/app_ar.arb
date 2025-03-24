@@ -133,6 +133,9 @@
   "booking": "الحجوزات",
   "persons": "الحساب",
     "imageGallery": "معرض الصور",
-    "favorite":"المفضلة"
-
+    "favorite":"المفضلة",
+  "hello_user": "مرحباً, ",
+    "search": "بحث",
+    "notifications": "الإشعارات",
+    "selectFacilityType": "اختر نوع المنشأة"
 }

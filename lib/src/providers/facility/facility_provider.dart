@@ -26,12 +26,15 @@ class Facilities extends _$Facilities {
     state = state.setLoading();
     String url = getFacilitiesUrl(facilityTypeId: facilityTypeId);
 
+
     try {
       await request<List<dynamic>>(
         url: url,
         method: Method.get,
       ).then((value) async {
+
         List<Facility> facilities = Facility.fromJsonList(value.data ?? []);
+
         if (target == FacilityTarget.hotels ||
             target == FacilityTarget.chalets) {
           facilities = facilities
@@ -46,10 +49,11 @@ class Facilities extends _$Facilities {
           final favoritesState = ref.read(favoritesProvider);
           final favoriteIds = favoritesState.data?.map((f) => f.id).toSet() ?? {};
 
+
           facilities = facilities.where((facility) => favoriteIds.contains(facility.id)).toList();
         } else if (target == FacilityTarget.searches) {
-          // لا شيء هنا؟
         }
+
 
         state = state.copyWith(data: facilities, meta: value.meta);
         state = state.setLoaded();

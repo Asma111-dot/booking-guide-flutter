@@ -1,7 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../models/facility.dart';
 import '../../models/response/response.dart';
 import '../../services/request_service.dart';
@@ -11,99 +9,129 @@ part 'favorite_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 class Favorites extends _$Favorites {
-  final Set<int> favoriteIds = {};
-
   @override
   Response<List<Facility>> build() {
-    _loadFavorites(); // تحميل المفضلات عند تشغيل التطبيق
     return const Response<List<Facility>>(data: []);
   }
 
-  /// 🛠️ **تحميل المفضلات المحفوظة من التخزين المحلي**
-  Future<void> _loadFavorites() async {
-    final prefs = await SharedPreferences.getInstance();
-    final List<String>? savedFavorites = prefs.getStringList('favorite_ids');
-
-    if (savedFavorites != null) {
-      favoriteIds.clear();
-      favoriteIds.addAll(savedFavorites.map(int.parse));
-    }
-  }
-
-  /// 🛠️ **حفظ المفضلات في التخزين المحلي**
-  Future<void> _saveFavorites() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList('favorite_ids', favoriteIds.map((e) => e.toString()).toList());
-  }
-
-  /// ✅ **جلب المفضلات من API**
   Future<void> fetchFavorites(int userId) async {
     state = state.setLoading();
+    String url = getFavoritesUrl(userId: userId);
+    print("📢 Fetching favorites from URL: $url");
+
     try {
       final response = await request<Map<String, dynamic>>(
-        url: getFavoritesUrl(userId),
+        url: url,
         method: Method.get,
       );
 
-      final favoritesData = response.data?['favorites'] as List<dynamic>? ?? [];
-      favoriteIds.clear();
-      favoriteIds.addAll(favoritesData.map((e) => e['id'] as int));
+      print("📌 Raw API Response: ${response.data}"); // ✅ طباعة استجابة API كاملة
 
-      List<Facility> facilities = favoritesData.map((e) => Facility.fromJson(e)).toList();
+      if (response.data == null) {
+        print("⚠ API response is null!");
+        state = state.copyWith(data: [], meta: response.meta);
+        state = state.setLoaded();
+        return;
+      }
+
+      if (!response.data!.containsKey('favorites')) {
+        print("⚠ Missing 'favorites' key in API response");
+        state = state.copyWith(data: [], meta: response.meta);
+        state = state.setLoaded();
+        return;
+      }
+
+      // ✅ استخراج جميع المفضلات بدون فلترة
+      List<dynamic> favoriteList = response.data!['favorites'] ?? [];
+      print("📌 Raw Favorites List: $favoriteList"); // ✅ طباعة البيانات الأولية
+
+      List<Facility> facilities = favoriteList
+          .map((e) {
+        try {
+          return Facility.fromJson(e as Map<String, dynamic>);
+        } catch (error) {
+          print("❌ Error parsing facility: $e");
+          return null;
+        }
+      })
+          .whereType<Facility>()
+          .toList();
+
+      print("✅ Parsed Favorites: ${facilities.length} items"); // ✅ طباعة عدد العناصر بعد التحويل
 
       state = state.copyWith(data: facilities, meta: response.meta);
       state = state.setLoaded();
-
-      await _saveFavorites(); // حفظ المفضلات بعد جلبها
-    } catch (e) {
-      state = state.setError(e.toString());
+    } catch (e, stackTrace) {
+      print("❌ Error fetching favorites: $e");
+      print(stackTrace);
+      state = state.setError("Failed to fetch favorites: $e");
     }
   }
 
-  /// ✅ **إضافة / حذف منشأة من المفضلة**
-  Future<void> toggleFavorite(WidgetRef ref, int userId, Facility facility) async {
-    final isFav = favoriteIds.contains(facility.id);
-    final String url = isFav
-        ? removeFavoriteUrl(userId, facility.id)
-        : addFavoriteUrl(userId, facility.id);
 
-    try {
-      await request<void>(
-        url: url,
-        method: isFav ? Method.delete : Method.post,
-      );
+    /// ✅ **إضافة / حذف منشأة من المفضلة عبر API ثم إعادة تحميل المفضلات**
+    // Future<void> toggleFavorite(WidgetRef ref, int userId, Facility facility) async {
+    //   final bool isFav = state.data?.any((f) => f.id == facility.id) ?? false;
+    //   final String url = isFav
+    //       ? removeFavoriteUrl(userId, facility.id)
+    //       : addFavoriteUrl(userId, facility.id);
+    //
+    //   try {
+    //     await request<void>(
+    //       url: url,
+    //       method: isFav ? Method.delete : Method.post,
+    //     );
+    //
+    //     // ✅ تحديث `state` محليًا بدون جلب جديد من API
+    //     List<Facility> updatedFavorites = List.from(state.data ?? []);
+    //
+    //     if (isFav) {
+    //       updatedFavorites.removeWhere((f) => f.id == facility.id);
+    //     } else {
+    //       updatedFavorites.add(facility);
+    //     }
+    //
+    //     state = state.copyWith(data: updatedFavorites);
+    //   } catch (e) {
+    //     state = state.setError(e.toString());
+    //   }
+    // }
+    Future<void> toggleFavorite(WidgetRef ref, int userId,
+        Facility facility) async {
+      final bool isFav = state.data?.any((f) => f.id == facility.id) ?? false;
+      final String url = isFav
+          ? removeFavoriteUrl(userId, facility.id)
+          : addFavoriteUrl(userId, facility.id);
+
+      // ✅ تحديث القائمة محليًا لتحديث الواجهة فورًا
+      List<Facility> updatedFavorites = List.from(state.data ?? []);
 
       if (isFav) {
-        favoriteIds.remove(facility.id);
+        updatedFavorites.removeWhere((f) => f.id == facility.id);
       } else {
-        favoriteIds.add(facility.id);
+        updatedFavorites.add(facility.copyWith(isFavorite: true));
       }
 
-      await _saveFavorites(); // حفظ المفضلات محليًا
+      state = state.copyWith(data: updatedFavorites);
 
-      // ✅ تحديث الحالة لضمان إعادة بناء الواجهة
-      state = state.copyWith(
-          data: [
-            ...favoriteIds.map((id) => Facility(
-              id: id,
-              name: 'Unknown Facility',
-              status: 'active',
-              facilityTypeId: 0,
-              desc: 'No description available',
-            )).toList()
-          ]
-      );
-    } catch (e) {
-      state = state.setError(e.toString());
+      try {
+        await request<void>(
+          url: url,
+          method: isFav ? Method.delete : Method.post,
+        );
+      } catch (e) {
+        // ✅ في حالة الفشل، نعيد الحالة القديمة
+        state = state.copyWith(
+            data: isFav ? [...state.data ?? [], facility] : updatedFavorites);
+        state = state.setError(e.toString());
+      }
     }
-  }
 
-  /// ✅ **التحقق إذا كانت المنشأة مفضلة**
-  bool isFavorite(int facilityId) {
-    return favoriteIds.contains(facilityId);
-  }
+    /// ✅ **التحقق إذا كانت المنشأة مفضلة**
+    bool isFavorite(int facilityId) {
+      return state.data?.any((facility) => facility.id == facilityId) ?? false;
+    }
 
-  /// ✅ **جلب قائمة المفضلات**
-  List<Facility> get favoriteFacilities =>
-      state.data?.where((facility) => favoriteIds.contains(facility.id)).toList() ?? [];
-}
+    /// ✅ **جلب قائمة المفضلات**
+    // List<Facility> get favoriteFacilities => state.data ?? [];
+  }
