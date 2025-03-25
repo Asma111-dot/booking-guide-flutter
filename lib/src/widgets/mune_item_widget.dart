@@ -26,7 +26,7 @@ class MenuItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           color: CustomTheme.primaryColor.withOpacity(0.1),
         ),
-        child: Icon(icon, color: CustomTheme.primaryColor), // استخدام الأيقونة المتغيرة
+        child: Icon(icon, color: CustomTheme.primaryColor), 
       ),
       title: Text(title, style: Theme.of(context).textTheme.bodySmall),
       trailing: Container(

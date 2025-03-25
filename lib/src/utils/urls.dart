@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 
-//         // : "http://192.168.1.103/booking-guide/public/") //my home
-//     // :"http://192.168.1.103:8000/") //my home
 
 String baseUrl = kDebugMode
     ? "http://${Platform.isIOS ? "localhost" : "10.0.2.2"}:8000/"

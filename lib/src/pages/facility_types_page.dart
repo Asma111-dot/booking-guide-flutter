@@ -55,6 +55,165 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
         });
       });
     }
+    // return Scaffold(
+    //   body: SafeArea(
+    //     child: SingleChildScrollView(
+    //       physics: const BouncingScrollPhysics(),
+    //       child: Padding(
+    //         padding: const EdgeInsets.only(bottom: 20),
+    //         child: Column(
+    //           crossAxisAlignment: CrossAxisAlignment.start,
+    //           children: [
+    //             const SizedBox(height: 30),
+    //
+    //             // Top user row
+    //             Padding(
+    //               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    //               child: Row(
+    //                 textDirection: TextDirection.rtl,
+    //                 crossAxisAlignment: CrossAxisAlignment.center,
+    //                 children: [
+    //                   CircleAvatar(
+    //                     radius: 22,
+    //                     backgroundColor: Colors.grey.shade200,
+    //                     backgroundImage: user?.avatar != null
+    //                         ? NetworkImage(user!.avatar!)
+    //                         : AssetImage(defaultAvatar) as ImageProvider,
+    //                   ),
+    //                   const SizedBox(width: 6),
+    //                   Expanded(
+    //                     child: Text.rich(
+    //                       TextSpan(
+    //                         text: trans().hello_user,
+    //                         style: const TextStyle(
+    //                           fontSize: 20,
+    //                           fontWeight: FontWeight.bold,
+    //                           color: Colors.black,
+    //                         ),
+    //                         children: [
+    //                           TextSpan(
+    //                             text: user?.name ?? "User",
+    //                             style: const TextStyle(
+    //                               color: CustomTheme.primaryColor,
+    //                             ),
+    //                           ),
+    //                         ],
+    //                       ),
+    //                       textDirection: TextDirection.rtl,
+    //                     ),
+    //                   ),
+    //                   IconButton(
+    //                     icon: const FaIcon(FontAwesomeIcons.whatsapp),
+    //                     color: Colors.green,
+    //                     onPressed: () {
+    //                       launchUrl(Uri.parse("https://wa.me/775421110"));
+    //                     },
+    //                   ),
+    //                   IconButton(
+    //                     icon: const Icon(Icons.notifications),
+    //                     color: Colors.grey,
+    //                     onPressed: () {
+    //                       // TODO: فتح صفحة الإشعارات
+    //                     },
+    //                   ),
+    //                 ],
+    //               ),
+    //             ),
+    //
+    //             // Search
+    //             Padding(
+    //               padding: const EdgeInsets.symmetric(horizontal: 20),
+    //               child: Row(
+    //                 children: [
+    //                   Expanded(
+    //                     child: Container(
+    //                       decoration: BoxDecoration(
+    //                         color: Colors.white,
+    //                         borderRadius: BorderRadius.circular(15),
+    //                         boxShadow: [
+    //                           BoxShadow(
+    //                             color: Colors.black12,
+    //                             blurRadius: 5,
+    //                             offset: Offset(0, 2),
+    //                           )
+    //                         ],
+    //                       ),
+    //                       child: TextField(
+    //                         onChanged: (value) {
+    //                           setState(() {
+    //                             searchQuery = value;
+    //                           });
+    //                         },
+    //                         decoration: InputDecoration(
+    //                           hintText: trans().search,
+    //                           prefixIcon: Icon(
+    //                             Icons.search,
+    //                             color: CustomTheme.primaryColor,
+    //                           ),
+    //                           border: InputBorder.none,
+    //                           contentPadding:
+    //                           const EdgeInsets.symmetric(horizontal: 15),
+    //                         ),
+    //                       ),
+    //                     ),
+    //                   ),
+    //                   const SizedBox(width: 10),
+    //                   Container(
+    //                     height: 50,
+    //                     width: 50,
+    //                     decoration: BoxDecoration(
+    //                       color: CustomTheme.primaryColor,
+    //                       borderRadius: BorderRadius.circular(15),
+    //                     ),
+    //                     child: const Icon(Icons.tune, color: Colors.white),
+    //                   ),
+    //                 ],
+    //               ),
+    //             ),
+    //
+    //             const SizedBox(height: 20),
+    //
+    //             // Facility Type Filters
+    //             Padding(
+    //               padding: const EdgeInsets.symmetric(horizontal: 20),
+    //               child: facilityTypesState.data == null ||
+    //                   facilityTypesState.data!.isEmpty
+    //                   ? const Center(child: CircularProgressIndicator())
+    //                   : Row(
+    //                 children: facilityTypesState.data!.map((facilityType) {
+    //                   return Padding(
+    //                     padding: const EdgeInsets.only(right: 10),
+    //                     child: _buildTypeButtonWithIcon(
+    //                       context,
+    //                       facilityType.name,
+    //                       facilityType.id,
+    //                       facilityType.id == 1 ? Icons.hotel : Icons.pool,
+    //                     ),
+    //                   );
+    //                 }).toList(),
+    //               ),
+    //             ),
+    //
+    //             const SizedBox(height: 20),
+    //
+    //             // Facilities List
+    //             selectedFacilityType == null
+    //                 ? Center(
+    //               child: Text(
+    //                 trans().selectFacilityType,
+    //               ),
+    //             )
+    //                 : FacilityPage(
+    //               facilityTypeId: selectedFacilityType ?? 0,
+    //               searchQuery: searchQuery,
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // );
+
     return Scaffold(
       // appBar: AppBar(
       //   centerTitle: true,

@@ -92,6 +92,8 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
 
         return ListView.builder(
           padding: const EdgeInsets.symmetric(horizontal: 16),
+          // shrinkWrap: true, // ← ضروري في حال وجوده داخل ScrollView
+          // physics: const NeverScrollableScrollPhysics(), // ← إلغاء Scroll داخلي
           itemCount: filteredFacilities.length,
           itemBuilder: (context, index) {
             final facility = filteredFacilities[index];

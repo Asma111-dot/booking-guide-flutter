@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../helpers/general_helper.dart';
+import '../storage/auth_storage.dart';
 import '../utils/theme.dart';
 import 'booking_page.dart';
 import 'facility_search_page.dart';
@@ -14,7 +15,11 @@ class NavigationMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(NavigationController());
+    final userId = currentUser()?.id ?? 0;
+    final facilityId = 1;
+
+    final controller = Get.put(NavigationController(userId: userId, facilityId: facilityId));
+
     return Scaffold(
       body: Stack(
         children: [
@@ -29,9 +34,7 @@ class NavigationMenu extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white10,
-                  ),
+                  decoration: const BoxDecoration(color: Colors.white10),
                   child: Obx(() => BottomNavigationBar(
                     currentIndex: controller.selectedIndex.value,
                     onTap: (index) {
@@ -81,11 +84,15 @@ class NavigationMenu extends StatelessWidget {
 class NavigationController extends GetxController {
   final RxInt selectedIndex = 0.obs;
 
-  final List<Widget> screens = [
-    FacilityTypesPage(),
-    MapPage(facilityId: 1),
-    BookingPage(),
-   FavoritesPage(userId: 1, facilityTypeId: 0), // تعديل التمرير هنا
-    PersonPage(),
-  ];
+  late final List<Widget> screens;
+
+  NavigationController({required int userId, required int facilityId}) {
+    screens = [
+      const FacilityTypesPage(),
+      MapPage(facilityId: facilityId),
+       BookingPage(),
+      FavoritesPage(userId: userId, facilityTypeId: 0),
+      PersonPage(),
+    ];
+  }
 }
