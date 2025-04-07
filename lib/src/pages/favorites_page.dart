@@ -1,20 +1,23 @@
-import 'package:booking_guide/src/widgets/view_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../helpers/general_helper.dart';
 import '../models/facility.dart';
 import '../providers/favorite/favorite_provider.dart';
 import '../storage/auth_storage.dart';
 import '../utils/theme.dart';
-import '../widgets/favorites_card.dart';
+import '../widgets/view_widget.dart';
+import '../widgets/favorites_widget.dart';
 
 class FavoritesPage extends ConsumerStatefulWidget {
   final int userId;
   final int facilityTypeId;
 
-  const FavoritesPage(
-      {Key? key, required this.userId, required this.facilityTypeId})
-      : super(key: key);
+  const FavoritesPage({
+    Key? key,
+    required this.userId,
+    required this.facilityTypeId,
+  }) : super(key: key);
 
   @override
   _FavoritesScreenState createState() => _FavoritesScreenState();
@@ -23,30 +26,13 @@ class FavoritesPage extends ConsumerStatefulWidget {
 class _FavoritesScreenState extends ConsumerState<FavoritesPage> {
   int selectedType = 0;
 
-  // 0 = الكل، 1 = فنادق، 2 = شاليهات
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   Future.microtask(() {
-  //     ref.read(facilitiesProvider(FacilityTarget.favorites).notifier).fetch(userId: widget.userId, facilityTypeId: widget.facilityTypeId);
-  //   });
-  // }
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   Future.microtask(() {
-  //     ref.read(favoritesProvider.notifier).fetchFavorites(widget.userId);
-  //   });
-  // }
-
   @override
   void initState() {
     super.initState();
     Future.microtask(() {
       final userId = currentUser()?.id;
       if (userId != null) {
-        ref.read(favoritesProvider.notifier).fetchFavorites(userId);
+        ref.read(favoritesProvider.notifier).fetchFavorites(userId: userId);
       }
     });
   }
@@ -54,8 +40,8 @@ class _FavoritesScreenState extends ConsumerState<FavoritesPage> {
   @override
   Widget build(BuildContext context) {
     final favoritesState = ref.watch(favoritesProvider);
-
-    print("📌 favoritesState.data: ${favoritesState.data}");
+    final favoritesNotifier = ref.read(favoritesProvider.notifier);
+    final userId = currentUser()?.id;
 
     return Scaffold(
       appBar: AppBar(
@@ -75,25 +61,45 @@ class _FavoritesScreenState extends ConsumerState<FavoritesPage> {
         meta: favoritesState.meta,
         data: favoritesState.data,
         onLoaded: (data) {
-          print("📌 Data Loaded: $data"); // طباعة البيانات عند التحميل
-
           if (data == null || data.isEmpty) {
             return Center(
               child: Text(
-                "لا توجد أماكن مفضلة حالياً",
-                style: TextStyle(fontSize: 18, color: Colors.grey),
+                trans().noFavorites,
+                style: const TextStyle(fontSize: 18, color: Colors.grey),
               ),
             );
           }
 
-          return ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: data.length,
-            itemBuilder: (context, index) {
-              final facility = data[index];
-              print("✅ Rendering: ${facility.name}"); // ✅ طباعة عند عرض العنصر
-              return FavoriteCard(facility: facility);
-            },
+          final filteredData = selectedType == 0
+              ? data
+              : data.where((f) => f.facilityTypeId == selectedType).toList();
+
+          return Column(
+            children: [
+              const SizedBox(height: 8),
+              _buildFilterButtons(),
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  itemCount: filteredData.length,
+                  itemBuilder: (context, index) {
+                    final facility = filteredData[index];
+                    return FavoriteWidget(
+                      facility: facility,
+                      onRemove: () async {
+                        if (userId != null) {
+                          await favoritesNotifier.toggleFavorite(ref, userId, facility);
+
+                          final currentList = favoritesState.data ?? [];
+                          final updatedList = currentList.where((f) => f.id != facility.id).toList();
+                          favoritesNotifier.setData(updatedList);
+                        }
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
           );
         },
       ),
@@ -127,7 +133,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesPage> {
         avatar: Icon(icon,
             color: isSelected ? Colors.white : CustomTheme.primaryColor),
         backgroundColor:
-            isSelected ? CustomTheme.primaryColor : Colors.grey[200],
+        isSelected ? CustomTheme.primaryColor : Colors.grey[200],
         labelStyle: TextStyle(
             color: isSelected ? Colors.white : CustomTheme.primaryColor),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

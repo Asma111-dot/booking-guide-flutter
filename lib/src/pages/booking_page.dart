@@ -8,7 +8,6 @@ import '../providers/reservation/reservations_provider.dart';
 import '../utils/assets.dart';
 import '../utils/theme.dart';
 import '../extensions/date_formatting.dart';
-import '../widgets/view_widget.dart';
 
 class BookingPage extends ConsumerStatefulWidget {
   final int userId;
@@ -41,7 +40,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
     final reservationState = ref.watch(reservationsProvider);
 
     return DefaultTabController(
-      length: 2,
+      length: 3, // ✅ الآن لدينا 3 تبويبات
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -60,6 +59,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
             labelColor: CustomTheme.primaryColor,
             unselectedLabelColor: Colors.grey,
             tabs: [
+              Tab(text: 'الكل'),
               Tab(text: 'مؤكد'),
               Tab(text: 'ملغي'),
             ],
@@ -69,6 +69,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
             ? const Center(child: CircularProgressIndicator())
             : TabBarView(
           children: [
+            _buildReservationList(reservationState.data, null),
             _buildReservationList(reservationState.data, 'confirmed'),
             _buildReservationList(reservationState.data, 'cancelled'),
           ],
@@ -77,8 +78,10 @@ class _BookingPageState extends ConsumerState<BookingPage>
     );
   }
 
-  Widget _buildReservationList(List<r.Reservation>? all, String status) {
-    final reservations = (all ?? []).where((r) => r.status == status).toList();
+  Widget _buildReservationList(List<r.Reservation>? all, String? status) {
+    final reservations = status == null
+        ? (all ?? [])
+        : (all ?? []).where((r) => r.status == status).toList();
 
     if (reservations.isEmpty) {
       return Center(child: Text(trans().no_data));
@@ -108,7 +111,8 @@ class _BookingPageState extends ConsumerState<BookingPage>
                     width: 110,
                     height: 110,
                     fit: BoxFit.cover,
-                    placeholder: (context, url) => const CircularProgressIndicator(),
+                    placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
                     errorWidget: (context, url, error) => Image.asset(
                       logoCoverImage,
                       width: 110,
@@ -154,7 +158,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
                   children: [
                     Text(
                       "#${reservation.id}",
-                      style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                      style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -193,10 +197,6 @@ class _BookingPageState extends ConsumerState<BookingPage>
         return 'مؤكد';
       case 'cancelled':
         return 'ملغي';
-      case 'pending_payment':
-        return 'في انتظار الدفع';
-      case 'pending_confirmation':
-        return 'في انتظار التأكيد';
       default:
         return 'غير معروف';
     }
@@ -208,13 +208,8 @@ class _BookingPageState extends ConsumerState<BookingPage>
         return Colors.green;
       case 'cancelled':
         return Colors.red;
-      case 'pending_payment':
-        return Colors.orange;
-      case 'pending_confirmation':
-        return Colors.blueGrey;
       default:
         return Colors.grey;
     }
   }
 }
-

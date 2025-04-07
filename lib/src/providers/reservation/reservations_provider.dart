@@ -20,7 +20,6 @@ class Reservations extends _$Reservations {
   }
 
   Future fetch({required int userId}) async {
-    print("🚀 Fetching reservations for userId: $userId");
     state = state.setLoading();
     try {
       await request<List<dynamic>>(

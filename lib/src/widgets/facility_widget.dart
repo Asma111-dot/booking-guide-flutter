@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
 import '../helpers/general_helper.dart';
 import '../models/facility.dart';
 import '../providers/favorite/favorite_provider.dart';
@@ -19,16 +20,14 @@ class FacilityWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isFavorite = ref.watch(favoritesProvider.select(
+          (state) => state.data?.any((f) => f.id == facility.id) ?? false,
+    ));
+
     final firstRoom = facility.rooms.isNotEmpty ? facility.rooms.first : null;
     final firstPrice = (firstRoom?.roomPrices.isNotEmpty == true)
         ? firstRoom!.roomPrices.first.amount
         : 0.0;
-
-    // final isFavorite = facility.isFavorite == 1 ||
-    //     ref.watch(favoritesProvider).data!.any((f) => f.id == facility.id) ?? false;
-    final isFavorite = ref.watch(favoritesProvider.select((state) {
-      return state.data?.any((f) => f.id == facility.id) ?? facility.isFavorite;
-    }));
 
     return GestureDetector(
       onTap: () {
@@ -59,11 +58,13 @@ class FacilityWidget extends ConsumerWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: CachedNetworkImage(
-                  imageUrl: facility.logo?.isNotEmpty == true ? facility.logo! : logoCoverImage,
+                  imageUrl: facility.logo?.isNotEmpty == true
+                      ? facility.logo!
+                      : logoCoverImage,
                   width: 110,
                   height: 110,
                   fit: BoxFit.cover,
-                  placeholder: (context, url) => CircularProgressIndicator(),
+                  placeholder: (context, url) => const CircularProgressIndicator(),
                   errorWidget: (context, url, error) => Image.asset(
                     logoCoverImage,
                     width: 110,
@@ -72,7 +73,6 @@ class FacilityWidget extends ConsumerWidget {
                   ),
                 ),
               ),
-
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -89,8 +89,8 @@ class FacilityWidget extends ConsumerWidget {
                     const SizedBox(height: 6),
                     Text(
                       firstPrice > 0
-                          ? '${trans().priceStartFrom} ${firstPrice}${trans().riyalY}'
-                          : '${trans().priceNotAvailable}',
+                          ? '${trans().priceStartFrom} $firstPrice${trans().riyalY}'
+                          : trans().priceNotAvailable,
                       style: TextStyle(
                         color: firstPrice > 0 ? Colors.amber : Colors.redAccent,
                         fontSize: 12,
@@ -100,12 +100,15 @@ class FacilityWidget extends ConsumerWidget {
                     const SizedBox(height: 6),
                     Row(
                       children: [
-                        Icon(Icons.location_on_outlined, color: Colors.grey, size: 16),
+                        const Icon(Icons.location_on_outlined, color: Colors.grey, size: 16),
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
-                            facility.address ?? '${trans().address}',
-                            style: TextStyle(color: CustomTheme.tertiaryColor, fontSize: 14),
+                            facility.address ?? trans().address,
+                            style: TextStyle(
+                              color: CustomTheme.tertiaryColor,
+                              fontSize: 14,
+                            ),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -114,37 +117,19 @@ class FacilityWidget extends ConsumerWidget {
                   ],
                 ),
               ),
-
-      IconButton(
-      icon: Icon(
-      isFavorite ? Icons.favorite : Icons.favorite_border,
-      color: isFavorite ? Colors.red : Colors.grey,
-    ),
-    onPressed: () async {
-      int? userId = currentUser()?.id;
-    await ref.read(favoritesProvider.notifier).toggleFavorite(ref, userId!, facility);
-    },
-    ),
-
-    // IconButton(
-              //   icon: Icon(
-              //     ref.watch(favoritesProvider).data?.any((f) => f.id == facility.id) ?? false
-              //         ? Icons.favorite
-              //         : Icons.favorite_border,
-              //     color: ref.watch(favoritesProvider).data?.any((f) => f.id == facility.id) ?? false
-              //         ? Colors.red
-              //         : Colors.grey,
-              //   ),
-              //   onPressed: () async {
-              //     await ref.read(favoritesProvider.notifier).toggleFavorite(ref, facility.facilityTypeId, facility);
-              //
-              //     // ✅ إجبار `FavoritesPage` على التحديث بعد الضغط على زر القلب
-              //     // ref.read(facilitiesProvider(FacilityTarget.favorites).notifier).fetch(
-              //     //   facilityTypeId: facility.facilityTypeId, // أي معرف مناسب للمفضلة
-              //     // );
-              //   },
-              // ),
-
+              IconButton(
+                icon: Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: isFavorite ? Colors.red : Colors.grey,
+                ),
+                onPressed: () async {
+                  final userId = currentUser()?.id;
+                  if (userId != null) {
+                    await ref.read(favoritesProvider.notifier)
+                        .toggleFavorite(ref, userId, facility);
+                  }
+                },
+              ),
             ],
           ),
         ),

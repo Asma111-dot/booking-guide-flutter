@@ -8,6 +8,7 @@ import '../storage/auth_storage.dart';
 import '../widgets/facility_widget.dart';
 import '../widgets/view_widget.dart';
 import '../models/facility.dart';
+import '../models/response/meta.dart'; // ← غيّر المسار حسب مكان الملف
 
 class FacilityPage extends ConsumerStatefulWidget {
   final int facilityTypeId;
@@ -41,13 +42,14 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
         currentTarget = FacilityTarget.all;
         break;
     }
+
     Future.microtask(() {
       ref.read(facilitiesProvider(currentTarget).notifier)
           .fetch(facilityTypeId: widget.facilityTypeId);
 
       int? userId = currentUser()?.id;
-      if (userId != null) {
-        ref.read(favoritesProvider.notifier).fetchFavorites(userId);
+      if (userId != null && (ref.read(favoritesProvider).data?.isEmpty ?? true)) {
+        ref.read(favoritesProvider.notifier).fetchFavorites(userId: userId);
       }
     });
   }
@@ -61,7 +63,7 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
             .fetch(facilityTypeId: widget.facilityTypeId);
 
         int? userId = currentUser()?.id;
-        ref.read(favoritesProvider.notifier).fetchFavorites(userId!);
+        ref.read(favoritesProvider.notifier).fetchFavorites(userId: userId!);
       });
     }
   }
@@ -69,20 +71,17 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
   @override
   Widget build(BuildContext context) {
     final facilitiesState = ref.watch(facilitiesProvider(currentTarget));
+    final favoritesState = ref.watch(favoritesProvider);
+
+    final favoritesLoaded = favoritesState.meta.status == Status.loaded;
+
+    if (!favoritesLoaded) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
     return ViewWidget<List<Facility>>(
       meta: facilitiesState.meta,
       data: facilitiesState.data,
-      // onLoaded: (data) {
-      //   return ListView.builder(
-      //     padding: const EdgeInsets.symmetric(horizontal: 16),
-      //     itemCount: data.length,
-      //     itemBuilder: (context, index) {
-      //       final facility = data[index];
-      //       return FacilityWidget(facility: facility);
-      //     },
-      //   );
-      // },
       onLoaded: (data) {
         final filteredFacilities = data.where((facility) {
           return facility.name
@@ -92,8 +91,6 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
 
         return ListView.builder(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          // shrinkWrap: true, // ← ضروري في حال وجوده داخل ScrollView
-          // physics: const NeverScrollableScrollPhysics(), // ← إلغاء Scroll داخلي
           itemCount: filteredFacilities.length,
           itemBuilder: (context, index) {
             final facility = filteredFacilities[index];
