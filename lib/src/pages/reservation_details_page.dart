@@ -243,7 +243,7 @@ class _ReservationDetailsPageState
         },
         onLoading: () => const Center(child: CircularProgressIndicator()),
         onEmpty: () => Center(
-          child: Text("لا توجد بيانات متاحة"),
+          child: Text("${trans().no_data}"),
         ),
         showError: true,
         showEmpty: true,

@@ -12,13 +12,16 @@ import 'person_page.dart';
 
 class NavigationMenu extends StatelessWidget {
   const NavigationMenu({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final userId = currentUser()?.id ?? 0;
     final facilityId = 1;
 
-    final controller = Get.put(NavigationController(userId: userId, facilityId: facilityId));
+    final controller = Get.put(NavigationController(
+      userId: userId,
+      facilityId: facilityId,
+    ));
+
 
     return Scaffold(
       body: Stack(
@@ -86,11 +89,14 @@ class NavigationController extends GetxController {
 
   late final List<Widget> screens;
 
-  NavigationController({required int userId, required int facilityId}) {
+  NavigationController({
+    required int userId,
+    required int facilityId,
+  }) {
     screens = [
       const FacilityTypesPage(),
       MapPage(facilityId: facilityId),
-       BookingPage(),
+      BookingPage(userId: userId ),
       FavoritesPage(userId: userId, facilityTypeId: 0),
       PersonPage(),
     ];

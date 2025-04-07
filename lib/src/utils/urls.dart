@@ -142,7 +142,13 @@ String updateReservationUrl(int reservationId) =>
 String deleteReservationUrl(int reservationId) =>
     "${apiUrl}reservations/$reservationId";
 
-String getReservationsUrl() => "${apiUrl}reservations";
+String getReservationsUrl({int? userId}) {
+  String url = "${apiUrl}reservations";
+  if (userId != null){
+    url += "?user_id=$userId";
+  }
+  return url;
+}
 
 // URLs Payment
 String getPaymentUrl({required int paymentId}) => "${apiUrl}payments/$paymentId";

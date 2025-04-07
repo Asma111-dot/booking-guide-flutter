@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../helpers/general_helper.dart';
 import '../models/facility.dart';
-import '../providers/facility/facility_provider.dart';
 import '../providers/favorite/favorite_provider.dart';
 import '../storage/auth_storage.dart';
 import '../utils/assets.dart';

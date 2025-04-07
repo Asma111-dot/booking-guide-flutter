@@ -19,20 +19,23 @@ class Reservation {
   List<Payment> payments;
 
   RoomPrice? roomPrice;
+  DateTime? createdAt;
 
-  Reservation(
-      {required this.id,
-      this.userId,
-      this.roomPriceId,
-      required this.checkInDate,
-      required this.checkOutDate,
-      this.status,
-      this.totalPrice,
-      required this.bookingType,
-      this.adultsCount,
-      this.childrenCount,
-      this.payments = const [],
-      this.roomPrice});
+  Reservation({
+    required this.id,
+    this.userId,
+    this.roomPriceId,
+    required this.checkInDate,
+    required this.checkOutDate,
+    this.status,
+    this.totalPrice,
+    required this.bookingType,
+    this.adultsCount,
+    this.childrenCount,
+    this.payments = const [],
+    this.roomPrice,
+    this.createdAt,
+  });
 
   Reservation.init()
       : id = 0,
@@ -46,7 +49,8 @@ class Reservation {
         adultsCount = 0,
         childrenCount = 0,
         payments = [],
-        roomPrice = null;
+        roomPrice = null,
+        createdAt = null;
 
   factory Reservation.fromJson(Map<String, dynamic> jsonMap) {
     if (jsonMap['user_id'] == null) {
@@ -75,6 +79,9 @@ class Reservation {
       roomPrice: jsonMap['room_price'] != null
           ? RoomPrice.fromJson(jsonMap['room_price'])
           : null,
+      createdAt: jsonMap['created_at'] != null
+          ? DateTime.tryParse(jsonMap['created_at'])
+          : null,
     );
   }
 
@@ -91,6 +98,7 @@ class Reservation {
       'adults_count': adultsCount,
       'children_count': childrenCount,
       'room_price': roomPrice?.toJson(),
+      // 'created_at': createdAt?.toIso8601String(),
     };
   }
 
