@@ -97,7 +97,7 @@ class NavigationController extends GetxController {
       const FacilityTypesPage(),
       MapPage(facilityId: facilityId),
       BookingPage(userId: userId ),
-      FavoritesPage(userId: userId, facilityTypeId: 0),
+      FavoritesPage(userId: userId),
       PersonPage(),
     ];
   }

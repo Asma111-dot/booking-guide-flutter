@@ -40,7 +40,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
     final reservationState = ref.watch(reservationsProvider);
 
     return DefaultTabController(
-      length: 3, // ✅ الآن لدينا 3 تبويبات
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -54,14 +54,14 @@ class _BookingPageState extends ConsumerState<BookingPage>
           elevation: 0,
           backgroundColor: Colors.transparent,
           iconTheme: const IconThemeData(color: Colors.black),
-          bottom: const TabBar(
+          bottom:  TabBar(
             indicatorColor: CustomTheme.primaryColor,
             labelColor: CustomTheme.primaryColor,
             unselectedLabelColor: Colors.grey,
             tabs: [
-              Tab(text: 'الكل'),
-              Tab(text: 'مؤكد'),
-              Tab(text: 'ملغي'),
+              Tab(text: trans().all),
+              Tab(text: trans().confirmed),
+              Tab(text: trans().cancelled)
             ],
           ),
         ),

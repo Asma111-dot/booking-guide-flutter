@@ -48,7 +48,6 @@ class FavoriteWidget extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // صورة المنشأة + شارة النوع
             Stack(
               children: [
                 ClipRRect(
@@ -62,7 +61,7 @@ class FavoriteWidget extends StatelessWidget {
                       width: 110,
                       height: 110,
                       alignment: Alignment.center,
-                      child: const CircularProgressIndicator(strokeWidth: 2),
+                      child: const CircularProgressIndicator(),
                     ),
                     errorWidget: (context, url, error) => Image.asset(
                       logoCoverImage,
@@ -98,7 +97,6 @@ class FavoriteWidget extends StatelessWidget {
 
             const SizedBox(width: 12),
 
-            // تفاصيل المنشأة
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
@@ -136,7 +134,6 @@ class FavoriteWidget extends StatelessWidget {
               ),
             ),
 
-            // زر الحذف - ❤️
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: GestureDetector(

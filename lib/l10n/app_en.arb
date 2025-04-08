@@ -141,5 +141,8 @@
   "mapHint": "View all facilities on the map and pick your destination easily.",
   "created_at": "Booking Date",
   "noFavorites": "No favorite facilities yet",
-  "please_login_first": "Please log in first"
+  "please_login_first": "Please log in first",
+  "all": "All",
+  "confirmed": "Confirmed",
+  "cancelled": "Cancelled"
 }
