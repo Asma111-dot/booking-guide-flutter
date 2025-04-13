@@ -23,6 +23,9 @@ class FacilityWidget extends ConsumerWidget {
     final isFavorite = ref.watch(favoritesProvider.select(
           (state) => state.data?.any((f) => f.id == facility.id) ?? false,
     ));
+    final defaultImage = facility.logo?.isNotEmpty == true
+        ? facility.logo!
+        : (facility.facilityTypeId == 1 ? hotelImage : chaletImage);
 
     final firstRoom = facility.rooms.isNotEmpty ? facility.rooms.first : null;
     final firstPrice = (firstRoom?.roomPrices.isNotEmpty == true)
@@ -58,9 +61,7 @@ class FacilityWidget extends ConsumerWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: CachedNetworkImage(
-                  imageUrl: facility.logo?.isNotEmpty == true
-                      ? facility.logo!
-                      : logoCoverImage,
+                  imageUrl: defaultImage,
                   width: 110,
                   height: 110,
                   fit: BoxFit.cover,

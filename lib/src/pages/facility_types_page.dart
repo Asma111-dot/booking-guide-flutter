@@ -6,7 +6,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../helpers/general_helper.dart';
 import '../providers/auth/user_provider.dart';
 import '../providers/facility_type/facility_type_provider.dart';
-import '../storage/auth_storage.dart';
 import '../utils/assets.dart';
 import '../utils/theme.dart';
 import 'facility_page.dart';
@@ -56,7 +55,6 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 30),
-
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
@@ -105,9 +103,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                     IconButton(
                       icon: const Icon(Icons.notification_important_outlined),
                       color: Colors.grey,
-                      onPressed: () {
-
-                      },
+                      onPressed: () {},
                     ),
                     const SizedBox(width: 10),
                   ],
@@ -115,9 +111,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
               ],
             ),
           ),
-
           const SizedBox(height: 10),
-
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
@@ -187,7 +181,6 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                   ),
           ),
           const SizedBox(height: 10),
-
           Expanded(
             child: selectedFacilityType == null
                 ? Center(

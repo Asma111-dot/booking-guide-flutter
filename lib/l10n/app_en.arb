@@ -144,5 +144,15 @@
   "please_login_first": "Please log in first",
   "all": "All",
   "confirmed": "Confirmed",
-  "cancelled": "Cancelled"
+  "cancelled": "Cancelled",
+  "personal_data": "Personal Data",
+  "personal_data_desc": "View or edit your personal information",
+  "language_desc": "Select your preferred language",
+  "policies": "Privacy Policy",
+  "policies_desc": "Learn how we handle your personal data and protect your privacy.",
+  "support": "Support & Contact",
+  "support_desc": "Contact us for any inquiry or issue",
+  "support_message": "We value your feedback and suggestions, and we welcome any communication through the following channels to enhance your experience.",
+  "logout_desc": "Sign out of your account"
+
 }
