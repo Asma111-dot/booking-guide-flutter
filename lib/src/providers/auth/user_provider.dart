@@ -50,7 +50,7 @@ class User extends _$User {
     await request<model.User>(
       url: updateUserUrl(user.id),
       method: Method.post,
-      body: user.uploadImage == null && !deleteImage ? user.toJson() : await user.toImageJson(),
+      body: await state.data!.toJson(),
     ).then((value) async {
       if(value.isLoaded()) {
         saveUserLocally(value.data!);

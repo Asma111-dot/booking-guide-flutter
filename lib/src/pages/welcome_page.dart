@@ -4,8 +4,7 @@ import '../storage/auth_storage.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../helpers/general_helper.dart';
-import '../utils/theme.dart';
-import 'navigation_menu.dart'; // استيراد NavigationMenu
+import 'navigation_menu.dart';
 
 class WelcomePage extends ConsumerWidget {
   const WelcomePage({super.key});

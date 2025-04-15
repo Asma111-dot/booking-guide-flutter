@@ -65,8 +65,8 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     CircleAvatar(
                       radius: 40,
                       backgroundColor: Colors.grey.shade200,
-                      backgroundImage: user?.avatar != null
-                          ? NetworkImage(user!.avatar!)
+                      backgroundImage: (user?.media.isNotEmpty ?? false)
+                          ? NetworkImage(user!.media.first.original_url)
                           : AssetImage(defaultAvatar) as ImageProvider,
                     ),
                     const SizedBox(width: 15),

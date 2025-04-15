@@ -19,7 +19,7 @@ User? currentUser() {
       name: box(_authBox).get(_nameKey),
       phone: box(_authBox).get(_phoneKey),
       email: box(_authBox).get(_emailKey),
-      avatar: box(_authBox).get(_avatar),
+      media: box(_authBox).get(_avatar),
     );
   }
   catch(e) {
@@ -32,7 +32,7 @@ Future saveCurrentProfile(User user) async {
   await box(_authBox).put(_nameKey, user.name);
   await box(_authBox).put(_phoneKey, user.phone);
   await box(_authBox).put(_emailKey, user.email);
-  await box(_authBox).put(_avatar, user.avatar);
+  await box(_authBox).put(_avatar, user.media);
 }
 
 Future clearCurrentUser() async {

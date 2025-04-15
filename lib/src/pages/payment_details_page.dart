@@ -1,5 +1,6 @@
 import 'package:booking_guide/src/extensions/date_formatting.dart';
 import 'package:booking_guide/src/extensions/string_formatting.dart';
+import 'package:booking_guide/src/pages/navigation_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -290,11 +291,15 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
               iconAfterText: true,
               disable: false,
               onPressed: () async {
-                Navigator.pushNamedAndRemoveUntil(
+                Navigator.pushReplacement(
                   context,
-                  Routes.facilityTypes,
-                  (r) => false,
+                  MaterialPageRoute(builder: (context) => NavigationMenu()),
                 );
+                // Navigator.pushNamedAndRemoveUntil(
+                //   context,
+                //   Routes.facilityTypes,
+                //   (r) => false,
+                // );
               },
             ),
             // Button(

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:booking_guide/src/models/facility.dart';
 
 import 'media.dart';
@@ -43,52 +41,49 @@ class Room {
         media = [],
         amenities = [],
         roomPrices = [],
-  facility = null;
-
+        facility = null;
 
   factory Room.fromJson(Map<String, dynamic> jsonMap) {
-    log(" jsonMap room =${jsonMap}");
-     print(" jsonMap  =${jsonMap}");
+    // log(" jsonMap room =${jsonMap}");
+    // print(" jsonMap  =${jsonMap}");
 
     return Room(
-         id : jsonMap['id'] ?? 0,
-    facilityId : jsonMap['facility_id'] ?? 0,
-    name : jsonMap['name'] ?? '',
-    type : jsonMap['type'] ?? '',
-    status : jsonMap['status'] ?? '',
-    desc : jsonMap['desc'] ?? '',
+      id: jsonMap['id'] ?? 0,
+      facilityId: jsonMap['facility_id'] ?? 0,
+      name: jsonMap['name'] ?? '',
+      type: jsonMap['type'] ?? '',
+      status: jsonMap['status'] ?? '',
+      desc: jsonMap['desc'] ?? '',
       // media : Media.fromJsonList(jsonMap['media'])??[],
-      media :  (jsonMap['media'] as List<dynamic>?)
-          ?.map((item) => Media.fromJson(item))
-          .toList() ??
+      media: (jsonMap['media'] as List<dynamic>?)
+              ?.map((item) => Media.fromJson(item))
+              .toList() ??
           [],
-    amenities : (jsonMap['amenities'] as List<dynamic>? ?? [])
-        .map((item) => Amenity.fromJson(item))
-        .toList(),
-    roomPrices : (jsonMap['room_prices'] as List<dynamic>? ?? [])
-        .map((item) => RoomPrice.fromJson(item))
-        .toList() ??
-        [],
+      amenities: (jsonMap['amenities'] as List<dynamic>? ?? [])
+          .map((item) => Amenity.fromJson(item))
+          .toList(),
+      roomPrices: (jsonMap['room_prices'] as List<dynamic>? ?? [])
+              .map((item) => RoomPrice.fromJson(item))
+              .toList() ??
+          [],
       facility: jsonMap['facility'] != null
-    ? Facility.fromJson(jsonMap['facility']) : null,
-
+          ? Facility.fromJson(jsonMap['facility'])
+          : null,
     );
-
-
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'facility_id': facilityId,
-    'name': name,
-    'type': type,
-    'status': status,
-    'desc': desc,
-    'media': media.map((m) => m.toJson()).toList(),
-    'amenities': amenities.map((a) => a.toJson()).toList(),
-    'room_prices': roomPrices.map((r) => r.toJson()).toList(),
-    'facility': facility?.toJson(),
-  };
+        'id': id,
+        'facility_id': facilityId,
+        'name': name,
+        'type': type,
+        'status': status,
+        'desc': desc,
+        'media': media.map((m) => m.toJson()).toList(),
+        'amenities': amenities.map((a) => a.toJson()).toList(),
+        'room_prices': roomPrices.map((r) => r.toJson()).toList(),
+        'facility': facility?.toJson(),
+      };
 
   static List<Room> fromJsonList(List<dynamic> items) =>
       items.map((item) => Room.fromJson(item)).toList();

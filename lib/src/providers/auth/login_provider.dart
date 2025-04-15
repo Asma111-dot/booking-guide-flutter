@@ -1,8 +1,10 @@
 import 'package:booking_guide/src/providers/auth/user_provider.dart';
+import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../models/response/response.dart';
 import '../../models/user.dart' as model;
+import '../../pages/navigation_menu.dart';
 import '../../services/request_service.dart';
 import '../../storage/auth_storage.dart';
 import '../../utils/routes.dart';
@@ -33,7 +35,12 @@ class Login extends _$Login {
     setToken(value.meta.accessToken ?? "");
     ref.read(userProvider.notifier).saveUserLocally(value.data!);
     //navKey.currentState!.pushNamedAndRemoveUntil(Routes.customers, (r) => false);
-    navKey.currentState?.pushNamedAndRemoveUntil(Routes.facilityTypes, (r) => false);
+    // navKey.currentState?.pushNamedAndRemoveUntil(Routes.facilityTypes, (r) => false);
+    navKey.currentState?.pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => const NavigationMenu()),
+          (r) => false,
+    );
+
 
   }
 }
