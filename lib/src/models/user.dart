@@ -9,6 +9,7 @@ class User {
   String email;
   String phone;
   String? password;
+  String? address;
 
   List<Media> media;
 
@@ -17,6 +18,7 @@ class User {
         name = '',
         phone = '',
         email = '',
+        address = '',
         media = [];
 
   User({
@@ -25,6 +27,7 @@ class User {
     required this.phone,
     required this.email,
     this.password,
+    this.address,
     this.media = const [],
   });
 
@@ -33,6 +36,7 @@ class User {
         name = jsonMap['name'] ?? '',
         phone = jsonMap['phone'] ?? '',
         email = jsonMap['email'] ?? '',
+        address = jsonMap['address'] ?? '',
         media = (jsonMap['media'] as List<dynamic>?)
                 ?.map((item) => Media.fromJson(item))
                 .toList() ??
@@ -51,6 +55,7 @@ class User {
       map["password"] = password;
     }
     map['device_name'] = await deviceName();
+    map["address"] = address;
     map["media"] = media.map((m) => m.toJson()).toList();
     return map;
   }

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../helpers/general_helper.dart';
 import '../utils/routes.dart';
@@ -171,7 +170,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    "${pageController.positions.isNotEmpty ? (pageController.page?.toInt() ?? 0) + 1 : 1}/${room.media.length ?? 1}",
+                    "${pageController.positions.isNotEmpty ? (pageController.page?.toInt() ?? 0) + 1 : 1}/${room.media.length}",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 15,

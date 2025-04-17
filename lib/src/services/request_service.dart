@@ -111,8 +111,14 @@ Future<Response<T>> request<T>({
 
           if (parsed.containsKey('meta')) {
             meta = Meta.fromJson(Map<String, dynamic>.from(parsed['meta']));
+            if (parsed.containsKey('token')) {
+              meta = meta.copyWith(accessToken: parsed['token']);
+            }
           } else {
             meta = Meta.fromJson(Map<String, dynamic>.from(parsed));
+            if (parsed.containsKey('token')) {
+              meta = meta.copyWith(accessToken: parsed['token']);
+            }
           }
 
           meta = meta.copyWith(

@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helpers/general_helper.dart';
 import '../models/payment.dart' as p;
 import '../providers/payment/payment_provider.dart';
-import '../utils/routes.dart';
 import '../utils/theme.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar_clipper.dart';
@@ -259,7 +258,7 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                       icon: Icons.price_check,
                       label: trans().remaining_amount,
                       value:
-                          "${(reservation.totalPrice?.toInt() ?? 0) - (data.amount.toInt() ?? 0)} ${trans().riyalY}",
+                          "${(reservation.totalPrice?.toInt() ?? 0) - (data.amount.toInt())} ${trans().riyalY}",
                     ),
                   ] else
                     Text(trans().not_available),

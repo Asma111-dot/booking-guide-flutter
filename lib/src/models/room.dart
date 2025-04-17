@@ -64,8 +64,7 @@ class Room {
           .toList(),
       roomPrices: (jsonMap['room_prices'] as List<dynamic>? ?? [])
               .map((item) => RoomPrice.fromJson(item))
-              .toList() ??
-          [],
+              .toList(),
       facility: jsonMap['facility'] != null
           ? Facility.fromJson(jsonMap['facility'])
           : null,

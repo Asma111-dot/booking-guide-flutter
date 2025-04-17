@@ -18,7 +18,7 @@ class ImageGalleryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PageController pageController = PageController(initialPage: initialIndex);
+    // final PageController pageController = PageController(initialPage: initialIndex);
 
     return Scaffold(
       backgroundColor: Colors.black,

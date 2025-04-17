@@ -21,23 +21,16 @@ String loginUrl() => "${apiUrl}login";
 
 String logoutUrl() => "${apiUrl}logout";
 
-String getUserUrl(int userId) => "${apiUrl}users/$userId";
+String getUserUrl(int userId) => "${apiUrl}user/$userId";
 
 String updateUserUrl(int userId) => "${apiUrl}users/$userId";
 
 String deleteUserUrl(int userId) => "${apiUrl}users/$userId";
 
-// URLs Customers
-String getCustomerUrl(String subDomain, int customerId) =>
-    "${apiPanelUrl(subDomain)}customers/$customerId";
-
-String addCustomerUrl(String subDomain) => "${apiPanelUrl(subDomain)}customers";
-
-String updateCustomerUrl(String subDomain, int customerId) =>
-    "${apiPanelUrl(subDomain)}customers/$customerId";
-
-String getCustomersUrl(String subDomain) =>
-    "${apiPanelUrl(subDomain)}customers";
+// URLs OTP & Profile
+String otpRequestUrl() => "${apiUrl}otp/request";
+String otpVerifyUrl() => "${apiUrl}otp/verify";
+String completeProfileUrl() => "${apiUrl}complete-profile";
 
 // URLs  Facility Type
 String getFacilityTypeUrl(int facilityTypeId) =>

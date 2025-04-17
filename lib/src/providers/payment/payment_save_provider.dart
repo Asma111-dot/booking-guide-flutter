@@ -27,7 +27,7 @@ class PaymentSave extends _$PaymentSave {
         state = state.copyWith(data: response.data, meta: response.meta);
         print("تم حفظ الدفع بنجاح مع ID: ${response.data?.id}");
       } else {
-        print("خطأ أثناء الحفظ: ${response.meta?.message}");
+        print("خطأ أثناء الحفظ: ${response.meta.message}");
       }
     } catch (error) {
       print("خطأ أثناء الحفظ: $error");

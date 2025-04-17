@@ -9,6 +9,7 @@ String _nameKey = 'name';
 String _emailKey = 'email';
 String _phoneKey = 'phone';
 String _avatar = 'avatar';
+String _addressKey = 'address';
 
 Future open() async => await openBox(_authBox);
 
@@ -19,10 +20,10 @@ User? currentUser() {
       name: box(_authBox).get(_nameKey),
       phone: box(_authBox).get(_phoneKey),
       email: box(_authBox).get(_emailKey),
+      address: box(_authBox).get(_addressKey),
       media: box(_authBox).get(_avatar),
     );
-  }
-  catch(e) {
+  } catch (e) {
     return null;
   }
 }
@@ -32,6 +33,7 @@ Future saveCurrentProfile(User user) async {
   await box(_authBox).put(_nameKey, user.name);
   await box(_authBox).put(_phoneKey, user.phone);
   await box(_authBox).put(_emailKey, user.email);
+  await box(_authBox).put(_addressKey, user.address);
   await box(_authBox).put(_avatar, user.media);
 }
 

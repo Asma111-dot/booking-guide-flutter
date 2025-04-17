@@ -195,8 +195,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                                             .showSnackBar(
                                           SnackBar(
                                             content: Text(
-                                              confirmState.meta.message ??
-                                                  'حدث خطأ أثناء الدفع',
+                                              confirmState.meta.message
                                             ),
                                           ),
                                         );
@@ -214,7 +213,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            currentState.meta.message ?? 'حدث خطأ أثناء الدفع',
+                            currentState.meta.message,
                           ),
                         ),
                       );

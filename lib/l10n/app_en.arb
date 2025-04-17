@@ -153,6 +153,13 @@
   "support": "Support & Contact",
   "support_desc": "Contact us for any inquiry or issue",
   "support_message": "We value your feedback and suggestions, and we welcome any communication through the following channels to enhance your experience.",
-  "logout_desc": "Sign out of your account"
-
+  "logout_desc": "Sign out of your account",
+  "completeProfile": "Complete Your Profile",
+  "fullName": "Full Name",
+  "address_optional": "Address (optional)",
+  "phone_number": "Phone Number",
+  "otp_code": "Verification Code",
+  "enter_verification_code_message": "Please enter the verification code that was sent to your phone number.",
+  "verify": "Verify",
+  "login_subtitle": "Start your journey with us and log in to the Hajoozaty app."
 }
