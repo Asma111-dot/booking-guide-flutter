@@ -23,9 +23,9 @@ String logoutUrl() => "${apiUrl}logout";
 
 String getUserUrl(int userId) => "${apiUrl}user/$userId";
 
-String updateUserUrl(int userId) => "${apiUrl}users/$userId";
+String updateUserUrl() => "${apiUrl}user/update";
 
-String deleteUserUrl(int userId) => "${apiUrl}users/$userId";
+String deleteUserUrl() => "${apiUrl}user/delete";
 
 // URLs OTP & Profile
 String otpRequestUrl() => "${apiUrl}otp/request";

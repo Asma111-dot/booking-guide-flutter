@@ -1,7 +1,11 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../helpers/general_helper.dart';
 import '../../helpers/notify_helper.dart';
+import '../../models/response/meta.dart';
 import '../../models/response/response.dart';
 import '../../models/user.dart' as model;
 import '../../services/request_service.dart';
@@ -43,21 +47,53 @@ class User extends _$User {
     });
   }
 
-  Future updateUser(model.User user, {bool deleteImage = false}) async {
+  // Future<void> updateUser(model.User user) async {
+  //   showLoading();
+  //
+  //   try {
+  //     final result = await request<model.User>(
+  //       url: updateUserUrl(),
+  //       method: Method.put,
+  //       body: await user.toJson(), // <-- هنا التعديل
+  //     );
+  //
+  //     if (result.isLoaded()) {
+  //       saveUserLocally(result.data!); // حفظ البيانات الجديدة محليًا
+  //       state = Response(data: result.data!, meta: result.meta); // تحديث حالة Riverpod
+  //     }
+  //   } catch (e) {
+  //     // يمكنك عرض رسالة خطأ هنا
+  //   } finally {
+  //     hideLoading();
+  //   }
+  // }
 
+
+  Future<void> updateUser(model.User user, File? avatar) async {
     showLoading();
 
-    await request<model.User>(
-      url: updateUserUrl(user.id),
-      method: Method.post,
-      body: await state.data!.toJson(),
-    ).then((value) async {
-      if(value.isLoaded()) {
-        saveUserLocally(value.data!);
-      }
-      hideLoading();
-    });
+    final result = await request<model.User>(
+      url: updateUserUrl(),
+      method: Method.post, // ✅ POST حقيقي
+      isMultipart: true,
+      file: avatar,
+      fileFieldName: 'avatar',
+      fields: {
+        '_method': 'PUT', // ✅ Laravel will treat this as PUT
+        'name': user.name ?? '',
+        'email': user.email ?? '',
+        'address': user.address ?? '',
+      },
+    );
+
+    if (result.isLoaded()) {
+      saveUserLocally(result.data!);
+      state = Response(data: result.data!, meta: result.meta);
+    }
+
+    hideLoading();
   }
+
 //if to ues logout
   Future logout() async {
     showLoading();
@@ -68,31 +104,55 @@ class User extends _$User {
       redirectOnPermissionDenied: true,
     ).then((value) async {
       if (value.isLoaded()) {
-        // نضيف هذه السطرين
-        await logout(); // من auth_storage.dart يمسح حالة الدخول والمستخدم
-        clearAllLocalDataAndNavigate(); // يعيد التوجيه
+        await logout();
+        clearAllLocalDataAndNavigate();
       }
     }).whenComplete(() => hideLoading());
   }
+
 
   Future saveUserLocally(model.User user) async {
     state = state.setLoading();
     state = state.copyWith(data: user);
     await saveCurrentProfile(user);
+    // print("📦 Hive content after save:");
+    // print(box('auth_user').toMap());
     state = state.setLoaded();
   }
 
-  Future deleteAccount() async {
+  Future<void> loadUserFromStorage() async {
+    await open();
+    // print("📦 Hive عند الفتح: ${box('auth_user').toMap()}");
+    final user = currentUser();
+    // debugPrint("🔁 Trying to load user: $user");
+    if (user != null) {
+      state = state.copyWith(data: user, meta: Meta(status: Status.loaded));
+    } else {
+      // debugPrint("❌ No user found in storage.");
+    }
+  }
 
+
+  Future<void> deleteAccount(BuildContext context) async {
     showLoading();
 
-    await request(
-      url: deleteUserUrl(currentUser()!.id),
-      method: Method.delete,
-    ).then((value) async {
-      if(value.isLoaded()) {
+    try {
+      final result = await request(
+        url: deleteUserUrl(),
+        method: Method.delete,
+      );
+
+      if (result.isLoaded()) {
+        await logout();
         clearAllLocalDataAndNavigate();
+
+        Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
       }
-    }).whenComplete(() => hideLoading());
+    } catch (e) {
+      debugPrint("❌ Failed to delete account: $e");
+    } finally {
+      hideLoading();
+    }
   }
+
 }

@@ -1,14 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../storage/auth_storage.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../helpers/general_helper.dart';
-import 'navigation_menu.dart';
+import '../pages/navigation_menu.dart';
+import '../providers/auth/user_provider.dart';
 
-class WelcomePage extends StatelessWidget {
+class WelcomePage extends ConsumerStatefulWidget {
   const WelcomePage({super.key});
 
-  Future<void> _navigateToNextScreen(BuildContext context) async {
+  @override
+  ConsumerState<WelcomePage> createState() => _WelcomePageState();
+}
+
+class _WelcomePageState extends ConsumerState<WelcomePage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ref.read(userProvider.notifier).loadUserFromStorage(); // ✅ حمل المستخدم
+      _navigateToNextScreen();
+    });
+  }
+
+  Future<void> _navigateToNextScreen() async {
     await Future.delayed(const Duration(seconds: 2));
 
     final firstTime = await isFirstTime();
@@ -27,10 +43,6 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _navigateToNextScreen(context);
-    });
-
     return Scaffold(
       body: Container(
         width: double.infinity,

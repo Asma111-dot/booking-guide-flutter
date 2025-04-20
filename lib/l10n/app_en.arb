@@ -161,5 +161,9 @@
   "otp_code": "Verification Code",
   "enter_verification_code_message": "Please enter the verification code that was sent to your phone number.",
   "verify": "Verify",
-  "login_subtitle": "Start your journey with us and log in to the Hajoozaty app."
+  "edit_personal_data": "Edit Personal Data",
+  "login_subtitle": "Start your journey with us and log in to the Hajoozaty app.",
+  "delete_account": "Delete Account",
+  "are_you_sure": "Are you sure?",
+  "delete_account_confirmation": "Do you really want to delete the account?"
 }

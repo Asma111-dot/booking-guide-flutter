@@ -11,6 +11,7 @@ import '../utils/theme.dart';
 import '../widgets/mune_item_widget.dart';
 import '../widgets/privacy_policy_widget.dart';
 import '../sheetes/support_bottom_sheet.dart';
+import 'user_profile_page.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
   const AccountPage({Key? key}) : super(key: key);
@@ -106,7 +107,12 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     MenuItem(
                       title: trans().personal_data,
                       subtitle: trans().personal_data_desc,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const UserProfilePage()),
+                        );
+                      },
                       icon: LineAwesomeIcons.user_circle,
                     ),
                   ),

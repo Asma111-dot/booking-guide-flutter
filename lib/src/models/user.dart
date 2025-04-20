@@ -21,6 +21,26 @@ class User {
         address = '',
         media = [];
 
+  User copyWith({
+    int? id,
+    String? name,
+    String? email,
+    String? phone,
+    String? password,
+    String? address,
+    List<Media>? media,
+  }) {
+    return User(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      phone: phone ?? this.phone,
+      password: password ?? this.password,
+      address: address ?? this.address,
+      media: media ?? this.media,
+    );
+  }
+
   User({
     required this.id,
     required this.name,

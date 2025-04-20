@@ -9,14 +9,14 @@ import '../utils/theme.dart';
 import '../widgets/button_widget.dart';
 import 'navigation_menu.dart';
 
-class CompleteProfileScreen extends ConsumerStatefulWidget {
-  const CompleteProfileScreen({super.key});
+class CompleteProfilePage extends ConsumerStatefulWidget {
+  const CompleteProfilePage({super.key});
 
   @override
-  ConsumerState<CompleteProfileScreen> createState() => _CompleteProfileScreenState();
+  ConsumerState<CompleteProfilePage> createState() => _CompleteProfileScreenState();
 }
 
-class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
+class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
   final _formKey = GlobalKey<FormState>();
   String name = '';
   String email = '';

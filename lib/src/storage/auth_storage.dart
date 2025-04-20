@@ -1,4 +1,5 @@
 import '../models/user.dart';
+import '../models/media.dart';
 import '../services/hive_service.dart';
 
 String _authBox = 'auth_user';
@@ -9,6 +10,7 @@ String _nameKey = 'name';
 String _emailKey = 'email';
 String _phoneKey = 'phone';
 String _avatar = 'avatar';
+String _avatarId = 'avatar_id';
 String _addressKey = 'address';
 
 String _isFirstTimeKey = 'is_first_time';
@@ -20,13 +22,16 @@ Future open() async => await openBox(_authBox);
 /// استرجاع المستخدم الحالي
 User? currentUser() {
   try {
+    final avatarUrl = box(_authBox).get(_avatar);
     return User(
       id: box(_authBox).get(_idKey),
       name: box(_authBox).get(_nameKey),
       phone: box(_authBox).get(_phoneKey),
       email: box(_authBox).get(_emailKey),
       address: box(_authBox).get(_addressKey),
-      media: box(_authBox).get(_avatar),
+      media: avatarUrl != null && avatarUrl is String && avatarUrl.isNotEmpty
+          ? [Media(original_url: avatarUrl, id: 1)]
+          : [],
     );
   } catch (e) {
     return null;
@@ -35,12 +40,15 @@ User? currentUser() {
 
 /// حفظ بيانات المستخدم بعد تسجيل الدخول
 Future saveCurrentProfile(User user) async {
+  // print("💾 Saving user: ${user.toJson()}"); // Debug
   await box(_authBox).put(_idKey, user.id);
   await box(_authBox).put(_nameKey, user.name);
   await box(_authBox).put(_phoneKey, user.phone);
   await box(_authBox).put(_emailKey, user.email);
   await box(_authBox).put(_addressKey, user.address);
-  await box(_authBox).put(_avatar, user.media);
+  await box(_authBox).put(_avatar, user.media.isNotEmpty ? user.media.first.original_url : '');
+  await box(_authBox).put(_avatarId, user.media.first.id);
+
 }
 
 /// حذف بيانات المستخدم (أثناء تسجيل الخروج)

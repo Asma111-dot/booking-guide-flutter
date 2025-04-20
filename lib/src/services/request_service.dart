@@ -27,41 +27,62 @@ Future<Response<T>> request<T>({
   bool redirectOnPermissionDenied = true,
   bool showSuccessMessage = true,
   bool showErrorMessage = true,
+  File? file,
+  String fileFieldName = 'file',
+  Map<String, dynamic>? fields,
+  bool isMultipart = false,
 }) async {
   Future<d.Response<dynamic>> response;
 
-  switch (method) {
-    case Method.post:
-      response = HttpService.instance.dio.post(
-        url,
-        data: body,
-        queryParameters: queryParameters,
-        cancelToken: cancelToken,
-      );
-      break;
-    case Method.put:
-      response = HttpService.instance.dio.put(
-        url,
-        data: body,
-        queryParameters: queryParameters,
-        cancelToken: cancelToken,
-      );
-      break;
-    case Method.delete:
-      response = HttpService.instance.dio.delete(
-        url,
-        data: body,
-        queryParameters: queryParameters,
-        cancelToken: cancelToken,
-      );
-      break;
-    default:
-      response = HttpService.instance.dio.get(
-        url,
-        queryParameters: body ?? queryParameters,
-        cancelToken: cancelToken,
-      );
-      break;
+  if (isMultipart && file != null) {
+    final formData = d.FormData.fromMap({
+      if (fields != null) ...fields,
+      fileFieldName: await d.MultipartFile.fromFile(
+        file.path,
+        filename: file.path.split('/').last,
+      ),
+    });
+
+    response = HttpService.instance.dio.post(
+      url,
+      data: formData,
+      queryParameters: queryParameters,
+      cancelToken: cancelToken,
+    );
+  } else {
+    switch (method) {
+      case Method.post:
+        response = HttpService.instance.dio.post(
+          url,
+          data: body,
+          queryParameters: queryParameters,
+          cancelToken: cancelToken,
+        );
+        break;
+      case Method.put:
+        response = HttpService.instance.dio.put(
+          url,
+          data: body,
+          queryParameters: queryParameters,
+          cancelToken: cancelToken,
+        );
+        break;
+      case Method.delete:
+        response = HttpService.instance.dio.delete(
+          url,
+          data: body,
+          queryParameters: queryParameters,
+          cancelToken: cancelToken,
+        );
+        break;
+      default:
+        response = HttpService.instance.dio.get(
+          url,
+          queryParameters: body ?? queryParameters,
+          cancelToken: cancelToken,
+        );
+        break;
+    }
   }
 
   dynamic data;
@@ -82,7 +103,6 @@ Future<Response<T>> request<T>({
     return await response.then((value) {
       if (kDebugMode) log("📥 Response raw: ${value.data.toString()}");
 
-      // ✅ Decode JSON safely (UTF-8 compatible)
       dynamic parsed;
       try {
         parsed = value.data is String
@@ -178,6 +198,12 @@ Future<Response<T>> request<T>({
   }
 }
 
+// ✅ دالة عرض الرسائل بعد نهاية request<T>()
 void showMessage(Meta meta) {
-  showNotify(alert: fromAlertName(meta.type), message: meta.message);
+  if (meta.message.isNotEmpty ?? false) {
+    showNotify(
+      alert: fromAlertName(meta.type),
+      message: meta.message,
+    );
+  }
 }

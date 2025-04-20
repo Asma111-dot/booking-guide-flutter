@@ -1,11 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:booking_guide/src/providers/auth/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../helpers/notify_helper.dart';
 import '../../models/response/response.dart';
 import '../../models/user.dart' as model;
 import '../../pages/complete_profile_page.dart';
@@ -15,6 +13,7 @@ import '../../storage/auth_storage.dart';
 import '../../utils/routes.dart';
 import '../../utils/urls.dart';
 import 'otp_state_provider.dart';
+import 'user_provider.dart';
 
 part 'login_provider.g.dart';
 
@@ -73,39 +72,64 @@ class Login extends _$Login {
     String? address,
     File? avatarFile,
   }) async {
-    final token = await getToken();
+    showLoading();
 
-    final uri = Uri.parse(completeProfileUrl());
-    final request = http.MultipartRequest('POST', uri);
-    request.headers['Authorization'] = 'Bearer $token';
-    request.fields['name'] = name;
-    request.fields['email'] = email;
-    request.fields['address'] = address ?? '';
+    final result = await request<model.User>(
+      url: completeProfileUrl(),
+      method: Method.post,
+      isMultipart: true,
+      file: avatarFile,
+      fileFieldName: 'avatar',
+      fields: {
+        'name': name,
+        'email': email,
+        'address': address ?? '',
+      },
+      showSuccessMessage: false,
+      showErrorMessage: true,
+    );
 
-    if (avatarFile != null) {
-      request.files.add(await http.MultipartFile.fromPath('avatar', avatarFile.path));
+    hideLoading();
+
+    if (result.isLoaded() && result.data != null) {
+      await ref.read(userProvider.notifier).saveUserLocally(result.data!);
+      return true;
     }
-
-    final streamedResponse = await request.send();
-    final response = await http.Response.fromStream(streamedResponse);
-
-    if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
-      if (jsonData is Map<String, dynamic> && jsonData['data'] != null) {
-        final parsedUser = model.User.fromJson(jsonData['data']);
-        ref.read(userProvider.notifier).saveUserLocally(parsedUser);
-        return true;
-      }
-     }
 
     return false;
   }
 
 
+  // Future<void> onSuccessLogin(Response<model.User> value) async {
+  //   final user = value.data!;
+  //   setToken(value.meta.accessToken ?? "");
+  //   ref.read(userProvider.notifier).saveUserLocally(user);
+  //
+  //   final name = user.name.trim().toLowerCase();
+  //   final email = user.email.trim().toLowerCase();
+  //
+  //   final isTemporaryProfile =
+  //       name == 'temporary name' || email.startsWith('phone_');
+  //
+  //   await setLoggedIn(true);
+  //   await setFirstTimeFalse();
+  //
+  //   navKey.currentState?.pushAndRemoveUntil(
+  //     MaterialPageRoute(
+  //       builder: (context) => isTemporaryProfile
+  //           ? const CompleteProfilePage()
+  //           : const NavigationMenu(),
+  //     ),
+  //         (r) => false,
+  //   );
+  // }
+
   Future<void> onSuccessLogin(Response<model.User> value) async {
     final user = value.data!;
-    setToken(value.meta.accessToken ?? "");
-    ref.read(userProvider.notifier).saveUserLocally(user);
+    setToken(value.meta.accessToken ?? ""); // ✅ بدون await
+
+    await open(); // فتح الصندوق
+    await ref.read(userProvider.notifier).saveUserLocally(user);
 
     final name = user.name.trim().toLowerCase();
     final email = user.email.trim().toLowerCase();
@@ -113,17 +137,17 @@ class Login extends _$Login {
     final isTemporaryProfile =
         name == 'temporary name' || email.startsWith('phone_');
 
-    // حفظ حالة الدخول
     await setLoggedIn(true);
     await setFirstTimeFalse();
 
     navKey.currentState?.pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (context) => isTemporaryProfile
-            ? const CompleteProfileScreen()
+            ? const CompleteProfilePage()
             : const NavigationMenu(),
       ),
           (r) => false,
     );
   }
+
 }

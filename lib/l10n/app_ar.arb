@@ -161,5 +161,9 @@
   "otp_code": "رمز التحقق",
   "enter_verification_code_message": "يرجى إدخال رمز التحقق الذي تم إرساله إلى رقم هاتفكم.",
   "verify": "تأكيد",
-  "login_subtitle": "ابدأ رحلتك معنا، وسجّل الدخول إلى تطبيق حجوزاتي."
+  "edit_personal_data": "تعديل البيانات الشخصية",
+  "login_subtitle": "ابدأ رحلتك معنا، وسجّل الدخول إلى تطبيق حجوزاتي.",
+  "delete_account": "حذف الحساب",
+  "are_you_sure": "هل أنت متأكد؟",
+  "delete_account_confirmation": "هل تريد فعلاً حذف حسابك؟ لا يمكن التراجع."
 }
