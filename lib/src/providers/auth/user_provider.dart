@@ -60,7 +60,6 @@ class User extends _$User {
   }
 //if to ues logout
   Future logout() async {
-
     showLoading();
 
     await request(
@@ -68,8 +67,10 @@ class User extends _$User {
       method: Method.post,
       redirectOnPermissionDenied: true,
     ).then((value) async {
-      if(value.isLoaded()) {
-        clearAllLocalDataAndNavigate();
+      if (value.isLoaded()) {
+        // نضيف هذه السطرين
+        await logout(); // من auth_storage.dart يمسح حالة الدخول والمستخدم
+        clearAllLocalDataAndNavigate(); // يعيد التوجيه
       }
     }).whenComplete(() => hideLoading());
   }

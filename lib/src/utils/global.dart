@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-String appName(String locale) => locale == 'ar' ? "دليل الحجوزات" : "Booking Guide";
+String appName(String locale) => locale == 'ar' ? " حجوزاتي" : "My Booking";
 
 //how?
 const authToken = "";

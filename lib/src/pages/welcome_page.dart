@@ -1,29 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../storage/auth_storage.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../helpers/general_helper.dart';
 import 'navigation_menu.dart';
 
-class WelcomePage extends ConsumerWidget {
+class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
 
   Future<void> _navigateToNextScreen(BuildContext context) async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 2));
 
-    if (isLoggedIn()) {
+    final firstTime = await isFirstTime();
+    final loggedIn = isUserLoggedIn();
+
+    if (firstTime || !loggedIn) {
+      await setFirstTimeFalse();
+      Navigator.pushReplacementNamed(context, Routes.login);
+    } else {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => NavigationMenu()),
+        MaterialPageRoute(builder: (context) => const NavigationMenu()),
       );
-    } else {
-      Navigator.pushReplacementNamed(context, Routes.login);
     }
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _navigateToNextScreen(context);
     });

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helpers/general_helper.dart';
 import '../providers/auth/otp_state_provider.dart';
 import '../providers/auth/login_provider.dart';
-import 'button_widget.dart';
+import '../widgets/button_widget.dart';
 
 class OtpVerifySheet extends ConsumerWidget {
   const OtpVerifySheet({super.key});

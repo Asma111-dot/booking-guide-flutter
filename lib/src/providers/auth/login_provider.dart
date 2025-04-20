@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:booking_guide/src/providers/auth/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../models/response/response.dart';
@@ -62,27 +66,41 @@ class Login extends _$Login {
     });
   }
 
+
   Future<bool> completeProfile({
     required String name,
     required String email,
     String? address,
+    File? avatarFile,
   }) async {
-    final response = await request<model.User>(
-      url: completeProfileUrl(),
-      method: Method.post,
-      body: {
-        "name": name,
-        "email": email,
-        "address": address,
-      },
-    );
+    final token = await getToken();
 
-    if (response.isLoaded()) {
-      ref.read(userProvider.notifier).saveUserLocally(response.data!);
+    final uri = Uri.parse(completeProfileUrl());
+    final request = http.MultipartRequest('POST', uri);
+    request.headers['Authorization'] = 'Bearer $token';
+    request.fields['name'] = name;
+    request.fields['email'] = email;
+    request.fields['address'] = address ?? '';
+
+    if (avatarFile != null) {
+      request.files.add(await http.MultipartFile.fromPath('avatar', avatarFile.path));
     }
 
-    return response.isLoaded();
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      if (jsonData is Map<String, dynamic> && jsonData['data'] != null) {
+        final parsedUser = model.User.fromJson(jsonData['data']);
+        ref.read(userProvider.notifier).saveUserLocally(parsedUser);
+        return true;
+      }
+     }
+
+    return false;
   }
+
 
   Future<void> onSuccessLogin(Response<model.User> value) async {
     final user = value.data!;
@@ -95,6 +113,10 @@ class Login extends _$Login {
     final isTemporaryProfile =
         name == 'temporary name' || email.startsWith('phone_');
 
+    // حفظ حالة الدخول
+    await setLoggedIn(true);
+    await setFirstTimeFalse();
+
     navKey.currentState?.pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (context) => isTemporaryProfile
@@ -105,4 +127,3 @@ class Login extends _$Login {
     );
   }
 }
-

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import '../helpers/general_helper.dart';
 import '../providers/auth/login_provider.dart';
 import '../utils/theme.dart';
@@ -19,6 +22,16 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
   String email = '';
   String address = '';
   bool isLoading = false;
+  File? _avatarFile;
+
+  Future<void> pickImage() async {
+    final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (picked != null) {
+      setState(() {
+        _avatarFile = File(picked.path);
+      });
+    }
+  }
 
   Future<void> submit() async {
     if (!_formKey.currentState!.validate()) return;
@@ -30,7 +43,10 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
       name: name,
       email: email,
       address: address,
+      avatarFile: _avatarFile,
     );
+
+    if (!mounted) return; // ✅ مهم جدًا في حال الشاشة تغيرت قبل ما يرجع الرد
 
     setState(() => isLoading = false);
 
@@ -45,6 +61,7 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
         const SnackBar(content: Text("فشل في حفظ البيانات، حاول مرة أخرى")),
       );
     }
+    print("✅ isSuccess = $isSuccess");
   }
 
   @override
@@ -74,16 +91,26 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
                 Stack(
                   alignment: Alignment.bottomRight,
                   children: [
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundColor: CustomTheme.tertiaryColor,
-                      child: const Icon(Icons.camera_alt_outlined, size: 40, color: Colors.grey),
+                    GestureDetector(
+                      onTap: pickImage,
+                      child: Stack(
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          CircleAvatar(
+                            radius: 50,
+                            backgroundImage: _avatarFile != null
+                                ? FileImage(_avatarFile!)
+                                : AssetImage('assets/images/default_avatar.jpg') as ImageProvider,
+                            backgroundColor: CustomTheme.tertiaryColor,
+                          ),
+                          CircleAvatar(
+                            radius: 15,
+                            backgroundColor: Colors.white,
+                            child: const Icon(Icons.camera_alt_outlined, size: 16, color: Colors.grey),
+                          ),
+                        ],
+                      ),
                     ),
-                    CircleAvatar(
-                      radius: 15,
-                      backgroundColor: Colors.white,
-                      child: const Icon(Icons.lock, size: 16, color: Colors.grey),
-                    )
                   ],
                 ),
                 const SizedBox(height: 30),

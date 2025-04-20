@@ -41,6 +41,9 @@ class User {
                 ?.map((item) => Media.fromJson(item))
                 .toList() ??
             [];
+  String? getAvatarUrl() {
+    return media.isNotEmpty ? media.first.original_url : null;
+  }
 
   Future<Map> toJson([String? verificationCode]) async {
     var map = <String, dynamic>{};

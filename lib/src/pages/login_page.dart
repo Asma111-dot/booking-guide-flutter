@@ -7,7 +7,7 @@ import '../utils/assets.dart';
 import '../utils/theme.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar_clipper.dart';
-import '../widgets/otp_verify_sheet.dart';
+import '../sheetes/otp_verify_sheet.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -119,54 +119,22 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     ),
                   ),
                 ),
-                validator: (value) =>
-                value == null || value.isEmpty
-                    ? trans().phoneFieldIsRequired
-                    : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return trans().phoneFieldIsRequired;
+                  } else if (value.length != 9) {
+                    return "رقم الهاتف يجب أن يتكون من 9 أرقام";
+                  } else if (!value.startsWith('7')) {
+                    return "رقم الهاتف يجب أن يبدأ بـ 7";
+                  }
+                  return null;
+                },
                 onChanged: (value) =>
                 ref
                     .read(phoneProvider.notifier)
                     .state = value,
               ),
               const SizedBox(height: 32),
-              // Hero(
-              //   tag: 'login',
-              //   child: ElevatedButton.icon(
-              //     style: ElevatedButton.styleFrom(
-              //       backgroundColor: CustomTheme.primaryColor,
-              //       minimumSize: const Size.fromHeight(50),
-              //       shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(8),
-              //       ),
-              //     ),
-              //     icon: const Icon(Icons.login, color: Colors.white),
-              //     label: Text(
-              //       trans().login,
-              //       style: const TextStyle(
-              //         fontSize: 16,
-              //         color: Colors.white,
-              //       ),
-              //     ),
-              //     onPressed: login.isLoading()
-              //         ? null
-              //         : () async {
-              //       if (loginKey.currentState!.validate()) {
-              //         FocusManager.instance.primaryFocus?.unfocus();
-              //         loginKey.currentState!.save();
-              //         showModalBottomSheet(
-              //           context: context,
-              //           isScrollControlled: true,
-              //           backgroundColor: Colors.transparent,
-              //           builder: (_) => const OtpVerifySheet(),
-              //         );
-              //         await ref
-              //             .read(loginProvider.notifier)
-              //             .requestOtp();
-              //       }
-              //       setState(() => autoValidate = true);
-              //     },
-              //   ),
-              // ),
               Hero(
                 tag: 'login',
                 child: Button(
@@ -175,20 +143,31 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     disable: login.isLoading(),
                     icon: const Icon(Icons.login, color: Colors.white),
                     iconAfterText: true,
-                    onPressed: () async {
-              if (loginKey.currentState!.validate()) {
-              FocusManager.instance.primaryFocus?.unfocus();
-              loginKey.currentState!.save();
-              showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              builder: (_) => const OtpVerifySheet(),
-              );
-              await ref.read(loginProvider.notifier).requestOtp();
-              }
-              setState(() => autoValidate = true);
-              },
+                  onPressed: () async {
+                    final phone = ref.read(phoneProvider);
+                    if (phone.length != 9 || !phone.startsWith('7')) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("الرجاء إدخال رقم هاتف صحيح مكون من 9 أرقام ويبدأ بـ 7")),
+                      );
+                      return;
+                    }
+
+                    if (loginKey.currentState!.validate()) {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      loginKey.currentState!.save();
+
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (_) => const OtpVerifySheet(),
+                      );
+
+                      await ref.read(loginProvider.notifier).requestOtp();
+                    }
+
+                    setState(() => autoValidate = true);
+                  },
               ),
             ),
             ],

@@ -5,11 +5,12 @@ import 'package:share_plus/share_plus.dart';
 
 import '../helpers/general_helper.dart';
 import '../providers/auth/user_provider.dart';
+import '../sheetes/logout_bottom_sheet.dart';
 import '../utils/assets.dart';
 import '../utils/theme.dart';
 import '../widgets/mune_item_widget.dart';
 import '../widgets/privacy_policy_widget.dart';
-import '../widgets/support_bottom_sheet.dart';
+import '../sheetes/support_bottom_sheet.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
   const AccountPage({Key? key}) : super(key: key);
@@ -153,7 +154,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     MenuItem(
                       title: trans().logout,
                       subtitle: trans().logout_desc,
-                      onPressed: () {},
+                      onPressed: () => showLogoutBottomSheet(context, ref),
                       icon: LineAwesomeIcons.sign_in_alt_solid,
                     ),
                   ),
