@@ -51,7 +51,7 @@ class Facilities extends _$Facilities {
 
 
           facilities = facilities.where((facility) => favoriteIds.contains(facility.id)).toList();
-        } else if (target == FacilityTarget.searches) {
+        } else if (target == FacilityTarget.filters) {
         }
 
 

@@ -74,14 +74,14 @@ class User extends _$User {
 
     final result = await request<model.User>(
       url: updateUserUrl(),
-      method: Method.post, // ✅ POST حقيقي
+      method: Method.post, // ⚠️ إرسال كـ POST لكن ...
       isMultipart: true,
       file: avatar,
       fileFieldName: 'avatar',
       fields: {
         '_method': 'PUT', // ✅ Laravel will treat this as PUT
-        'name': user.name ?? '',
-        'email': user.email ?? '',
+        'name': user.name,
+        'email': user.email,
         'address': user.address ?? '',
       },
     );

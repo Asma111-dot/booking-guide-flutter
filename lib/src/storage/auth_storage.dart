@@ -47,7 +47,7 @@ Future saveCurrentProfile(User user) async {
   await box(_authBox).put(_emailKey, user.email);
   await box(_authBox).put(_addressKey, user.address);
   await box(_authBox).put(_avatar, user.media.isNotEmpty ? user.media.first.original_url : '');
-  await box(_authBox).put(_avatarId, user.media.first.id);
+  await box(_authBox).put(_avatarId, user.media.isNotEmpty ? user.media.first.id : null);
 
 }
 

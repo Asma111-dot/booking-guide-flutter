@@ -95,8 +95,7 @@ dev_dependencies:
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-#f
-
+#flutter gen-l10n
 # dart run build_runner build --delete-conflicting-outputs
 # The following section is specific to Flutter packages.
 flutter:

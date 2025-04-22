@@ -116,14 +116,14 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       icon: LineAwesomeIcons.user_circle,
                     ),
                   ),
-                  _buildMenuCard(
-                    MenuItem(
-                      title: trans().language,
-                      subtitle: trans().language_desc,
-                      onPressed: () {},
-                      icon: LineAwesomeIcons.language_solid,
-                    ),
-                  ),
+                  // _buildMenuCard(
+                  //   MenuItem(
+                  //     title: trans().language,
+                  //     subtitle: trans().language_desc,
+                  //     onPressed: () {},
+                  //     icon: LineAwesomeIcons.language_solid,
+                  //   ),
+                  // ),
                   _buildMenuCard(
                     MenuItem(
                       title: trans().policies,

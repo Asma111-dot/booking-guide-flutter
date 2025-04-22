@@ -1,12 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'facility_provider.dart';
+part of 'filtered_facilities_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$facilitiesHash() => r'cd406c207322a0dd987959dce6becc220e8c167f';
+String _$filteredFacilitiesHash() =>
+    r'9252cd272c1ae5f5f4525fa634ced17f3f34e2bf';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,39 +30,39 @@ class _SystemHash {
   }
 }
 
-abstract class _$Facilities
+abstract class _$FilteredFacilities
     extends BuildlessAutoDisposeNotifier<Response<List<Facility>>> {
-  late final FacilityTarget target;
+  late final Map<String, String> filters;
 
   Response<List<Facility>> build(
-    FacilityTarget target,
+    Map<String, String> filters,
   );
 }
 
-/// See also [Facilities].
-@ProviderFor(Facilities)
-const facilitiesProvider = FacilitiesFamily();
+/// See also [FilteredFacilities].
+@ProviderFor(FilteredFacilities)
+const filteredFacilitiesProvider = FilteredFacilitiesFamily();
 
-/// See also [Facilities].
-class FacilitiesFamily extends Family<Response<List<Facility>>> {
-  /// See also [Facilities].
-  const FacilitiesFamily();
+/// See also [FilteredFacilities].
+class FilteredFacilitiesFamily extends Family<Response<List<Facility>>> {
+  /// See also [FilteredFacilities].
+  const FilteredFacilitiesFamily();
 
-  /// See also [Facilities].
-  FacilitiesProvider call(
-    FacilityTarget target,
+  /// See also [FilteredFacilities].
+  FilteredFacilitiesProvider call(
+    Map<String, String> filters,
   ) {
-    return FacilitiesProvider(
-      target,
+    return FilteredFacilitiesProvider(
+      filters,
     );
   }
 
   @override
-  FacilitiesProvider getProviderOverride(
-    covariant FacilitiesProvider provider,
+  FilteredFacilitiesProvider getProviderOverride(
+    covariant FilteredFacilitiesProvider provider,
   ) {
     return call(
-      provider.target,
+      provider.filters,
     );
   }
 
@@ -77,81 +78,81 @@ class FacilitiesFamily extends Family<Response<List<Facility>>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'facilitiesProvider';
+  String? get name => r'filteredFacilitiesProvider';
 }
 
-/// See also [Facilities].
-class FacilitiesProvider extends AutoDisposeNotifierProviderImpl<Facilities,
-    Response<List<Facility>>> {
-  /// See also [Facilities].
-  FacilitiesProvider(
-    FacilityTarget target,
+/// See also [FilteredFacilities].
+class FilteredFacilitiesProvider extends AutoDisposeNotifierProviderImpl<
+    FilteredFacilities, Response<List<Facility>>> {
+  /// See also [FilteredFacilities].
+  FilteredFacilitiesProvider(
+    Map<String, String> filters,
   ) : this._internal(
-          () => Facilities()..target = target,
-          from: facilitiesProvider,
-          name: r'facilitiesProvider',
+          () => FilteredFacilities()..filters = filters,
+          from: filteredFacilitiesProvider,
+          name: r'filteredFacilitiesProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$facilitiesHash,
-          dependencies: FacilitiesFamily._dependencies,
+                  : _$filteredFacilitiesHash,
+          dependencies: FilteredFacilitiesFamily._dependencies,
           allTransitiveDependencies:
-              FacilitiesFamily._allTransitiveDependencies,
-          target: target,
+              FilteredFacilitiesFamily._allTransitiveDependencies,
+          filters: filters,
         );
 
-  FacilitiesProvider._internal(
+  FilteredFacilitiesProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.target,
+    required this.filters,
   }) : super.internal();
 
-  final FacilityTarget target;
+  final Map<String, String> filters;
 
   @override
   Response<List<Facility>> runNotifierBuild(
-    covariant Facilities notifier,
+    covariant FilteredFacilities notifier,
   ) {
     return notifier.build(
-      target,
+      filters,
     );
   }
 
   @override
-  Override overrideWith(Facilities Function() create) {
+  Override overrideWith(FilteredFacilities Function() create) {
     return ProviderOverride(
       origin: this,
-      override: FacilitiesProvider._internal(
-        () => create()..target = target,
+      override: FilteredFacilitiesProvider._internal(
+        () => create()..filters = filters,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        target: target,
+        filters: filters,
       ),
     );
   }
 
   @override
-  AutoDisposeNotifierProviderElement<Facilities, Response<List<Facility>>>
-      createElement() {
-    return _FacilitiesProviderElement(this);
+  AutoDisposeNotifierProviderElement<FilteredFacilities,
+      Response<List<Facility>>> createElement() {
+    return _FilteredFacilitiesProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is FacilitiesProvider && other.target == target;
+    return other is FilteredFacilitiesProvider && other.filters == filters;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, target.hashCode);
+    hash = _SystemHash.combine(hash, filters.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -159,18 +160,20 @@ class FacilitiesProvider extends AutoDisposeNotifierProviderImpl<Facilities,
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin FacilitiesRef
+mixin FilteredFacilitiesRef
     on AutoDisposeNotifierProviderRef<Response<List<Facility>>> {
-  /// The parameter `target` of this provider.
-  FacilityTarget get target;
+  /// The parameter `filters` of this provider.
+  Map<String, String> get filters;
 }
 
-class _FacilitiesProviderElement extends AutoDisposeNotifierProviderElement<
-    Facilities, Response<List<Facility>>> with FacilitiesRef {
-  _FacilitiesProviderElement(super.provider);
+class _FilteredFacilitiesProviderElement
+    extends AutoDisposeNotifierProviderElement<FilteredFacilities,
+        Response<List<Facility>>> with FilteredFacilitiesRef {
+  _FilteredFacilitiesProviderElement(super.provider);
 
   @override
-  FacilityTarget get target => (origin as FacilitiesProvider).target;
+  Map<String, String> get filters =>
+      (origin as FilteredFacilitiesProvider).filters;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

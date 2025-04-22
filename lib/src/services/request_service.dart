@@ -34,20 +34,30 @@ Future<Response<T>> request<T>({
 }) async {
   Future<d.Response<dynamic>> response;
 
-  if (isMultipart && file != null) {
-    final formData = d.FormData.fromMap({
+  if (isMultipart) {
+    final formMap = <String, dynamic>{
       if (fields != null) ...fields,
-      fileFieldName: await d.MultipartFile.fromFile(
+    };
+
+    if (file != null) {
+      formMap[fileFieldName] = await d.MultipartFile.fromFile(
         file.path,
         filename: file.path.split('/').last,
-      ),
-    });
+      );
+    }
+
+    final formData = d.FormData.fromMap(formMap);
 
     response = HttpService.instance.dio.post(
       url,
       data: formData,
       queryParameters: queryParameters,
       cancelToken: cancelToken,
+      options: d.Options(
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      ),
     );
   } else {
     switch (method) {

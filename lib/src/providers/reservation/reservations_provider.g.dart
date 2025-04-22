@@ -6,7 +6,7 @@ part of 'reservations_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$reservationsHash() => r'8ba30ac359423e58e2889e4434fae0c40248e7f0';
+String _$reservationsHash() => r'd4836694516fd6d2117eed3ace4bfaf159a862ad';
 
 /// See also [Reservations].
 @ProviderFor(Reservations)

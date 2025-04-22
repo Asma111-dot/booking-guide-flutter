@@ -65,23 +65,14 @@ String getFacilitiesUrl({int? facilityTypeId}) {
 }
 
 // URLs Facility Search
-String searchFacilitiesUrl({
-  String? name,
-}) {
+String searchFacilitiesUrl(Map<String, String> filters) {
   String url = "${apiUrl}facilities/search";
-  Map<String, String> queryParams = {};
-
-  if (name != null && name.isNotEmpty) {
-    queryParams['name'] = name;
+  if (filters.isNotEmpty) {
+    url += '?' + Uri(queryParameters: filters).query;
   }
-
-  // Adding query parameters to the URL
-  if (queryParams.isNotEmpty) {
-    url += '?' + Uri(queryParameters: queryParams).query;
-  }
-
   return url;
 }
+
 
 //Urls Room
 String getRoomUrl({required int roomId}) => "${apiUrl}rooms/$roomId";
