@@ -6,8 +6,10 @@ import 'package:url_launcher/url_launcher.dart';
 import '../helpers/general_helper.dart';
 import '../providers/auth/user_provider.dart';
 import '../providers/facility_type/facility_type_provider.dart';
+import '../providers/filter/filtered_facilities_provider.dart';
 import '../utils/assets.dart';
 import '../utils/theme.dart';
+import 'facility_filter_page.dart';
 import 'facility_page.dart';
 
 class FacilityTypesPage extends ConsumerStatefulWidget {
@@ -19,7 +21,7 @@ class FacilityTypesPage extends ConsumerStatefulWidget {
 
 class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
   int? selectedFacilityType;
-  String searchQuery = '';
+  Map<String, String>? activeFilters;
 
   @override
   void initState() {
@@ -117,45 +119,86 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
             child: Row(
               children: [
                 Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 5,
-                          offset: Offset(0, 2),
-                        )
-                      ],
-                    ),
-                    child: TextField(
-                      onChanged: (value) {
-                        setState(() {
-                          searchQuery = value;
-                        });
-                      },
-                      decoration: InputDecoration(
-                        hintText: trans().search,
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: CustomTheme.primaryColor,
-                        ),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                  child: GestureDetector(
+                    // onTap: () async {
+                    //   final filters = await Navigator.push<Map<String, String>>(
+                    //     context,
+                    //     MaterialPageRoute(builder: (_) => FacilityFilterPage()),
+                    //   );
+                    //
+                    //   if (filters != null) {
+                    //     ref.read(filteredFacilitiesProvider(filters).notifier).fetch();
+                    //   }
+                    // },
+                    onTap: () async {
+                      final filters = await Navigator.push<Map<String, String>>(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const FacilityFilterPage()),
+                      );
+
+                      if (filters != null) {
+                        setState(() => activeFilters = filters);
+                        ref
+                            .read(filteredFacilitiesProvider(filters).notifier)
+                            .fetch();
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 5,
+                            offset: Offset(0, 2),
+                          )
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.search, color: CustomTheme.primaryColor),
+                          SizedBox(width: 10),
+                          Text(
+                            'بحث في المنشآت...',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
                 const SizedBox(width: 10),
-                Container(
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                    color: CustomTheme.primaryColor,
-                    borderRadius: BorderRadius.circular(15),
+                GestureDetector(
+                  onTap: () async {
+                    final filters = await Navigator.push<Map<String, String>>(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const FacilityFilterPage()),
+                    );
+
+                    if (filters != null) {
+                      setState(() => activeFilters = filters);
+                      ref
+                          .read(filteredFacilitiesProvider(filters).notifier)
+                          .fetch();
+                    }
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      color: CustomTheme.primaryColor,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: const Icon(Icons.tune, color: Colors.white),
                   ),
-                  child: const Icon(Icons.tune, color: Colors.white),
                 ),
               ],
             ),
@@ -181,18 +224,68 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                   ),
           ),
           const SizedBox(height: 10),
+          // Expanded(
+          //   child: selectedFacilityType == null
+          //       ? Center(
+          //           child: Text(
+          //             trans().selectFacilityType,
+          //           ),
+          //         )
+          //       : FacilityPage(
+          //           facilityTypeId: selectedFacilityType ?? 0,
+          //        //   searchQuery: searchQuery,
+          //         ),
+          // ),
+          if (activeFilters != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  onPressed: () => setState(() => activeFilters = null),
+                  icon: const Icon(Icons.close),
+                  label: const Text("إلغاء الفلاتر"),
+                ),
+              ),
+            ),
           Expanded(
-            child: selectedFacilityType == null
-                ? Center(
-                    child: Text(
-                      trans().selectFacilityType,
-                    ),
+            child: activeFilters != null
+                ? Consumer(
+                    builder: (context, ref, _) {
+                      final filtered =
+                          ref.watch(filteredFacilitiesProvider(activeFilters!));
+
+                      if (filtered.isLoading()) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (!filtered.isLoaded() && filtered.message != null) {
+                        return Center(
+                            child: Text(filtered.message != null ? filtered.message!() : "حدث خطأ أثناء التحميل")
+                        );
+                      }
+
+                      if (filtered.data != null && filtered.data!.isEmpty) {
+                        return Center(
+                            child: Text("لا توجد منشآت مطابقة للبحث"));
+                      }
+
+                      return ListView.builder(
+                        itemCount: filtered.data!.length,
+                        itemBuilder: (_, index) {
+                          final facility = filtered.data![index];
+                          return ListTile(
+                            title: Text(facility.name),
+                            subtitle: Text(facility.address ?? ""),
+                          );
+                        },
+                      );
+                    },
                   )
-                : FacilityPage(
-                    facilityTypeId: selectedFacilityType ?? 0,
-                    searchQuery: searchQuery,
-                  ),
-          ),
+                : selectedFacilityType == null
+                    ? Center(child: Text(trans().selectFacilityType))
+                    : FacilityPage(facilityTypeId: selectedFacilityType!),
+          )
         ],
       ),
     );
@@ -207,7 +300,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
         padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
         decoration: BoxDecoration(
           color: isSelected
-              ? CustomTheme.primaryColor.withOpacity(0.1)
+              ? CustomTheme.primaryColor.withAlpha((0.1 * 255).toInt())
               : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
         ),

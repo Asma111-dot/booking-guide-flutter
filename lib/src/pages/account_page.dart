@@ -9,7 +9,7 @@ import '../sheetes/logout_bottom_sheet.dart';
 import '../utils/assets.dart';
 import '../utils/theme.dart';
 import '../widgets/mune_item_widget.dart';
-import '../widgets/privacy_policy_widget.dart';
+import 'privacy_policy_page .dart';
 import '../sheetes/support_bottom_sheet.dart';
 import 'user_profile_page.dart';
 

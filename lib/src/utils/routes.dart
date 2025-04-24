@@ -1,10 +1,11 @@
-import 'package:booking_guide/src/pages/payment_page.dart';
 import 'package:flutter/material.dart';
 
 import '../models/facility.dart';
 import '../models/room_price.dart';
+import '../pages/facility_filter_page.dart';
 import '../pages/map_page.dart';
 import '../pages/payment_details_page.dart';
+import '../pages/payment_page.dart';
 import '../pages/price_calendar_page.dart';
 import '../pages/room_details_page.dart';
 import '../pages/facility_types_page.dart';
@@ -93,6 +94,12 @@ class Routes {
         final facilityTypeId = args as int? ?? 0;
         return MaterialPageRoute(
           builder: (_) => MapPage(facilityId: facilityTypeId),
+          settings: settings,
+        );
+
+      case '/filters':
+        return MaterialPageRoute(
+          builder: (_) => const FacilityFilterPage(),
           settings: settings,
         );
 

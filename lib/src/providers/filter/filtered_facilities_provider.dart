@@ -8,7 +8,8 @@ import '../../utils/urls.dart';
 
 part 'filtered_facilities_provider.g.dart';
 
-@riverpod
+// @riverpod
+@Riverpod(keepAlive: true)
 class FilteredFacilities extends _$FilteredFacilities {
   @override
   Response<List<Facility>> build(Map<String, String> filters) =>
@@ -22,7 +23,8 @@ class FilteredFacilities extends _$FilteredFacilities {
     try {
       final result = await request<List<dynamic>>(
         url: url,
-        method: Method.get,
+        method: Method.post,
+        body: filters,        // ✅ filters هو Map<String, String>
       );
 
       final facilities = Facility.fromJsonList(result.data ?? []);
