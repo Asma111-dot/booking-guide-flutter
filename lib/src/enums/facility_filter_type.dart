@@ -1,5 +1,6 @@
 enum FacilityFilterType {
   name,
+  facilityTypeId,
   priceBetween,
   checkInBetween,
   addressLike,
@@ -13,6 +14,8 @@ extension FacilityFilterTypeExtension on FacilityFilterType {
     switch (this) {
       case FacilityFilterType.name:
         return 'اسم المنشأة';
+      case FacilityFilterType.facilityTypeId:
+        return 'نوع المنشأة';
       case FacilityFilterType.priceBetween:
         return 'نطاق السعر';
       case FacilityFilterType.checkInBetween:
@@ -24,7 +27,7 @@ extension FacilityFilterTypeExtension on FacilityFilterType {
       case FacilityFilterType.capacityAtLeast:
         return 'عدد الأشخاص المناسب';
       case FacilityFilterType.availableOnDay:
-        return 'المتاحة في يوم محدد'; // ✅
+        return 'المتاحة في يوم محدد';
     }
   }
 
@@ -32,6 +35,8 @@ extension FacilityFilterTypeExtension on FacilityFilterType {
     switch (this) {
       case FacilityFilterType.name:
         return 'filter[name]';
+      case FacilityFilterType.facilityTypeId:
+        return 'filter[facility_type_id]';
       case FacilityFilterType.priceBetween:
         return 'filter[price_between]';
       case FacilityFilterType.checkInBetween:

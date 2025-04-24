@@ -98,8 +98,9 @@ class Routes {
         );
 
       case '/filters':
+        final facilityTypeId = settings.arguments as int;
         return MaterialPageRoute(
-          builder: (_) => const FacilityFilterPage(),
+          builder: (_) => FacilityFilterPage(initialFacilityTypeId: facilityTypeId),
           settings: settings,
         );
 

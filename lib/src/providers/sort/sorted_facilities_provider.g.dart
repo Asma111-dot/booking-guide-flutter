@@ -1,13 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'filtered_facilities_provider.dart';
+part of 'sorted_facilities_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$filteredFacilitiesHash() =>
-    r'6c248be2771daaef2029e5d7867318f16f24b9b6';
+String _$sortedFacilitiesHash() => r'57f57426e9d1d22ebec72a769194c494cf5656d5';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,39 +29,39 @@ class _SystemHash {
   }
 }
 
-abstract class _$FilteredFacilities
+abstract class _$SortedFacilities
     extends BuildlessNotifier<Response<List<Facility>>> {
-  late final Map<String, String> filters;
+  late final String sortKey;
 
   Response<List<Facility>> build(
-    Map<String, String> filters,
+    String sortKey,
   );
 }
 
-/// See also [FilteredFacilities].
-@ProviderFor(FilteredFacilities)
-const filteredFacilitiesProvider = FilteredFacilitiesFamily();
+/// See also [SortedFacilities].
+@ProviderFor(SortedFacilities)
+const sortedFacilitiesProvider = SortedFacilitiesFamily();
 
-/// See also [FilteredFacilities].
-class FilteredFacilitiesFamily extends Family<Response<List<Facility>>> {
-  /// See also [FilteredFacilities].
-  const FilteredFacilitiesFamily();
+/// See also [SortedFacilities].
+class SortedFacilitiesFamily extends Family<Response<List<Facility>>> {
+  /// See also [SortedFacilities].
+  const SortedFacilitiesFamily();
 
-  /// See also [FilteredFacilities].
-  FilteredFacilitiesProvider call(
-    Map<String, String> filters,
+  /// See also [SortedFacilities].
+  SortedFacilitiesProvider call(
+    String sortKey,
   ) {
-    return FilteredFacilitiesProvider(
-      filters,
+    return SortedFacilitiesProvider(
+      sortKey,
     );
   }
 
   @override
-  FilteredFacilitiesProvider getProviderOverride(
-    covariant FilteredFacilitiesProvider provider,
+  SortedFacilitiesProvider getProviderOverride(
+    covariant SortedFacilitiesProvider provider,
   ) {
     return call(
-      provider.filters,
+      provider.sortKey,
     );
   }
 
@@ -78,81 +77,81 @@ class FilteredFacilitiesFamily extends Family<Response<List<Facility>>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'filteredFacilitiesProvider';
+  String? get name => r'sortedFacilitiesProvider';
 }
 
-/// See also [FilteredFacilities].
-class FilteredFacilitiesProvider
-    extends NotifierProviderImpl<FilteredFacilities, Response<List<Facility>>> {
-  /// See also [FilteredFacilities].
-  FilteredFacilitiesProvider(
-    Map<String, String> filters,
+/// See also [SortedFacilities].
+class SortedFacilitiesProvider
+    extends NotifierProviderImpl<SortedFacilities, Response<List<Facility>>> {
+  /// See also [SortedFacilities].
+  SortedFacilitiesProvider(
+    String sortKey,
   ) : this._internal(
-          () => FilteredFacilities()..filters = filters,
-          from: filteredFacilitiesProvider,
-          name: r'filteredFacilitiesProvider',
+          () => SortedFacilities()..sortKey = sortKey,
+          from: sortedFacilitiesProvider,
+          name: r'sortedFacilitiesProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$filteredFacilitiesHash,
-          dependencies: FilteredFacilitiesFamily._dependencies,
+                  : _$sortedFacilitiesHash,
+          dependencies: SortedFacilitiesFamily._dependencies,
           allTransitiveDependencies:
-              FilteredFacilitiesFamily._allTransitiveDependencies,
-          filters: filters,
+              SortedFacilitiesFamily._allTransitiveDependencies,
+          sortKey: sortKey,
         );
 
-  FilteredFacilitiesProvider._internal(
+  SortedFacilitiesProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.filters,
+    required this.sortKey,
   }) : super.internal();
 
-  final Map<String, String> filters;
+  final String sortKey;
 
   @override
   Response<List<Facility>> runNotifierBuild(
-    covariant FilteredFacilities notifier,
+    covariant SortedFacilities notifier,
   ) {
     return notifier.build(
-      filters,
+      sortKey,
     );
   }
 
   @override
-  Override overrideWith(FilteredFacilities Function() create) {
+  Override overrideWith(SortedFacilities Function() create) {
     return ProviderOverride(
       origin: this,
-      override: FilteredFacilitiesProvider._internal(
-        () => create()..filters = filters,
+      override: SortedFacilitiesProvider._internal(
+        () => create()..sortKey = sortKey,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        filters: filters,
+        sortKey: sortKey,
       ),
     );
   }
 
   @override
-  NotifierProviderElement<FilteredFacilities, Response<List<Facility>>>
+  NotifierProviderElement<SortedFacilities, Response<List<Facility>>>
       createElement() {
-    return _FilteredFacilitiesProviderElement(this);
+    return _SortedFacilitiesProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is FilteredFacilitiesProvider && other.filters == filters;
+    return other is SortedFacilitiesProvider && other.sortKey == sortKey;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, filters.hashCode);
+    hash = _SystemHash.combine(hash, sortKey.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -160,18 +159,18 @@ class FilteredFacilitiesProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin FilteredFacilitiesRef on NotifierProviderRef<Response<List<Facility>>> {
-  /// The parameter `filters` of this provider.
-  Map<String, String> get filters;
+mixin SortedFacilitiesRef on NotifierProviderRef<Response<List<Facility>>> {
+  /// The parameter `sortKey` of this provider.
+  String get sortKey;
 }
 
-class _FilteredFacilitiesProviderElement extends NotifierProviderElement<
-    FilteredFacilities, Response<List<Facility>>> with FilteredFacilitiesRef {
-  _FilteredFacilitiesProviderElement(super.provider);
+class _SortedFacilitiesProviderElement
+    extends NotifierProviderElement<SortedFacilities, Response<List<Facility>>>
+    with SortedFacilitiesRef {
+  _SortedFacilitiesProviderElement(super.provider);
 
   @override
-  Map<String, String> get filters =>
-      (origin as FilteredFacilitiesProvider).filters;
+  String get sortKey => (origin as SortedFacilitiesProvider).sortKey;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

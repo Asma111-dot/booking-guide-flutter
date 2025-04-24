@@ -6,27 +6,30 @@ import '../../models/response/response.dart';
 import '../../services/request_service.dart';
 import '../../utils/urls.dart';
 
-part 'filtered_facilities_provider.g.dart';
+part 'sorted_facilities_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-class FilteredFacilities extends _$FilteredFacilities {
+class SortedFacilities extends _$SortedFacilities {
   @override
-  Response<List<Facility>> build(Map<String, String> filters) =>
-      const Response<List<Facility>>(data: []);
+  Response<List<Facility>> build(String sortKey) {
+    return const Response<List<Facility>>(data: []);
+  }
 
-  Future<void> fetch() async {
+  Future<void> _fetch(String sortKey) async {
     state = state.setLoading();
 
-    final url = searchFacilitiesUrl(this.filters); // بدون sort
+    final url = "${searchFacilitiesUrl({})}&sort=$sortKey";
 
     try {
       final result = await request<Map<String, dynamic>>(
         url: url,
         method: Method.post,
-        body: filters,
+        body: {},
       );
 
-      final facilities = Facility.fromJsonList(result.data?['data'] ?? []);
+      final List<dynamic> dataList = result.data?['data']?['data'] ?? [];
+      final facilities = Facility.fromJsonList(dataList);
+
       state = state.copyWith(data: facilities, meta: result.meta);
       state = state.setLoaded();
     } catch (error) {

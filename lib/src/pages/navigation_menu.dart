@@ -4,7 +4,6 @@ import '../helpers/general_helper.dart';
 import '../storage/auth_storage.dart';
 import '../utils/theme.dart';
 import 'booking_page.dart';
-import 'facility_filter_page.dart';
 import 'facility_types_page.dart';
 import 'favorites_page.dart';
 import 'map_page.dart';

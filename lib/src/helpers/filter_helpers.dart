@@ -1,5 +1,3 @@
-import '../enums/facility_sort_type.dart';
-
 Map<String, String> facilityFilters({
   String? name,
   int? facilityTypeId,
@@ -8,8 +6,7 @@ Map<String, String> facilityFilters({
   String? addressLike,
   String? addressNearUser,
   String? capacityAtLeast,
-  String? availableOnDay, // ✅
-  FacilitySortType? sortType,
+  String? availableOnDay,
 }) {
   final Map<String, String> filters = {};
 
@@ -20,11 +17,7 @@ Map<String, String> facilityFilters({
   if (addressLike?.isNotEmpty ?? false) filters['filter[address_like]'] = addressLike!;
   if (addressNearUser?.isNotEmpty ?? false) filters['filter[address_near_user]'] = addressNearUser!;
   if (capacityAtLeast?.isNotEmpty ?? false) filters['filter[capacity_at_least]'] = capacityAtLeast!;
-  if (availableOnDay?.isNotEmpty ?? false) filters['filter[available_on_day]'] = availableOnDay!; // ✅
-
-  if (sortType?.sortParam != null) {
-    filters['sort'] = sortType!.sortParam!;
-  }
+  if (availableOnDay?.isNotEmpty ?? false) filters['filter[available_on_day]'] = availableOnDay!;
 
   return filters;
 }
