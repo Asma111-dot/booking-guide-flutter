@@ -52,36 +52,60 @@ class Reservation {
         roomPrice = null,
         createdAt = null;
 
-  factory Reservation.fromJson(Map<String, dynamic> jsonMap) {
-    if (jsonMap['user_id'] == null) {
-      print('Warning: user_id is null or missing!');
-    }
+  // factory Reservation.fromJson(Map<String, dynamic> jsonMap) {
+  //   if (jsonMap['user_id'] == null) {
+  //     print('Warning: user_id is null or missing!');
+  //   }
+  //
+  //   return Reservation(
+  //     id: jsonMap['id'] ?? 0,
+  //     userId: jsonMap['user_id'] ?? 0,
+  //     roomPriceId: jsonMap['room_price_id'] ?? 0,
+  //     checkInDate:
+  //         DateTime.tryParse(jsonMap['check_in_date'] ?? '') ?? DateTime.now(),
+  //     checkOutDate:
+  //         DateTime.tryParse(jsonMap['check_out_date'] ?? '') ?? DateTime.now(),
+  //     status: jsonMap['status'],
+  //     totalPrice: jsonMap['total_price'] != null
+  //         ? double.tryParse(jsonMap['total_price'].toString()) ?? 0.0
+  //         : 0.0,
+  //     bookingType: jsonMap['booking_type'] ?? '',
+  //     adultsCount: jsonMap['adults_count'] ?? 0,
+  //     childrenCount: jsonMap['children_count'] ?? 0,
+  //     payments: (jsonMap['payments'] as List<dynamic>?)
+  //             ?.map((item) => Payment.fromJson(item))
+  //             .toList() ??
+  //         [],
+  //     roomPrice: jsonMap['room_price'] != null
+  //         ? RoomPrice.fromJson(jsonMap['room_price'])
+  //         : null,
+  //     createdAt: jsonMap['created_at'] != null
+  //         ? DateTime.tryParse(jsonMap['created_at'])
+  //         : null,
+  //   );
+  // }
 
+  factory Reservation.fromJson(Map<String, dynamic> jsonMap) {
     return Reservation(
       id: jsonMap['id'] ?? 0,
       userId: jsonMap['user_id'] ?? 0,
       roomPriceId: jsonMap['room_price_id'] ?? 0,
-      checkInDate:
-          DateTime.tryParse(jsonMap['check_in_date'] ?? '') ?? DateTime.now(),
-      checkOutDate:
-          DateTime.tryParse(jsonMap['check_out_date'] ?? '') ?? DateTime.now(),
+      checkInDate: DateTime.tryParse(jsonMap['check_in_date']?.toString() ?? '') ?? DateTime.now(),
+      checkOutDate: DateTime.tryParse(jsonMap['check_out_date']?.toString() ?? '') ?? DateTime.now(),
       status: jsonMap['status'],
-      totalPrice: jsonMap['total_price'] != null
+      totalPrice: (jsonMap['total_price'] != null)
           ? double.tryParse(jsonMap['total_price'].toString()) ?? 0.0
           : 0.0,
       bookingType: jsonMap['booking_type'] ?? '',
       adultsCount: jsonMap['adults_count'] ?? 0,
       childrenCount: jsonMap['children_count'] ?? 0,
-      payments: (jsonMap['payments'] as List<dynamic>?)
-              ?.map((item) => Payment.fromJson(item))
-              .toList() ??
-          [],
-      roomPrice: jsonMap['room_price'] != null
+      payments: (jsonMap['payments'] is List)
+          ? List<Payment>.from((jsonMap['payments'] as List).map((item) => Payment.fromJson(item)))
+          : [],
+      roomPrice: (jsonMap['room_price'] is Map)
           ? RoomPrice.fromJson(jsonMap['room_price'])
           : null,
-      createdAt: jsonMap['created_at'] != null
-          ? DateTime.tryParse(jsonMap['created_at'])
-          : null,
+      createdAt: DateTime.tryParse(jsonMap['created_at']?.toString() ?? ''),
     );
   }
 

@@ -27,10 +27,12 @@ class FacilityWidget extends ConsumerWidget {
         ? facility.logo!
         : (facility.facilityTypeId == 1 ? hotelImage : chaletImage);
 
-    final firstRoom = facility.rooms.isNotEmpty ? facility.rooms.first : null;
-    final firstPrice = (firstRoom?.roomPrices.isNotEmpty == true)
-        ? firstRoom!.roomPrices.first.amount
-        : 0.0;
+    // final firstRoom = facility.rooms.isNotEmpty ? facility.rooms.first : null;
+    // final firstPrice = (firstRoom?.roomPrices.isNotEmpty == true)
+    //     ? firstRoom!.roomPrices.first.amount
+    //     : 0.0;
+    final firstPrice = facility.price ?? 0.0;
+
 
     return GestureDetector(
       onTap: () {
@@ -90,7 +92,7 @@ class FacilityWidget extends ConsumerWidget {
                     const SizedBox(height: 6),
                     Text(
                       firstPrice > 0
-                          ? '${trans().priceStartFrom} $firstPrice${trans().riyalY}'
+                          ? '${trans().priceStartFrom} ${firstPrice.toStringAsFixed(0)}${trans().riyalY}'
                           : trans().priceNotAvailable,
                       style: TextStyle(
                         color: firstPrice > 0 ? Colors.amber : Colors.redAccent,

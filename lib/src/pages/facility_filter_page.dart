@@ -7,8 +7,11 @@ import 'package:intl/intl.dart';
 import '../enums/facility_filter_type.dart';
 import '../enums/facility_sort_type.dart';
 import '../helpers/filter_helpers.dart';
+import '../helpers/general_helper.dart';
 import '../providers/filter/filtered_facilities_provider.dart';
 import '../providers/sort/sorted_facilities_provider.dart';
+import '../providers/sort/sort_key_provider.dart';
+import '../utils/theme.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/facility_widget.dart';
 
@@ -21,21 +24,28 @@ class FacilityFilterPage extends ConsumerStatefulWidget {
   ConsumerState<FacilityFilterPage> createState() => _FacilityFilterPageState();
 }
 
-class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> {
+class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> with SingleTickerProviderStateMixin {
   FacilityFilterType? selectedFilter;
   final Map<FacilityFilterType, dynamic> values = {};
   final textController = TextEditingController();
   final dateRange = ValueNotifier<DateTimeRange?>(null);
 
   FacilitySortType currentSort = FacilitySortType.lowestPrice;
-
   bool showResults = false;
   Map<String, String>? currentFilters;
+
+  late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    values[FacilityFilterType.facilityTypeId] = widget.initialFacilityTypeId.toString();
+    values[FacilityFilterType.facilityTypeId] = widget.initialFacilityTypeId;
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.index = widget.initialFacilityTypeId == 1 ? 0 : 1;
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) return;
+      _onTabChanged(_tabController.index);
+    });
   }
 
   void _onApplyFilters() {
@@ -46,6 +56,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> {
       addressNearUser: values[FacilityFilterType.addressNearUser],
       capacityAtLeast: values[FacilityFilterType.capacityAtLeast],
       availableOnDay: values[FacilityFilterType.availableOnDay],
+      facilityTypeId: values[FacilityFilterType.facilityTypeId],
     );
 
     if (mapEquals(currentFilters, filters)) {
@@ -61,112 +72,27 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> {
     ref.read(filteredFacilitiesProvider(filters).notifier).fetch();
   }
 
-  void _onResetFilters() {
+  void _onTabChanged(int index) {
     setState(() {
-      selectedFilter = null;
-      values.clear();
-      values[FacilityFilterType.facilityTypeId] = widget.initialFacilityTypeId.toString();
-      textController.clear();
-      dateRange.value = null;
-      showResults = false;
-      currentFilters = null;
-      currentSort = FacilitySortType.lowestPrice;
+      values[FacilityFilterType.facilityTypeId] = (index == 0 ? 1 : 2);
     });
+    _onApplyFilters();
   }
 
-  Widget _buildFilterInput(FacilityFilterType type) {
-    switch (type) {
-      case FacilityFilterType.name:
-      case FacilityFilterType.addressLike:
-      case FacilityFilterType.addressNearUser:
-        return TextField(
-          controller: textController,
-          decoration: InputDecoration(labelText: 'أدخل ${type.label}'),
-          onChanged: (value) => values[type] = value,
-        );
-
-      case FacilityFilterType.capacityAtLeast:
-        return TextField(
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(labelText: 'عدد الأشخاص'),
-          onChanged: (value) => values[type] = value,
-        );
-
-      case FacilityFilterType.checkInBetween:
-        return ValueListenableBuilder<DateTimeRange?>(
-          valueListenable: dateRange,
-          builder: (_, range, __) => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ElevatedButton(
-                onPressed: () async {
-                  final picked = await showDateRangePicker(
-                    context: context,
-                    firstDate: DateTime.now().subtract(const Duration(days: 30)),
-                    lastDate: DateTime.now().add(const Duration(days: 365)),
-                  );
-                  if (picked != null) {
-                    dateRange.value = picked;
-                    values[type] = '${DateFormat('yyyy-MM-dd').format(picked.start)},${DateFormat('yyyy-MM-dd').format(picked.end)}';
-                  }
-                },
-                child: const Text('اختيار الفترة'),
-              ),
-              if (range != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text(
-                    '${range.start.toString().split(" ").first} → ${range.end.toString().split(" ").first}',
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                ),
-            ],
-          ),
-        );
-
-      case FacilityFilterType.availableOnDay:
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ElevatedButton(
-              onPressed: () async {
-                final picked = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime.now().subtract(const Duration(days: 30)),
-                  lastDate: DateTime.now().add(const Duration(days: 365)),
-                );
-                if (picked != null) {
-                  final formatted = DateFormat('yyyy-MM-dd').format(picked);
-                  values[type] = formatted;
-                }
-              },
-              child: const Text('اختر التاريخ'),
-            ),
-            if (values[type] != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Text(
-                  'التاريخ المختار: ${values[type]}',
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ),
-          ],
-        );
-
-      case FacilityFilterType.facilityTypeId:
-        return const SizedBox();
-
-      default:
-        return const SizedBox();
-    }
+  @override
+  void dispose() {
+    _tabController.dispose();
+    textController.dispose();
+    dateRange.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: CustomAppBar(
-        appTitle: 'فلترة المنشآت',
+        appTitle: '',
         icon: const FaIcon(Icons.arrow_back_ios),
       ),
       body: Padding(
@@ -174,130 +100,171 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            DropdownButton<FacilityFilterType>(
-              hint: const Text('اختر نوع الفلتر'),
-              value: selectedFilter,
-              isExpanded: true,
-              items: FacilityFilterType.values
-                  .where((f) => f != FacilityFilterType.facilityTypeId)
-                  .map((f) => DropdownMenuItem(
-                value: f,
-                child: Text(f.label),
-              ))
-                  .toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedFilter = value;
-                  if (value != null && !values.containsKey(value)) {
-                    values[value] = null;
-                  }
-                });
-              },
-            ),
-            const SizedBox(height: 12),
-            if (selectedFilter != null) _buildFilterInput(selectedFilter!),
-            const Divider(height: 32),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'ترتيب حسب السعر: ${currentSort.label}',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                IconButton(
-                  icon: Icon(
-                    currentSort == FacilitySortType.lowestPrice
-                        ? Icons.arrow_downward
-                        : Icons.arrow_upward,
-                  ),
-                  tooltip: 'تغيير نوع الفرز',
-                  onPressed: () {
-                    setState(() {
-                      currentSort = currentSort == FacilitySortType.lowestPrice
-                          ? FacilitySortType.highestPrice
-                          : FacilitySortType.lowestPrice;
-                    });
-                  },
-                ),
+            TabBar(
+              controller: _tabController,
+              indicatorColor: CustomTheme.primaryColor,
+              labelColor: CustomTheme.primaryColor,
+              unselectedLabelColor: Colors.grey,
+              tabs: [
+                Tab(text: trans().hotel),
+                Tab(text: trans().chalet),
               ],
             ),
             const SizedBox(height: 16),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.search),
-              label: const Text('بحث'),
-              onPressed: _onApplyFilters,
-            ),
-            const SizedBox(height: 8),
-            TextButton.icon(
-              icon: const Icon(Icons.refresh),
-              label: const Text('إعادة تعيين الفلاتر'),
-              onPressed: _onResetFilters,
-            ),
+            _buildSearchFilters(),
+            const Divider(height: 32),
+            _buildSortControls(),
             const SizedBox(height: 16),
-            if (currentFilters != null && showResults)
-              Expanded(
-                child: Consumer(
-                  builder: (context, ref, _) {
-                    final provider = filteredFacilitiesProvider(currentFilters!);
-                    final filtered = ref.watch(provider);
-
-                    if (filtered.isLoading()) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-
-                    if (filtered.isError()) {
-                      return Center(child: Text(filtered.message()));
-                    }
-
-                    if (filtered.data == null) {
-                      return const Center(child: Text('جاري تحميل البيانات...'));
-                    } else if (filtered.data!.isEmpty) {
-                      return const Center(child: Text('لا توجد منشآت مطابقة للبحث'));
-                    } else {
-                      return ListView.builder(
-                        itemCount: filtered.data!.length,
-                        itemBuilder: (_, index) {
-                          final facility = filtered.data![index];
-                          return FacilityWidget(facility: facility);
-                        },
-                      );
-                    }
-                  },
-                ),
-              ),
-            if (!showResults)
-              Expanded(
-                child: Consumer(
-                  builder: (context, ref, _) {
-                    final sorted = ref.watch(sortedFacilitiesProvider(
-                      currentSort == FacilitySortType.lowestPrice ? 'price' : '-price',
-                    ));
-
-                    if (sorted.isLoading()) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-
-                    if (sorted.isError()) {
-                      return Center(child: Text('خطأ: ${sorted.message()}'));
-                    }
-
-                    if (sorted.data != null && sorted.data!.isEmpty) {
-                      return const Center(child: Text('لا توجد منشآت متاحة'));
-                    }
-
-                    return ListView.builder(
-                      itemCount: sorted.data?.length ?? 0,
-                      itemBuilder: (_, index) {
-                        final facility = sorted.data![index];
-                        return FacilityWidget(facility: facility);
-                      },
-                    );
-                  },
-                ),
-              ),
+            Expanded(child: showResults ? _buildFilteredList() : _buildSortedList()),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSearchFilters() {
+    return Row(
+      children: [
+        Flexible(
+          flex: 2,
+          child: Container(
+            height: 45,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3, offset: Offset(0, 2))],
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<FacilityFilterType>(
+                isExpanded: true,
+                hint: const Text('اختر الفلتر', overflow: TextOverflow.ellipsis),
+                value: selectedFilter,
+                icon: const Icon(Icons.arrow_drop_down),
+                items: FacilityFilterType.values
+                    .where((f) => f != FacilityFilterType.facilityTypeId)
+                    .map((f) => DropdownMenuItem(
+                  value: f,
+                  child: Text(f.label, style: const TextStyle(fontSize: 14), overflow: TextOverflow.ellipsis),
+                ))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedFilter = value;
+                    if (value != null && !values.containsKey(value)) {
+                      values[value] = null;
+                    }
+                  });
+                },
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          flex: 5,
+          child: Container(
+            height: 45,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3, offset: Offset(0, 2))],
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.search, color: Colors.grey, size: 20),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextField(
+                    controller: textController,
+                    decoration: const InputDecoration(
+                      hintText: 'ابحث...',
+                      hintStyle: TextStyle(fontSize: 14),
+                      border: InputBorder.none,
+                    ),
+                    style: const TextStyle(fontSize: 14),
+                    onChanged: (value) {
+                      if (selectedFilter != null) {
+                        values[selectedFilter!] = value;
+                        _onApplyFilters();
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSortControls() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text('${currentSort.label}', style: const TextStyle(fontWeight: FontWeight.bold)),
+        IconButton(
+          icon: Icon(currentSort == FacilitySortType.lowestPrice ? Icons.arrow_downward : Icons.arrow_upward),
+          tooltip: 'تغيير نوع الفرز',
+          onPressed: () {
+            setState(() {
+              currentSort = currentSort == FacilitySortType.lowestPrice
+                  ? FacilitySortType.highestPrice
+                  : FacilitySortType.lowestPrice;
+            });
+            final newSortKey = currentSort == FacilitySortType.lowestPrice ? 'price' : '-price';
+            ref.read(sortKeyProvider.notifier).state = newSortKey;
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFilteredList() {
+    return Consumer(
+      builder: (context, ref, _) {
+        final provider = filteredFacilitiesProvider(currentFilters!);
+        final filtered = ref.watch(provider);
+
+        if (filtered.isLoading()) return const Center(child: CircularProgressIndicator());
+        if (filtered.isError()) return Center(child: Text(filtered.message()));
+        final facilities = filtered.data ?? [];
+
+        if (facilities.isEmpty) return const Center(child: Text('لا توجد منشآت مطابقة للبحث'));
+
+        return ListView.builder(
+          itemCount: facilities.length,
+          itemBuilder: (_, index) => FacilityWidget(facility: facilities[index]),
+        );
+      },
+    );
+  }
+
+  Widget _buildSortedList() {
+    final sortKey = ref.watch(sortKeyProvider);
+    final sortedAsyncValue = ref.watch(sortedFacilitiesProvider(sortKey));
+
+    if (sortedAsyncValue.isLoading()) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (sortedAsyncValue.isError()) {
+      return Center(child: Text('خطأ: ${sortedAsyncValue.message()}'));
+    }
+
+    final facilities = sortedAsyncValue.data ?? [];
+
+    if (facilities.isEmpty) {
+      return const Center(child: Text('لا توجد منشآت متاحة'));
+    }
+
+    return ListView.builder(
+      itemCount: facilities.length,
+      itemBuilder: (_, index) {
+        final facility = facilities[index];
+        return FacilityWidget(facility: facility);
+      },
     );
   }
 }

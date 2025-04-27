@@ -43,22 +43,41 @@ class RoomPrice {
         reservations = [],
   room = null;
 
+  // factory RoomPrice.fromJson(Map<String, dynamic> jsonMap) {
+  //   return RoomPrice(
+  //     id: jsonMap['id'] ?? 0,
+  //     roomId: jsonMap['room_id'] ?? 0,
+  //     capacity: jsonMap['capacity'] ?? 0,
+  //     amount: double.tryParse(jsonMap['amount']?.toString() ?? '0.0') ?? 0.0,
+  //     deposit: double.tryParse(jsonMap['deposit']?.toString() ?? '') ?? null,
+  //     currency: jsonMap['currency'] ?? '',
+  //     period: jsonMap['period'] ?? '',
+  //     timeFrom: jsonMap['time_from'] ?? null,
+  //     timeTo: jsonMap['time_to'] ?? null,
+  //     reservations: (jsonMap['reservations'] as List<dynamic>? ?? [])
+  //         .map((item) => Reservation.fromJson(item))
+  //         .toList(),
+  //     room: jsonMap['room'] != null
+  //         ? Room.fromJson(jsonMap['room']) : null,
+  //   );
+  // }
   factory RoomPrice.fromJson(Map<String, dynamic> jsonMap) {
     return RoomPrice(
-      id: jsonMap['id'] ?? 0,
-      roomId: jsonMap['room_id'] ?? 0,
-      capacity: jsonMap['capacity'] ?? 0,
+      id: int.tryParse(jsonMap['id']?.toString() ?? '') ?? 0,
+      roomId: int.tryParse(jsonMap['room_id']?.toString() ?? '') ?? 0,
+      capacity: int.tryParse(jsonMap['capacity']?.toString() ?? '') ?? 0,
       amount: double.tryParse(jsonMap['amount']?.toString() ?? '0.0') ?? 0.0,
-      deposit: double.tryParse(jsonMap['deposit']?.toString() ?? '') ?? null,
+      deposit: double.tryParse(jsonMap['deposit']?.toString() ?? ''),
       currency: jsonMap['currency'] ?? '',
       period: jsonMap['period'] ?? '',
-      timeFrom: jsonMap['time_from'] ?? null,
-      timeTo: jsonMap['time_to'] ?? null,
-      reservations: (jsonMap['reservations'] as List<dynamic>? ?? [])
-          .map((item) => Reservation.fromJson(item))
-          .toList(),
-      room: jsonMap['room'] != null
-          ? Room.fromJson(jsonMap['room']) : null,
+      timeFrom: jsonMap['time_from'],
+      timeTo: jsonMap['time_to'],
+      reservations: (jsonMap['reservations'] is List)
+          ? List<Reservation>.from((jsonMap['reservations'] as List).map((item) => Reservation.fromJson(item)))
+          : [],
+      room: (jsonMap['room'] is Map)
+          ? Room.fromJson(jsonMap['room'])
+          : null,
     );
   }
 

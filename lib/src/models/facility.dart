@@ -6,12 +6,13 @@ class Facility {
   String name;
   String desc;
   String status;
-  String? address; // Nullable
+  String? address;
   double? latitude;
   double? longitude;
   String? geojson;
   String? logo;
-  bool isFavorite; // Ensure it's bool
+  bool isFavorite;
+  double? price; // ✅ تمت إضافته
 
   List<Room> rooms;
 
@@ -26,7 +27,8 @@ class Facility {
     this.longitude,
     this.geojson,
     this.logo,
-    this.isFavorite = false, // Default value is false
+    this.isFavorite = false,
+    this.price, // ✅ هنا
     this.rooms = const [],
   });
 
@@ -41,7 +43,8 @@ class Facility {
         longitude = null,
         geojson = null,
         logo = null,
-        isFavorite = false, // Ensure it's false by default
+        isFavorite = false,
+        price = null, // ✅ مضافة هنا أيضاً
         rooms = [];
 
   Facility copyWith({
@@ -55,8 +58,9 @@ class Facility {
     double? longitude,
     String? geojson,
     String? logo,
+    bool? isFavorite,
+    double? price, // ✅
     List<Room>? rooms,
-    bool? isFavorite, // Added this field
   }) {
     return Facility(
       id: id ?? this.id,
@@ -69,8 +73,9 @@ class Facility {
       longitude: longitude ?? this.longitude,
       geojson: geojson ?? this.geojson,
       logo: logo ?? this.logo,
+      isFavorite: isFavorite ?? this.isFavorite,
+      price: price ?? this.price, // ✅
       rooms: rooms ?? this.rooms,
-      isFavorite: isFavorite ?? this.isFavorite, // Ensure it's handled
     );
   }
 
@@ -86,13 +91,13 @@ class Facility {
       longitude: double.tryParse(jsonMap['longitude']?.toString() ?? ''),
       geojson: jsonMap['geojson'],
       logo: jsonMap['logo'],
-      rooms: (jsonMap['rooms'] as List<dynamic>?)
-          ?.map((item) => Room.fromJson(item))
-          .toList() ??
-          [],
-      isFavorite: (jsonMap['is_favorite'] is int) // ✅ تحويل int إلى bool
+      price: jsonMap['price'] != null ? double.tryParse(jsonMap['price'].toString()) : null, // ✅
+      rooms: (jsonMap['rooms'] is List)
+          ? List<Room>.from((jsonMap['rooms'] as List).map((item) => Room.fromJson(item)))
+          : [],
+      isFavorite: (jsonMap['is_favorite'] is int)
           ? jsonMap['is_favorite'] == 1
-          : jsonMap['is_favorite'] ?? false,
+          : (jsonMap['is_favorite'] ?? false),
     );
   }
 
@@ -108,7 +113,8 @@ class Facility {
       'longitude': longitude,
       'geojson': geojson,
       'logo': logo,
-      'is_favorite': isFavorite, // Ensure it's included
+      'is_favorite': isFavorite,
+      'price': price, // ✅ مضافة هنا
       'rooms': rooms.map((room) => room.toJson()).toList(),
     };
   }
@@ -124,7 +130,9 @@ class Facility {
 
   @override
   String toString() {
-    return 'Facility(id: $id, facilityTypeId: $facilityTypeId, name: "$name", desc: "$desc", status: "$status", address: "$address", latitude: $latitude, longitude: $longitude, geojson: "$geojson", logo: "$logo", isFavorite: $isFavorite, rooms: $rooms)';
+    return 'Facility(id: $id, facilityTypeId: $facilityTypeId, name: "$name", desc: "$desc", status: "$status", '
+        'address: "$address", latitude: $latitude, longitude: $longitude, geojson: "$geojson", logo: "$logo", '
+        'isFavorite: $isFavorite, price: $price, rooms: $rooms)';
   }
 
   @override
@@ -142,7 +150,8 @@ class Facility {
             longitude == other.longitude &&
             geojson == other.geojson &&
             logo == other.logo &&
-            isFavorite == other.isFavorite && // Ensure it's included in comparison
+            isFavorite == other.isFavorite &&
+            price == other.price && // ✅ إضافتها للمقارنة
             rooms == other.rooms;
   }
 
@@ -158,6 +167,7 @@ class Facility {
       longitude.hashCode ^
       geojson.hashCode ^
       logo.hashCode ^
-      isFavorite.hashCode ^ // Ensure it's included here too
+      isFavorite.hashCode ^
+      price.hashCode ^ // ✅ مضافة هنا أيضاً
       rooms.hashCode;
 }
