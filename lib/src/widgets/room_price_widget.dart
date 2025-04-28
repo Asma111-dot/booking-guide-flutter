@@ -15,13 +15,13 @@ class RoomPriceWidget extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         border: Border.all(
-          color: CustomTheme.primaryColor.withOpacity(0.3),
+          color: CustomTheme.primaryColor.withValues(alpha: 0.1 * 255),
         ),
         borderRadius: BorderRadius.circular(12),
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1 * 255),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),

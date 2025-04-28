@@ -20,37 +20,22 @@ Meta _$MetaFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Meta {
-  @JsonKey(includeFromJson: false, includeToJson: false)
   Status get status => throw _privateConstructorUsedError;
   bool get fetchedAll => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
-  @JsonKey(name: 'show_dialog')
   bool get showDialog => throw _privateConstructorUsedError;
-  @JsonKey(name: 'message')
   String get message => throw _privateConstructorUsedError;
-  @JsonKey(name: 'type')
   String? get type => throw _privateConstructorUsedError;
-  @JsonKey(name: 'access_token')
   String? get accessToken => throw _privateConstructorUsedError;
-  @JsonKey(name: 'current_page')
   int? get currentPage => throw _privateConstructorUsedError;
-  @JsonKey(name: 'forget_route')
   bool? get forgetRoute => throw _privateConstructorUsedError;
-  @JsonKey(name: 'verify')
   bool? get verify => throw _privateConstructorUsedError;
-  @JsonKey(name: 'next_page')
   int? get nextPage => throw _privateConstructorUsedError;
-  @JsonKey(name: 'next_cursor')
   String? get nextCursor => throw _privateConstructorUsedError;
-  @JsonKey(name: 'next_page_url')
   String? get nextPageUrl => throw _privateConstructorUsedError;
-  @JsonKey(name: 'per_page')
   int? get perPage => throw _privateConstructorUsedError;
-  @JsonKey(name: 'route')
   String? get route => throw _privateConstructorUsedError;
-  @JsonKey(name: 'to')
   int? get to => throw _privateConstructorUsedError;
-  @JsonKey(name: 'total')
   int? get total => throw _privateConstructorUsedError;
 
   /// Serializes this Meta to a JSON map.
@@ -68,23 +53,23 @@ abstract class $MetaCopyWith<$Res> {
       _$MetaCopyWithImpl<$Res, Meta>;
   @useResult
   $Res call(
-      {@JsonKey(includeFromJson: false, includeToJson: false) Status status,
+      {Status status,
       bool fetchedAll,
       int? id,
-      @JsonKey(name: 'show_dialog') bool showDialog,
-      @JsonKey(name: 'message') String message,
-      @JsonKey(name: 'type') String? type,
-      @JsonKey(name: 'access_token') String? accessToken,
-      @JsonKey(name: 'current_page') int? currentPage,
-      @JsonKey(name: 'forget_route') bool? forgetRoute,
-      @JsonKey(name: 'verify') bool? verify,
-      @JsonKey(name: 'next_page') int? nextPage,
-      @JsonKey(name: 'next_cursor') String? nextCursor,
-      @JsonKey(name: 'next_page_url') String? nextPageUrl,
-      @JsonKey(name: 'per_page') int? perPage,
-      @JsonKey(name: 'route') String? route,
-      @JsonKey(name: 'to') int? to,
-      @JsonKey(name: 'total') int? total});
+      bool showDialog,
+      String message,
+      String? type,
+      String? accessToken,
+      int? currentPage,
+      bool? forgetRoute,
+      bool? verify,
+      int? nextPage,
+      String? nextCursor,
+      String? nextPageUrl,
+      int? perPage,
+      String? route,
+      int? to,
+      int? total});
 }
 
 /// @nodoc
@@ -201,23 +186,23 @@ abstract class _$$MetaImplCopyWith<$Res> implements $MetaCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(includeFromJson: false, includeToJson: false) Status status,
+      {Status status,
       bool fetchedAll,
       int? id,
-      @JsonKey(name: 'show_dialog') bool showDialog,
-      @JsonKey(name: 'message') String message,
-      @JsonKey(name: 'type') String? type,
-      @JsonKey(name: 'access_token') String? accessToken,
-      @JsonKey(name: 'current_page') int? currentPage,
-      @JsonKey(name: 'forget_route') bool? forgetRoute,
-      @JsonKey(name: 'verify') bool? verify,
-      @JsonKey(name: 'next_page') int? nextPage,
-      @JsonKey(name: 'next_cursor') String? nextCursor,
-      @JsonKey(name: 'next_page_url') String? nextPageUrl,
-      @JsonKey(name: 'per_page') int? perPage,
-      @JsonKey(name: 'route') String? route,
-      @JsonKey(name: 'to') int? to,
-      @JsonKey(name: 'total') int? total});
+      bool showDialog,
+      String message,
+      String? type,
+      String? accessToken,
+      int? currentPage,
+      bool? forgetRoute,
+      bool? verify,
+      int? nextPage,
+      String? nextCursor,
+      String? nextPageUrl,
+      int? perPage,
+      String? route,
+      int? to,
+      int? total});
 }
 
 /// @nodoc
@@ -325,33 +310,32 @@ class __$$MetaImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$MetaImpl extends _Meta with DiagnosticableTreeMixin {
+class _$MetaImpl extends _Meta {
   const _$MetaImpl(
-      {@JsonKey(includeFromJson: false, includeToJson: false)
-      this.status = Status.initial,
+      {this.status = Status.initial,
       this.fetchedAll = false,
       this.id,
-      @JsonKey(name: 'show_dialog') this.showDialog = false,
-      @JsonKey(name: 'message') this.message = '',
-      @JsonKey(name: 'type') this.type,
-      @JsonKey(name: 'access_token') this.accessToken,
-      @JsonKey(name: 'current_page') this.currentPage,
-      @JsonKey(name: 'forget_route') this.forgetRoute,
-      @JsonKey(name: 'verify') this.verify,
-      @JsonKey(name: 'next_page') this.nextPage,
-      @JsonKey(name: 'next_cursor') this.nextCursor,
-      @JsonKey(name: 'next_page_url') this.nextPageUrl,
-      @JsonKey(name: 'per_page') this.perPage,
-      @JsonKey(name: 'route') this.route,
-      @JsonKey(name: 'to') this.to,
-      @JsonKey(name: 'total') this.total})
+      this.showDialog = false,
+      this.message = '',
+      this.type,
+      this.accessToken,
+      this.currentPage,
+      this.forgetRoute,
+      this.verify,
+      this.nextPage,
+      this.nextCursor,
+      this.nextPageUrl,
+      this.perPage,
+      this.route,
+      this.to,
+      this.total})
       : super._();
 
   factory _$MetaImpl.fromJson(Map<String, dynamic> json) =>
       _$$MetaImplFromJson(json);
 
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey()
   final Status status;
   @override
   @JsonKey()
@@ -359,75 +343,39 @@ class _$MetaImpl extends _Meta with DiagnosticableTreeMixin {
   @override
   final int? id;
   @override
-  @JsonKey(name: 'show_dialog')
+  @JsonKey()
   final bool showDialog;
   @override
-  @JsonKey(name: 'message')
+  @JsonKey()
   final String message;
   @override
-  @JsonKey(name: 'type')
   final String? type;
   @override
-  @JsonKey(name: 'access_token')
   final String? accessToken;
   @override
-  @JsonKey(name: 'current_page')
   final int? currentPage;
   @override
-  @JsonKey(name: 'forget_route')
   final bool? forgetRoute;
   @override
-  @JsonKey(name: 'verify')
   final bool? verify;
   @override
-  @JsonKey(name: 'next_page')
   final int? nextPage;
   @override
-  @JsonKey(name: 'next_cursor')
   final String? nextCursor;
   @override
-  @JsonKey(name: 'next_page_url')
   final String? nextPageUrl;
   @override
-  @JsonKey(name: 'per_page')
   final int? perPage;
   @override
-  @JsonKey(name: 'route')
   final String? route;
   @override
-  @JsonKey(name: 'to')
   final int? to;
   @override
-  @JsonKey(name: 'total')
   final int? total;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'Meta(status: $status, fetchedAll: $fetchedAll, id: $id, showDialog: $showDialog, message: $message, type: $type, accessToken: $accessToken, currentPage: $currentPage, forgetRoute: $forgetRoute, verify: $verify, nextPage: $nextPage, nextCursor: $nextCursor, nextPageUrl: $nextPageUrl, perPage: $perPage, route: $route, to: $to, total: $total)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'Meta'))
-      ..add(DiagnosticsProperty('status', status))
-      ..add(DiagnosticsProperty('fetchedAll', fetchedAll))
-      ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('showDialog', showDialog))
-      ..add(DiagnosticsProperty('message', message))
-      ..add(DiagnosticsProperty('type', type))
-      ..add(DiagnosticsProperty('accessToken', accessToken))
-      ..add(DiagnosticsProperty('currentPage', currentPage))
-      ..add(DiagnosticsProperty('forgetRoute', forgetRoute))
-      ..add(DiagnosticsProperty('verify', verify))
-      ..add(DiagnosticsProperty('nextPage', nextPage))
-      ..add(DiagnosticsProperty('nextCursor', nextCursor))
-      ..add(DiagnosticsProperty('nextPageUrl', nextPageUrl))
-      ..add(DiagnosticsProperty('perPage', perPage))
-      ..add(DiagnosticsProperty('route', route))
-      ..add(DiagnosticsProperty('to', to))
-      ..add(DiagnosticsProperty('total', total));
   }
 
   @override
@@ -502,76 +450,60 @@ class _$MetaImpl extends _Meta with DiagnosticableTreeMixin {
 
 abstract class _Meta extends Meta {
   const factory _Meta(
-      {@JsonKey(includeFromJson: false, includeToJson: false)
-      final Status status,
+      {final Status status,
       final bool fetchedAll,
       final int? id,
-      @JsonKey(name: 'show_dialog') final bool showDialog,
-      @JsonKey(name: 'message') final String message,
-      @JsonKey(name: 'type') final String? type,
-      @JsonKey(name: 'access_token') final String? accessToken,
-      @JsonKey(name: 'current_page') final int? currentPage,
-      @JsonKey(name: 'forget_route') final bool? forgetRoute,
-      @JsonKey(name: 'verify') final bool? verify,
-      @JsonKey(name: 'next_page') final int? nextPage,
-      @JsonKey(name: 'next_cursor') final String? nextCursor,
-      @JsonKey(name: 'next_page_url') final String? nextPageUrl,
-      @JsonKey(name: 'per_page') final int? perPage,
-      @JsonKey(name: 'route') final String? route,
-      @JsonKey(name: 'to') final int? to,
-      @JsonKey(name: 'total') final int? total}) = _$MetaImpl;
+      final bool showDialog,
+      final String message,
+      final String? type,
+      final String? accessToken,
+      final int? currentPage,
+      final bool? forgetRoute,
+      final bool? verify,
+      final int? nextPage,
+      final String? nextCursor,
+      final String? nextPageUrl,
+      final int? perPage,
+      final String? route,
+      final int? to,
+      final int? total}) = _$MetaImpl;
   const _Meta._() : super._();
 
   factory _Meta.fromJson(Map<String, dynamic> json) = _$MetaImpl.fromJson;
 
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
   Status get status;
   @override
   bool get fetchedAll;
   @override
   int? get id;
   @override
-  @JsonKey(name: 'show_dialog')
   bool get showDialog;
   @override
-  @JsonKey(name: 'message')
   String get message;
   @override
-  @JsonKey(name: 'type')
   String? get type;
   @override
-  @JsonKey(name: 'access_token')
   String? get accessToken;
   @override
-  @JsonKey(name: 'current_page')
   int? get currentPage;
   @override
-  @JsonKey(name: 'forget_route')
   bool? get forgetRoute;
   @override
-  @JsonKey(name: 'verify')
   bool? get verify;
   @override
-  @JsonKey(name: 'next_page')
   int? get nextPage;
   @override
-  @JsonKey(name: 'next_cursor')
   String? get nextCursor;
   @override
-  @JsonKey(name: 'next_page_url')
   String? get nextPageUrl;
   @override
-  @JsonKey(name: 'per_page')
   int? get perPage;
   @override
-  @JsonKey(name: 'route')
   String? get route;
   @override
-  @JsonKey(name: 'to')
   int? get to;
   @override
-  @JsonKey(name: 'total')
   int? get total;
 
   /// Create a copy of Meta

@@ -86,7 +86,7 @@ class CustomTheme {
           labelColor: secondaryColor,
           indicatorColor: secondaryColor,
           overlayColor: WidgetStateProperty.resolveWith(
-              (state) => secondaryColor.withOpacity(0.1)),
+              (state) => secondaryColor.withValues(alpha: 0.1 * 255)),
         ),
         scaffoldBackgroundColor: scaffoldColor(),
         appBarTheme: AppBarTheme(

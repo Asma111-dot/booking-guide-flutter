@@ -13,7 +13,7 @@ extension FacilityFilterTypeExtension on FacilityFilterType {
   String get label {
     switch (this) {
       case FacilityFilterType.name:
-        return 'اسم المنشأة';
+        return 'الأسم ';
       case FacilityFilterType.facilityTypeId:
         return 'نوع المنشأة';
       case FacilityFilterType.priceBetween:
@@ -21,9 +21,9 @@ extension FacilityFilterTypeExtension on FacilityFilterType {
       case FacilityFilterType.checkInBetween:
         return 'تاريخ الوصول بين';
       case FacilityFilterType.addressLike:
-        return 'البحث حسب العنوان';
+        return 'العنوان';
       case FacilityFilterType.addressNearUser:
-        return 'العنوان بالقرب من المستخدم';
+        return 'العنوان بالقرب من عنوان المستخدم';
       case FacilityFilterType.capacityAtLeast:
         return 'عدد الأشخاص المناسب';
       case FacilityFilterType.availableOnDay:

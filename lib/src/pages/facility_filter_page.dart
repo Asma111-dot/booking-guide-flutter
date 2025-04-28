@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
 
 import '../enums/facility_filter_type.dart';
 import '../enums/facility_sort_type.dart';
@@ -29,12 +28,11 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> with Si
   final Map<FacilityFilterType, dynamic> values = {};
   final textController = TextEditingController();
   final dateRange = ValueNotifier<DateTimeRange?>(null);
-
   FacilitySortType currentSort = FacilitySortType.lowestPrice;
   bool showResults = false;
   Map<String, String>? currentFilters;
-
   late TabController _tabController;
+  bool isSorting = false;
 
   @override
   void initState() {
@@ -115,7 +113,13 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> with Si
             const Divider(height: 32),
             _buildSortControls(),
             const SizedBox(height: 16),
-            Expanded(child: showResults ? _buildFilteredList() : _buildSortedList()),
+            Expanded(
+              child: showResults
+                  ? _buildFilteredList()
+                  : isSorting
+                  ? _buildSortedList()
+                  : _buildDefaultList(), // ✅ نعرض داتا عادية بدون ترتيب
+            ),
           ],
         ),
       ),
@@ -210,6 +214,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> with Si
           tooltip: 'تغيير نوع الفرز',
           onPressed: () {
             setState(() {
+              isSorting = true; // ✅ علمنا أنه يريد ترتيب
               currentSort = currentSort == FacilitySortType.lowestPrice
                   ? FacilitySortType.highestPrice
                   : FacilitySortType.lowestPrice;
@@ -217,7 +222,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> with Si
             final newSortKey = currentSort == FacilitySortType.lowestPrice ? 'price' : '-price';
             ref.read(sortKeyProvider.notifier).state = newSortKey;
           },
-        ),
+        )
       ],
     );
   }
@@ -245,6 +250,31 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> with Si
   Widget _buildSortedList() {
     final sortKey = ref.watch(sortKeyProvider);
     final sortedAsyncValue = ref.watch(sortedFacilitiesProvider(sortKey));
+
+    if (sortedAsyncValue.isLoading()) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (sortedAsyncValue.isError()) {
+      return Center(child: Text('خطأ: ${sortedAsyncValue.message()}'));
+    }
+
+    final facilities = sortedAsyncValue.data ?? [];
+
+    if (facilities.isEmpty) {
+      return const Center(child: Text('لا توجد منشآت متاحة'));
+    }
+
+    return ListView.builder(
+      itemCount: facilities.length,
+      itemBuilder: (_, index) {
+        final facility = facilities[index];
+        return FacilityWidget(facility: facility);
+      },
+    );
+  }
+
+  Widget _buildDefaultList() {
+    final sortedAsyncValue = ref.watch(sortedFacilitiesProvider('')); // لاحظ: نرسل مفتاح فاضي يعني بدون ترتيب
 
     if (sortedAsyncValue.isLoading()) {
       return const Center(child: CircularProgressIndicator());

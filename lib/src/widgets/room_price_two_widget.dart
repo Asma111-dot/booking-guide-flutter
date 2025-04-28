@@ -45,7 +45,7 @@ class RoomPriceWidget extends StatelessWidget {
           border: Border.all(color: CustomTheme.primaryColor),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
+              color: Colors.grey.withValues(alpha: 0.1 * 255),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),

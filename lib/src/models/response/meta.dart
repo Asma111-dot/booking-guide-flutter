@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter/foundation.dart';
 
 import '../../enums/alert.dart';
 
@@ -10,32 +9,33 @@ enum Status { initial, loading, loaded, error, empty, cancelled }
 
 @freezed
 class Meta with _$Meta {
-
   const Meta._();
 
   const factory Meta({
-    @Default(Status.initial) @JsonKey(includeFromJson: false, includeToJson: false) Status status,
+    @Default(Status.initial) Status status,
     @Default(false) bool fetchedAll,
     int? id,
-    @Default(false) @JsonKey(name: 'show_dialog') bool showDialog,
-    @Default('') @JsonKey(name: 'message') String message,
-    @JsonKey(name: 'type') String? type,
-    @JsonKey(name: 'access_token') String? accessToken,
-    @JsonKey(name: 'current_page') int? currentPage,
-    @JsonKey(name: 'forget_route') bool? forgetRoute,
-    @JsonKey(name: 'verify') bool? verify,
-    @JsonKey(name: 'next_page') int? nextPage,
-    @JsonKey(name: 'next_cursor') String? nextCursor,
-    @JsonKey(name: 'next_page_url') String? nextPageUrl,
-    @JsonKey(name: 'per_page') int? perPage,
-    @JsonKey(name: 'route') String? route,
-    @JsonKey(name: 'to') int? to,
-    @JsonKey(name: 'total') int? total,
+    @Default(false) bool showDialog,
+    @Default('') String message,
+    String? type,
+    String? accessToken,
+    int? currentPage,
+    bool? forgetRoute,
+    bool? verify,
+    int? nextPage,
+    String? nextCursor,
+    String? nextPageUrl,
+    int? perPage,
+    String? route,
+    int? to,
+    int? total,
   }) = _Meta;
 
   factory Meta.fromJson(Map<String, dynamic> json) => _$MetaFromJson(json);
 
-  setValue(Meta meta) => copyWith(
+  // --- Custom methods ---
+
+  Meta setValue(Meta meta) => copyWith(
     status: meta.status,
     type: meta.type,
     fetchedAll: meta.fetchedAll,
@@ -51,31 +51,28 @@ class Meta with _$Meta {
     verify: meta.verify,
   );
 
-  init() => copyWith(status: Status.initial);
+  Meta init() => copyWith(status: Status.initial);
   bool isInit() => status == Status.initial;
 
-  setFetchedAll(bool value) => copyWith(fetchedAll: value);
+  Meta setFetchedAll(bool value) => copyWith(fetchedAll: value);
   bool isFetchedAll() => fetchedAll;
 
-  setLoading() => copyWith(status: Status.loading);
+  Meta setLoading() => copyWith(status: Status.loading);
   bool isLoading() => status == Status.loading;
 
-  setLoaded() => copyWith(status: Status.loaded);
+  Meta setLoaded() => copyWith(status: Status.loaded);
   bool isLoaded() => status == Status.loaded;
 
-  setCancelled() => copyWith(status: Status.loaded);
+  Meta setCancelled() => copyWith(status: Status.cancelled);
   bool isCancelled() => status == Status.cancelled;
 
-  setError([String message = '']) =>
-      copyWith(status: Status.error, message: message);
-
+  Meta setError([String message = '']) => copyWith(status: Status.error, message: message);
   bool isError() => status == Status.error;
 
-  setEmpty([String message = '']) => copyWith(status: Status.empty, message: message);
+  Meta setEmpty([String message = '']) => copyWith(status: Status.empty, message: message);
   bool isEmpty() => status == Status.empty;
 
   bool isLast() => to == null || to == total;
-
   bool isCursor() => (nextCursor?.isNotEmpty ?? false);
 
   bool isSuccessType() => type == Alert.success.name;

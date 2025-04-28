@@ -6,7 +6,7 @@ part of 'sorted_facilities_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$sortedFacilitiesHash() => r'57f57426e9d1d22ebec72a769194c494cf5656d5';
+String _$sortedFacilitiesHash() => r'74132fdd96b8877a7d5010a071d2dbbe22106a76';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,7 +30,7 @@ class _SystemHash {
 }
 
 abstract class _$SortedFacilities
-    extends BuildlessNotifier<Response<List<Facility>>> {
+    extends BuildlessAutoDisposeNotifier<Response<List<Facility>>> {
   late final String sortKey;
 
   Response<List<Facility>> build(
@@ -81,8 +81,8 @@ class SortedFacilitiesFamily extends Family<Response<List<Facility>>> {
 }
 
 /// See also [SortedFacilities].
-class SortedFacilitiesProvider
-    extends NotifierProviderImpl<SortedFacilities, Response<List<Facility>>> {
+class SortedFacilitiesProvider extends AutoDisposeNotifierProviderImpl<
+    SortedFacilities, Response<List<Facility>>> {
   /// See also [SortedFacilities].
   SortedFacilitiesProvider(
     String sortKey,
@@ -138,7 +138,7 @@ class SortedFacilitiesProvider
   }
 
   @override
-  NotifierProviderElement<SortedFacilities, Response<List<Facility>>>
+  AutoDisposeNotifierProviderElement<SortedFacilities, Response<List<Facility>>>
       createElement() {
     return _SortedFacilitiesProviderElement(this);
   }
@@ -159,14 +159,15 @@ class SortedFacilitiesProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin SortedFacilitiesRef on NotifierProviderRef<Response<List<Facility>>> {
+mixin SortedFacilitiesRef
+    on AutoDisposeNotifierProviderRef<Response<List<Facility>>> {
   /// The parameter `sortKey` of this provider.
   String get sortKey;
 }
 
 class _SortedFacilitiesProviderElement
-    extends NotifierProviderElement<SortedFacilities, Response<List<Facility>>>
-    with SortedFacilitiesRef {
+    extends AutoDisposeNotifierProviderElement<SortedFacilities,
+        Response<List<Facility>>> with SortedFacilitiesRef {
   _SortedFacilitiesProviderElement(super.provider);
 
   @override

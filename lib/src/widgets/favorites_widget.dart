@@ -40,7 +40,7 @@ class FavoriteWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.25),
+              color: Colors.grey.withValues(alpha: 0.1 * 255),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),
@@ -77,7 +77,7 @@ class FavoriteWidget extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
+                      color: Colors.black.withValues(alpha: 0.1 * 255),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -145,7 +145,7 @@ class FavoriteWidget extends StatelessWidget {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
+                        color: Colors.grey.withValues(alpha: 0.1 * 255),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),

@@ -28,8 +28,8 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
     super.initState();
     final user = ref.read(userProvider).data;
     if (user != null) {
-      nameController.text = user.name ?? '';
-      emailController.text = user.email ?? '';
+      nameController.text = user.name ;
+      emailController.text = user.email ;
       addressController.text = user.address ?? '';
     }
   }

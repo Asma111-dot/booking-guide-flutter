@@ -210,7 +210,7 @@ Future<Response<T>> request<T>({
 
 // ✅ دالة عرض الرسائل بعد نهاية request<T>()
 void showMessage(Meta meta) {
-  if (meta.message.isNotEmpty ?? false) {
+  if (meta.message.isNotEmpty) {
     showNotify(
       alert: fromAlertName(meta.type),
       message: meta.message,

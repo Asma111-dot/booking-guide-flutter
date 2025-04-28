@@ -166,7 +166,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.4),
+                    color: Colors.black.withValues(alpha: 0.1 * 255),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
@@ -194,7 +194,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withValues(alpha: 0.1 * 255),
                             blurRadius: 10,
                             offset: const Offset(0, -4),
                           ),

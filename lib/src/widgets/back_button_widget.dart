@@ -16,7 +16,7 @@ class BackButtonWidget extends StatelessWidget {
     return IconButtonWidget(
       icon: arrow
           ? FontAwesomeIcons.arrowLeft
-          : FontAwesomeIcons.times,
+          : FontAwesomeIcons.xmark,
       onPressed: onPressed ??
           (Navigator.canPop(context)
               ? () => Navigator.maybePop(context)

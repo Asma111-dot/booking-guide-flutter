@@ -107,7 +107,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
-                      color: CustomTheme.primaryColor.withOpacity(0.7),
+                      color: CustomTheme.primaryColor.withValues(alpha: 0.1 * 255),
                       width: 1.5,
                     ),
                   ),

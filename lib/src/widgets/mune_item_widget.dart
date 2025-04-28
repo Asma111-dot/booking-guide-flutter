@@ -27,7 +27,7 @@ class MenuItem extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
-          color: CustomTheme.primaryColor.withOpacity(0.1),
+          color: CustomTheme.primaryColor.withValues(alpha: 0.1 * 255),
         ),
         child: Icon(icon, color: CustomTheme.primaryColor),
       ),

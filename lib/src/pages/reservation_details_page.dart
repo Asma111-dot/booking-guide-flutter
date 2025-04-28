@@ -93,7 +93,7 @@ class _ReservationDetailsPageState
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
+                              color: Colors.grey.withValues(alpha: 0.1 * 255),
                               spreadRadius: 2,
                               blurRadius: 7,
                               offset: const Offset(0, 3),

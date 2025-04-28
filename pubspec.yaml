@@ -88,9 +88,10 @@ dev_dependencies:
   # rules and activating additional ones.
   build_runner: ^2.4.13
   freezed: ^2.5.7
-  json_serializable: ^6.8.0
+  json_serializable: ^6.7.1
   riverpod_generator: ^2.6.2
   riverpod_lint: ^2.6.2
+  flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
