@@ -1,5 +1,7 @@
+import 'package:booking_guide/src/extensions/date_formatting.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -540,10 +542,10 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
         //  _showDateRangeBottomSheet();
         break;
       case FacilityFilterType.capacityAtLeast:
-        // _showCapacityBottomSheet();
+         _showCapacityBottomSheet();
         break;
       case FacilityFilterType.availableOnDay:
-        // _showAvailableDayBottomSheet();
+         _showAvailableDayBottomSheet();
         break;
       default:
         // لا شيء
@@ -629,4 +631,160 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
       },
     );
   }
+
+  void _showCapacityBottomSheet() {
+    final capacityController = TextEditingController();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 16,
+            right: 16,
+            top: 16,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 16, // ✅ دعم الكيبورد
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'حدد عدد الأشخاص',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: capacityController,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9٠-٩]'))],
+                  decoration: const InputDecoration(
+                    labelText: 'عدد الأشخاص',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      final people = capacityController.text.trim();
+
+                      if (people.isEmpty) {
+                        Navigator.pop(context);
+                        return;
+                      }
+
+                      setState(() {
+                        final englishPeople = toEnglishNumbers(people);
+                        values[FacilityFilterType.capacityAtLeast] = englishPeople;
+                        selectedFilter = FacilityFilterType.capacityAtLeast;
+                      });
+
+                      Navigator.pop(context);
+                      _onApplyFilters();
+                    },
+                    child: const Text('تطبيق الفلترة'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showAvailableDayBottomSheet() {
+    final selectedDate = ValueNotifier<DateTime?>(null);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 16,
+            right: 16,
+            top: 16,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'حدد يوم التوفر',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16),
+                ValueListenableBuilder<DateTime?>(
+                  valueListenable: selectedDate,
+                  builder: (context, value, child) {
+                    return InkWell(
+                      onTap: () async {
+                        final picked = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2020),
+                          lastDate: DateTime(2100),
+                        );
+                        if (picked != null) {
+                          selectedDate.value = picked;
+                        }
+                      },
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          value != null
+                              ? value.toSqlDateOnly()   // ✅ هنا التغيير
+                              : 'اختر تاريخ التوفر',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (selectedDate.value == null) {
+                        Navigator.pop(context);
+                        return;
+                      }
+
+                      setState(() {
+                        final englishDate = toEnglishNumbers(selectedDate.value!.toSqlDateOnly()); // ✅ هنا التغيير
+                        values[FacilityFilterType.availableOnDay] = englishDate;
+                        selectedFilter = FacilityFilterType.availableOnDay;
+                      });
+
+                      Navigator.pop(context);
+                      _onApplyFilters();
+                    },
+                    child: const Text('تطبيق الفلترة'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 }

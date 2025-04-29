@@ -16,9 +16,9 @@ class ReservationPage extends ConsumerStatefulWidget {
   final RoomPrice roomPrice;
 
   const ReservationPage({
-    Key? key,
+    super.key,
     required this.roomPrice,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<ReservationPage> createState() => _ReservationPageState();

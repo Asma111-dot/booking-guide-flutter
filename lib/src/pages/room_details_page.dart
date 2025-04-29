@@ -20,7 +20,7 @@ import 'image_gallery_page.dart';
 class RoomDetailsPage extends ConsumerStatefulWidget {
   final Facility facility;
 
-  const RoomDetailsPage({Key? key, required this.facility}) : super(key: key);
+  const RoomDetailsPage({super.key, required this.facility});
 
   @override
   _RoomDetailsPageState createState() => _RoomDetailsPageState();
@@ -37,9 +37,11 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
   void initState() {
     super.initState();
     Future.microtask(() async {
-      final value = await ref
-          .read(roomProvider.notifier)
-          .fetch(roomId: widget.facility.rooms.first.id);
+      if (widget.facility.rooms.isNotEmpty) {
+        await ref
+            .read(roomProvider.notifier)
+            .fetch(roomId: widget.facility.rooms.first.id);
+      }
     });
     tabController = TabController(length: 3, vsync: this);
     pageController = PageController(viewportFraction: 1);
@@ -47,7 +49,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
       setState(() {});
     });
     imageTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
-      if (pageController.hasClients) {
+      if (pageController.hasClients && widget.facility.rooms.isNotEmpty) {
         if (pageController.page ==
             widget.facility.rooms.first.media.length - 1) {
           pageController.jumpToPage(0);
@@ -78,9 +80,13 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
       body: ViewWidget<r.Room>(
         meta: roomState.meta,
         data: roomState.data,
-        refresh: () async => await ref
-            .read(roomProvider.notifier)
-            .fetch(roomId: widget.facility.rooms.first.id),
+        refresh: () async {
+          if (widget.facility.rooms.isNotEmpty) {
+            await ref
+                .read(roomProvider.notifier)
+                .fetch(roomId: widget.facility.rooms.first.id);
+          }
+        },
         forceShowLoaded: roomState.data != null,
         onLoaded: (room) {
           return Stack(
@@ -127,7 +133,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                 ),
               ),
               Positioned(
-              top: 20,
+                top: 20,
                 right: 10,
                 child: Container(
                   padding: const EdgeInsets.all(0),

@@ -64,15 +64,24 @@ Future clearAllLocalDataAndNavigate() async {
           (route) => false, arguments: true);
 }
 
-String convertArabicNumber(String value) {
-  const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-  const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+// String convertArabicNumber(String value) {
+//   const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+//   const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+//
+//   String input = value;
+//   for (int i = 0; i < arabic.length; i++) {
+//     input = input.replaceAll(arabic[i], english[i]);
+//   }
+//
+//   return input;
+// }
+String toEnglishNumbers(String input) {
+  const arabicNumbers = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+  const englishNumbers = ['0','1','2','3','4','5','6','7','8','9'];
 
-  String input = value;
-  for (int i = 0; i < arabic.length; i++) {
-    input = input.replaceAll(arabic[i], english[i]);
+  for (var i = 0; i < arabicNumbers.length; i++) {
+    input = input.replaceAll(arabicNumbers[i], englishNumbers[i]);
   }
-
   return input;
 }
 
