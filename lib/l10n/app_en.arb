@@ -165,5 +165,25 @@
   "login_subtitle": "Start your journey with us and log in to the Hajoozaty app.",
   "delete_account": "Delete Account",
   "are_you_sure": "Are you sure?",
-  "delete_account_confirmation": "Do you really want to delete the account?"
+  "delete_account_confirmation": "Do you really want to delete the account?",
+
+  "discoverBestPlace": "Discover the best place for your needs",
+  "searchByNameAddress": "Search by name or address, specify the number of people, select the suitable date, and sort results by price easily.",
+  "name": "Facility Name",
+  "address_like": "Facility Address",
+  "facility_type_id": "Facility Category",
+  "price_between": "Price Range",
+  "check_in_between": "Check-in Date",
+  "address_near_user": "Nearby Location",
+  "capacity_at_least": "Minimum Capacity",
+  "available_on_day": "Availability by Day",
+
+  "desc_name": "Search for facilities by typing part of their name.",
+  "desc_address_like": "Find facilities based on keywords in their address.",
+  "desc_price_between": "Select a minimum and maximum price to display suitable facilities.",
+  "desc_check_in_between": "View facilities available during a specific check-in period.",
+  "desc_address_near_user": "Find facilities closest to your specified address.",
+  "desc_capacity_at_least": "Find facilities that can accommodate at least a specified number of people.",
+  "desc_available_on_day": "View facilities available for booking on a selected day.",
+  "desc_facility_type_id": "Choose the facility category such as hotel, chalet, or event hall to filter results."
 }

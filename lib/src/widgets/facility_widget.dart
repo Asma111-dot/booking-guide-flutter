@@ -12,10 +12,14 @@ import '../utils/theme.dart';
 
 class FacilityWidget extends ConsumerWidget {
   final Facility facility;
+  final double? minPriceFilter; // ✅ مضاف
+  final double? maxPriceFilter; // ✅ مضاف
 
   const FacilityWidget({
     Key? key,
     required this.facility,
+    this.minPriceFilter, // ✅ مضاف
+    this.maxPriceFilter, // ✅ مضاف
   }) : super(key: key);
 
   @override
@@ -23,16 +27,17 @@ class FacilityWidget extends ConsumerWidget {
     final isFavorite = ref.watch(favoritesProvider.select(
           (state) => state.data?.any((f) => f.id == facility.id) ?? false,
     ));
+
     final defaultImage = facility.logo?.isNotEmpty == true
         ? facility.logo!
         : (facility.facilityTypeId == 1 ? hotelImage : chaletImage);
 
-    // final firstRoom = facility.rooms.isNotEmpty ? facility.rooms.first : null;
-    // final firstPrice = (firstRoom?.roomPrices.isNotEmpty == true)
-    //     ? firstRoom!.roomPrices.first.amount
-    //     : 0.0;
     final firstPrice = facility.price ?? 0.0;
 
+    // ✅ فلترة السعر
+    if (!_isWithinPriceRange(firstPrice)) {
+      return const SizedBox(); // 👉 إذا خارج النطاق لا تعرض شيء
+    }
 
     return GestureDetector(
       onTap: () {
@@ -67,7 +72,7 @@ class FacilityWidget extends ConsumerWidget {
                   width: 110,
                   height: 110,
                   fit: BoxFit.cover,
-                  placeholder: (context, url) => const CircularProgressIndicator(),
+                  placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
                   errorWidget: (context, url, error) => Image.asset(
                     logoCoverImage,
                     width: 110,
@@ -138,5 +143,15 @@ class FacilityWidget extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  /// ✅ دالة فحص إذا السعر داخل النطاق
+  bool _isWithinPriceRange(double price) {
+    if (minPriceFilter == null && maxPriceFilter == null) {
+      return true; // 👉 إذا لا يوجد فلترة، أعرض الكل
+    }
+    final min = minPriceFilter ?? 0;
+    final max = maxPriceFilter ?? double.infinity;
+    return price >= min && price <= max;
   }
 }

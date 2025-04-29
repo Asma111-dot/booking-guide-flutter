@@ -23,7 +23,8 @@ class FacilityFilterPage extends ConsumerStatefulWidget {
   ConsumerState<FacilityFilterPage> createState() => _FacilityFilterPageState();
 }
 
-class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> with SingleTickerProviderStateMixin {
+class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
+    with SingleTickerProviderStateMixin {
   FacilityFilterType? selectedFilter;
   final Map<FacilityFilterType, dynamic> values = {};
   final textController = TextEditingController();
@@ -33,13 +34,17 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> with Si
   Map<String, String>? currentFilters;
   late TabController _tabController;
   bool isSorting = false;
+  bool tabChanged = false;
+  String? minPriceFilter;
+  String? maxPriceFilter;
 
   @override
   void initState() {
     super.initState();
-    values[FacilityFilterType.facilityTypeId] = widget.initialFacilityTypeId;
+    values[FacilityFilterType.facilityTypeId] = 1; // ✅ نبدأ بعرض الفنادق فقط
+    selectedFilter = FacilityFilterType.name;
     _tabController = TabController(length: 2, vsync: this);
-    _tabController.index = widget.initialFacilityTypeId == 1 ? 0 : 1;
+    _tabController.index = 0;
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) return;
       _onTabChanged(_tabController.index);
@@ -54,8 +59,20 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> with Si
       addressNearUser: values[FacilityFilterType.addressNearUser],
       capacityAtLeast: values[FacilityFilterType.capacityAtLeast],
       availableOnDay: values[FacilityFilterType.availableOnDay],
+      priceBetween: values[FacilityFilterType.priceBetween],
       facilityTypeId: values[FacilityFilterType.facilityTypeId],
     );
+
+    // ✅ نجهز القيم minPriceFilter و maxPriceFilter بناءً على الفلترة المختارة
+    final priceBetween = values[FacilityFilterType.priceBetween];
+    if (priceBetween != null && priceBetween is String && priceBetween.contains(',')) {
+      final parts = priceBetween.split(',');
+      minPriceFilter = parts[0];
+      maxPriceFilter = parts[1];
+    } else {
+      minPriceFilter = null;
+      maxPriceFilter = null;
+    }
 
     if (mapEquals(currentFilters, filters)) {
       ref.read(filteredFacilitiesProvider(currentFilters!).notifier).fetch();
@@ -70,11 +87,42 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> with Si
     ref.read(filteredFacilitiesProvider(filters).notifier).fetch();
   }
 
+  // void _onApplyFilters() {
+  //   final filters = facilityFilters(
+  //     name: values[FacilityFilterType.name],
+  //     addressLike: values[FacilityFilterType.addressLike],
+  //     checkInBetween: values[FacilityFilterType.checkInBetween],
+  //     addressNearUser: values[FacilityFilterType.addressNearUser],
+  //     capacityAtLeast: values[FacilityFilterType.capacityAtLeast],
+  //     availableOnDay: values[FacilityFilterType.availableOnDay],
+  //     priceBetween: values[FacilityFilterType.priceBetween],
+  //     facilityTypeId: values[FacilityFilterType.facilityTypeId],
+  //   );
+  //
+  //   if (mapEquals(currentFilters, filters)) {
+  //     ref.read(filteredFacilitiesProvider(currentFilters!).notifier).fetch();
+  //     return;
+  //   }
+  //
+  //   setState(() {
+  //     showResults = true;
+  //     currentFilters = filters;
+  //   });
+  //
+  //   ref.read(filteredFacilitiesProvider(filters).notifier).fetch();
+  // }
+
   void _onTabChanged(int index) {
     setState(() {
+      tabChanged = true;
+      isSorting = false;
+      showResults = false;
+
       values[FacilityFilterType.facilityTypeId] = (index == 0 ? 1 : 2);
+
+      textController.clear(); // ✅ تصفير مربع البحث
+      selectedFilter = FacilityFilterType.name; // ✅ إرجاع البحث بالاسم دائمًا
     });
-    _onApplyFilters();
   }
 
   @override
@@ -98,6 +146,30 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> with Si
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    trans().discoverBestPlace,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    trans().searchByNameAddress,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             TabBar(
               controller: _tabController,
               indicatorColor: CustomTheme.primaryColor,
@@ -108,21 +180,71 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> with Si
                 Tab(text: trans().chalet),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 10),
             _buildSearchFilters(),
             const Divider(height: 32),
             _buildSortControls(),
             const SizedBox(height: 16),
             Expanded(
-              child: showResults
-                  ? _buildFilteredList()
-                  : isSorting
-                  ? _buildSortedList()
-                  : _buildDefaultList(), // ✅ نعرض داتا عادية بدون ترتيب
-            ),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: showResults
+                    ? _buildFilteredList()
+                    : (isSorting
+                        ? _buildSortedList()
+                        : _buildTabFilteredList()),
+              ),
+            )
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildTabFilteredList() {
+    final allFacilitiesAsync = ref.watch(sortedFacilitiesProvider(''));
+
+    if (allFacilitiesAsync.isLoading()) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (allFacilitiesAsync.isError()) {
+      return Center(child: Text('خطأ: ${allFacilitiesAsync.message()}'));
+    }
+
+    final allFacilities = allFacilitiesAsync.data ?? [];
+    final facilityTypeId = values[FacilityFilterType.facilityTypeId];
+
+    final filteredFacilities =
+        allFacilities.where((f) => f.facilityTypeId == facilityTypeId).toList();
+
+    if (filteredFacilities.isEmpty) {
+      return const Center(child: Text('لا توجد منشآت متاحة'));
+    }
+
+    final title = facilityTypeId == 1
+        ? 'جميع الفنادق المتوفرة'
+        : 'جميع الشاليهات المتوفرة';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Text(
+            title,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: filteredFacilities.length,
+            itemBuilder: (_, index) {
+              final facility = filteredFacilities[index];
+              return FacilityWidget(facility: facility);
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -137,29 +259,26 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> with Si
             decoration: BoxDecoration(
               color: Colors.grey.shade100,
               borderRadius: BorderRadius.circular(12),
-              boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3, offset: Offset(0, 2))],
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black12, blurRadius: 3, offset: Offset(0, 2))
+              ],
             ),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<FacilityFilterType>(
-                isExpanded: true,
-                hint: const Text('اختر الفلتر', overflow: TextOverflow.ellipsis),
-                value: selectedFilter,
-                icon: const Icon(Icons.arrow_drop_down),
-                items: FacilityFilterType.values
-                    .where((f) => f != FacilityFilterType.facilityTypeId)
-                    .map((f) => DropdownMenuItem(
-                  value: f,
-                  child: Text(f.label, style: const TextStyle(fontSize: 14), overflow: TextOverflow.ellipsis),
-                ))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedFilter = value;
-                    if (value != null && !values.containsKey(value)) {
-                      values[value] = null;
-                    }
-                  });
-                },
+            child: GestureDetector(
+              onTap: _openFilterBottomSheet,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      selectedFilter?.label ?? 'اختر الفلتر',
+                      style: const TextStyle(fontSize: 14),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ),
+                  const Icon(Icons.arrow_drop_down),
+                ],
               ),
             ),
           ),
@@ -173,7 +292,10 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> with Si
             decoration: BoxDecoration(
               color: Colors.grey.shade100,
               borderRadius: BorderRadius.circular(12),
-              boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3, offset: Offset(0, 2))],
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black12, blurRadius: 3, offset: Offset(0, 2))
+              ],
             ),
             child: Row(
               children: [
@@ -189,9 +311,18 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> with Si
                     ),
                     style: const TextStyle(fontSize: 14),
                     onChanged: (value) {
-                      if (selectedFilter != null) {
-                        values[selectedFilter!] = value;
-                        _onApplyFilters();
+                      if (value.isEmpty) {
+                        setState(() {
+                          showResults = false;
+                          values[selectedFilter!] = null;
+                        });
+                      } else {
+                        if (selectedFilter != null) {
+                          setState(() {
+                            values[selectedFilter!] = value;
+                          });
+                          _onApplyFilters();
+                        }
                       }
                     },
                   ),
@@ -208,9 +339,12 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> with Si
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('${currentSort.label}', style: const TextStyle(fontWeight: FontWeight.bold)),
+        Text('${currentSort.label}',
+            style: const TextStyle(fontWeight: FontWeight.bold)),
         IconButton(
-          icon: Icon(currentSort == FacilitySortType.lowestPrice ? Icons.arrow_downward : Icons.arrow_upward),
+          icon: Icon(currentSort == FacilitySortType.lowestPrice
+              ? Icons.arrow_downward
+              : Icons.arrow_upward),
           tooltip: 'تغيير نوع الفرز',
           onPressed: () {
             setState(() {
@@ -219,7 +353,9 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> with Si
                   ? FacilitySortType.highestPrice
                   : FacilitySortType.lowestPrice;
             });
-            final newSortKey = currentSort == FacilitySortType.lowestPrice ? 'price' : '-price';
+            final newSortKey = currentSort == FacilitySortType.lowestPrice
+                ? 'price'
+                : '-price';
             ref.read(sortKeyProvider.notifier).state = newSortKey;
           },
         )
@@ -233,15 +369,24 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> with Si
         final provider = filteredFacilitiesProvider(currentFilters!);
         final filtered = ref.watch(provider);
 
-        if (filtered.isLoading()) return const Center(child: CircularProgressIndicator());
+        if (filtered.isLoading())
+          return const Center(child: CircularProgressIndicator());
         if (filtered.isError()) return Center(child: Text(filtered.message()));
         final facilities = filtered.data ?? [];
 
-        if (facilities.isEmpty) return const Center(child: Text('لا توجد منشآت مطابقة للبحث'));
+        if (facilities.isEmpty)
+          return const Center(child: Text('لا توجد منشآت مطابقة للبحث'));
 
-        return ListView.builder(
+        return ListView.builder( // ✅ هنا أضفنا return
           itemCount: facilities.length,
-          itemBuilder: (_, index) => FacilityWidget(facility: facilities[index]),
+          itemBuilder: (_, index) {
+            final facility = facilities[index];
+            return FacilityWidget(
+              facility: facility,
+              minPriceFilter: minPriceFilter != null ? double.tryParse(minPriceFilter!) : null,
+              maxPriceFilter: maxPriceFilter != null ? double.tryParse(maxPriceFilter!) : null,
+            );
+          },
         );
       },
     );
@@ -258,42 +403,229 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage> with Si
       return Center(child: Text('خطأ: ${sortedAsyncValue.message()}'));
     }
 
-    final facilities = sortedAsyncValue.data ?? [];
+    final allFacilities = sortedAsyncValue.data ?? [];
+
+    final facilityTypeId = values[FacilityFilterType.facilityTypeId];
+
+    final facilities =
+        allFacilities.where((f) => f.facilityTypeId == facilityTypeId).toList();
+
+    final title = facilityTypeId == 1
+        ? 'الفنادق مرتبة حسب السعر'
+        : 'الشاليهات مرتبة حسب السعر';
 
     if (facilities.isEmpty) {
       return const Center(child: Text('لا توجد منشآت متاحة'));
     }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Text(
+            title,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: facilities.length,
+            itemBuilder: (_, index) {
+              final facility = facilities[index];
+              return FacilityWidget(facility: facility);
+            },
+          ),
+        )
+      ],
+    );
+  }
 
-    return ListView.builder(
-      itemCount: facilities.length,
-      itemBuilder: (_, index) {
-        final facility = facilities[index];
-        return FacilityWidget(facility: facility);
+  void _openFilterBottomSheet() {
+    final filters = FacilityFilterType.values
+        .where((f) => f != FacilityFilterType.facilityTypeId)
+        .toList();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.6,
+          minChildSize: 0.6,
+          maxChildSize: 0.6,
+          builder: (context, scrollController) {
+            return Column(
+              children: [
+                const SizedBox(height: 8),
+                Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade400,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  'اختر نوع الفلتر',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 12),
+                const Divider(height: 1),
+                Expanded(
+                  child: ListView.separated(
+                    controller: scrollController,
+                    physics: const AlwaysScrollableScrollPhysics(
+                        parent: BouncingScrollPhysics()),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    itemCount: filters.length,
+                    separatorBuilder: (_, __) => const Divider(height: 1),
+                    itemBuilder: (context, index) {
+                      final filter = filters[index];
+                      return ListTile(
+                          leading: Icon(filter.icon,
+                              color: CustomTheme.primaryColor),
+                          title: Text(
+                            filter.label,
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Text(
+                            filter.description,
+                            style: const TextStyle(
+                                fontSize: 12, color: Colors.grey),
+                          ),
+                          onTap: () {
+                            if (filter == FacilityFilterType.name ||
+                                filter == FacilityFilterType.addressLike) {
+                              setState(() {
+                                selectedFilter = filter;
+                              });
+                              Navigator.pop(context);
+                            } else {
+                              Navigator.pop(context);
+                              _openValueBottomSheet(filter);
+                            }
+                          }
+                          // onTap: () {
+                          //   setState(() {
+                          //     selectedFilter = filter;
+                          //   });
+                          //   Navigator.pop(context);
+                          // },
+                          );
+                    },
+                  ),
+                ),
+              ],
+            );
+          },
+        );
       },
     );
   }
 
-  Widget _buildDefaultList() {
-    final sortedAsyncValue = ref.watch(sortedFacilitiesProvider('')); // لاحظ: نرسل مفتاح فاضي يعني بدون ترتيب
-
-    if (sortedAsyncValue.isLoading()) {
-      return const Center(child: CircularProgressIndicator());
+  void _openValueBottomSheet(FacilityFilterType filter) {
+    switch (filter) {
+      case FacilityFilterType.priceBetween:
+        _showPriceRangeBottomSheet();
+        break;
+      case FacilityFilterType.checkInBetween:
+        //  _showDateRangeBottomSheet();
+        break;
+      case FacilityFilterType.capacityAtLeast:
+        // _showCapacityBottomSheet();
+        break;
+      case FacilityFilterType.availableOnDay:
+        // _showAvailableDayBottomSheet();
+        break;
+      default:
+        // لا شيء
+        break;
     }
-    if (sortedAsyncValue.isError()) {
-      return Center(child: Text('خطأ: ${sortedAsyncValue.message()}'));
-    }
+  }
 
-    final facilities = sortedAsyncValue.data ?? [];
+  void _showPriceRangeBottomSheet() {
+    final minPriceController = TextEditingController();
+    final maxPriceController = TextEditingController();
 
-    if (facilities.isEmpty) {
-      return const Center(child: Text('لا توجد منشآت متاحة'));
-    }
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 16,
+            right: 16,
+            top: 16,
+            bottom:
+                MediaQuery.of(context).viewInsets.bottom + 16, // ✅ دعم الكيبورد
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'حدد نطاق السعر',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: minPriceController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'أقل سعر',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: maxPriceController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'أعلى سعر',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      final min = minPriceController.text.trim();
+                      final max = maxPriceController.text.trim();
 
-    return ListView.builder(
-      itemCount: facilities.length,
-      itemBuilder: (_, index) {
-        final facility = facilities[index];
-        return FacilityWidget(facility: facility);
+                      if (min.isEmpty || max.isEmpty) {
+                        Navigator.pop(context);
+                        return;
+                      }
+
+                      setState(() {
+                        final englishMin = toEnglishNumbers(min);
+                        final englishMax = toEnglishNumbers(max);
+                        values[FacilityFilterType.priceBetween] = '$englishMin,$englishMax';
+                        selectedFilter = FacilityFilterType.priceBetween;
+                      });
+
+                      Navigator.pop(context);
+                      _onApplyFilters();
+                    },
+                    child: const Text('تطبيق الفلترة'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
       },
     );
   }
