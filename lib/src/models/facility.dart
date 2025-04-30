@@ -12,7 +12,8 @@ class Facility {
   String? geojson;
   String? logo;
   bool isFavorite;
-  double? price; // ✅ تمت إضافته
+  double? price;
+  int? firstRoomId; // ✅ تمت إضافته
 
   List<Room> rooms;
 
@@ -28,8 +29,9 @@ class Facility {
     this.geojson,
     this.logo,
     this.isFavorite = false,
-    this.price, // ✅ هنا
+    this.price,
     this.rooms = const [],
+    this.firstRoomId, // ✅ مضاف هنا
   });
 
   Facility.init()
@@ -44,7 +46,8 @@ class Facility {
         geojson = null,
         logo = null,
         isFavorite = false,
-        price = null, // ✅ مضافة هنا أيضاً
+        price = null,
+        firstRoomId = null, // ✅
         rooms = [];
 
   Facility copyWith({
@@ -59,7 +62,8 @@ class Facility {
     String? geojson,
     String? logo,
     bool? isFavorite,
-    double? price, // ✅
+    double? price,
+    int? firstRoomId, // ✅
     List<Room>? rooms,
   }) {
     return Facility(
@@ -74,7 +78,8 @@ class Facility {
       geojson: geojson ?? this.geojson,
       logo: logo ?? this.logo,
       isFavorite: isFavorite ?? this.isFavorite,
-      price: price ?? this.price, // ✅
+      price: price ?? this.price,
+      firstRoomId: firstRoomId ?? this.firstRoomId, // ✅
       rooms: rooms ?? this.rooms,
     );
   }
@@ -91,7 +96,8 @@ class Facility {
       longitude: double.tryParse(jsonMap['longitude']?.toString() ?? ''),
       geojson: jsonMap['geojson'],
       logo: jsonMap['logo'],
-      price: jsonMap['price'] != null ? double.tryParse(jsonMap['price'].toString()) : null, // ✅
+      price: jsonMap['price'] != null ? double.tryParse(jsonMap['price'].toString()) : null,
+      firstRoomId: jsonMap['first_room_id'], // ✅
       rooms: (jsonMap['rooms'] is List)
           ? List<Room>.from((jsonMap['rooms'] as List).map((item) => Room.fromJson(item)))
           : [],
@@ -114,7 +120,8 @@ class Facility {
       'geojson': geojson,
       'logo': logo,
       'is_favorite': isFavorite,
-      'price': price, // ✅ مضافة هنا
+      'price': price,
+      'first_room_id': firstRoomId, // ✅
       'rooms': rooms.map((room) => room.toJson()).toList(),
     };
   }
@@ -132,7 +139,7 @@ class Facility {
   String toString() {
     return 'Facility(id: $id, facilityTypeId: $facilityTypeId, name: "$name", desc: "$desc", status: "$status", '
         'address: "$address", latitude: $latitude, longitude: $longitude, geojson: "$geojson", logo: "$logo", '
-        'isFavorite: $isFavorite, price: $price, rooms: $rooms)';
+        'isFavorite: $isFavorite, price: $price, rooms: $rooms, firstRoomId: $firstRoomId)';
   }
 
   @override
@@ -151,7 +158,8 @@ class Facility {
             geojson == other.geojson &&
             logo == other.logo &&
             isFavorite == other.isFavorite &&
-            price == other.price && // ✅ إضافتها للمقارنة
+            price == other.price &&
+            firstRoomId == other.firstRoomId && // ✅
             rooms == other.rooms;
   }
 
@@ -168,6 +176,7 @@ class Facility {
       geojson.hashCode ^
       logo.hashCode ^
       isFavorite.hashCode ^
-      price.hashCode ^ // ✅ مضافة هنا أيضاً
+      price.hashCode ^
+      firstRoomId.hashCode ^ // ✅
       rooms.hashCode;
 }

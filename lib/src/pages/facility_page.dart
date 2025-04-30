@@ -15,10 +15,10 @@ class FacilityPage extends ConsumerStatefulWidget {
   final String searchQuery;
 
   const FacilityPage({
-    Key? key,
+    super.key,
     required this.facilityTypeId,
     this.searchQuery = '',
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState createState() => _FacilityPageState();

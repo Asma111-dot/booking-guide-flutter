@@ -16,11 +16,11 @@ class FacilityWidget extends ConsumerWidget {
   final double? maxPriceFilter; // ✅ مضاف
 
   const FacilityWidget({
-    Key? key,
+    super.key,
     required this.facility,
     this.minPriceFilter, // ✅ مضاف
     this.maxPriceFilter, // ✅ مضاف
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,13 +40,20 @@ class FacilityWidget extends ConsumerWidget {
     }
 
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-          Routes.roomDetails,
-          arguments: facility,
-        );
-      },
+        onTap: () {
+          if (facility.firstRoomId == null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('لا توجد غرف متوفرة لهذه المنشأة')),
+            );
+            return;
+          }
+
+          Navigator.pushNamed(
+            context,
+            Routes.roomDetails,
+            arguments: facility,
+          );
+        },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(

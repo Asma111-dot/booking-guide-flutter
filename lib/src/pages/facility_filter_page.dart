@@ -341,7 +341,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('${currentSort.label}',
+        Text(currentSort.label,
             style: const TextStyle(fontWeight: FontWeight.bold)),
         IconButton(
           icon: Icon(currentSort == FacilitySortType.lowestPrice
@@ -371,13 +371,15 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
         final provider = filteredFacilitiesProvider(currentFilters!);
         final filtered = ref.watch(provider);
 
-        if (filtered.isLoading())
+        if (filtered.isLoading()) {
           return const Center(child: CircularProgressIndicator());
+        }
         if (filtered.isError()) return Center(child: Text(filtered.message()));
         final facilities = filtered.data ?? [];
 
-        if (facilities.isEmpty)
+        if (facilities.isEmpty) {
           return const Center(child: Text('لا توجد منشآت مطابقة للبحث'));
+        }
 
         return ListView.builder( // ✅ هنا أضفنا return
           itemCount: facilities.length,

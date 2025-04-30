@@ -37,10 +37,15 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
   void initState() {
     super.initState();
     Future.microtask(() async {
-      if (widget.facility.rooms.isNotEmpty) {
-        await ref
-            .read(roomProvider.notifier)
-            .fetch(roomId: widget.facility.rooms.first.id);
+      final roomId = widget.facility.firstRoomId;
+      if (roomId != null) {
+        await ref.read(roomProvider.notifier).fetch(roomId: roomId);
+        final data = ref.read(roomProvider).data;
+        if (data == null) {
+          ref.read(roomProvider.notifier).setEmpty(); // ✅ في حال لم يرجع شيء من الـ API
+        }
+      } else {
+        ref.read(roomProvider.notifier).setEmpty();
       }
     });
     tabController = TabController(length: 3, vsync: this);
@@ -81,10 +86,9 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
         meta: roomState.meta,
         data: roomState.data,
         refresh: () async {
-          if (widget.facility.rooms.isNotEmpty) {
-            await ref
-                .read(roomProvider.notifier)
-                .fetch(roomId: widget.facility.rooms.first.id);
+          final roomId = widget.facility.firstRoomId;
+          if (roomId != null) {
+            await ref.read(roomProvider.notifier).fetch(roomId: roomId);
           }
         },
         forceShowLoaded: roomState.data != null,
@@ -99,8 +103,11 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                   height: 400,
                   child: PageView.builder(
                     controller: pageController,
-                    itemCount: room.media.length,
+                    itemCount: room.media.isNotEmpty ? room.media.length : 1,
                     itemBuilder: (context, index) {
+                      if (room.media.isEmpty) {
+                        return const Center(child: Text("لا توجد صور"));
+                      }
                       final imageUrl = room.media[index].original_url;
                       return GestureDetector(
                         onTap: () {

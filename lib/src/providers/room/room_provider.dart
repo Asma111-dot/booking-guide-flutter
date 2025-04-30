@@ -17,6 +17,10 @@ class Room extends _$Room {
     state = state.copyWith(data: room);
   }
 
+  void setEmpty() {
+    state = state.copyWith(data: null).setLoaded();
+  }
+
   Future fetch({required int roomId, r.Room? room}) async {
     if (room != null) {
       state = state.copyWith(data: room);
@@ -56,3 +60,4 @@ class Room extends _$Room {
     }
   }
 }
+

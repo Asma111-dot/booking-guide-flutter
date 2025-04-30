@@ -10,7 +10,7 @@ import 'map_page.dart';
 import 'account_page.dart';
 
 class NavigationMenu extends StatelessWidget {
-  const NavigationMenu({Key? key}) : super(key: key);
+  const NavigationMenu({super.key});
 
   @override
   Widget build(BuildContext context) {

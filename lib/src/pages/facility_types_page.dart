@@ -12,7 +12,7 @@ import 'facility_filter_page.dart';
 import 'facility_page.dart';
 
 class FacilityTypesPage extends ConsumerStatefulWidget {
-  const FacilityTypesPage({Key? key}) : super(key: key);
+  const FacilityTypesPage({super.key});
 
   @override
   ConsumerState createState() => _FacilityTypesPageState();
