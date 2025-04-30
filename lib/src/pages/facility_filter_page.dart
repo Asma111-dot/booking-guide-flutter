@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
 
 import '../enums/facility_filter_type.dart';
 import '../enums/facility_sort_type.dart';
@@ -57,7 +58,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
     final filters = facilityFilters(
       name: values[FacilityFilterType.name],
       addressLike: values[FacilityFilterType.addressLike],
-      checkInBetween: values[FacilityFilterType.checkInBetween],
+      // checkInBetween: values[FacilityFilterType.checkInBetween],
       addressNearUser: values[FacilityFilterType.addressNearUser],
       capacityAtLeast: values[FacilityFilterType.capacityAtLeast],
       availableOnDay: values[FacilityFilterType.availableOnDay],
@@ -65,7 +66,6 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
       facilityTypeId: values[FacilityFilterType.facilityTypeId],
     );
 
-    // ✅ نجهز القيم minPriceFilter و maxPriceFilter بناءً على الفلترة المختارة
     final priceBetween = values[FacilityFilterType.priceBetween];
     if (priceBetween != null && priceBetween is String && priceBetween.contains(',')) {
       final parts = priceBetween.split(',');
@@ -88,31 +88,6 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
 
     ref.read(filteredFacilitiesProvider(filters).notifier).fetch();
   }
-
-  // void _onApplyFilters() {
-  //   final filters = facilityFilters(
-  //     name: values[FacilityFilterType.name],
-  //     addressLike: values[FacilityFilterType.addressLike],
-  //     checkInBetween: values[FacilityFilterType.checkInBetween],
-  //     addressNearUser: values[FacilityFilterType.addressNearUser],
-  //     capacityAtLeast: values[FacilityFilterType.capacityAtLeast],
-  //     availableOnDay: values[FacilityFilterType.availableOnDay],
-  //     priceBetween: values[FacilityFilterType.priceBetween],
-  //     facilityTypeId: values[FacilityFilterType.facilityTypeId],
-  //   );
-  //
-  //   if (mapEquals(currentFilters, filters)) {
-  //     ref.read(filteredFacilitiesProvider(currentFilters!).notifier).fetch();
-  //     return;
-  //   }
-  //
-  //   setState(() {
-  //     showResults = true;
-  //     currentFilters = filters;
-  //   });
-  //
-  //   ref.read(filteredFacilitiesProvider(filters).notifier).fetch();
-  // }
 
   void _onTabChanged(int index) {
     setState(() {
@@ -184,6 +159,21 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
             ),
             const SizedBox(height: 10),
             _buildSearchFilters(),
+            if (values.length > 1)
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton.icon(
+                  onPressed: () {
+                    setState(() {
+                      values.removeWhere((key, value) => key != FacilityFilterType.facilityTypeId);
+                      showResults = false;
+                      textController.clear();
+                    });
+                  },
+                  icon: const Icon(Icons.refresh, color: Colors.red),
+                  label: const Text('إعادة تعيين الفلاتر', style: TextStyle(color: Colors.grey)),
+                ),
+              ),
             const Divider(height: 32),
             _buildSortControls(),
             const SizedBox(height: 16),
@@ -374,23 +364,113 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
         if (filtered.isLoading()) {
           return const Center(child: CircularProgressIndicator());
         }
-        if (filtered.isError()) return Center(child: Text(filtered.message()));
+        if (filtered.isError()) {
+          return Center(child: Text(filtered.message()));
+        }
+
         final facilities = filtered.data ?? [];
 
         if (facilities.isEmpty) {
           return const Center(child: Text('لا توجد منشآت مطابقة للبحث'));
         }
 
-        return ListView.builder( // ✅ هنا أضفنا return
-          itemCount: facilities.length,
-          itemBuilder: (_, index) {
-            final facility = facilities[index];
-            return FacilityWidget(
-              facility: facility,
-              minPriceFilter: minPriceFilter != null ? double.tryParse(minPriceFilter!) : null,
-              maxPriceFilter: maxPriceFilter != null ? double.tryParse(maxPriceFilter!) : null,
-            );
-          },
+        final facilityTypeId = values[FacilityFilterType.facilityTypeId];
+        final filterDate = values[FacilityFilterType.availableOnDay];
+
+        String title = '';
+
+        if (filterDate != null) {
+
+          for (var facility in facilities) {
+            for (var room in facility.rooms) {
+              for (var price in room.roomPrices) {
+                if ((price.reservations.isNotEmpty ?? false)) {
+                  break;
+                }
+              }
+            }
+          }
+
+          final typeLabel = facilityTypeId == 1 ? 'الفنادق' : 'الشاليهات';
+          title = '$typeLabel المتوفرة في تاريخ $filterDate';
+        } else {
+          final typeLabel = facilityTypeId == 1 ? 'الفنادق' : 'الشاليهات';
+          title = '$typeLabel المتوفرة';
+        }
+
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: RichText(
+                          text: TextSpan(
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: facilityTypeId == 1
+                                    ? 'الفنادق المتوفرة'
+                                    : 'الشاليهات المتوفرة',
+                              ),
+                              if (filterDate != null) ...[
+                                const TextSpan(text: ' في تاريخ: '),
+                                TextSpan(
+                                  text: filterDate,
+                                  style: TextStyle(
+                                    color: CustomTheme.primaryColor,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      ),
+                      if (filterDate != null)
+                        const Padding(
+                          padding: EdgeInsets.only(left: 8),
+                          child: Icon(Icons.calendar_today, size: 18, color: Colors.blue),
+                        ),
+                    ],
+                  ),
+
+                  // ✅ رسالة إضافية حسب الفلتر
+                  if (selectedFilter != null && values[selectedFilter] != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        _buildFilterDescription(selectedFilter!, values[selectedFilter]),
+                        style: const TextStyle(fontSize: 13, color: Colors.grey),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: facilities.length,
+                itemBuilder: (_, index) {
+                  final facility = facilities[index];
+                  return FacilityWidget(
+                    facility: facility,
+                    minPriceFilter: minPriceFilter != null ? double.tryParse(minPriceFilter!) : null,
+                    maxPriceFilter: maxPriceFilter != null ? double.tryParse(maxPriceFilter!) : null,
+                  );
+                },
+              ),
+            ),
+          ],
         );
       },
     );
@@ -446,7 +526,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
 
   void _openFilterBottomSheet() {
     final filters = FacilityFilterType.values
-        .where((f) => f != FacilityFilterType.facilityTypeId)
+        .where((f) => f != FacilityFilterType.facilityTypeId && f != FacilityFilterType.checkInBetween)
         .toList();
 
     showModalBottomSheet(
@@ -505,24 +585,21 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                             style: const TextStyle(
                                 fontSize: 12, color: Colors.grey),
                           ),
-                          onTap: () {
-                            if (filter == FacilityFilterType.name ||
-                                filter == FacilityFilterType.addressLike) {
-                              setState(() {
-                                selectedFilter = filter;
-                              });
-                              Navigator.pop(context);
-                            } else {
-                              Navigator.pop(context);
-                              _openValueBottomSheet(filter);
-                            }
+                        onTap: () async {
+                          if (filter == FacilityFilterType.name ||
+                              filter == FacilityFilterType.addressLike) {
+                            setState(() {
+                              selectedFilter = filter;
+                            });
+                            Navigator.pop(context);
+                          } else if (filter == FacilityFilterType.addressNearUser) {
+                            Navigator.pop(context); // أغلق اختيار الفلتر
+                            _showUserAddressBottomSheet(); // افتح إدخال العنوان
+                          } else {
+                            Navigator.pop(context);
+                            _openValueBottomSheet(filter);
                           }
-                          // onTap: () {
-                          //   setState(() {
-                          //     selectedFilter = filter;
-                          //   });
-                          //   Navigator.pop(context);
-                          // },
+                        },
                           );
                     },
                   ),
@@ -540,9 +617,9 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
       case FacilityFilterType.priceBetween:
         _showPriceRangeBottomSheet();
         break;
-      case FacilityFilterType.checkInBetween:
-        //  _showDateRangeBottomSheet();
-        break;
+      // case FacilityFilterType.checkInBetween:
+      //   //  _showDateRangeBottomSheet();
+      //   break;
       case FacilityFilterType.capacityAtLeast:
          _showCapacityBottomSheet();
         break;
@@ -703,6 +780,8 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
 
   void _showAvailableDayBottomSheet() {
     final selectedDate = ValueNotifier<DateTime?>(null);
+    final TextEditingController _controller = TextEditingController();
+    DateTime today = DateTime.now();
 
     showModalBottomSheet(
       context: context,
@@ -727,50 +806,79 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
+
+                /// ✅ مربع النص فقط (لا كتابة)
                 ValueListenableBuilder<DateTime?>(
                   valueListenable: selectedDate,
-                  builder: (context, value, child) {
-                    return InkWell(
-                      onTap: () async {
-                        final picked = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2020),
-                          lastDate: DateTime(2100),
-                        );
-                        if (picked != null) {
-                          selectedDate.value = picked;
-                        }
-                      },
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey.shade300),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          value != null
-                              ? value.toSqlDateOnly()   // ✅ هنا التغيير
-                              : 'اختر تاريخ التوفر',
-                          style: const TextStyle(fontSize: 16),
-                        ),
+                  builder: (context, value, _) {
+                    return TextFormField(
+                      controller: _controller,
+                      readOnly: true,
+                      decoration: const InputDecoration(
+                        labelText: 'اختر التاريخ',
+                        border: OutlineInputBorder(),
+                        suffixIcon: Icon(Icons.calendar_today),
                       ),
+                      onTap: () async {
+                        await showDialog(
+                          context: context,
+                          builder: (context) {
+                            DateTime tempSelected = selectedDate.value ?? today;
+
+                            return AlertDialog(
+                              title: const Text('اختر التاريخ'),
+                              content: SizedBox(
+                                height: 300,
+                                width: double.maxFinite,
+                                child: dp.DayPicker.single(
+                                  selectedDate: tempSelected,
+                                  onChanged: (date) {
+                                    tempSelected = date;
+                                    Navigator.of(context).pop(date); // إغلاق وتمريرة
+                                  },
+                                  firstDate: today,
+                                  lastDate: DateTime(2100),
+                                  datePickerStyles: dp.DatePickerRangeStyles(
+                                    selectedDateStyle: const TextStyle(color: Colors.white),
+                                    selectedSingleDateDecoration: BoxDecoration(
+                                      color: CustomTheme.primaryColor,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ).then((picked) {
+                          if (picked != null && picked is DateTime) {
+                            selectedDate.value = picked;
+                            _controller.text = picked.toSqlDateOnly();
+                          }
+                        });
+                      },
                     );
                   },
                 ),
+
                 const SizedBox(height: 16),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
                       if (selectedDate.value == null) {
-                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('الرجاء اختيار تاريخ أولاً'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
                         return;
                       }
 
                       setState(() {
-                        final englishDate = toEnglishNumbers(selectedDate.value!.toSqlDateOnly()); // ✅ هنا التغيير
+                        final englishDate = toEnglishNumbers(
+                          selectedDate.value!.toSqlDateOnly(),
+                        );
                         values[FacilityFilterType.availableOnDay] = englishDate;
                         selectedFilter = FacilityFilterType.availableOnDay;
                       });
@@ -787,6 +895,85 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
         );
       },
     );
+  }
+
+  void _showUserAddressBottomSheet() {
+    final addressController = TextEditingController();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 16,
+            right: 16,
+            top: 16,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'أدخل عنوانك الحالي',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: addressController,
+                  decoration: const InputDecoration(
+                    labelText: 'العنوان المطابق للعنوانك',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      final userAddress = addressController.text.trim();
+                      if (userAddress.isNotEmpty) {
+                        setState(() {
+                          values[FacilityFilterType.addressNearUser] = userAddress;
+                          selectedFilter = FacilityFilterType.addressNearUser;
+                        });
+                        Navigator.pop(context);
+                        _onApplyFilters();
+                      }
+                    },
+                    child: const Text('تطبيق الفلترة'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  String _buildFilterDescription(FacilityFilterType filter, dynamic value) {
+    switch (filter) {
+      case FacilityFilterType.name:
+        return 'تمت التصفية حسب الاسم الذي يحتوي: "$value"';
+      case FacilityFilterType.addressLike:
+        return 'تمت التصفية حسب العنوان الذي يحتوي: "$value"';
+      case FacilityFilterType.capacityAtLeast:
+        return 'تمت التصفية لعدد أشخاص لا يقل عن $value';
+      case FacilityFilterType.priceBetween:
+        final parts = value.split(',');
+        return 'تمت التصفية لأسعار بين ${parts[0]} و ${parts[1]}';
+      case FacilityFilterType.availableOnDay:
+        return 'تمت التصفية حسب اليوم المتاح';
+      case FacilityFilterType.addressNearUser:
+        return 'تمت التصفية حسب موقعك الحالي (قريب من "$value")';
+      default:
+        return '';
+    }
   }
 
 }

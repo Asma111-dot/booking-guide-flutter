@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import '../helpers/general_helper.dart';
 
 enum FacilityFilterType {
-  name,
-  addressLike,
-  facilityTypeId,
-  priceBetween,
-  checkInBetween,
-  addressNearUser,
-  capacityAtLeast,
-  availableOnDay,
+  name,                // 1
+  addressLike,         // 2
+  capacityAtLeast,     // 3
+  availableOnDay,      // 4
+  addressNearUser,     // 5
+  priceBetween,        // 6
+  checkInBetween,      // 7 ← مؤجّلة ولن تظهر
+  facilityTypeId,      // 8 ← داخلي فقط
 }
 
 extension FacilityFilterTypeExtension on FacilityFilterType {

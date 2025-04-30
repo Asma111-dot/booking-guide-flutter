@@ -69,6 +69,7 @@ dependencies:
   flutter_launcher_icons: ^0.14.3
   get: ^4.7.2
   line_awesome_flutter: ^3.0.1
+  flutter_date_pickers: ^0.4.3
 
 flutter_launcher_icons:
     android: true
