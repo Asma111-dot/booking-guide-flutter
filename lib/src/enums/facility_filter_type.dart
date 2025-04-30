@@ -103,3 +103,23 @@ extension FacilityFilterTypeDescription on FacilityFilterType {
     }
   }
 }
+
+String buildFilterDescription(FacilityFilterType filter, dynamic value) {
+  switch (filter) {
+    case FacilityFilterType.name:
+      return 'تمت التصفية حسب الاسم الذي يحتوي: "$value"';
+    case FacilityFilterType.addressLike:
+      return 'تمت التصفية حسب العنوان الذي يحتوي: "$value"';
+    case FacilityFilterType.capacityAtLeast:
+      return 'تمت التصفية لعدد أشخاص لا يقل عن $value';
+    case FacilityFilterType.priceBetween:
+      final parts = value.split(',');
+      return 'تمت التصفية لأسعار بين ${parts[0]} و ${parts[1]}';
+    case FacilityFilterType.availableOnDay:
+      return 'تمت التصفية حسب اليوم المتاح';
+    case FacilityFilterType.addressNearUser:
+      return 'تمت التصفية حسب موقعك الحالي (قريب من "$value")';
+    default:
+      return '';
+  }
+}
