@@ -7,8 +7,8 @@ import '../helpers/general_helper.dart';
 import '../providers/auth/user_provider.dart';
 import '../providers/facility_type/facility_type_provider.dart';
 import '../utils/assets.dart';
+import '../utils/routes.dart';
 import '../utils/theme.dart';
-import 'facility_filter_page.dart';
 import 'facility_page.dart';
 
 class FacilityTypesPage extends ConsumerStatefulWidget {
@@ -122,13 +122,10 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                     onTap: () {
                       if (selectedFacilityType == null) return;
 
-                      Navigator.push(
+                      Navigator.pushNamed(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => FacilityFilterPage(
-                            initialFacilityTypeId: selectedFacilityType!,
-                          ),
-                        ),
+                        Routes.filter,
+                        arguments: selectedFacilityType!,
                       );
                     },
                     child: Container(
@@ -149,7 +146,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                           Icon(Icons.search, color: CustomTheme.primaryColor),
                           const SizedBox(width: 10),
                           Text(
-                            'بحث في المنشآت...',
+                            trans().search_in_facilities,
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.grey.shade600,
@@ -158,6 +155,26 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                         ],
                       ),
                     ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                GestureDetector(
+                  onTap: () {
+                    if (selectedFacilityType == null) return;
+                    Navigator.pushNamed(
+                      context,
+                      Routes.filter,
+                      arguments: selectedFacilityType!,
+                    );
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      color: CustomTheme.primaryColor,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: const Icon(Icons.tune, color: Colors.white),
                   ),
                 ),
               ],

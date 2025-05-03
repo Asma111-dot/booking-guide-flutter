@@ -1,6 +1,6 @@
 enum FacilitySortType {
-  lowestPrice,  // ✅ السعر الأقل (price ASC)
-  highestPrice, // ✅ السعر الأعلى (price DESC)
+  lowestPrice,  // (price ASC)
+  highestPrice, // (price DESC)
 }
 
 extension FacilitySortTypeExtension on FacilitySortType {

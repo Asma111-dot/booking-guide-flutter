@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../enums/facility_filter_type.dart';
+import '../helpers/general_helper.dart';
 import '../providers/filter/filtered_facilities_provider.dart';
-import '../providers/sort/sorted_facilities_provider.dart';
 import '../utils/theme.dart';
 import 'facility_widget.dart';
 
@@ -37,14 +37,23 @@ class FilteredFacilitiesListWidget extends ConsumerWidget {
     final facilities = filtered.data ?? [];
 
     if (facilities.isEmpty) {
-      return const Center(child: Text('لا توجد منشآت مطابقة للبحث'));
+      return Center(
+        child: Text(
+          trans().no_matching_facilities,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.grey,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      );
     }
 
     final facilityTypeId = values[FacilityFilterType.facilityTypeId];
     final filterDate = values[FacilityFilterType.availableOnDay];
 
-    final typeLabel = facilityTypeId == 1 ? 'الفنادق' : 'الشاليهات';
-    final title = filterDate != null ? '$typeLabel المتوفرة في تاريخ $filterDate' : '$typeLabel المتوفرة';
+    final typeLabel = facilityTypeId == 1 ? trans().hotel : trans().chalet;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,9 +70,9 @@ class FilteredFacilitiesListWidget extends ConsumerWidget {
                       text: TextSpan(
                         style: const TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
                         children: [
-                          TextSpan(text: typeLabel + ' المتوفرة'),
+                          TextSpan(text: '$typeLabel ${trans().available}'),
                           if (filterDate != null) ...[
-                            const TextSpan(text: ' في تاريخ: '),
+                             TextSpan(text: trans().on_date),
                             TextSpan(
                               text: filterDate,
                               style: TextStyle(color: CustomTheme.primaryColor, fontWeight: FontWeight.w900),
@@ -101,112 +110,6 @@ class FilteredFacilitiesListWidget extends ConsumerWidget {
                 minPriceFilter: minPrice != null ? double.tryParse(minPrice!) : null,
                 maxPriceFilter: maxPrice != null ? double.tryParse(maxPrice!) : null,
               );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class SortedFacilitiesListWidget extends ConsumerWidget {
-  final String sortKey;
-  final int facilityTypeId;
-
-  const SortedFacilitiesListWidget({
-    super.key,
-    required this.sortKey,
-    required this.facilityTypeId,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final sortedAsyncValue = ref.watch(sortedFacilitiesProvider(sortKey));
-
-    if (sortedAsyncValue.isLoading()) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    if (sortedAsyncValue.isError()) {
-      return Center(child: Text('خطأ: ${sortedAsyncValue.message()}'));
-    }
-
-    final allFacilities = sortedAsyncValue.data ?? [];
-    final facilities = allFacilities.where((f) => f.facilityTypeId == facilityTypeId).toList();
-
-    final title = facilityTypeId == 1 ? 'الفنادق مرتبة حسب السعر' : 'الشاليهات مرتبة حسب السعر';
-
-    if (facilities.isEmpty) {
-      return const Center(child: Text('لا توجد منشآت متاحة'));
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Text(
-            title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: facilities.length,
-            itemBuilder: (_, index) {
-              final facility = facilities[index];
-              return FacilityWidget(facility: facility);
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class TabFilteredFacilitiesListWidget extends ConsumerWidget {
-  final int facilityTypeId;
-
-  const TabFilteredFacilitiesListWidget({
-    super.key,
-    required this.facilityTypeId,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final allFacilitiesAsync = ref.watch(sortedFacilitiesProvider(''));
-
-    if (allFacilitiesAsync.isLoading()) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    if (allFacilitiesAsync.isError()) {
-      return Center(child: Text('خطأ: ${allFacilitiesAsync.message()}'));
-    }
-
-    final allFacilities = allFacilitiesAsync.data ?? [];
-    final filteredFacilities = allFacilities.where((f) => f.facilityTypeId == facilityTypeId).toList();
-
-    final title = facilityTypeId == 1 ? 'جميع الفنادق المتوفرة' : 'جميع الشاليهات المتوفرة';
-
-    if (filteredFacilities.isEmpty) {
-      return const Center(child: Text('لا توجد منشآت متاحة'));
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Text(
-            title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: filteredFacilities.length,
-            itemBuilder: (_, index) {
-              final facility = filteredFacilities[index];
-              return FacilityWidget(facility: facility);
             },
           ),
         ),

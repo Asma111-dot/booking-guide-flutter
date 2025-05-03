@@ -167,6 +167,7 @@
   "are_you_sure": "هل أنت متأكد؟",
   "delete_account_confirmation": "هل تريد فعلاً حذف حسابك؟ لا يمكن التراجع.",
 
+  "search_in_facilities": "بحث في المنشآت...",
   "discoverBestPlace": "اكتشف أفضل مكان يناسب احتياجاتك",
   "searchByNameAddress": "ابحث بالاسم أو العنوان، حدّد عدد الأشخاص، اختر التاريخ المناسب، ورتب النتائج حسب السعر بكل سهولة.",
   "name": "اسم المنشأة",
@@ -185,5 +186,16 @@
   "desc_address_near_user": "اعثر على المنشآت الأقرب بناءً على عنوانك المحدد.",
   "desc_capacity_at_least": "ابحث عن منشآت تستوعب عددًا لا يقل عن عدد معين من الأشخاص.",
   "desc_available_on_day": "اعرض المنشآت المتاحة للحجز في يوم معين تختاره.",
-  "desc_facility_type_id": "اختر تصنيف المنشأة مثل فندق، شاليه، قاعة مناسبات لتسهيل البحث."
+  "desc_facility_type_id": "اختر تصنيف المنشأة مثل فندق، شاليه، قاعة مناسبات لتسهيل البحث.",
+  "hotel_sorted_by_lowest_price": "الفنادق مرتبة حسب السعر من الأقل إلى الأعلى",
+  "hotel_sorted_by_highest_price": "الفنادق مرتبة حسب السعر من الأعلى إلى الأقل",
+  "chalet_sorted_by_lowest_price": "الشاليهات مرتبة حسب السعر من الأقل إلى الأعلى",
+  "chalet_sorted_by_highest_price": "الشاليهات مرتبة حسب السعر من الأعلى إلى الأقل",
+  "all_available_hotels": "جميع الفنادق المتوفرة",
+  "all_available_chalets": "جميع الشاليهات المتوفرة",
+  "no_facilities_available": "لا توجد منشآت متاحة",
+  "reset_filters": "إعادة تعيين الفلترة",
+  "no_matching_facilities": "لا توجد منشآت مطابقة للبحث",
+  "available": "المتوفرة",
+  "on_date": "في تاريخ:"
 }

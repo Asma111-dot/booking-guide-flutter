@@ -12,12 +12,10 @@ import '../models/response/meta.dart';
 
 class FacilityPage extends ConsumerStatefulWidget {
   final int facilityTypeId;
-  final String searchQuery;
 
   const FacilityPage({
     super.key,
     required this.facilityTypeId,
-    this.searchQuery = '',
   });
 
   @override
@@ -83,17 +81,11 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
       meta: facilitiesState.meta,
       data: facilitiesState.data,
       onLoaded: (data) {
-        final filteredFacilities = data.where((facility) {
-          return facility.name
-              .toLowerCase()
-              .contains(widget.searchQuery.toLowerCase());
-        }).toList();
-
         return ListView.builder(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          itemCount: filteredFacilities.length,
+          itemCount: data.length,
           itemBuilder: (context, index) {
-            final facility = filteredFacilities[index];
+            final facility = data[index];
             return FacilityWidget(facility: facility);
           },
         );

@@ -14,10 +14,11 @@ import '../sheetes/available_day_filter_sheet.dart';
 import '../sheetes/capacity_filter_sheet.dart';
 import '../sheetes/filter_type_selector_bottom_sheet.dart';
 import '../sheetes/price_filter_sheet.dart';
-import '../sheetes/search_filter_bar.dart';
 import '../utils/theme.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/filtered_facilities_list_widget.dart';
+import '../widgets/sorted_facilities_list_widget.dart';
+import '../widgets/tab_filtered_facilities_list_widget.dart';
 
 class FacilityFilterPage extends ConsumerStatefulWidget {
   final int initialFacilityTypeId;
@@ -101,8 +102,8 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
 
       values[FacilityFilterType.facilityTypeId] = (index == 0 ? 1 : 2);
 
-      textController.clear(); // ✅ تصفير مربع البحث
-      selectedFilter = FacilityFilterType.name; // ✅ إرجاع البحث بالاسم دائمًا
+      textController.clear();
+      selectedFilter = FacilityFilterType.name;
     });
   }
 
@@ -140,7 +141,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                       color: Colors.black87,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 4),
                   Text(
                     trans().searchByNameAddress,
                     style: const TextStyle(
@@ -161,44 +162,139 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                 Tab(text: trans().chalet),
               ],
             ),
-            const SizedBox(height: 10),
-            SearchFilterBar(
-              selectedFilter: selectedFilter,
-              textController: textController,
-              onOpenFilter: _openFilterBottomSheet,
-              onSearchChanged: (value) {
-                if (value.isEmpty) {
-                  setState(() {
-                    showResults = false;
-                    values[selectedFilter!] = null;
-                  });
-                } else if (selectedFilter != null) {
-                  setState(() {
-                    values[selectedFilter!] = value;
-                  });
-                  _onApplyFilters();
-                }
-              },
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                // زر اختيار نوع الفلتر
+                Flexible(
+                  flex: 2,
+                  child: Container(
+                    height: 45,
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 3,
+                            offset: Offset(0, 2)),
+                      ],
+                    ),
+                    child: GestureDetector(
+                      onTap: _openFilterBottomSheet,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              selectedFilter?.label ?? 'اختر الفلتر',
+                              style: const TextStyle(fontSize: 14),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ),
+                          const Icon(Icons.arrow_drop_down),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+
+                // مربع البحث
+                Flexible(
+                  flex: 6,
+                  child: TextField(
+                    controller: textController,
+                    decoration: InputDecoration(
+                      hintText: trans().search_in_facilities,
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 12),
+                    ),
+                    onChanged: (value) {
+                      if (value.isEmpty) {
+                        setState(() {
+                          showResults = false;
+                          values[selectedFilter!] = null;
+                        });
+                      } else if (selectedFilter != null) {
+                        setState(() {
+                          values[selectedFilter!] = value;
+                        });
+                        _onApplyFilters();
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(width: 10),
+
+                // زر الفلترة
+                Flexible(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isSorting = true;
+                        currentSort =
+                            currentSort == FacilitySortType.lowestPrice
+                                ? FacilitySortType.highestPrice
+                                : FacilitySortType.lowestPrice;
+                      });
+                      final newSortKey =
+                          currentSort == FacilitySortType.lowestPrice
+                              ? 'price'
+                              : '-price';
+                      ref.read(sortKeyProvider.notifier).state = newSortKey;
+                    },
+                    child: Container(
+                      height: 45,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: CustomTheme.primaryColor,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        key: ValueKey(currentSort),
+                        currentSort == FacilitySortType.lowestPrice
+                            ? Icons.arrow_downward
+                            : Icons.arrow_upward,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            if (values.length > 1)
+            if (values.length > 1 || isSorting)
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton.icon(
                   onPressed: () {
                     setState(() {
                       values.removeWhere((key, value) =>
-                          key != FacilityFilterType.facilityTypeId);
+                      key != FacilityFilterType.facilityTypeId);
                       showResults = false;
                       textController.clear();
+
+                      currentSort = FacilitySortType.lowestPrice;
+                      isSorting = false;
+
+                      ref.read(sortKeyProvider.notifier).state = 'price';
                     });
                   },
                   icon: const Icon(Icons.refresh, color: Colors.red),
-                  label: const Text('إعادة تعيين الفلاتر',
-                      style: TextStyle(color: Colors.grey)),
+                  label:  Text(
+                    trans().reset_filters,
+                    style: TextStyle(color: Colors.grey),
+                  ),
                 ),
               ),
             const Divider(height: 32),
-            _buildSortControls(),
             const SizedBox(height: 16),
             Expanded(
               child: AnimatedSwitcher(
@@ -216,10 +312,12 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                             sortKey: ref.watch(sortKeyProvider),
                             facilityTypeId:
                                 values[FacilityFilterType.facilityTypeId],
+                            currentSort: currentSort,
                           )
                         : TabFilteredFacilitiesListWidget(
-                  facilityTypeId: values[FacilityFilterType.facilityTypeId],
-                )),
+                            facilityTypeId:
+                                values[FacilityFilterType.facilityTypeId],
+                          )),
               ),
             )
           ],
@@ -228,37 +326,11 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
     );
   }
 
-  Widget _buildSortControls() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(currentSort.label,
-            style: const TextStyle(fontWeight: FontWeight.bold)),
-        IconButton(
-          icon: Icon(currentSort == FacilitySortType.lowestPrice
-              ? Icons.arrow_downward
-              : Icons.arrow_upward),
-          tooltip: 'تغيير نوع الفرز',
-          onPressed: () {
-            setState(() {
-              isSorting = true; // ✅ علمنا أنه يريد ترتيب
-              currentSort = currentSort == FacilitySortType.lowestPrice
-                  ? FacilitySortType.highestPrice
-                  : FacilitySortType.lowestPrice;
-            });
-            final newSortKey = currentSort == FacilitySortType.lowestPrice
-                ? 'price'
-                : '-price';
-            ref.read(sortKeyProvider.notifier).state = newSortKey;
-          },
-        )
-      ],
-    );
-  }
-
   void _openFilterBottomSheet() {
     final filters = FacilityFilterType.values
-        .where((f) => f != FacilityFilterType.facilityTypeId && f != FacilityFilterType.checkInBetween)
+        .where((f) =>
+            f != FacilityFilterType.facilityTypeId &&
+            f != FacilityFilterType.checkInBetween)
         .toList();
 
     showModalBottomSheet(
@@ -272,7 +344,8 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
         return FilterTypeSelectorBottomSheet(
           filters: filters,
           onSelect: (filter) {
-            if (filter == FacilityFilterType.name || filter == FacilityFilterType.addressLike) {
+            if (filter == FacilityFilterType.name ||
+                filter == FacilityFilterType.addressLike) {
               setState(() {
                 selectedFilter = filter;
               });
@@ -295,7 +368,6 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
       },
     );
   }
-
 
   void _openValueBottomSheet(FacilityFilterType filter) {
     switch (filter) {

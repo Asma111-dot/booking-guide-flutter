@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/facility.dart';
 import '../models/room_price.dart';
 import '../pages/facility_filter_page.dart';
+import '../pages/facility_page.dart';
 import '../pages/map_page.dart';
 import '../pages/payment_details_page.dart';
 import '../pages/payment_page.dart';
@@ -30,7 +31,8 @@ class Routes {
   static const String reservationDetails = '/reservation_details';
   static const String payment = '/payment';
   static const String paymentDetails = '/payment_details';
-  static const String mapPage = '/map';
+  static const String map = '/map';
+  static const String filter = '/filters';
 
   static Route? generate(RouteSettings settings) {
     final args = settings.arguments;
@@ -50,6 +52,13 @@ class Routes {
       case facilityTypes:
         return MaterialPageRoute(
           builder: (_) => FacilityTypesPage(),
+          settings: settings,
+        );
+
+      case facilities:
+        final facilityTypeId = settings.arguments as int;
+        return MaterialPageRoute(
+          builder: (_) => FacilityPage(facilityTypeId: facilityTypeId),
           settings: settings,
         );
 
@@ -90,14 +99,14 @@ class Routes {
           settings: settings,
         );
 
-      case mapPage:
+      case map:
         final facilityTypeId = args as int? ?? 0;
         return MaterialPageRoute(
           builder: (_) => MapPage(facilityId: facilityTypeId),
           settings: settings,
         );
 
-      case '/filters':
+      case filter:
         final facilityTypeId = settings.arguments as int;
         return MaterialPageRoute(
           builder: (_) => FacilityFilterPage(initialFacilityTypeId: facilityTypeId),
