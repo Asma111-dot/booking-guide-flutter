@@ -23,6 +23,7 @@ Future open() async => await openBox(_authBox);
 User? currentUser() {
   try {
     final avatarUrl = box(_authBox).get(_avatar);
+    final mimeType = box(_authBox).get('avatar_mime_type');
     return User(
       id: box(_authBox).get(_idKey),
       name: box(_authBox).get(_nameKey),
@@ -30,7 +31,13 @@ User? currentUser() {
       email: box(_authBox).get(_emailKey),
       address: box(_authBox).get(_addressKey),
       media: avatarUrl != null && avatarUrl is String && avatarUrl.isNotEmpty
-          ? [Media(original_url: avatarUrl, id: 1)]
+          ? [
+        Media(
+          original_url: avatarUrl,
+          id: 1,
+          mime_type: mimeType ?? '',
+        )
+      ]
           : [],
     );
   } catch (e) {

@@ -6,10 +6,10 @@ class FullScreenImagePage extends StatelessWidget {
   final int initialIndex;
 
   const FullScreenImagePage({
-    Key? key,
+    super.key,
     required this.imageUrls,
     this.initialIndex = 0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

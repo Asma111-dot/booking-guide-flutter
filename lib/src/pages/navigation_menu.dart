@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../helpers/general_helper.dart';
 import '../storage/auth_storage.dart';
+import '../utils/assets.dart';
 import '../utils/theme.dart';
 import 'booking_page.dart';
 import 'facility_types_page.dart';
@@ -42,11 +43,11 @@ class NavigationMenu extends StatelessWidget {
             final isSelected = controller.selectedIndex.value == index;
 
             final iconData = [
-              Icons.home_outlined,
-              Icons.location_on_outlined,
-              Icons.sticky_note_2_outlined,
-              Icons.favorite_outline_outlined,
-              Icons.person_2_outlined,
+              homeIcon,
+              mapIcon,
+              bookingIcon,
+              favoriteIcon,
+              personIcon,
             ][index];
 
             final label = [
@@ -63,7 +64,9 @@ class NavigationMenu extends StatelessWidget {
                 duration: const Duration(milliseconds: 250),
                 padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
                 decoration: BoxDecoration(
-                  color: isSelected ? CustomTheme.color3.withOpacity(0.1) : Colors.transparent,
+                  color: isSelected
+                      ? CustomTheme.color3.withAlpha(25)
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Column(

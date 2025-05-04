@@ -5,6 +5,7 @@ const _base = 'assets/';
 const _lottieBase = "${_base}lottie/";
 const _imageBase = "${_base}images/";
 const _iconBase = "${_base}icons/";
+const _videoBase = "${_base}videos/";
 
 // Lottie (Json) ---------------------------------------------------------------
 const loadingJson = "${_lottieBase}loading_circular.json";
@@ -20,9 +21,9 @@ const unauthorizedJson = "${_lottieBase}unauthorized.json";
 const defaultAvatar = "${_imageBase}default_avatar.jpg";
 const logoCoverImage = "${_imageBase}logo_cover.png";
 const appIcon = "${_imageBase}app_icon.jpg";
-const myBooking ="${_imageBase}my_booking.png";
-const myBookingWhite ="${_imageBase}My_booking_white.png";
-const booking ="${_imageBase}booking1.png";
+const myBooking = "${_imageBase}my_booking.png";
+const myBookingWhite = "${_imageBase}My_booking_white.png";
+const booking = "${_imageBase}booking1.png";
 const chaletImage = "${_imageBase}chalet.jpg";
 const hotelImage = "${_imageBase}hotel.jpg";
 const floosakImage = "${_imageBase}floosak.png";
@@ -53,4 +54,10 @@ const starBorderIcon = Icons.star_border_outlined;
 const deleteIcon = Icons.delete_outline_rounded;
 const callIcon = Icons.phone_rounded;
 const phoneIcon = Icons.phone_iphone_rounded;
-const mapIcon = Icons.map;
+const mapIcon = Icons.location_on_outlined;
+const bookingIcon = Icons.sticky_note_2_outlined;
+const favoriteIcon = Icons.favorite_outline_outlined;
+const personIcon = Icons.person_2_outlined;
+
+// Videos -----------------------------------------------------------------------
+const welcome = "${_videoBase}welcome.mp4";

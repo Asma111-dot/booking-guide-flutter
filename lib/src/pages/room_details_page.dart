@@ -14,6 +14,7 @@ import '../providers/room/room_provider.dart';
 import '../models/facility.dart';
 import '../models/room.dart' as r;
 import '../widgets/room_price_widget.dart';
+import '../widgets/video_widget.dart';
 import '../widgets/view_widget.dart';
 import 'image_gallery_page.dart';
 
@@ -112,33 +113,36 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                       if (room.media.isEmpty) {
                         return Center(child: Text(trans().no_images));
                       }
-                      final imageUrl = room.media[index].original_url;
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ImageGalleryPage(
-                                imageUrls: room.media
-                                    .map((m) => m.original_url)
-                                    .toList(),
-                                initialIndex: index,
+                      final media = room.media[index];
+                      final isVideo = media.mime_type?.startsWith('video') ?? false;
+                      final mediaUrl = media.original_url;
+
+                      if (isVideo) {
+                        return VideoWidget(videoUrl: mediaUrl);
+                      } else {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ImageGalleryPage(
+                                  mediaList: room.media,
+                                  initialIndex: index,
+                                ),
                               ),
+                            );
+                          },
+                          child: Hero(
+                            tag: mediaUrl,
+                            child: CachedNetworkImage(
+                              imageUrl: mediaUrl,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                              errorWidget: (context, url, error) => const Icon(Icons.error),
                             ),
-                          );
-                        },
-                        child: Hero(
-                          tag: imageUrl,
-                          child: CachedNetworkImage(
-                            imageUrl: imageUrl,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => const Center(
-                                child: CircularProgressIndicator()),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     },
                   ),
                 ),

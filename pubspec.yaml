@@ -70,6 +70,7 @@ dependencies:
   get: ^4.7.2
   line_awesome_flutter: ^3.0.1
   flutter_date_pickers: ^0.4.3
+  video_player: ^2.9.5
 
 flutter_launcher_icons:
   android: true
@@ -113,6 +114,7 @@ flutter:
   assets:
    - assets/lottie/
    - assets/images/
+   - assets/videos/
 
   fonts:
     - family: Unbounded

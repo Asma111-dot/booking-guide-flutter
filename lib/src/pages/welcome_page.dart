@@ -1,12 +1,12 @@
+import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../storage/auth_storage.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
-import '../helpers/general_helper.dart';
-import '../pages/navigation_menu.dart';
 import '../providers/auth/user_provider.dart';
-import '../utils/theme.dart';
+import 'navigation_menu.dart';
 
 class WelcomePage extends ConsumerStatefulWidget {
   const WelcomePage({super.key});
@@ -16,17 +16,39 @@ class WelcomePage extends ConsumerStatefulWidget {
 }
 
 class _WelcomePageState extends ConsumerState<WelcomePage> {
+  late VideoPlayerController _controller;
+
   @override
   void initState() {
     super.initState();
+
+    _controller = VideoPlayerController.asset(welcome)
+      ..initialize().then((_) {
+        setState(() {});
+        _controller.setLooping(false);
+        _controller.play();
+      });
+
+    _controller.addListener(() async {
+      if (_controller.value.position >= _controller.value.duration &&
+          !_controller.value.isPlaying) {
+        _navigateToNextScreen();
+      }
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await ref.read(userProvider.notifier).loadUserFromStorage();
-      _navigateToNextScreen();
     });
   }
 
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   Future<void> _navigateToNextScreen() async {
-    await Future.delayed(const Duration(seconds: 3));
 
     final firstTime = await isFirstTime();
     final loggedIn = isUserLoggedIn();
@@ -38,53 +60,26 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const NavigationMenu()),
-      );]
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        // decoration: const BoxDecoration(
-        //   gradient: LinearGradient(
-        //     colors: [Colors.white],
-        //     begin: Alignment.topCenter,
-        //     end: Alignment.bottomCenter,
-        //   ),
-        // ),
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const SizedBox(height: 20),
-            Text(
-              "${trans().welcomeToBooking} ....",
-              style: const TextStyle(
-                fontSize: 24,
-                color: CustomTheme.color2,
-                fontWeight: FontWeight.bold,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          if (_controller.value.isInitialized)
+            FittedBox(
+              fit: BoxFit.cover,
+              child: SizedBox(
+                width: _controller.value.size.width,
+                height: _controller.value.size.height,
+                child: VideoPlayer(_controller),
               ),
             ),
-            Image.asset(
-              booking,
-              width: 150,
-              height: 150,
-            ),
-
-            const SizedBox(height: 20),
-            Text(
-              trans().ultimateDestination,
-              style: const TextStyle(
-                fontSize: 16,
-                color: CustomTheme.color4,
-              ),
-            ),
-            const SizedBox(height: 40),
-            // const CircularProgressIndicator(),
-          ],
-        ),
+        ],
       ),
     );
   }
