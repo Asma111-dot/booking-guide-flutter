@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../helpers/general_helper.dart';
 import '../models/room_price.dart';
 import '../providers/reservation/reservation_provider.dart';
 import '../providers/reservation/reservation_save_provider.dart';
 import '../providers/room_price/room_prices_provider.dart';
+import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar.dart';
@@ -55,7 +55,7 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         appTitle: trans().continueBooking,
-        icon: const FaIcon(Icons.arrow_back_ios),
+        icon: arrowBackIcon,
       ),
       body: ViewWidget<List<RoomPrice>>(
         meta: roomPriceState.meta,
@@ -152,10 +152,9 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                       final bookingType = this.bookingType ?? '';
 
                       if (bookingType.isEmpty || adultsCount == 0) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              content: Text('الرجاء إكمال البيانات بشكل صحيح')),
-                        );
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content:
+                                Text(trans().please_complete_data_correctly)));
                         return;
                       }
 
@@ -182,13 +181,13 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                         );
                       } catch (error) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('حدث خطأ أثناء الحفظ')),
+                          SnackBar(content: Text(trans().error_occurred_during_save)),
                         );
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                            content: Text('الرجاء إكمال البيانات بشكل صحيح')),
+                            content: Text(trans().please_complete_data_correctly)),
                       );
                     }
                   },

@@ -1,9 +1,10 @@
-import 'package:booking_guide/src/extensions/date_formatting.dart';
-import 'package:booking_guide/src/extensions/string_formatting.dart';
 import 'package:flutter/material.dart';
 
+import '../extensions/date_formatting.dart';
+import '../extensions/string_formatting.dart';
 import '../helpers/general_helper.dart';
 import '../models/room_price.dart';
+import '../utils/assets.dart';
 import '../utils/theme.dart';
 
 class RoomPriceWidget extends StatelessWidget {
@@ -12,11 +13,11 @@ class RoomPriceWidget extends StatelessWidget {
   final void Function()? onTap;
 
   const RoomPriceWidget({
-    Key? key,
+    super.key,
     required this.roomPrice,
     required this.isSelected,
     this.onTap,
-  }) : super(key: key);
+  });
 
   Color _getColor() {
     return isSelected
@@ -26,8 +27,8 @@ class RoomPriceWidget extends StatelessWidget {
 
   TextStyle _getTextStyle() {
     return TextStyle(
-      color: isSelected ? CustomTheme.color3 : CustomTheme.primaryColor,
-      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+      color: isSelected ? Colors.white : CustomTheme.primaryColor,
+      fontWeight: isSelected ? FontWeight.bold : FontWeight.w800,
     );
   }
 
@@ -55,14 +56,18 @@ class RoomPriceWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildRow(Icons.monetization_on_outlined,
+              _buildRow(priceIcon,
                   "${roomPrice.amount.toInt()} ${trans().riyalY}"),
-              _buildRow(Icons.calendar_today, roomPrice.period),
-              _buildRow(Icons.groups_2_outlined,
+              const SizedBox(height: 5),
+              _buildRow(periodIcon, roomPrice.period),
+              const SizedBox(height: 5),
+              _buildRow(groupsIcon,
                   "${roomPrice.capacity} ${trans().person}"),
-              _buildRow(Icons.money_off_sharp,
-                  "${trans().deposit} ${roomPrice.deposit!.toInt()} ${trans().riyalY}"),
-              _buildRow(Icons.access_time,
+              const SizedBox(height: 5),
+              _buildRow(depositIcon,
+                  "${trans().deposit} :  ${roomPrice.deposit!.toInt()} ${trans().riyalY}"),
+              const SizedBox(height: 5),
+              _buildRow(accessTimeIcon,
                   '${roomPrice.timeFrom?.fromTimeToDateTime()?.toTimeView() ?? '--:--'} - ${roomPrice.timeTo?.fromTimeToDateTime()?.toTimeView() ?? '--:--'}'),
             ],
           ),
@@ -74,8 +79,8 @@ class RoomPriceWidget extends StatelessWidget {
   Widget _buildRow(IconData icon, String text) {
     return Row(
       children: [
-        Icon(icon, size: 16, color: _getColor()),
-        const SizedBox(width: 8),
+        Icon(icon, size: 20, color: _getColor()),
+        const SizedBox(width: 12),
         Flexible(
           child: Text(
             text,

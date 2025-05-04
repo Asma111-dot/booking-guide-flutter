@@ -11,12 +11,12 @@ class ShareButton extends StatelessWidget {
   final bool iconAfterText;
 
   const ShareButton({
-    Key? key,
+    super.key,
     required this.textToShare,
     this.subject,
     this.width = 150,
     this.iconAfterText = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +59,7 @@ class ShareButton extends StatelessWidget {
               color: Colors.white,
             ),
             const SizedBox(width: 8),
-            Text(
-              trans().share,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            // عدم عرض النص في حال لم يكن iconAfterText true
           ],
         ),
       ),

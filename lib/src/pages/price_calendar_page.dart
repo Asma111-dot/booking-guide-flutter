@@ -1,14 +1,13 @@
-import 'package:booking_guide/src/models/reservation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../models/reservation.dart';
 import '../models/room_price.dart';
 import '../helpers/general_helper.dart';
 import '../providers/reservation/reservation_save_provider.dart';
 import '../providers/room_price/room_prices_provider.dart';
+import '../utils/assets.dart';
 import '../utils/routes.dart';
-import '../utils/theme.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_calendar_widget.dart';
@@ -18,8 +17,7 @@ import '../widgets/view_widget.dart';
 class PriceAndCalendarPage extends ConsumerStatefulWidget {
   final int roomId;
 
-  const PriceAndCalendarPage({Key? key, required this.roomId})
-      : super(key: key);
+  const PriceAndCalendarPage({super.key, required this.roomId});
 
   @override
   ConsumerState<PriceAndCalendarPage> createState() =>
@@ -47,7 +45,7 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
     if (roomPrices != null && roomPrices.isNotEmpty) {
       final defaultPrice = roomPrices.first;
       setState(() {
-        selectedPrice = defaultPrice;  // Ensure there's a default price
+        selectedPrice = defaultPrice; // Ensure there's a default price
       });
       _populateEvents();
     } else {
@@ -84,7 +82,7 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
           currentDate = currentDate.add(const Duration(days: 1));
         }
       } catch (e) {
-        print('Error processing reservation: $e');
+        debugPrint('Error processing reservation: $e');
       }
     }
     setState(() {});
@@ -98,47 +96,105 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         appTitle: trans().availabilityCalendar,
-        icon: const FaIcon(Icons.arrow_back_ios),
+        icon: arrowBackIcon,
       ),
       body: Stack(
         children: [
           ViewWidget<List<RoomPrice>>(
             meta: roomPriceState.meta,
             data: roomPriceState.data,
-            refresh: () async => await ref
-                .read(roomPricesProvider.notifier)
-                .fetch(roomId: widget.roomId),
+            refresh: () async => await ref.read(roomPricesProvider.notifier).fetch(roomId: widget.roomId),
             forceShowLoaded: roomPriceState.data != null,
             onLoaded: (data) {
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // عرض العنوان والوصف
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            trans().view_price_list,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            trans().select_period_and_day,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // RoomPriceWidget
                     SizedBox(
                       height: 160,
                       child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: data.length,
                         itemBuilder: (context, index) {
                           final roomPrice = roomPriceState.data![index];
                           return Padding(
-                            padding:
-                            const EdgeInsets.symmetric(horizontal: 2.0),
-                            child: RoomPriceWidget(
-                              roomPrice: roomPrice,
-                              isSelected: selectedPrice == roomPrice,
-                              onTap: () {
-                                setState(() {
-                                  selectedPrice = roomPrice;
-                                  _populateEvents(selectedPrice: selectedPrice);
-                                });
-                              },
+                            padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RoomPriceWidget(
+                                  roomPrice: roomPrice,
+                                  isSelected: selectedPrice == roomPrice,
+                                  onTap: () {
+                                    setState(() {
+                                      selectedPrice = roomPrice;
+                                      _populateEvents(selectedPrice: selectedPrice);
+                                    });
+                                  },
+                                ),
+                              ],
                             ),
                           );
                         },
                       ),
                     ),
-                    const SizedBox(height: 16),
+
+                    // باقي المحتوى
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            trans().question_title,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            trans().question_description,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // CustomCalendarWidget
                     CustomCalendarWidget(
                       events: events.map((key, value) {
                         return MapEntry(key, value.map((e) => e.toString()).toList());
@@ -149,20 +205,17 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
                           selectedDay = selectedDate;
                         });
                         if (events[selectedDate] == null || events[selectedDate]!.isEmpty) {
-                          print('Selected date: $selectedDate');
-                          print('Events: ${events[selectedDate]}');
+                          debugPrint('Selected date: $selectedDate');
+                          debugPrint('Events: ${events[selectedDate]}');
                         }
                       },
                     ),
-
                   ],
                 ),
               );
             },
             onLoading: () => const Center(child: CircularProgressIndicator()),
-            onEmpty: () =>  Center(
-              child: Text(trans().no_data),
-            ),
+            onEmpty: () => Center(child: Text(trans().no_data)),
             showError: true,
             showEmpty: true,
           ),
@@ -174,24 +227,23 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
                 width: double.infinity,
                 title: trans().continueBooking,
                 icon: Icon(
-                  Icons.arrow_forward,
+                  arrowForWordIcon,
                   size: 20,
                   color: Colors.white,
                 ),
-                 iconAfterText: true,
+                iconAfterText: true,
                 disable: (selectedDay == null ||
                     selectedPrice == null ||
-                    (events[selectedDay]?.isNotEmpty ?? false)) && !hasSuccessfulAttempt,
+                    (events[selectedDay]?.isNotEmpty ?? false)) &&
+                    !hasSuccessfulAttempt,
                 onPressed: () async {
-                  if (selectedDay != null &&
-                      selectedPrice != null &&
-                      !(events[selectedDay]?.isNotEmpty ?? false)) {
+                  if (selectedDay != null && selectedPrice != null && !(events[selectedDay]?.isNotEmpty ?? false)) {
                     setState(() {
                       hasSuccessfulAttempt = true;
                     });
 
-                    print("Selected Day: $selectedDay");
-                    print("Selected Price: $selectedPrice");
+                    debugPrint("Selected Day: $selectedDay");
+                    debugPrint("Selected Price: $selectedPrice");
 
                     ref.read(reservationSaveProvider.notifier).saveReservationDraft(
                       Reservation(

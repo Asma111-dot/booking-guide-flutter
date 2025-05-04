@@ -2,15 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+
 import '../helpers/general_helper.dart';
 import '../providers/auth/user_provider.dart';
+import '../utils/assets.dart';
 import '../utils/theme.dart';
 import '../widgets/custom_app_bar.dart';
 
 class UserProfilePage extends ConsumerStatefulWidget {
-  const UserProfilePage({Key? key}) : super(key: key);
+  const UserProfilePage({super.key});
 
   @override
   ConsumerState<UserProfilePage> createState() => _UserProfilePageState();
@@ -67,7 +68,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         appTitle: trans().edit_personal_data,
-        icon: const FaIcon(Icons.arrow_back_ios),
+        icon: arrowBackIcon,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

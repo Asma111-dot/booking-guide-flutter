@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../helpers/general_helper.dart';
+import '../utils/assets.dart';
 import '../widgets/custom_app_bar.dart';
 
 class PrivacyPolicyPage extends StatelessWidget {
@@ -12,7 +12,7 @@ class PrivacyPolicyPage extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         appTitle: trans().policies,
-        icon: const FaIcon(Icons.arrow_back_ios),
+        icon: arrowBackIcon,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

@@ -58,6 +58,13 @@ const mapIcon = Icons.location_on_outlined;
 const bookingIcon = Icons.sticky_note_2_outlined;
 const favoriteIcon = Icons.favorite_outline_outlined;
 const personIcon = Icons.person_2_outlined;
+const priceIcon = Icons.monetization_on_outlined;
+const periodIcon = Icons.calendar_today;
+const groupsIcon = Icons.groups_2_outlined;
+const depositIcon = Icons.money_off_sharp;
+const accessTimeIcon = Icons.access_time;
+const arrowBackIcon = Icon(Icons.arrow_back_ios);
+const arrowForWordIcon = Icons.arrow_forward;
 
 // Videos -----------------------------------------------------------------------
 const welcome = "${_videoBase}welcome.mp4";

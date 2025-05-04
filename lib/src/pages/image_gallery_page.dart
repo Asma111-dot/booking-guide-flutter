@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../helpers/general_helper.dart';
 import '../models/media.dart';
+import '../utils/assets.dart';
 import '../widgets/custom_app_bar.dart';
 import 'full_screen_image_page.dart';
 import 'video_fullscreen_page.dart';
@@ -24,7 +24,7 @@ class ImageGalleryPage extends StatelessWidget {
       backgroundColor: Colors.black,
       appBar: CustomAppBar(
         appTitle: trans().imageGallery,
-        icon: const FaIcon(Icons.arrow_back_ios),
+        icon: arrowBackIcon,
       ),
       body: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../helpers/general_helper.dart';
 import '../utils/routes.dart';
@@ -114,7 +115,8 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                         return Center(child: Text(trans().no_images));
                       }
                       final media = room.media[index];
-                      final isVideo = media.mime_type?.startsWith('video') ?? false;
+                      final isVideo =
+                          media.mime_type?.startsWith('video') ?? false;
                       final mediaUrl = media.original_url;
 
                       if (isVideo) {
@@ -137,8 +139,10 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                             child: CachedNetworkImage(
                               imageUrl: mediaUrl,
                               fit: BoxFit.cover,
-                              placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                              errorWidget: (context, url, error) => const Icon(Icons.error),
+                              placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator()),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
                             ),
                           ),
                         );
@@ -182,7 +186,9 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                       color: CustomTheme.color2,
                     ),
                     onPressed: () async {
-                      // await Share.share(textToShare);  // Share the passed text
+                      await Share.share(
+                        "جرب تطبيقنا الآن! 📲 https://play.google.com/store/apps/details?id=com.mybooking",
+                      );
                     },
                   ),
                 ),
@@ -252,7 +258,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                               SizedBox(width: 4),
                               Text(
                                 widget.facility.address?.toString() ??
-                                    'عنوان غير متوفر',
+                                    trans().address_not_available,
                                 style: TextStyle(
                                   color: CustomTheme.color3,
                                   fontSize: 20,

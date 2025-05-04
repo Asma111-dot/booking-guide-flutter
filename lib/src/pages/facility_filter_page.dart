@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../enums/facility_filter_type.dart';
 import '../enums/facility_sort_type.dart';
@@ -14,6 +13,7 @@ import '../sheetes/available_day_filter_sheet.dart';
 import '../sheetes/capacity_filter_sheet.dart';
 import '../sheetes/filter_type_selector_bottom_sheet.dart';
 import '../sheetes/price_filter_sheet.dart';
+import '../utils/assets.dart';
 import '../utils/theme.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/filtered_facilities_list_widget.dart';
@@ -121,7 +121,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         appTitle: '',
-        icon: const FaIcon(Icons.arrow_back_ios),
+        icon: arrowBackIcon,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

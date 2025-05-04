@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../helpers/general_helper.dart';
 import '../providers/payment/payment_confirm_provider.dart';
@@ -14,7 +13,7 @@ import '../models/payment.dart' as pay;
 class PaymentPage extends ConsumerStatefulWidget {
   final int reservationId;
 
-  const PaymentPage({Key? key, required this.reservationId}) : super(key: key);
+  const PaymentPage({super.key, required this.reservationId});
 
   @override
   ConsumerState<PaymentPage> createState() => _PaymentPageState();
@@ -34,7 +33,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         appTitle: trans().payment,
-        icon: const FaIcon(Icons.arrow_back_ios),
+        icon: arrowBackIcon,
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -44,7 +43,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                'وسائل الدفع',
+                trans().payment_methods,
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -86,7 +85,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                     const SizedBox(width: 16),
                     Flexible(
                       child: Text(
-                        'فلوسك',
+                        trans().floosak,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -116,7 +115,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
         padding: const EdgeInsets.all(16.0),
         child: Button(
           width: MediaQuery.of(context).size.width - 40,
-          title: 'إتمام الحجز',
+          title: trans().completeTheReservation,
           disable: selectedPaymentMethod == null || isLoading,
           icon: isLoading
               ? const CircularProgressIndicator(color: CustomTheme.primaryColor)
@@ -150,12 +149,12 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                               TextEditingController();
 
                           return AlertDialog(
-                            title: const Text('تأكيد الدفع'),
+                            title:  Text((trans().confirm_payment)),
                             content: TextField(
                               controller: confirmationController,
                               keyboardType: TextInputType.number,
-                              decoration: const InputDecoration(
-                                hintText: 'أدخل رقم التأكيد',
+                              decoration:  InputDecoration(
+                                hintText: trans().enter_confirmation_number,
                               ),
                             ),
                             actions: [
@@ -163,7 +162,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: const Text('إلغاء'),
+                                child: Text(trans().cancel),
                               ),
                               TextButton(
                                 onPressed: () async {
@@ -185,9 +184,9 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                                       if (confirmState.isLoaded()) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
-                                          const SnackBar(
+                                           SnackBar(
                                             content:
-                                                Text('تم تأكيد الدفع بنجاح!'),
+                                                Text(trans().payment_confirmed_successfully),
                                           ),
                                         );
                                       } else {
@@ -203,7 +202,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                                     }
                                   }
                                 },
-                                child: const Text('تأكيد'),
+                                child: Text(trans().verify),
                               ),
                             ],
                           );

@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../utils/theme.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
-  CustomAppBar({Key? key, this.appTitle, this.route, this.icon, this.actions})
-      : super(key: key);
+  const CustomAppBar({super.key, this.appTitle, this.route, this.icon, this.actions});
   @override
   Size get preferredSize => const Size.fromHeight(60);
 
   final String? appTitle;
   final String? route;
-  final FaIcon? icon;
+  final Widget? icon;
   final List<Widget>? actions;
 
   @override
@@ -57,7 +55,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       )
           : null,
       //if action is not set, return null
-      actions: widget.actions ?? null,
+      actions: widget.actions,
     );
   }
 }
