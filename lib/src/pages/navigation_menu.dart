@@ -24,46 +24,69 @@ class NavigationMenu extends StatelessWidget {
 
     return Obx(() => Scaffold(
       body: controller.screens[controller.selectedIndex.value],
-      bottomNavigationBar: ClipRRect(
-        borderRadius: BorderRadius.circular(50),
-        child: Container(
-          decoration: const BoxDecoration(color: Colors.white10),
-          child: BottomNavigationBar(
-            currentIndex: controller.selectedIndex.value,
-            onTap: (index) {
-              if (index >= 0 && index < controller.screens.length) {
-                controller.selectedIndex.value = index;
-              }
-            },
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.white,
-            selectedItemColor: CustomTheme.primaryColor,
-            unselectedItemColor: CustomTheme.tertiaryColor,
-            showSelectedLabels: true,
-            showUnselectedLabels: true,
-            items: [
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.home_outlined),
-                label: trans().facilityTypes,
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.location_on_outlined),
-                label: trans().map,
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.sticky_note_2_outlined),
-                label: trans().booking,
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.favorite_outline_outlined),
-                label: trans().favorite,
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.person_2_outlined),
-                label: trans().persons,
-              ),
-            ],
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
           ),
+          boxShadow: [
+            BoxShadow(color: Colors.black12, blurRadius: 8),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: List.generate(controller.screens.length, (index) {
+            final isSelected = controller.selectedIndex.value == index;
+
+            final iconData = [
+              Icons.home_outlined,
+              Icons.location_on_outlined,
+              Icons.sticky_note_2_outlined,
+              Icons.favorite_outline_outlined,
+              Icons.person_2_outlined,
+            ][index];
+
+            final label = [
+              trans().facilityTypes,
+              trans().map,
+              trans().booking,
+              trans().favorite,
+              trans().persons,
+            ][index];
+
+            return GestureDetector(
+              onTap: () => controller.selectedIndex.value = index,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                decoration: BoxDecoration(
+                  color: isSelected ? CustomTheme.color3.withOpacity(0.1) : Colors.transparent,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      iconData,
+                      color: isSelected ? CustomTheme.color2 : CustomTheme.tertiaryColor,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        color: isSelected ? CustomTheme.primaryColor : CustomTheme.tertiaryColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
         ),
       ),
     ));

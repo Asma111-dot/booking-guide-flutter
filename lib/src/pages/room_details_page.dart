@@ -42,7 +42,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
         await ref.read(roomProvider.notifier).fetch(roomId: roomId);
         final data = ref.read(roomProvider).data;
         if (data == null) {
-          ref.read(roomProvider.notifier).setEmpty(); // ✅ في حال لم يرجع شيء من الـ API
+          ref.read(roomProvider.notifier).setEmpty();
         }
       } else {
         ref.read(roomProvider.notifier).setEmpty();
@@ -54,14 +54,18 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
       setState(() {});
     });
     imageTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
-      if (pageController.hasClients && widget.facility.rooms.isNotEmpty) {
-        if (pageController.page ==
-            widget.facility.rooms.first.media.length - 1) {
+      final room = ref.read(roomProvider).data;
+
+      if (pageController.hasClients && room != null && room.media.isNotEmpty) {
+        final currentPage = pageController.page?.round() ?? 0;
+        final lastPage = room.media.length - 1;
+
+        if (currentPage >= lastPage) {
           pageController.jumpToPage(0);
         } else {
           pageController.nextPage(
             duration: const Duration(milliseconds: 300),
-            curve: Curves.easeIn,
+            curve: Curves.easeInOut,
           );
         }
       }
@@ -106,7 +110,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                     itemCount: room.media.isNotEmpty ? room.media.length : 1,
                     itemBuilder: (context, index) {
                       if (room.media.isEmpty) {
-                        return const Center(child: Text("لا توجد صور"));
+                        return Center(child: Text(trans().no_images));
                       }
                       final imageUrl = room.media[index].original_url;
                       return GestureDetector(
@@ -145,12 +149,15 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                 child: Container(
                   padding: const EdgeInsets.all(0),
                   decoration: BoxDecoration(
-                    color: CustomTheme.primaryColor,
+                    color: Colors.white.withValues(alpha: 200),
+                    // 178 ≈ 0.7 * 255
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: IconButton(
-                    icon:
-                        const Icon(Icons.arrow_back_ios, color: Colors.white70),
+                    icon: const Icon(
+                      Icons.arrow_back_ios,
+                      color: CustomTheme.color2,
+                    ),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ),
@@ -161,11 +168,15 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                 child: Container(
                   padding: const EdgeInsets.all(0),
                   decoration: BoxDecoration(
-                    color: CustomTheme.primaryColor,
+                    color: Colors.white.withValues(alpha: 200),
+                    // 178 ≈ 0.7 * 255
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: IconButton(
-                    icon: const Icon(Icons.share, color: Colors.white70),
+                    icon: const Icon(
+                      Icons.share,
+                      color: CustomTheme.color2,
+                    ),
                     onPressed: () async {
                       // await Share.share(textToShare);  // Share the passed text
                     },
@@ -231,7 +242,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                             children: [
                               Icon(
                                 Icons.location_on_outlined,
-                                color: CustomTheme.tertiaryColor,
+                                color: CustomTheme.color2,
                                 size: 20,
                               ),
                               SizedBox(width: 4),
@@ -239,7 +250,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                                 widget.facility.address?.toString() ??
                                     'عنوان غير متوفر',
                                 style: TextStyle(
-                                  color: CustomTheme.primaryColor,
+                                  color: CustomTheme.color3,
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -278,7 +289,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                             controller: tabController,
                             labelColor: CustomTheme.primaryColor,
                             unselectedLabelColor: Colors.grey,
-                            indicatorColor: CustomTheme.primaryColor,
+                            indicatorColor: CustomTheme.color2,
                             tabs: [
                               Tab(
                                 text: trans().description,
@@ -324,14 +335,15 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                                                       FontAwesomeIcons
                                                           .checkDouble,
                                                       size: 18,
-                                                      color: CustomTheme
-                                                          .primaryColor,
+                                                      color: CustomTheme.color2,
                                                     ),
                                                     const SizedBox(width: 8),
                                                     Text(
                                                       a.name,
                                                       style: const TextStyle(
                                                         fontSize: 16,
+                                                        color: CustomTheme
+                                                            .primaryColor,
                                                       ),
                                                     ),
                                                   ],
@@ -344,6 +356,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                                                 style: const TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold,
+                                                  color: CustomTheme.color2,
                                                 ),
                                               ),
                                             ],
@@ -362,9 +375,9 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                                             Text(
                                               "${trans().price}: ${trans().priceNotAvailable}",
                                               style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: CustomTheme.color2),
                                             ),
                                           ],
                                   ),

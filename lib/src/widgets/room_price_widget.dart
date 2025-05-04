@@ -35,7 +35,7 @@ class RoomPriceWidget extends StatelessWidget {
             children: [
               const Icon(
                 Icons.calendar_today,
-                color: CustomTheme.primaryColor,
+                color: CustomTheme.color2,
                 size: 16,
               ),
               const SizedBox(width: 8),
@@ -43,6 +43,7 @@ class RoomPriceWidget extends StatelessWidget {
                 price.period,
                 style: const TextStyle(
                   fontSize: 14,
+                  color: CustomTheme.primaryColor,
                 ),
               ),
             ],
@@ -53,7 +54,7 @@ class RoomPriceWidget extends StatelessWidget {
             children: [
               const Icon(
                 Icons.monetization_on_outlined,
-                color: CustomTheme.primaryColor,
+                color: CustomTheme.color2,
                 size: 16,
               ),
               const SizedBox(width: 8),
@@ -62,6 +63,7 @@ class RoomPriceWidget extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
+                  color: CustomTheme.primaryColor,
                 ),
               ),
             ],

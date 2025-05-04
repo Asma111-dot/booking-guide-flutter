@@ -52,8 +52,8 @@ class MyApp extends ConsumerWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
 
-      theme: customTheme.fromSeed(),
-      darkTheme: CustomTheme(isDark: true).fromSeed(),
+      theme: customTheme.fromSeed(settings.languageCode),
+      darkTheme: CustomTheme(isDark: true).fromSeed(settings.languageCode),
       themeMode: settings.displayMode.isDark() ? ThemeMode.dark : ThemeMode.light,
     );
   }

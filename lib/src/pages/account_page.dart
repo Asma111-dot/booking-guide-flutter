@@ -14,7 +14,7 @@ import '../sheetes/support_bottom_sheet.dart';
 import 'user_profile_page.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
-  const AccountPage({Key? key}) : super(key: key);
+  const AccountPage({super.key});
 
   @override
   ConsumerState createState() => _AccountPageState();
@@ -40,13 +40,13 @@ class _AccountPageState extends ConsumerState<AccountPage> {
         title: Text(
           trans().persons,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: CustomTheme.primaryColor,
+                color: CustomTheme.color2,
                 fontWeight: FontWeight.bold,
               ),
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: CustomTheme.color2),
         // actions: [
         //   IconButton(
         //       onPressed: () {},
@@ -80,7 +80,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                            color: CustomTheme.primaryColor,
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -88,7 +88,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                           user?.email ?? "user@example.com",
                           style: const TextStyle(
                             fontSize: 14,
-                            color: Colors.grey,
+                            color: CustomTheme.color3,
                           ),
                         ),
                       ],
@@ -110,7 +110,8 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const UserProfilePage()),
+                          MaterialPageRoute(
+                              builder: (context) => const UserProfilePage()),
                         );
                       },
                       icon: LineAwesomeIcons.user_circle,
@@ -132,11 +133,11 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const PrivacyPolicyPage()),
+                          MaterialPageRoute(
+                              builder: (context) => const PrivacyPolicyPage()),
                         );
                       },
                     ),
-
                   ),
                   _buildMenuCard(
                     MenuItem(
@@ -146,7 +147,8 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                         showModalBottomSheet(
                           context: context,
                           shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(20)),
                           ),
                           backgroundColor: Colors.grey.shade100,
                           isScrollControlled: true,
@@ -173,7 +175,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   child: Column(
                     children: [
                       Image.asset(
-                        logoCoverImage,
+                        myBooking,
                         width: 120,
                         height: 40,
                         fit: BoxFit.contain,
@@ -184,7 +186,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                         children: [
                           IconButton(
                             icon: const Icon(LineAwesomeIcons.instagram),
-                            color: CustomTheme.primaryColor,
+                            color: CustomTheme.color2,
                             onPressed: () {
                               // رابط إنستغرام
                             },
@@ -192,7 +194,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                           const SizedBox(width: 10),
                           IconButton(
                             icon: const Icon(LineAwesomeIcons.facebook),
-                            color: CustomTheme.primaryColor,
+                            color: CustomTheme.color2,
                             onPressed: () {
                               // رابط فيسبوك
                             },
@@ -200,7 +202,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                           const SizedBox(width: 10),
                           IconButton(
                             icon: const Icon(LineAwesomeIcons.twitter),
-                            color: CustomTheme.primaryColor,
+                            color: CustomTheme.color2,
                             onPressed: () {
                               // رابط تيك توك
                             },
@@ -216,7 +218,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                           );
                         },
                         label: const Text('شارك التطبيق مع أصدقائك!'),
-                        icon: const Icon(LineAwesomeIcons.paper_plane_solid),
+                        icon: const Icon(LineAwesomeIcons.paper_plane_solid,color: CustomTheme.color2,),
                         style: TextButton.styleFrom(
                           foregroundColor: CustomTheme.primaryColor,
                         ),

@@ -79,7 +79,7 @@ class _MapPageState extends ConsumerState<MapPage> {
         title: Text(
           trans().map,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: CustomTheme.primaryColor,
+                color: CustomTheme.color2,
                 fontWeight: FontWeight.bold,
               ),
         ),
@@ -174,7 +174,7 @@ class _MapPageState extends ConsumerState<MapPage> {
                                     facility.name,
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
-                                      color: Colors.white,
+                                      color: CustomTheme.color1,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),

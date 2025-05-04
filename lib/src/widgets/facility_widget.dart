@@ -12,14 +12,14 @@ import '../utils/theme.dart';
 
 class FacilityWidget extends ConsumerWidget {
   final Facility facility;
-  final double? minPriceFilter; // ✅ مضاف
-  final double? maxPriceFilter; // ✅ مضاف
+  final double? minPriceFilter;
+  final double? maxPriceFilter;
 
   const FacilityWidget({
     super.key,
     required this.facility,
-    this.minPriceFilter, // ✅ مضاف
-    this.maxPriceFilter, // ✅ مضاف
+    this.minPriceFilter,
+    this.maxPriceFilter,
   });
 
   @override
@@ -36,7 +36,7 @@ class FacilityWidget extends ConsumerWidget {
 
     // ✅ فلترة السعر
     if (!_isWithinPriceRange(firstPrice)) {
-      return const SizedBox(); // 👉 إذا خارج النطاق لا تعرض شيء
+      return const SizedBox();
     }
 
     return GestureDetector(
@@ -107,7 +107,7 @@ class FacilityWidget extends ConsumerWidget {
                           ? '${trans().priceStartFrom} ${firstPrice.toStringAsFixed(0)}${trans().riyalY}'
                           : trans().priceNotAvailable,
                       style: TextStyle(
-                        color: firstPrice > 0 ? Colors.amber : Colors.redAccent,
+                        color: firstPrice > 0 ? CustomTheme.color4 : Colors.redAccent,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
@@ -115,13 +115,13 @@ class FacilityWidget extends ConsumerWidget {
                     const SizedBox(height: 6),
                     Row(
                       children: [
-                        const Icon(Icons.location_on_outlined, color: Colors.grey, size: 16),
+                        const Icon(Icons.location_on_outlined, color: CustomTheme.color3, size: 16),
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
                             facility.address ?? trans().address,
                             style: TextStyle(
-                              color: CustomTheme.tertiaryColor,
+                              color: CustomTheme.color1,
                               fontSize: 14,
                             ),
                             overflow: TextOverflow.ellipsis,
@@ -135,7 +135,7 @@ class FacilityWidget extends ConsumerWidget {
               IconButton(
                 icon: Icon(
                   isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: isFavorite ? Colors.red : Colors.grey,
+                  color: isFavorite ? CustomTheme.color1 : Colors.grey,
                 ),
                 onPressed: () async {
                   final userId = currentUser()?.id;
@@ -152,10 +152,9 @@ class FacilityWidget extends ConsumerWidget {
     );
   }
 
-  /// ✅ دالة فحص إذا السعر داخل النطاق
   bool _isWithinPriceRange(double price) {
     if (minPriceFilter == null && maxPriceFilter == null) {
-      return true; // 👉 إذا لا يوجد فلترة، أعرض الكل
+      return true;
     }
     final min = minPriceFilter ?? 0;
     final max = maxPriceFilter ?? double.infinity;

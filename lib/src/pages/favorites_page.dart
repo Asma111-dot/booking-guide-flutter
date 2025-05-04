@@ -13,9 +13,9 @@ class FavoritesPage extends ConsumerStatefulWidget {
   final int userId;
 
   const FavoritesPage({
-    Key? key,
+    super.key,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   _FavoritesScreenState createState() => _FavoritesScreenState();
@@ -47,7 +47,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesPage> {
           title: Text(
             trans().favorite,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: CustomTheme.primaryColor,
+                  color: CustomTheme.color2,
                   fontWeight: FontWeight.bold,
                 ),
           ),
@@ -55,7 +55,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesPage> {
           backgroundColor: Colors.transparent,
           iconTheme: const IconThemeData(color: Colors.black),
           bottom: TabBar(
-            indicatorColor: CustomTheme.primaryColor,
+            indicatorColor: CustomTheme.color2,
             labelColor: CustomTheme.primaryColor,
             unselectedLabelColor: Colors.grey,
             tabs: [

@@ -133,6 +133,7 @@
   "booking": "Booking",
   "persons": "Person",
   "imageGallery": "Image Gallery",
+  "no_images": "No images available",
   "favorite": "Favorite",
   "hello_user": "Hello,",
   "search": "Search",
@@ -197,5 +198,6 @@
   "reset_filters": "Reset Filters",
   "no_matching_facilities": "No facilities match your search",
   "available": "available",
-  "on_date": "on date:"
+  "on_date": "on date:",
+  "choose_filter_type": "Choose filter type"
 }

@@ -20,13 +20,13 @@ class RoomPriceWidget extends StatelessWidget {
 
   Color _getColor() {
     return isSelected
-         ? Colors.white : CustomTheme.primaryColor;
+         ? CustomTheme.color2 : CustomTheme.color2;
         //? CustomTheme.primaryColor : Colors.grey;
   }
 
   TextStyle _getTextStyle() {
     return TextStyle(
-      color: isSelected ? Colors.white : Colors.black,
+      color: isSelected ? CustomTheme.color3 : CustomTheme.primaryColor,
       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
     );
   }

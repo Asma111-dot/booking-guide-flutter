@@ -68,7 +68,7 @@ class FilteredFacilitiesListWidget extends ConsumerWidget {
                   Expanded(
                     child: RichText(
                       text: TextSpan(
-                        style: const TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 16, color: Colors.black38, fontWeight: FontWeight.bold),
                         children: [
                           TextSpan(text: '$typeLabel ${trans().available}'),
                           if (filterDate != null) ...[
@@ -85,7 +85,7 @@ class FilteredFacilitiesListWidget extends ConsumerWidget {
                   if (filterDate != null)
                     const Padding(
                       padding: EdgeInsets.only(left: 8),
-                      child: Icon(Icons.calendar_today, size: 18, color: Colors.blue),
+                      child: Icon(Icons.calendar_today, size: 18, color: CustomTheme.color2),
                     ),
                 ],
               ),

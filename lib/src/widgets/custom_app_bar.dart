@@ -29,7 +29,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
         widget.appTitle!,
         style: const TextStyle(
           fontSize: 20,
-          color: Colors.black,
+          color: CustomTheme.color2,
         ),
       ),
       //if icon is not set, return null
@@ -38,7 +38,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: CustomTheme.primaryColor,
+          gradient: CustomTheme.primaryGradient,
         ),
         child: IconButton(
           onPressed: () {

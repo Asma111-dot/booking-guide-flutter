@@ -55,7 +55,15 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 30),
+          const SizedBox(height: 15),
+          Center(
+            child: Image.asset(
+              booking,
+              width: 150,
+              height: 50,
+              fit: BoxFit.contain,
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
@@ -80,7 +88,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            color: CustomTheme.color2,
                           ),
                           children: [
                             TextSpan(
@@ -135,7 +143,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                         borderRadius: BorderRadius.circular(15),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black12,
+                            color: Colors.grey,
                             blurRadius: 5,
                             offset: Offset(0, 2),
                           )
@@ -143,7 +151,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.search, color: CustomTheme.primaryColor),
+                          Icon(Icons.search, color: CustomTheme.color2),
                           const SizedBox(width: 10),
                           Text(
                             trans().search_in_facilities,
@@ -171,10 +179,12 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                     height: 50,
                     width: 50,
                     decoration: BoxDecoration(
-                      color: CustomTheme.primaryColor,
+                      gradient: CustomTheme.primaryGradient,
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    child: const Icon(Icons.tune, color: Colors.white),
+                    child: const Icon(Icons.tune,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ],
@@ -228,7 +238,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
           children: [
             Icon(
               icon,
-              color: isSelected ? CustomTheme.primaryColor : Colors.grey,
+              color: isSelected ? CustomTheme.color2 : Colors.grey,
               size: 24,
             ),
             const SizedBox(width: 10),
@@ -237,7 +247,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: isSelected ? CustomTheme.primaryColor : Colors.black,
+                color: isSelected ? CustomTheme.primaryColor : Colors.black38,
               ),
             ),
           ],

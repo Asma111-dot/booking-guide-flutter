@@ -3,14 +3,14 @@ import '../utils/theme.dart';
 
 class Button extends StatelessWidget {
   const Button({
-    Key? key,
+    super.key,
     required this.width,
     required this.title,
     required this.onPressed,
     required this.disable,
     this.icon,
     this.iconAfterText = false,
-  }) : super(key: key);
+  });
 
   final double width;
   final String title;
@@ -23,42 +23,48 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: width,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: CustomTheme.primaryColor,
-          foregroundColor: CustomTheme.placeholderColor,
-        ),
-        onPressed: disable ? null : onPressed,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: iconAfterText
-              ? [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
+      child: InkWell(
+        onTap: disable ? null : () => onPressed?.call(),
+        borderRadius: BorderRadius.circular(30),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          decoration: BoxDecoration(
+            gradient: CustomTheme.primaryGradient,
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: iconAfterText
+                ? [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-            ),
-            if (icon != null) ...[
-              const SizedBox(width: 8),
-              icon!,
-            ],
-          ]
-              : [
-            if (icon != null) ...[
-              icon!,
-              const SizedBox(width: 8),
-            ],
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
+              if (icon != null) ...[
+                const SizedBox(width: 8),
+                icon!,
+              ],
+            ]
+                : [
+              if (icon != null) ...[
+                icon!,
+                const SizedBox(width: 8),
+              ],
+              Text(
+                title,
+                style:  TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                    color: Colors.white
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

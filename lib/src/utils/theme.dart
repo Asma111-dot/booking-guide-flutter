@@ -10,7 +10,10 @@ class CustomTheme {
     required this.isDark,
   });
 
-  String getFont() => 'Baloo_Bhaijaan_2';
+  String getFont(String languageCode) {
+    return languageCode == 'ar' ? 'AraHamahAlFiddaa' : 'Unbounded';
+  }
+
 
   // String getFont() => 'Roboto';
 // اللون الأساسي يمكن أن يكون أحد اللونين
@@ -31,9 +34,25 @@ class CustomTheme {
   // ),
   // );
 
-  static const Color primaryColor =
-      // Color.Hex('#1D4ED8');
-      Color.fromARGB(232, 17, 75, 151);
+  static const Color color1 = Color(0xFFB114E9); // b114e9
+  static const Color color2 = Color(0xFF860EEE); // 860eee
+  static const Color color3 = Color(0xFF565BF2); // 565bf2
+  static const Color color4 = Color(0xFF0DD7FC); // 0dd7fc
+  static const Color primaryColor = Color(0xFF140B2D); // 140b2d (Primary)
+
+  static const LinearGradient primaryGradient = LinearGradient(
+    colors: [
+      color1, // #b114e9
+      color2, // #860eee
+      color3, // #565bf2
+      color4, // #0dd7fc
+      color4
+    ],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  // Color.fromARGB(232, 17, 75, 151);
   static const Color secondaryColor = Color(0xFF03DAC6);
   static const tertiaryColor = Color(0xFF2C3E50); // Dark blue
   static const fourthColor = Color(0xffF0F0F0); // Light gray
@@ -69,9 +88,9 @@ class CustomTheme {
 
   fillColor() => Colors.white;
 
-  ThemeData fromSeed() => ThemeData(
+  ThemeData fromSeed(String languageCode) => ThemeData(
         useMaterial3: true,
-        fontFamily: getFont(),
+    fontFamily: getFont(languageCode),
         colorScheme: ColorScheme.fromSeed(
           brightness: isDark ? Brightness.dark : Brightness.light,
           seedColor: primaryColor,
@@ -168,12 +187,12 @@ class CustomTheme {
           labelStyle: TextStyle(
             color: isDark ? Colors.grey[200] : Colors.grey[800],
             fontSize: 12,
-            fontFamily: getFont(),
+            fontFamily: getFont(languageCode),
           ),
           secondaryLabelStyle: TextStyle(
             color: isDark ? Colors.black : Colors.white,
             fontSize: 12,
-            fontFamily: getFont(),
+            fontFamily: getFont(languageCode),
           ),
           iconTheme: IconThemeData(
             color: isDark ? Colors.white : Colors.black,

@@ -29,12 +29,13 @@ class MenuItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           color: CustomTheme.primaryColor.withValues(alpha: 0.1 * 255),
         ),
-        child: Icon(icon, color: CustomTheme.primaryColor),
+        child: Icon(icon, color: CustomTheme.color2),
       ),
       title: Text(
         title,
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
           fontWeight: FontWeight.w600,
+          color: CustomTheme.primaryColor
         ),
       ),
       subtitle: subtitle != null

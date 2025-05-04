@@ -2,7 +2,7 @@
   "appTitle": " حجوزاتي",
   "welcome": "مرحباً",
   "to": "في",
-  "welcomeToBooking": "مرحبا بك في تطبيقنا",
+  "welcomeToBooking": "مرحبا بك في ",
   "ultimateDestination": "وجهتك النهائية للحجوزات",
   "chooseOne": "قم باختيار أحد الخيارات للتمتع بخدمات التطبيق",
   "facilityTypes": "المنشئات",
@@ -133,6 +133,7 @@
   "booking": "الحجوزات",
   "persons": "الحساب",
   "imageGallery": "معرض الصور",
+  "no_images": "لا توجد صور",
   "favorite": "المفضلة",
   "hello_user": "مرحباً, ",
   "search": "بحث",
@@ -197,5 +198,6 @@
   "reset_filters": "إعادة تعيين الفلترة",
   "no_matching_facilities": "لا توجد منشآت مطابقة للبحث",
   "available": "المتوفرة",
-  "on_date": "في تاريخ:"
+  "on_date": "في تاريخ:",
+  "choose_filter_type": "اختر نوع الفلتر"
 }

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
+import '../utils/theme.dart';
+
 class CustomCalendarWidget extends StatefulWidget {
   final Map<DateTime, List<String>> events;
   final DateTime? initialSelectedDay;
   final Function(DateTime selectedDate) onDateSelected;
 
   const CustomCalendarWidget({
-    Key? key,
+    super.key,
     required this.events,
     this.initialSelectedDay,
     required this.onDateSelected,
-  }) : super(key: key);
+  });
 
   @override
   _CustomCalendarWidgetState createState() => _CustomCalendarWidgetState();
@@ -62,7 +64,7 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
             decoration: TextDecoration.lineThrough,
           ),
           todayTextStyle: const TextStyle(
-            color: Colors.black,
+            color: CustomTheme.color2,
             fontWeight: FontWeight.bold,
           ),
         ),

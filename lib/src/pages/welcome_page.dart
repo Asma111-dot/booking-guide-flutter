@@ -6,6 +6,7 @@ import '../utils/routes.dart';
 import '../helpers/general_helper.dart';
 import '../pages/navigation_menu.dart';
 import '../providers/auth/user_provider.dart';
+import '../utils/theme.dart';
 
 class WelcomePage extends ConsumerStatefulWidget {
   const WelcomePage({super.key});
@@ -19,13 +20,13 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await ref.read(userProvider.notifier).loadUserFromStorage(); // ✅ حمل المستخدم
+      await ref.read(userProvider.notifier).loadUserFromStorage();
       _navigateToNextScreen();
     });
   }
 
   Future<void> _navigateToNextScreen() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 3));
 
     final firstTime = await isFirstTime();
     final loggedIn = isUserLoggedIn();
@@ -37,7 +38,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const NavigationMenu()),
-      );
+      );]
     }
   }
 
@@ -46,40 +47,42 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
     return Scaffold(
       body: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.white, Colors.lightBlueAccent],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
+        // decoration: const BoxDecoration(
+        //   gradient: LinearGradient(
+        //     colors: [Colors.white],
+        //     begin: Alignment.topCenter,
+        //     end: Alignment.bottomCenter,
+        //   ),
+        // ),
+        color: Colors.white,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset(
-              logoCoverImage,
-              width: 150,
-              height: 150,
-            ),
             const SizedBox(height: 20),
             Text(
-              "${trans().welcome} ${trans().to} ${trans().appTitle}",
+              "${trans().welcomeToBooking} ....",
               style: const TextStyle(
                 fontSize: 24,
-                color: Colors.white,
+                color: CustomTheme.color2,
                 fontWeight: FontWeight.bold,
               ),
             ),
+            Image.asset(
+              booking,
+              width: 150,
+              height: 150,
+            ),
+
             const SizedBox(height: 20),
             Text(
               trans().ultimateDestination,
               style: const TextStyle(
                 fontSize: 16,
-                color: Colors.black54,
+                color: CustomTheme.color4,
               ),
             ),
             const SizedBox(height: 40),
-            const CircularProgressIndicator(),
+            // const CircularProgressIndicator(),
           ],
         ),
       ),

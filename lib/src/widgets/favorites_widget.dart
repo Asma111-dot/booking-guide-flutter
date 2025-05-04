@@ -61,7 +61,7 @@ class FavoriteWidget extends StatelessWidget {
                       width: 110,
                       height: 110,
                       alignment: Alignment.center,
-                      child: const CircularProgressIndicator(),
+                      child: const Center(child: CircularProgressIndicator()),
                     ),
                     errorWidget: (context, url, error) => Image.asset(
                       logoCoverImage,
@@ -75,7 +75,8 @@ class FavoriteWidget extends StatelessWidget {
                   top: 6,
                   left: 6,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.black.withValues(alpha: 0.1 * 255),
                       borderRadius: BorderRadius.circular(12),
@@ -86,7 +87,8 @@ class FavoriteWidget extends StatelessWidget {
                         const SizedBox(width: 4),
                         Text(
                           typeLabel,
-                          style: const TextStyle(color: Colors.white, fontSize: 12),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 12),
                         ),
                       ],
                     ),
@@ -94,12 +96,11 @@ class FavoriteWidget extends StatelessWidget {
                 ),
               ],
             ),
-
             const SizedBox(width: 12),
-
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -115,14 +116,15 @@ class FavoriteWidget extends StatelessWidget {
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        const Icon(Icons.location_on_outlined, color: Colors.grey, size: 16),
+                        const Icon(Icons.location_on_outlined,
+                            color: CustomTheme.color2, size: 16),
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
                             facility.address ?? trans().address,
                             style: const TextStyle(
                               fontSize: 14,
-                              color: CustomTheme.tertiaryColor,
+                              color: CustomTheme.color3,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -133,7 +135,6 @@ class FavoriteWidget extends StatelessWidget {
                 ),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: GestureDetector(
@@ -151,7 +152,8 @@ class FavoriteWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const Icon(Icons.favorite, color: Colors.red, size: 22),
+                  child: const Icon(Icons.favorite,
+                      color: CustomTheme.color1, size: 22),
                 ),
               ),
             ),

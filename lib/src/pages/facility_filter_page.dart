@@ -154,7 +154,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
             ),
             TabBar(
               controller: _tabController,
-              indicatorColor: CustomTheme.primaryColor,
+              indicatorColor: CustomTheme.color2,
               labelColor: CustomTheme.primaryColor,
               unselectedLabelColor: Colors.grey,
               tabs: [
@@ -194,7 +194,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                               maxLines: 1,
                             ),
                           ),
-                          const Icon(Icons.arrow_drop_down),
+                          const Icon(Icons.arrow_drop_down,color: CustomTheme.color2,),
                         ],
                       ),
                     ),
@@ -209,7 +209,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                     controller: textController,
                     decoration: InputDecoration(
                       hintText: trans().search_in_facilities,
-                      prefixIcon: const Icon(Icons.search),
+                      prefixIcon: const Icon(Icons.search,color: CustomTheme.color2,),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
@@ -255,7 +255,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                       height: 45,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: CustomTheme.primaryColor,
+                        gradient: CustomTheme.primaryGradient,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Icon(

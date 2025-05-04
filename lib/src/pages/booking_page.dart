@@ -47,7 +47,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
           title: Text(
             trans().booking,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              color: CustomTheme.primaryColor,
+              color: CustomTheme.color2,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -55,7 +55,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
           backgroundColor: Colors.transparent,
           iconTheme: const IconThemeData(color: Colors.black),
           bottom:  TabBar(
-            indicatorColor: CustomTheme.primaryColor,
+            indicatorColor: CustomTheme.color2,
             labelColor: CustomTheme.primaryColor,
             unselectedLabelColor: Colors.grey,
             tabs: [
@@ -112,7 +112,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
                     height: 110,
                     fit: BoxFit.cover,
                     placeholder: (context, url) =>
-                    const CircularProgressIndicator(),
+                    const Center(child: CircularProgressIndicator()),
                     errorWidget: (context, url, error) => Image.asset(
                       logoCoverImage,
                       width: 110,
@@ -138,7 +138,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
                       Text(
                         "${trans().reservation_date} : ${reservation.checkInDate.toDateView()}",
                         style: TextStyle(
-                          color: Colors.grey.shade600,
+                          color: CustomTheme.color1,
                           fontSize: 15,
                         ),
                       ),
@@ -146,7 +146,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
                       Text(
                         "${trans().created_at} : ${reservation.createdAt?.toDateView()}",
                         style: TextStyle(
-                          color: Colors.grey.shade600,
+                          color: CustomTheme.color2,
                           fontSize: 14,
                         ),
                       ),
@@ -158,13 +158,13 @@ class _BookingPageState extends ConsumerState<BookingPage>
                   children: [
                     Text(
                       "#${reservation.id}",
-                      style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                      style: const TextStyle(color: CustomTheme.color4, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       "${reservation.totalPrice?.toStringAsFixed(0) ?? trans().priceNotAvailable} ${trans().riyalY}",
                       style: TextStyle(
-                        color: CustomTheme.primaryColor,
+                        color: CustomTheme.color3,
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                       ),
