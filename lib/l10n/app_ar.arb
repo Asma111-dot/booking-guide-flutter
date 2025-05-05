@@ -192,7 +192,7 @@
   "capacity_at_least": "الحد الأدنى للأشخاص",
   "available_on_day": "التوفر حسب اليوم",
 
-  "desc_name": "ابحث عن منشآت عبر كتابة جزء من اسمها.",
+  "desc_name": "ابحث عن منشآت عبر كتابة اسمها او جزء من منها.",
   "desc_address_like": "اعثر على منشآت بناءً على كلمات موجودة في العنوان.",
   "desc_price_between": "اختر الحد الأدنى والأقصى للسعر لعرض المنشآت المناسبة.",
   "desc_check_in_between": "اعرض المنشآت المتوفرة ضمن فترة وصول محددة.",
@@ -211,5 +211,15 @@
   "no_matching_facilities": "لا توجد منشآت مطابقة للبحث",
   "available": "المتوفرة",
   "on_date": "في تاريخ:",
-  "choose_filter_type": "اختر نوع الفلتر"
+  "choose_filter_type": "اختر نوع الفلتر",
+  "select_people_count": "حدد عدد الأشخاص",
+  "people_count": "عدد الأشخاص",
+  "apply_filter": "تطبيق الفلترة",
+  "select_availability_day": "حدد يوم التوفر",
+  "select_date": "اختر التاريخ",
+  "enter_current_address": "أدخل عنوانك الحالي",
+  "select_price_range": "حدد نطاق السعر",
+  "min_price": "أقل سعر",
+  "max_price": "أعلى سعر"
+
 }

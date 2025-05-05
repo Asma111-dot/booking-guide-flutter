@@ -46,7 +46,6 @@ class CustomTheme {
       color2, // #860eee
       color3, // #565bf2
       color4, // #0dd7fc
-      color4
     ],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,

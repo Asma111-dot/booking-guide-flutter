@@ -93,14 +93,12 @@ extension FacilityFilterTypeDescription on FacilityFilterType {
       case FacilityFilterType.addressNearUser:
         return trans().desc_address_near_user;
       case FacilityFilterType.capacityAtLeast:
-        return trans().capacity_at_least;
+        return trans().desc_capacity_at_least;
       case FacilityFilterType.availableOnDay:
         return trans().desc_available_on_day;
       case FacilityFilterType.facilityTypeId:
         return trans().desc_facility_type_id;
-      default:
-        return '';
-    }
+      }
   }
 }
 

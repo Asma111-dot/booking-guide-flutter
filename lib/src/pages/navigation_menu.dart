@@ -58,11 +58,12 @@ class NavigationMenu extends StatelessWidget {
               trans().persons,
             ][index];
 
-            return GestureDetector(
-              onTap: () => controller.selectedIndex.value = index,
+            return Expanded(
+                child: GestureDetector(
+                onTap: () => controller.selectedIndex.value = index,
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
-                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? CustomTheme.color3.withAlpha(25)
@@ -81,14 +82,14 @@ class NavigationMenu extends StatelessWidget {
                       label,
                       style: TextStyle(
                         fontSize: 12,
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                         color: isSelected ? CustomTheme.primaryColor : CustomTheme.tertiaryColor,
                       ),
                     ),
                   ],
                 ),
               ),
-            );
+            ),);
           }),
         ),
       ),

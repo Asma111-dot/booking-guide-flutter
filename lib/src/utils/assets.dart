@@ -20,7 +20,7 @@ const unauthorizedJson = "${_lottieBase}unauthorized.json";
 // Images ----------------------------------------------------------------------
 const defaultAvatar = "${_imageBase}default_avatar.jpg";
 const logoCoverImage = "${_imageBase}logo_cover.png";
-const appIcon = "${_imageBase}app_icon.jpg";
+const appIcon = "${_imageBase}app_icon.png";
 const myBooking = "${_imageBase}my_booking.png";
 const myBookingWhite = "${_imageBase}My_booking_white.png";
 const booking = "${_imageBase}booking1.png";

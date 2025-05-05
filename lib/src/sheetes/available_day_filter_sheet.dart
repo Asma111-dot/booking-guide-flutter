@@ -34,15 +34,30 @@ void showAvailableDayBottomSheet({
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text('حدد يوم التوفر', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                Text(
+                  trans().select_availability_day,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: CustomTheme.color2,
+                  ),
+                ),
                 const SizedBox(height: 16),
                 TextField(
                   controller: controller,
                   readOnly: true,
-                  decoration: const InputDecoration(
-                    labelText: 'اختر التاريخ',
+                  decoration: InputDecoration(
+                    labelText: trans().select_date,
+                    labelStyle: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: CustomTheme.primaryColor,
+                    ),
                     border: OutlineInputBorder(),
-                    suffixIcon: Icon(Icons.calendar_today),
+                    suffixIcon: Icon(
+                      Icons.calendar_today,
+                      color: CustomTheme.color2,
+                    ),
                   ),
                   onTap: () async {
                     final picked = await showDialog<DateTime>(
@@ -50,7 +65,12 @@ void showAvailableDayBottomSheet({
                       builder: (_) {
                         DateTime temp = date.value ?? today;
                         return AlertDialog(
-                          title: const Text('اختر التاريخ'),
+                          title: Text(trans().select_date,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: CustomTheme.color2,
+                              )),
                           content: SizedBox(
                             height: 300,
                             child: dp.DayPicker.single(
@@ -59,9 +79,10 @@ void showAvailableDayBottomSheet({
                               firstDate: today,
                               lastDate: DateTime(2100),
                               datePickerStyles: dp.DatePickerRangeStyles(
-                                selectedDateStyle: const TextStyle(color: Colors.white),
+                                selectedDateStyle:
+                                    const TextStyle(color: Colors.white),
                                 selectedSingleDateDecoration: BoxDecoration(
-                                  color: CustomTheme.primaryColor,
+                                  color: CustomTheme.color2,
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -81,11 +102,17 @@ void showAvailableDayBottomSheet({
                 ElevatedButton(
                   onPressed: () {
                     if (date.value != null) {
-                      onSelected(toEnglishNumbers(date.value!.toSqlDateOnly()));
+                      onSelected(
+                        toEnglishNumbers(
+                          date.value!.toSqlDateOnly(),
+                        ),
+                      );
                       Navigator.pop(context);
                     }
                   },
-                  child: const Text('تطبيق الفلترة'),
+                  child: Text(
+                    trans().apply_filter,
+                  ),
                 ),
               ],
             );

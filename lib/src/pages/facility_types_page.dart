@@ -86,14 +86,16 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                         TextSpan(
                           text: trans().hello_user,
                           style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
                             color: CustomTheme.color2,
                           ),
                           children: [
                             TextSpan(
                               text: user?.name ?? "User",
                               style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
                                 color: CustomTheme.primaryColor,
                               ),
                             ),
@@ -156,7 +158,8 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                           Text(
                             trans().search_in_facilities,
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w400,
                               color: Colors.grey.shade600,
                             ),
                           ),
@@ -245,8 +248,8 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
             Text(
               title,
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
                 color: isSelected ? CustomTheme.primaryColor : Colors.black38,
               ),
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../helpers/general_helper.dart';
+import '../utils/theme.dart';
 
 typedef OnPriceSelected = void Function(String value);
 
@@ -27,18 +28,41 @@ void showPriceRangeBottomSheet({
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('حدد نطاق السعر', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(
+              trans().select_price_range,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: CustomTheme.color2,
+              ),
+            ),
             const SizedBox(height: 16),
             TextField(
               controller: minController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'أقل سعر', border: OutlineInputBorder()),
+              decoration: InputDecoration(
+                labelText: trans().min_price,
+                labelStyle: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: CustomTheme.primaryColor,
+                ),
+                border: OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: maxController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'أعلى سعر', border: OutlineInputBorder()),
+              decoration: InputDecoration(
+                labelText: trans().max_price,
+                labelStyle: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: CustomTheme.primaryColor,
+                ),
+                border: OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
@@ -50,7 +74,9 @@ void showPriceRangeBottomSheet({
                   Navigator.pop(context);
                 }
               },
-              child: const Text('تطبيق الفلترة'),
+              child: Text(
+                trans().apply_filter,
+              ),
             ),
           ],
         ),

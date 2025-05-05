@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../helpers/general_helper.dart';
+import '../utils/theme.dart';
 
 typedef OnCapacitySelected = void Function(String value);
 
@@ -27,13 +28,28 @@ void showCapacityBottomSheet({
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('حدد عدد الأشخاص', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(
+              trans().select_people_count,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: CustomTheme.color2,
+              ),
+            ),
             const SizedBox(height: 16),
             TextField(
               controller: controller,
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: const InputDecoration(labelText: 'عدد الأشخاص', border: OutlineInputBorder()),
+              decoration: InputDecoration(
+                labelText: trans().people_count,
+                labelStyle: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: CustomTheme.primaryColor,
+                ),
+                border: OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
@@ -44,7 +60,9 @@ void showCapacityBottomSheet({
                   Navigator.pop(context);
                 }
               },
-              child: const Text('تطبيق الفلترة'),
+              child: Text(
+                trans().apply_filter,
+              ),
             ),
           ],
         ),

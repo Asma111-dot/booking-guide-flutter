@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helpers/general_helper.dart';
 import '../providers/auth/user_provider.dart';
+import '../utils/theme.dart';
 
 void showLogoutBottomSheet(BuildContext context, WidgetRef ref) {
   showModalBottomSheet(
@@ -15,14 +16,18 @@ void showLogoutBottomSheet(BuildContext context, WidgetRef ref) {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.logout, size: 50, color: Colors.red),
+          const Icon(
+            Icons.logout,
+            size: 30,
+            color: CustomTheme.color2,
+          ),
           const SizedBox(height: 15),
           Text(
             trans().areYouSureYouWantToLogout,
             style: TextStyle(
-              color: Colors.black,
-              fontSize: 18,
+              fontSize: 14,
               fontWeight: FontWeight.w600,
+              color: CustomTheme.primaryColor,
             ),
             textAlign: TextAlign.start,
           ),
@@ -30,43 +35,59 @@ void showLogoutBottomSheet(BuildContext context, WidgetRef ref) {
           Row(
             children: [
               Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    shape: RoundedRectangleBorder(
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                    ref.read(userProvider.notifier).logout();
+                  },
+                  borderRadius: BorderRadius.circular(12),
+                  child: Ink(
+                    decoration: BoxDecoration(
+                      gradient: CustomTheme.primaryGradient,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    ref
-                        .read(userProvider.notifier)
-                        .logout();
-                  },
-                  child: Text(
-                    trans().yes,
-                    style: TextStyle(color: Colors.white),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      child: Center(
+                        child: Text(
+                          trans().yes,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey.shade800,
-                    shape: RoundedRectangleBorder(
+                child: InkWell(
+                  onTap: () => Navigator.pop(context),
+                  borderRadius: BorderRadius.circular(12),
+                  child: Ink(
+                    decoration: BoxDecoration(
+                      gradient: CustomTheme.primaryGradient,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(
-                    trans().no,
-                    style: TextStyle(color: Colors.white),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      child: Center(
+                        child: Text(
+                          trans().no,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
             ],
-          ),
+          )
         ],
       ),
     ),

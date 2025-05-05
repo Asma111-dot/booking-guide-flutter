@@ -31,7 +31,7 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
       final response = await ref
           .read(paymentProvider.notifier)
           .fetch(paymentId: widget.paymentId);
-      print("Response: $response");
+      // print("Response: $response");
     });
   }
 
@@ -43,7 +43,7 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(160.0),
         child: CustomAppBarClipper(
-          backgroundColor: CustomTheme.primaryColor,
+          backgroundColor: CustomTheme.color2,
           height: 160.0,
           child: Align(
             alignment: Alignment.topCenter,
@@ -116,19 +116,23 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                               style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
+                                color: CustomTheme.primaryColor,
                               ),
                             ),
                             Row(
                               children: [
                                 const Icon(
                                   Icons.location_on_outlined,
-                                  color: CustomTheme.primaryColor,
+                                  color: CustomTheme.color2,
                                   size: 16,
                                 ),
                                 const SizedBox(width: 8),
                                 Text(
                                   " ${reservation?.roomPrice?.room?.facility?.address ?? trans().not_available}",
-                                  style: const TextStyle(fontSize: 16),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: CustomTheme.color3,
+                                  ),
                                 ),
                               ],
                             ),
@@ -145,7 +149,7 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge
-                        ?.copyWith(color: CustomTheme.primaryColor),
+                        ?.copyWith(color: CustomTheme.color3),
                   ),
                   const SizedBox(height: 15),
                   CustomRowWidget(
@@ -173,22 +177,10 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge
-                        ?.copyWith(color: CustomTheme.primaryColor),
+                        ?.copyWith(color: CustomTheme.color3),
                   ),
                   const SizedBox(height: 12),
                   if (reservation != null) ...[
-                    // CustomRowWidget(
-                    //   icon: Icons.add_business_rounded,
-                    //   label: trans().chalet_name,
-                    //   value: reservation.roomPrice?.room?.name ??
-                    //       trans().not_available,
-                    // ),
-                    // CustomRowWidget(
-                    //   icon: Icons.room,
-                    //   label: trans().address,
-                    //   value: reservation.roomPrice?.room?.facility?.address ??
-                    //       trans().not_available,
-                    // ),
                     CustomRowWidget(
                       icon: Icons.calendar_today,
                       label: trans().check_in_date,
@@ -233,27 +225,22 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge
-                          ?.copyWith(color: CustomTheme.primaryColor),
+                          ?.copyWith(color: CustomTheme.color3),
                     ),
                     const SizedBox(height: 12),
-
                     CustomRowWidget(
                       icon: Icons.money,
                       label: trans().total_price,
                       value:
                           "${reservation.totalPrice?.toInt()} ${trans().riyalY}",
                     ),
-
                     const SizedBox(height: 8),
-
                     CustomRowWidget(
                       icon: Icons.paid,
                       label: trans().paid_amount,
                       value: "${data.amount.toInt()} ${trans().riyalY}",
                     ),
-
                     const SizedBox(height: 8),
-
                     CustomRowWidget(
                       icon: Icons.price_check,
                       label: trans().remaining_amount,
@@ -294,31 +281,12 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                   context,
                   MaterialPageRoute(builder: (context) => NavigationMenu()),
                 );
-                // Navigator.pushNamedAndRemoveUntil(
-                //   context,
-                //   Routes.facilityTypes,
-                //   (r) => false,
-                // );
               },
             ),
-            // Button(
-            //   width: (MediaQuery.of(context).size.width - 50) / 2,
-            //   title: trans().share,
-            //   icon: const Icon(
-            //     Icons.share,
-            //     size: 20,
-            //     color: Colors.white,
-            //   ),
-            //   iconAfterText: true,
-            //   disable: false,
-            //   onPressed: () async {
-            //     // كود المشاركة (تستطيع استخدام حزمة share_plus)
-            //     print("تم الضغط على زر المشاركة");
-            //   },
-            // ),
             ShareButton(
-           //   textToShare: "جرب تطبيقنا الجديد للحجوزات! 🌟",
-                textToShare: "جرب تطبيقنا الآن! 📲 https://play.google.com/store/apps/details?id=com.mybooking",
+              //   textToShare: "جرب تطبيقنا الجديد للحجوزات! 🌟",
+              textToShare:
+                  "جرب تطبيقنا الآن! 📲 https://play.google.com/store/apps/details?id=com.mybooking",
             ),
           ],
         ),

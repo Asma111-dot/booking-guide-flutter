@@ -1,4 +1,7 @@
+import 'package:booking_guide/src/helpers/general_helper.dart';
 import 'package:flutter/material.dart';
+
+import '../utils/theme.dart';
 
 typedef OnAddressSelected = void Function(String value);
 
@@ -25,12 +28,24 @@ void showAddressNearUserBottomSheet({
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('أدخل عنوانك الحالي', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(
+              trans().enter_current_address,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: CustomTheme.color2,
+              ),
+            ),
             const SizedBox(height: 16),
             TextField(
               controller: controller,
-              decoration: const InputDecoration(
-                labelText: 'العنوان',
+              decoration: InputDecoration(
+                labelText: trans().address,
+                labelStyle: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: CustomTheme.primaryColor,
+                ),
                 border: OutlineInputBorder(),
               ),
             ),
@@ -43,7 +58,9 @@ void showAddressNearUserBottomSheet({
                   Navigator.pop(context);
                 }
               },
-              child: const Text('تطبيق الفلترة'),
+              child: Text(
+                trans().apply_filter,
+              ),
             ),
           ],
         ),

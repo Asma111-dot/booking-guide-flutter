@@ -16,9 +16,9 @@ class ReservationDetailsPage extends ConsumerStatefulWidget {
   final int roomPriceId;
 
   const ReservationDetailsPage({
-    Key? key,
+    super.key,
     required this.roomPriceId,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<ReservationDetailsPage> createState() =>
@@ -46,7 +46,7 @@ class _ReservationDetailsPageState
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(160.0),
         child: CustomAppBarClipper(
-          backgroundColor: CustomTheme.primaryColor,
+          backgroundColor: CustomTheme.color2,
           height: 160.0,
           child: Align(
             alignment: Alignment.topCenter,
@@ -117,19 +117,23 @@ class _ReservationDetailsPageState
                             style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
+                              color: CustomTheme.primaryColor,
                             ),
                           ),
                           Row(
                             children: [
                               const Icon(
                                 Icons.location_on_outlined,
-                                color: CustomTheme.primaryColor,
+                                color: CustomTheme.color2,
                                 size: 16,
                               ),
                               const SizedBox(width: 8),
                               Text(
                                 " ${data.roomPrice?.room?.facility?.address ?? trans().not_available}",
-                                style: const TextStyle(fontSize: 16),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: CustomTheme.color3,
+                                ),
                               ),
                             ],
                           ),
@@ -139,7 +143,7 @@ class _ReservationDetailsPageState
                   ],
                 ),
 
-                const SizedBox(height: 15),
+                const SizedBox(height: 10),
                 const Divider(color: Colors.grey),
                 const SizedBox(height: 10),
 
@@ -243,32 +247,11 @@ class _ReservationDetailsPageState
         },
         onLoading: () => const Center(child: CircularProgressIndicator()),
         onEmpty: () => Center(
-          child: Text("${trans().no_data}"),
+          child: Text(trans().no_data),
         ),
         showError: true,
         showEmpty: true,
       ),
-      // bottomNavigationBar: Padding(
-      //   padding: const EdgeInsets.all(20.0),
-      //   child: Button(
-      //     width: MediaQuery.of(context).size.width - 40,
-      //     title: trans().payment_now,
-      //     icon: Icon(
-      //       Icons.arrow_forward,
-      //       size: 20,
-      //       color: Colors.white,
-      //     ),
-      //     iconAfterText: true,
-      //     disable: false,
-      //     onPressed: () async {
-      //       Navigator.pushNamed(
-      //         context,
-      //         Routes.payment,
-      //         arguments: reservationId, // قم بتمرير `reservationId` المناسب
-      //       );
-      //     },
-      //   ),
-      // ),
     );
   }
 }

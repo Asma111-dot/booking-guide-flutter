@@ -118,7 +118,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
           title: trans().completeTheReservation,
           disable: selectedPaymentMethod == null || isLoading,
           icon: isLoading
-              ? const CircularProgressIndicator(color: CustomTheme.primaryColor)
+              ? const CircularProgressIndicator(color: CustomTheme.color2)
               : const Icon(
                   Icons.arrow_forward,
                   size: 20,

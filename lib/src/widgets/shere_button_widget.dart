@@ -21,48 +21,52 @@ class ShareButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: width,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: CustomTheme.primaryColor,
-          foregroundColor: Colors.white,
-        ),
-        onPressed: () async {
-          await Share.share(
-            textToShare,
-            subject: subject ?? trans().share,
-          );
-        },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: iconAfterText
-              ? [
-            Text(
-              trans().share,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
+        width: width,
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: CustomTheme.primaryGradient,
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.transparent,
+              shadowColor: Colors.transparent,
+              foregroundColor: Colors.white,
             ),
-            const SizedBox(width: 8),
-            const Icon(
-              Icons.share,
-              size: 20,
-              color: Colors.white,
+            onPressed: () async {
+              await Share.share(
+                textToShare,
+                subject: subject ?? trans().share,
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: iconAfterText
+                  ? [
+                      Text(
+                        trans().share,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      const Icon(
+                        Icons.share,
+                        size: 20,
+                        color: Colors.white,
+                      ),
+                    ]
+                  : [
+                      const Icon(
+                        Icons.share,
+                        size: 20,
+                        color: Colors.white,
+                      ),
+                    ],
             ),
-          ]
-              : [
-            const Icon(
-              Icons.share,
-              size: 20,
-              color: Colors.white,
-            ),
-            const SizedBox(width: 8),
-            // عدم عرض النص في حال لم يكن iconAfterText true
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }

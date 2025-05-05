@@ -47,7 +47,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
   @override
   void initState() {
     super.initState();
-    values[FacilityFilterType.facilityTypeId] = 1; // ✅ نبدأ بعرض الفنادق فقط
+    values[FacilityFilterType.facilityTypeId] = 1;
     selectedFilter = FacilityFilterType.name;
     _tabController = TabController(length: 2, vsync: this);
     _tabController.index = 0;
@@ -136,8 +136,8 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                   Text(
                     trans().discoverBestPlace,
                     style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
                       color: Colors.black87,
                     ),
                   ),
@@ -145,7 +145,8 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                   Text(
                     trans().searchByNameAddress,
                     style: const TextStyle(
-                      fontSize: 14,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w300,
                       color: Colors.black54,
                     ),
                   ),
@@ -170,10 +171,12 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                   flex: 2,
                   child: Container(
                     height: 45,
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(15),
                       boxShadow: [
                         BoxShadow(
                             color: Colors.black12,
@@ -189,12 +192,18 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                           Expanded(
                             child: Text(
                               selectedFilter?.label ?? 'اختر الفلتر',
-                              style: const TextStyle(fontSize: 14),
+                              style: const TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w200,
+                              ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
                           ),
-                          const Icon(Icons.arrow_drop_down,color: CustomTheme.color2,),
+                          const Icon(
+                            Icons.arrow_drop_down_rounded,
+                            color: CustomTheme.color2,
+                          ),
                         ],
                       ),
                     ),
@@ -209,12 +218,22 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                     controller: textController,
                     decoration: InputDecoration(
                       hintText: trans().search_in_facilities,
-                      prefixIcon: const Icon(Icons.search,color: CustomTheme.color2,),
+                      hintStyle: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.grey.shade600,
+                      ),
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        color: CustomTheme.color2,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
                       contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 12),
+                        horizontal: 15,
+                        vertical: 12,
+                      ),
                     ),
                     onChanged: (value) {
                       if (value.isEmpty) {
@@ -277,7 +296,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                   onPressed: () {
                     setState(() {
                       values.removeWhere((key, value) =>
-                      key != FacilityFilterType.facilityTypeId);
+                          key != FacilityFilterType.facilityTypeId);
                       showResults = false;
                       textController.clear();
 
@@ -287,15 +306,22 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                       ref.read(sortKeyProvider.notifier).state = 'price';
                     });
                   },
-                  icon: const Icon(Icons.refresh, color: Colors.red),
-                  label:  Text(
+                  icon: const Icon(
+                    Icons.refresh,
+                    color: Colors.red,
+                  ),
+                  label: Text(
                     trans().reset_filters,
-                    style: TextStyle(color: Colors.grey),
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
-            const Divider(height: 32),
-            const SizedBox(height: 16),
+            const Divider(height: 12),
+            const SizedBox(height: 8),
             Expanded(
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),

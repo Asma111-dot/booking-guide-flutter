@@ -33,7 +33,7 @@ class FilterTypeSelectorBottomSheet extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
             Text(
               trans().choose_filter_type,
               style: TextStyle(
@@ -41,7 +41,7 @@ class FilterTypeSelectorBottomSheet extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   color: CustomTheme.color2),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
             const Divider(height: 1),
             Expanded(
               child: ListView.separated(
@@ -55,15 +55,25 @@ class FilterTypeSelectorBottomSheet extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final filter = filters[index];
                   return ListTile(
-                    leading: Icon(filter.icon, color: CustomTheme.color2),
-                    title: Text(filter.label,
-                        style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: CustomTheme.primaryColor)),
-                    subtitle: Text(filter.description,
-                        style:
-                            const TextStyle(fontSize: 12, color: Colors.grey)),
+                    leading: Icon(
+                      filter.icon,
+                      color: CustomTheme.color2,
+                    ),
+                    title: Text(
+                      filter.label,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: CustomTheme.primaryColor,
+                      ),
+                    ),
+                    subtitle: Text(
+                      filter.description,
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: Colors.grey,
+                      ),
+                    ),
                     onTap: () {
                       Navigator.pop(context);
                       onSelect(filter);

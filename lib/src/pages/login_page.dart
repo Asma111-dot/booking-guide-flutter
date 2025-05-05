@@ -26,159 +26,165 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: [
-            CustomAppBarClipper(
-            backgroundColor: CustomTheme.primaryColor,
-            height: 160.0,
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 50.0, left: 20.0),
-                child: Text(
-                  trans().login,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Container(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
-            padding: EdgeInsets.fromLTRB(
-              16,
-              16,
-              16,
-              16 + MediaQuery
-                  .of(context)
-                  .padding
-                  .bottom,
-            ),
-            child: Form(
-              key: loginKey,
-              autovalidateMode: autoValidate
-                  ? AutovalidateMode.always
-                  : AutovalidateMode.disabled,
-              child: Column(
-                  children: <Widget>[
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 40),
-                child: Image.asset(logoCoverImage, height: 100),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(
-                  trans().login_subtitle,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey[700],
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                keyboardType: TextInputType.phone,
-                readOnly: login.isLoading(),
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.phone),
-                  prefixIconColor: CustomTheme.primaryColor,
-                  prefixText: '+967 ',
-                  prefixStyle: const TextStyle(
-                    color: CustomTheme.tertiaryColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  labelText: trans().phone_number,
-                  labelStyle: const TextStyle(
-                    color: CustomTheme.primaryColor,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(
-                      color: CustomTheme.primaryColor.withValues(alpha: 0.1 * 255),
-                      width: 1.5,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: CustomTheme.primaryColor,
-                      width: 1.5,
+        resizeToAvoidBottomInset: true,
+        body: Stack(
+          children: [
+            Column(
+              children: [
+                // الشريط العلوي الثابت
+                CustomAppBarClipper(
+                  backgroundColor: CustomTheme.color2,
+                  height: 160.0,
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 50.0, left: 20.0),
+                      child: Text(
+                        trans().login,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return trans().phoneFieldIsRequired;
-                  } else if (value.length != 9) {
-                    return "رقم الهاتف يجب أن يتكون من 9 أرقام";
-                  } else if (!value.startsWith('7')) {
-                    return "رقم الهاتف يجب أن يبدأ بـ 7";
+
+                // الفورم قابل للتمرير
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 100), // مساحة لزر الدخول
+                    child: Form(
+                      key: loginKey,
+                      autovalidateMode: autoValidate
+                          ? AutovalidateMode.always
+                          : AutovalidateMode.disabled,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 40),
+                            child: Image.asset(myBooking, height: 100),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Text(
+                              trans().login_subtitle,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[700],
+                              ),
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          TextFormField(
+                            keyboardType: TextInputType.phone,
+                            readOnly: login.isLoading(),
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.phone),
+                              prefixIconColor: CustomTheme.color2,
+                              prefixText: '+967 ',
+                              prefixStyle: const TextStyle(
+                                color: CustomTheme.color3,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              labelText: trans().phone_number,
+                              labelStyle: const TextStyle(
+                                color: CustomTheme.color3,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  color: CustomTheme.primaryColor.withValues(alpha: 0.1 * 255),
+                                  width: 1.5,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(
+                                  color: CustomTheme.primaryColor,
+                                  width: 1.5,
+                                ),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return trans().phoneFieldIsRequired;
+                              } else if (value.length != 9) {
+                                return "رقم الهاتف يجب أن يتكون من 9 أرقام";
+                              } else if (!value.startsWith('7')) {
+                                return "رقم الهاتف يجب أن يبدأ بـ 7";
+                              }
+                              return null;
+                            },
+                            onChanged: (value) =>
+                            ref.read(phoneProvider.notifier).state = value,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        bottomNavigationBar: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+              bottom: MediaQuery.of(context).viewInsets.bottom > 0
+                  ? MediaQuery.of(context).viewInsets.bottom
+                  : 16,
+            ),
+            child: Hero(
+              tag: 'login',
+              child: Button(
+                width: double.infinity,
+                title: trans().login,
+                disable: login.isLoading(),
+                icon: const Icon(Icons.login, color: Colors.white),
+                iconAfterText: true,
+                onPressed: () async {
+                  final phone = ref.read(phoneProvider);
+                  if (phone.length != 9 || !phone.startsWith('7')) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("الرجاء إدخال رقم هاتف صحيح مكون من 9 أرقام ويبدأ بـ 7"),
+                      ),
+                    );
+                    return;
                   }
-                  return null;
+
+                  if (loginKey.currentState!.validate()) {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    loginKey.currentState!.save();
+
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (_) => const OtpVerifySheet(),
+                    );
+
+                    await ref.read(loginProvider.notifier).requestOtp();
+                  }
+
+                  setState(() => autoValidate = true);
                 },
-                onChanged: (value) =>
-                ref
-                    .read(phoneProvider.notifier)
-                    .state = value,
-              ),
-              const SizedBox(height: 32),
-              Hero(
-                tag: 'login',
-                child: Button(
-                    width: double.infinity,
-                    title: trans().login,
-                    disable: login.isLoading(),
-                    icon: const Icon(Icons.login, color: Colors.white),
-                    iconAfterText: true,
-                  onPressed: () async {
-                    final phone = ref.read(phoneProvider);
-                    if (phone.length != 9 || !phone.startsWith('7')) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("الرجاء إدخال رقم هاتف صحيح مكون من 9 أرقام ويبدأ بـ 7")),
-                      );
-                      return;
-                    }
-
-                    if (loginKey.currentState!.validate()) {
-                      FocusManager.instance.primaryFocus?.unfocus();
-                      loginKey.currentState!.save();
-
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        builder: (_) => const OtpVerifySheet(),
-                      );
-
-                      await ref.read(loginProvider.notifier).requestOtp();
-                    }
-
-                    setState(() => autoValidate = true);
-                  },
               ),
             ),
-            ],
           ),
         ),
       ),
-      ],
-    ),)
-    ,
-    )
-    ,
     );
   }
 }

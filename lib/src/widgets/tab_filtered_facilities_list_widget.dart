@@ -2,6 +2,7 @@ import 'package:booking_guide/src/helpers/general_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/sort/sorted_facilities_provider.dart';
+import '../utils/theme.dart';
 import 'facility_widget.dart';
 
 class TabFilteredFacilitiesListWidget extends ConsumerWidget {
@@ -24,9 +25,12 @@ class TabFilteredFacilitiesListWidget extends ConsumerWidget {
     }
 
     final allFacilities = allFacilitiesAsync.data ?? [];
-    final filteredFacilities = allFacilities.where((f) => f.facilityTypeId == facilityTypeId).toList();
+    final filteredFacilities =
+        allFacilities.where((f) => f.facilityTypeId == facilityTypeId).toList();
 
-    final title = facilityTypeId == 1 ? trans().all_available_hotels : trans().all_available_chalets;
+    final title = facilityTypeId == 1
+        ? trans().all_available_hotels
+        : trans().all_available_chalets;
 
     if (filteredFacilities.isEmpty) {
       return Center(
@@ -49,7 +53,11 @@ class TabFilteredFacilitiesListWidget extends ConsumerWidget {
           padding: const EdgeInsets.only(bottom: 10),
           child: Text(
             title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: CustomTheme.primaryColor,
+            ),
           ),
         ),
         Expanded(

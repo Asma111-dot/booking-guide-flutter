@@ -19,7 +19,7 @@ class CustomRowWidget extends StatelessWidget {
       children: [
         Icon(
           icon,
-          color: CustomTheme.primaryColor,
+          color: CustomTheme.color2,
           size: 16,
         ),
         const SizedBox(width: 8),

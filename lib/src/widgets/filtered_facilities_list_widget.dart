@@ -50,68 +50,43 @@ class FilteredFacilitiesListWidget extends ConsumerWidget {
       );
     }
 
-    final facilityTypeId = values[FacilityFilterType.facilityTypeId];
-    final filterDate = values[FacilityFilterType.availableOnDay];
-
-    final typeLabel = facilityTypeId == 1 ? trans().hotel : trans().chalet;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ListView(
+      padding: const EdgeInsets.only(top: 8, bottom: 8),
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 4),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: RichText(
-                      text: TextSpan(
-                        style: const TextStyle(fontSize: 16, color: Colors.black38, fontWeight: FontWeight.bold),
-                        children: [
-                          TextSpan(text: '$typeLabel ${trans().available}'),
-                          if (filterDate != null) ...[
-                             TextSpan(text: trans().on_date),
-                            TextSpan(
-                              text: filterDate,
-                              style: TextStyle(color: CustomTheme.primaryColor, fontWeight: FontWeight.w900),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                  ),
-                  if (filterDate != null)
-                    const Padding(
-                      padding: EdgeInsets.only(left: 8),
-                      child: Icon(Icons.calendar_today, size: 18, color: CustomTheme.color2),
-                    ),
-                ],
-              ),
               if (selectedFilter != null && values[selectedFilter] != null)
                 Padding(
-                  padding: const EdgeInsets.only(top: 4),
+                  padding: const EdgeInsets.only(top: 2),
                   child: Text(
-                    buildFilterDescription(selectedFilter!, values[selectedFilter]),
-                    style: const TextStyle(fontSize: 13, color: Colors.grey),
+                    buildFilterDescription(
+                      selectedFilter!,
+                      values[selectedFilter],
+                    ),
+                    style: const TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: CustomTheme.primaryColor,
+                    ),
                   ),
                 ),
             ],
           ),
         ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: facilities.length,
-            itemBuilder: (_, index) {
-              final facility = facilities[index];
-              return FacilityWidget(
-                facility: facility,
-                minPriceFilter: minPrice != null ? double.tryParse(minPrice!) : null,
-                maxPriceFilter: maxPrice != null ? double.tryParse(maxPrice!) : null,
-              );
-            },
-          ),
+        const SizedBox(height: 10),
+        ...facilities.map(
+          (facility) {
+            return FacilityWidget(
+              facility: facility,
+              minPriceFilter:
+                  minPrice != null ? double.tryParse(minPrice!) : null,
+              maxPriceFilter:
+                  maxPrice != null ? double.tryParse(maxPrice!) : null,
+            );
+          },
         ),
       ],
     );

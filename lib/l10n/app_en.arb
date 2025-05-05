@@ -211,5 +211,14 @@
   "no_matching_facilities": "No facilities match your search",
   "available": "available",
   "on_date": "on date:",
-  "choose_filter_type": "Choose filter type"
+  "choose_filter_type": "Choose filter type",
+  "select_people_count": "Select the number of people",
+  "people_count": "Number of people",
+  "apply_filter": "Apply Filter",
+  "select_availability_day": "Select Availability Day",
+  "select_date": "Select Date",
+  "enter_current_address": "Enter your current address",
+  "select_price_range": "Select price range",
+  "min_price": "أقل سعر",
+  "max_price": "أعلى سعر"
 }

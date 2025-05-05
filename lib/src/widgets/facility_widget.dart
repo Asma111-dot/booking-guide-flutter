@@ -34,7 +34,6 @@ class FacilityWidget extends ConsumerWidget {
 
     final firstPrice = facility.price ?? 0.0;
 
-    // ✅ فلترة السعر
     if (!_isWithinPriceRange(firstPrice)) {
       return const SizedBox();
     }
@@ -97,8 +96,8 @@ class FacilityWidget extends ConsumerWidget {
                       facility.name,
                       style: TextStyle(
                         color: CustomTheme.primaryColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -109,7 +108,7 @@ class FacilityWidget extends ConsumerWidget {
                       style: TextStyle(
                         color: firstPrice > 0 ? CustomTheme.color4 : Colors.redAccent,
                         fontSize: 12,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -123,6 +122,7 @@ class FacilityWidget extends ConsumerWidget {
                             style: TextStyle(
                               color: CustomTheme.color1,
                               fontSize: 14,
+                              fontWeight: FontWeight.w400,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
