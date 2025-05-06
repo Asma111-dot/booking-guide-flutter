@@ -10,12 +10,12 @@ class MenuItem extends StatelessWidget {
   final IconData icon;
 
   const MenuItem({
-    Key? key,
+    super.key,
     required this.title,
     this.subtitle,
     required this.onPressed,
     required this.icon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,15 +47,11 @@ class MenuItem extends StatelessWidget {
         ),
       )
           : null,
-      trailing: Container(
+      trailing: SizedBox(
         width: 30,
         height: 30,
-        // decoration: BoxDecoration(
-        //   borderRadius: BorderRadius.circular(100),
-        //   color: CustomTheme.tertiaryColor.withOpacity(0.1),
-        // ),
         child: Icon(LineAwesomeIcons.angle_left_solid,
-            color: CustomTheme.tertiaryColor, size: 18),
+            color: CustomTheme.color2, size: 18),
       ),
     );
   }

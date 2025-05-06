@@ -9,6 +9,7 @@ import '../sheetes/logout_bottom_sheet.dart';
 import '../utils/assets.dart';
 import '../utils/theme.dart';
 import '../widgets/mune_item_widget.dart';
+import '../widgets/social_links_widget.dart';
 import 'privacy_policy_page .dart';
 import '../sheetes/support_bottom_sheet.dart';
 import 'user_profile_page.dart';
@@ -111,7 +112,8 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const UserProfilePage()),
+                            builder: (context) => const UserProfilePage(),
+                          ),
                         );
                       },
                       icon: LineAwesomeIcons.user_circle,
@@ -134,7 +136,8 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const PrivacyPolicyPage()),
+                            builder: (context) => const PrivacyPolicyPage(),
+                          ),
                         );
                       },
                     ),
@@ -181,34 +184,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                         fit: BoxFit.contain,
                       ),
                       const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            icon: const Icon(LineAwesomeIcons.instagram),
-                            color: CustomTheme.color2,
-                            onPressed: () {
-                              // رابط إنستغرام
-                            },
-                          ),
-                          const SizedBox(width: 10),
-                          IconButton(
-                            icon: const Icon(LineAwesomeIcons.facebook),
-                            color: CustomTheme.color2,
-                            onPressed: () {
-                              // رابط فيسبوك
-                            },
-                          ),
-                          const SizedBox(width: 10),
-                          IconButton(
-                            icon: const Icon(LineAwesomeIcons.twitter),
-                            color: CustomTheme.color2,
-                            onPressed: () {
-                              // رابط تيك توك
-                            },
-                          ),
-                        ],
-                      ),
+                      const SocialLinksWidget(),
                       const SizedBox(height: 16),
                       TextButton.icon(
                         onPressed: () {
@@ -217,10 +193,17 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                             subject: 'تطبيق رائع! جرّبه الآن 👇',
                           );
                         },
-                        label: const Text('شارك التطبيق مع أصدقائك!'),
-                        icon: const Icon(LineAwesomeIcons.paper_plane_solid,color: CustomTheme.color2,),
+                        label: Text(
+                          trans().share_app,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: CustomTheme.primaryColor,
+                          ),
+                        ),
+                        // icon: const Icon(LineAwesomeIcons.paper_plane_solid,color: CustomTheme.color2,),
                         style: TextButton.styleFrom(
-                          foregroundColor: CustomTheme.primaryColor,
+                          foregroundColor: CustomTheme.color2,
                         ),
                       ),
                     ],

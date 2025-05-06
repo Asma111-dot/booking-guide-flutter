@@ -2,36 +2,30 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
+
 import '../helpers/general_helper.dart';
 import '../providers/auth/login_provider.dart';
 import '../utils/theme.dart';
+import '../widgets/avatar_picker.dart';
 import '../widgets/button_widget.dart';
+import '../widgets/custom_text_field.dart';
 import 'navigation_menu.dart';
 
 class CompleteProfilePage extends ConsumerStatefulWidget {
   const CompleteProfilePage({super.key});
 
   @override
-  ConsumerState<CompleteProfilePage> createState() => _CompleteProfileScreenState();
+  ConsumerState<CompleteProfilePage> createState() =>
+      _CompleteProfileScreenState();
 }
 
 class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
   final _formKey = GlobalKey<FormState>();
-  String name = '';
-  String email = '';
-  String address = '';
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final addressController = TextEditingController();
   bool isLoading = false;
   File? _avatarFile;
-
-  Future<void> pickImage() async {
-    final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (picked != null) {
-      setState(() {
-        _avatarFile = File(picked.path);
-      });
-    }
-  }
 
   Future<void> submit() async {
     if (!_formKey.currentState!.validate()) return;
@@ -40,13 +34,13 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
     setState(() => isLoading = true);
 
     final isSuccess = await ref.read(loginProvider.notifier).completeProfile(
-      name: name,
-      email: email,
-      address: address,
+      name: nameController.text.trim(),
+      email: emailController.text.trim(),
+      address: addressController.text.trim(),
       avatarFile: _avatarFile,
     );
 
-    if (!mounted) return; // ✅ مهم جدًا في حال الشاشة تغيرت قبل ما يرجع الرد
+    if (!mounted) return;
 
     setState(() => isLoading = false);
 
@@ -54,14 +48,22 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (_) => const NavigationMenu()),
-            (route) => false,
+        (route) => false,
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("فشل في حفظ البيانات، حاول مرة أخرى")),
       );
     }
-    print("✅ isSuccess = $isSuccess");
+    // print("✅ isSuccess = $isSuccess");
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    addressController.dispose();
+    super.dispose();
   }
 
   @override
@@ -69,17 +71,18 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+        backgroundColor: CustomTheme.placeholderColor,
         appBar: AppBar(
           centerTitle: true,
           title: Text(
             trans().completeProfile,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              color: CustomTheme.primaryColor,
-              fontWeight: FontWeight.w200,
-            ),
+                  color: CustomTheme.color2,
+                  fontWeight: FontWeight.w200,
+                ),
           ),
-          elevation: 0,
-          backgroundColor: Colors.transparent,
+          elevation: 1,
+          backgroundColor: CustomTheme.placeholderColor,
           iconTheme: const IconThemeData(color: Colors.black),
         ),
         body: SingleChildScrollView(
@@ -88,54 +91,34 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
             key: _formKey,
             child: Column(
               children: [
-                Stack(
-                  alignment: Alignment.bottomRight,
-                  children: [
-                    GestureDetector(
-                      onTap: pickImage,
-                      child: Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          CircleAvatar(
-                            radius: 50,
-                            backgroundImage: _avatarFile != null
-                                ? FileImage(_avatarFile!)
-                                : AssetImage('assets/images/default_avatar.jpg') as ImageProvider,
-                            backgroundColor: CustomTheme.tertiaryColor,
-                          ),
-                          CircleAvatar(
-                            radius: 15,
-                            backgroundColor: Colors.white,
-                            child: const Icon(Icons.camera_alt_outlined, size: 16, color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 30),
-
-                TextFormField(
-                  decoration: _inputDecoration(trans().fullName),
-                  validator: (value) => value!.isEmpty ? trans().nameFieldIsRequired : null,
-                  onSaved: (value) => name = value!,
-                ),
-                const SizedBox(height: 20),
-
-                TextFormField(
-                  decoration: _inputDecoration(trans().email),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) => value!.isEmpty ? trans().emailFieldIsRequired : null,
-                  onSaved: (value) => email = value!,
-                ),
-                const SizedBox(height: 20),
-
-                TextFormField(
-                  decoration: _inputDecoration(trans().address_optional),
-                  onSaved: (value) => address = value ?? trans().not_available,
+                AvatarPicker(
+                  onImageSelected: (file) {
+                    setState(() {
+                      _avatarFile = file;
+                    });
+                  },
                 ),
                 const SizedBox(height: 40),
 
+                CustomTextField(
+                  controller: nameController,
+                  label: trans().fullName,
+                ),
+                const SizedBox(height: 20),
+
+                CustomTextField(
+                  controller: emailController,
+                  label: trans().email,
+                ),
+                const SizedBox(height: 20),
+
+                CustomTextField(
+                  controller: addressController,
+                  label: trans().address,
+                ),
+
+
+                const SizedBox(height: 40),
                 Button(
                   width: double.infinity,
                   title: trans().save,
@@ -148,19 +131,6 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  InputDecoration _inputDecoration(String label) {
-    return InputDecoration(
-      labelText: label,
-      filled: true,
-      fillColor: Colors.white,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Colors.grey),
       ),
     );
   }

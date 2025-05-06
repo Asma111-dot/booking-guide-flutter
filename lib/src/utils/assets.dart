@@ -65,6 +65,9 @@ const depositIcon = Icons.money_off_sharp;
 const accessTimeIcon = Icons.access_time;
 const arrowBackIcon = Icon(Icons.arrow_back_ios);
 const arrowForWordIcon = Icons.arrow_forward;
+const cameraIcon = Icons.camera_alt_outlined;
+const cameraSourceIcon = Icons.camera_alt;
+const gallerySourceIcon = Icons.photo;
 
 // Videos -----------------------------------------------------------------------
 const welcome = "${_videoBase}welcome.mp4";

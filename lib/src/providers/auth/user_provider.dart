@@ -20,14 +20,12 @@ class User extends _$User {
   Response<model.User> build() => Response(data: model.User.init());
 
   Future fetch({bool force = false}) async {
+    if (currentUser() == null) return;
 
-    if(currentUser() == null) return;
-
-    if(!force) {
+    if (!force) {
       state = state.copyWith(data: currentUser()!);
       state = state.setFetchAll(true);
-    }
-    else {
+    } else {
       state = state.setLoading();
     }
 
@@ -36,50 +34,28 @@ class User extends _$User {
       method: Method.get,
       //key: 'user'
     ).then((value) async {
-      if(value.isLoaded()) {
+      if (value.isLoaded()) {
         state = state.copyWith(data: value.data);
         saveUserLocally(value.data!);
       }
 
-      if(!state.meta.fetchedAll) {
+      if (!state.meta.fetchedAll) {
         state = state.copyWith(meta: value.meta);
       }
     });
   }
-
-  // Future<void> updateUser(model.User user) async {
-  //   showLoading();
-  //
-  //   try {
-  //     final result = await request<model.User>(
-  //       url: updateUserUrl(),
-  //       method: Method.put,
-  //       body: await user.toJson(), // <-- هنا التعديل
-  //     );
-  //
-  //     if (result.isLoaded()) {
-  //       saveUserLocally(result.data!); // حفظ البيانات الجديدة محليًا
-  //       state = Response(data: result.data!, meta: result.meta); // تحديث حالة Riverpod
-  //     }
-  //   } catch (e) {
-  //     // يمكنك عرض رسالة خطأ هنا
-  //   } finally {
-  //     hideLoading();
-  //   }
-  // }
-
 
   Future<void> updateUser(model.User user, File? avatar) async {
     showLoading();
 
     final result = await request<model.User>(
       url: updateUserUrl(),
-      method: Method.post, // ⚠️ إرسال كـ POST لكن ...
+      method: Method.post,
       isMultipart: true,
       file: avatar,
       fileFieldName: 'avatar',
       fields: {
-        '_method': 'PUT', // ✅ Laravel will treat this as PUT
+        '_method': 'PUT',
         'name': user.name,
         'email': user.email,
         'address': user.address ?? '',
@@ -110,7 +86,6 @@ class User extends _$User {
     }).whenComplete(() => hideLoading());
   }
 
-
   Future saveUserLocally(model.User user) async {
     state = state.setLoading();
     state = state.copyWith(data: user);
@@ -132,7 +107,6 @@ class User extends _$User {
     }
   }
 
-
   Future<void> deleteAccount(BuildContext context) async {
     showLoading();
 
@@ -146,7 +120,8 @@ class User extends _$User {
         await logout();
         clearAllLocalDataAndNavigate();
 
-        Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/login', (route) => false);
       }
     } catch (e) {
       debugPrint("❌ Failed to delete account: $e");
@@ -154,5 +129,4 @@ class User extends _$User {
       hideLoading();
     }
   }
-
 }

@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 String baseUrl = kDebugMode
     ? (Platform.isIOS
     ? "http://localhost:8000/" // إذا كان التطبيق يعمل على iOS
+    // : "http://192.168.227.220:8000/") // إذا كان التطبيق يعمل على Android
     : "http://172.21.0.137:8000/") // إذا كان التطبيق يعمل على Android
     : "http://bookings-guide.com/"; // إذا كان التطبيق في وضع الإنتاج
 

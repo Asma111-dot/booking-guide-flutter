@@ -12,49 +12,48 @@ class SupportBottomSheet extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            trans().support,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: CustomTheme.color2,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              trans().support,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: CustomTheme.color2,
+                  ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 10),
-          Text(
-            trans().support_message,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Colors.grey[700],
+            const SizedBox(height: 10),
+            Text(
+              trans().support_message,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Colors.grey[700],
+                  ),
+              textAlign: TextAlign.right,
             ),
-            textAlign: TextAlign.right,
-          ),
-    const SizedBox(height: 20),
-    _buildSupportOption(
-    context,
-    icon: Icons.phone,
-    label: '775421110',
-    onTap: () => _launchPhone('775421110'),
-    ),
-    const SizedBox(height: 10),
-    _buildSupportOption(
-    context,
-      icon: FontAwesomeIcons.whatsapp,
-    label: '775421110',
-      onTap: () => _launchWhatsApp(context, '775421110'),
-    ),
-    const SizedBox(height: 10),
-    _buildSupportOption(
-    context,
-    icon: Icons.email_outlined,
-    label: 'bookingguide999@gmail.com',
-      onTap: () => _launchEmail(context, 'bookingguide999@gmail.com'),
-    ),
-]
-    ),
+            const SizedBox(height: 20),
+            _buildSupportOption(
+              context,
+              icon: Icons.phone,
+              label: '775421110',
+              onTap: () => _launchPhone('775421110'),
+            ),
+            const SizedBox(height: 10),
+            _buildSupportOption(
+              context,
+              icon: FontAwesomeIcons.whatsapp,
+              label: '775421110',
+              onTap: () => _launchWhatsApp(context, '775421110'),
+            ),
+            const SizedBox(height: 10),
+            _buildSupportOption(
+              context,
+              icon: Icons.email_outlined,
+              label: 'bookingguide999@gmail.com',
+              onTap: () => _launchEmail(context, 'bookingguide999@gmail.com'),
+            ),
+          ]),
     );
   }
 
@@ -64,21 +63,27 @@ class SupportBottomSheet extends StatelessWidget {
         required String label,
         required VoidCallback onTap,
       }) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey.shade300),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
-            Icon(icon, color: CustomTheme.color2),
-          ],
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        splashColor: CustomTheme.color2.withOpacity(0.1),
+        highlightColor: CustomTheme.color2.withOpacity(0.05),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
+              Icon(icon, color: CustomTheme.color2),
+            ],
+          ),
         ),
       ),
     );

@@ -2,13 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../helpers/general_helper.dart';
 import '../providers/auth/user_provider.dart';
 import '../utils/assets.dart';
 import '../utils/theme.dart';
+import '../widgets/avatar_picker.dart';
 import '../widgets/custom_app_bar.dart';
+import '../widgets/custom_text_field.dart';
 
 class UserProfilePage extends ConsumerStatefulWidget {
   const UserProfilePage({super.key});
@@ -23,14 +24,13 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
   final addressController = TextEditingController();
   File? selectedImage;
 
-
   @override
   void initState() {
     super.initState();
     final user = ref.read(userProvider).data;
     if (user != null) {
-      nameController.text = user.name ;
-      emailController.text = user.email ;
+      nameController.text = user.name;
+      emailController.text = user.email;
       addressController.text = user.address ?? '';
     }
   }
@@ -43,16 +43,6 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
     super.dispose();
   }
 
-  Future<void> pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        selectedImage = File(pickedFile.path);
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,48 +65,33 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
         child: Column(
           children: [
             const SizedBox(height: 20),
-
-            /// صورة المستخدم
-            Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundColor: CustomTheme.tertiaryColor,
-                  backgroundImage: selectedImage != null
-                      ? FileImage(selectedImage!)
-                      : (user.getAvatarUrl() != null
-                      ? NetworkImage(user.getAvatarUrl()!) as ImageProvider
-                      : const AssetImage('assets/images/default_avatar.jpg')),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: ElevatedButton(
-                    onPressed: pickImage,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      shape: const CircleBorder(),
-                      padding: const EdgeInsets.all(8),
-                      elevation: 4,
-                      shadowColor: Colors.grey.shade400,
-                    ),
-                    child: Icon(Icons.camera_alt_outlined,
-                        size: 18, color: Colors.grey.shade700),
-                  ),
-                ),
-              ],
+            AvatarPicker(
+              initialImageUrl: user.getAvatarUrl(),
+              onImageSelected: (file) {
+                setState(() {
+                  selectedImage = file;
+                });
+              },
             ),
 
             const SizedBox(height: 30),
 
-            _buildTextField(
-                controller: nameController, label: trans().fullName),
+            CustomTextField(
+              controller: nameController,
+              label: trans().fullName,
+            ),
             const SizedBox(height: 20),
-            _buildTextField(controller: emailController, label: trans().email),
+
+            CustomTextField(
+              controller: emailController,
+              label: trans().email,
+            ),
             const SizedBox(height: 20),
-            _buildTextField(
-                controller: addressController, label: trans().address),
+
+            CustomTextField(
+              controller: addressController,
+              label: trans().address,
+            ),
 
             const SizedBox(height: 30),
 
@@ -126,16 +101,42 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                 final confirm = await showDialog<bool>(
                   context: context,
                   builder: (_) => AlertDialog(
-                    title: Text(trans().are_you_sure),
-                    content: Text(trans().delete_account_confirmation),
+                    title: Text(
+                      trans().are_you_sure,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: CustomTheme.color2,
+                      ),
+                    ),
+                    content: Text(
+                      trans().delete_account_confirmation,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: CustomTheme.primaryColor,
+                      ),
+                    ),
                     actions: [
                       TextButton(
-                        child: Text(trans().cancel),
                         onPressed: () => Navigator.pop(context, false),
+                        child: Text(
+                          trans().cancel,
+                          style: TextStyle(
+                            color: CustomTheme.primaryColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       TextButton(
-                        child: Text(trans().yes),
                         onPressed: () => Navigator.pop(context, true),
+                        child: Text(
+                          trans().verify,
+                          style: TextStyle(
+                            color: Colors.grey[700],
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -161,50 +162,68 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
               icon: Icon(Icons.delete_forever, color: Colors.red.shade700),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
 
             /// أزرار الحفظ والإلغاء
             Row(
               children: [
                 Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      final updatedUser = user.copyWith(
-                        name: nameController.text.trim(),
-                        email: emailController.text.trim(),
-                        address: addressController.text.trim(),
-                      );
-
-                      await ref.read(userProvider.notifier).updateUser(
-                        updatedUser,
-                        selectedImage, // ✅ تمرير الصورة هنا
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      elevation: 2,
-                      side: BorderSide(color: CustomTheme.primaryColor),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: CustomTheme.primaryGradient,
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Text(
-                      trans().save,
-                      style: TextStyle(color: CustomTheme.primaryColor),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final updatedUser = user.copyWith(
+                          name: nameController.text.trim(),
+                          email: emailController.text.trim(),
+                          address: addressController.text.trim(),
+                        );
+
+                        await ref.read(userProvider.notifier).updateUser(
+                              updatedUser,
+                              selectedImage,
+                            );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: Text(
+                        trans().save,
+                        style: const TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 15),
                 Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      elevation: 2,
-                      side: BorderSide(color: Colors.grey.shade300),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: CustomTheme.primaryGradient,
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Text(
-                      trans().cancel,
-                      style: const TextStyle(color: Colors.black),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: Text(
+                        trans().cancel,
+                        style: const TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                 ),
@@ -213,29 +232,6 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildTextField(
-      {required TextEditingController controller, required String label}) {
-    return TextFormField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: label,
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.grey, width: 1.2),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: CustomTheme.primaryColor, width: 1.5),
-        ),
-      ),
-      style: const TextStyle(color: Colors.black),
     );
   }
 }

@@ -219,6 +219,10 @@
   "select_date": "Select Date",
   "enter_current_address": "Enter your current address",
   "select_price_range": "Select price range",
-  "min_price": "أقل سعر",
-  "max_price": "أعلى سعر"
+  "min_price": "Minimum Price",
+  "max_price": "Maximum Price",
+  "share_app": "📲 Share the app with your loved ones...",
+  "pick_from_gallery": "Pick from gallery",
+  "pick_from_camera": "Take from camera"
+
 }
