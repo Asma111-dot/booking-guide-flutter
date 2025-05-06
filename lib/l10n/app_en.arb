@@ -223,6 +223,7 @@
   "max_price": "Maximum Price",
   "share_app": "📲 Share the app with your loved ones...",
   "pick_from_gallery": "Pick from gallery",
-  "pick_from_camera": "Take from camera"
-
+  "pick_from_camera": "Take from camera",
+  "share_subject": "Amazing app! Try it now 👇",
+  "share_app_message": "Try our new booking app now!"
 }

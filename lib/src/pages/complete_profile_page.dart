@@ -71,7 +71,7 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: CustomTheme.placeholderColor,
+        backgroundColor: CustomTheme.whiteColor,
         appBar: AppBar(
           centerTitle: true,
           title: Text(
@@ -82,7 +82,7 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
                 ),
           ),
           elevation: 1,
-          backgroundColor: CustomTheme.placeholderColor,
+          backgroundColor: CustomTheme.whiteColor,
           iconTheme: const IconThemeData(color: Colors.black),
         ),
         body: SingleChildScrollView(

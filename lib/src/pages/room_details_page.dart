@@ -157,7 +157,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                 child: Container(
                   padding: const EdgeInsets.all(0),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 200),
+                    color: Colors.white.withValues(alpha: 150),
                     // 178 ≈ 0.7 * 255
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -176,8 +176,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                 child: Container(
                   padding: const EdgeInsets.all(0),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 200),
-                    // 178 ≈ 0.7 * 255
+                    color: Colors.white.withValues(alpha: 150),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: IconButton(
@@ -186,9 +185,9 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                       color: CustomTheme.color2,
                     ),
                     onPressed: () async {
-                      await Share.share(
-                        "جرب تطبيقنا الآن! 📲 https://play.google.com/store/apps/details?id=com.mybooking",
-                      );
+                      final room = ref.read(roomProvider).data;
+                      final text = "شاهد هذه المنشأة في تطبيقنا: ${room?.name ?? ''} \n📍 ${room?.facility?.address ?? ''}\nرابط المنشأة: https://myapp.com/room";
+                      await Share.share(text);
                     },
                   ),
                 ),

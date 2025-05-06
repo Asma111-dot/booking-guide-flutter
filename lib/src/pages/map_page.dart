@@ -70,7 +70,7 @@ class _MapPageState extends ConsumerState<MapPage> {
   Widget build(BuildContext context) {
     final facilitiesState = ref.watch(getProvider());
 
-    final double normalHue = hueFromColor(CustomTheme.placeholderColor);
+    final double normalHue = hueFromColor(CustomTheme.whiteColor);
     final double selectedHue = darkerHueFromColor(CustomTheme.primaryColor);
 
     return Scaffold(

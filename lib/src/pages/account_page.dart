@@ -179,7 +179,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     children: [
                       Image.asset(
                         myBooking,
-                        width: 120,
+                        width: 150,
                         height: 40,
                         fit: BoxFit.contain,
                       ),
@@ -187,21 +187,24 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       const SocialLinksWidget(),
                       const SizedBox(height: 16),
                       TextButton.icon(
-                        onPressed: () {
-                          Share.share(
-                            'حمّل تطبيقنا الآن عبر الرابط التالي:\nhttps://example.com/app-download',
-                            subject: 'تطبيق رائع! جرّبه الآن 👇',
+                        onPressed: () async {
+                          final shareText =
+                              '${trans().share_app_message}📲 https://play.google.com/store/apps/details?id=com.mybooking';
+                          await Share.share(
+                            shareText,
+                            subject: trans().share_subject,
                           );
                         },
+                        icon:
+                            const Icon(Icons.share, color: CustomTheme.color2),
                         label: Text(
                           trans().share_app,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                             color: CustomTheme.primaryColor,
                           ),
                         ),
-                        // icon: const Icon(LineAwesomeIcons.paper_plane_solid,color: CustomTheme.color2,),
                         style: TextButton.styleFrom(
                           foregroundColor: CustomTheme.color2,
                         ),

@@ -89,11 +89,11 @@ class _AvatarPickerState extends State<AvatarPicker> {
               CircleAvatar(
                 radius: 50,
                 backgroundImage: _avatarImage,
-                backgroundColor: CustomTheme.placeholderColor,
+                backgroundColor: CustomTheme.whiteColor,
               ),
               const CircleAvatar(
                 radius: 15,
-                backgroundColor: CustomTheme.placeholderColor,
+                backgroundColor: CustomTheme.whiteColor,
                 child: Icon(
                   cameraIcon,
                   size: 16,
