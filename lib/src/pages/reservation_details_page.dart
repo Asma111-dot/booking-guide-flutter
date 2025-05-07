@@ -43,31 +43,8 @@ class _ReservationDetailsPageState
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(160.0),
-        child: CustomAppBarClipper(
-          backgroundColor: CustomTheme.color2,
-          height: 160.0,
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 50, right: 200.0),
-              child: Row(
-                children: [
-                  const SizedBox(width: 10),
-                  Text(
-                    trans().reservationDetails,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+      appBar: CustomAppBarClipper(
+        title: trans().reservationDetails,
       ),
       body: ViewWidget<res.Reservation>(
         meta: reservationState.meta,

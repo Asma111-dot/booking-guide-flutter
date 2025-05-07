@@ -72,31 +72,8 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
     return RepaintBoundary(
       key: _shareKey,
       child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(160.0),
-          child: CustomAppBarClipper(
-            backgroundColor: CustomTheme.color2,
-            height: 160.0,
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 50.0, right: 200.0),
-                child: Row(
-                  children: [
-                    const SizedBox(width: 10),
-                    Text(
-                      trans().payment_details,
-                      style: const TextStyle(
-                        color: CustomTheme.whiteColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+        appBar: CustomAppBarClipper(
+          title: trans().payment_details,
         ),
         body: ViewWidget<p.Payment>(
           meta: paymentState.meta,

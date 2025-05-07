@@ -1,46 +1,42 @@
 import 'package:flutter/material.dart';
 
-class CustomAppBarClipper extends StatelessWidget {
-  final Color backgroundColor;
-  final double height;
-  final Widget? child;
+import '../utils/theme.dart';
+
+class CustomAppBarClipper extends StatelessWidget
+    implements PreferredSizeWidget {
+  final String title;
 
   const CustomAppBarClipper({
-    Key? key,
-    required this.backgroundColor,
-    this.height = 180.0,
-    this.child,
-  }) : super(key: key);
+    super.key,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return ClipPath(
-      clipper: _AppBarClipper(),
-      child: Container(
-        height: height,
-        color: backgroundColor,
-        child: child ?? SizedBox.shrink(),
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: CustomTheme.primaryGradient,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(35),
+          bottomRight: Radius.circular(35),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      child: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(
+          title,
+          style: const TextStyle(
+            color: CustomTheme.whiteColor,
+            fontSize: 20,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
       ),
     );
   }
-}
-
-class _AppBarClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.lineTo(0, size.height - 60);
-    path.quadraticBezierTo(
-        size.width / 4, size.height, size.width / 2, size.height - 60);
-    path.quadraticBezierTo(
-        size.width * 3 / 4, size.height - 120, size.width, size.height - 60);
-    path.lineTo(size.width, 0);
-    path.close();
-    return path;
-  }
 
   @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    return false;
-  }
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight + 10);
 }

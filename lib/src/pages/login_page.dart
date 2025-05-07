@@ -31,31 +31,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           children: [
             Column(
               children: [
-                // الشريط العلوي الثابت
                 CustomAppBarClipper(
-                  backgroundColor: CustomTheme.color2,
-                  height: 160.0,
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 50.0, left: 20.0),
-                      child: Text(
-                        trans().login,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
+                  title: trans().login,
                 ),
 
-                // الفورم قابل للتمرير
                 Expanded(
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 100), // مساحة لزر الدخول
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
                     child: Form(
                       key: loginKey,
                       autovalidateMode: autoValidate
@@ -102,7 +85,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide: BorderSide(
-                                  color: CustomTheme.primaryColor.withValues(alpha: 0.1 * 255),
+                                  color: CustomTheme.primaryColor
+                                      .withValues(alpha: 0.1 * 255),
                                   width: 1.5,
                                 ),
                               ),
@@ -125,7 +109,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               return null;
                             },
                             onChanged: (value) =>
-                            ref.read(phoneProvider.notifier).state = value,
+                                ref.read(phoneProvider.notifier).state = value,
                           ),
                         ],
                       ),
@@ -158,7 +142,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   if (phone.length != 9 || !phone.startsWith('7')) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text("الرجاء إدخال رقم هاتف صحيح مكون من 9 أرقام ويبدأ بـ 7"),
+                        content: Text(
+                            "الرجاء إدخال رقم هاتف صحيح مكون من 9 أرقام ويبدأ بـ 7"),
                       ),
                     );
                     return;
