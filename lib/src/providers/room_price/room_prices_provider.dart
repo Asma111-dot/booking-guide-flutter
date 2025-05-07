@@ -72,5 +72,3 @@ class RoomPrices extends _$RoomPrices {
     state = state.copyWith(data: state.data);
   }
 }
-//اعمل هانا inti بحيث ينحفظ البيانات لوما اكمل عملية الحجز بشكل كامل
-//يوز اقدر اعملها في لارفل داخل الاوث auth بحيث يمررها بشكل تلاقي

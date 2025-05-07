@@ -111,7 +111,7 @@
   "please_choose_booking_type": "Please choose the booking type",
   "adults_count": "Number of Adults",
   "please_enter_adults_count": "Please enter the number of adults",
-  "children_count": "Number of Children(Optional)",
+  "children_count": "Number of Children",
   "please_enter_children_count": "Please enter the number of children",
   "not_available": "Not Available",
   "next": "Next",
@@ -225,5 +225,11 @@
   "pick_from_gallery": "Pick from gallery",
   "pick_from_camera": "Take from camera",
   "share_subject": "Amazing app! Try it now 👇",
-  "share_app_message": "Try our new booking app now!"
+  "share_app_message": "Try our new booking app now!",
+  "number_of_days": "Number of days",
+  "day": "day",
+  "booking_type_hint": "Please select the appropriate booking type (Family / Women / Men / Company)",
+  "adults_hint": "Specify the number of adults attending.",
+  "children_hint": "Specify the number of children (optional – only if applicable)"
+
 }

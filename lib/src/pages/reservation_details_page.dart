@@ -77,6 +77,10 @@ class _ReservationDetailsPageState
             .fetch(roomPriceId: widget.roomPriceId),
         forceShowLoaded: reservationState.data != null,
         onLoaded: (data) {
+          final checkIn = data.checkInDate;
+          final checkOut = data.checkOutDate;
+          final daysCount = checkOut.difference(checkIn).inDays;
+
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -153,6 +157,20 @@ class _ReservationDetailsPageState
                   label: trans().reservation_date,
                   value: data.checkInDate.toDateDateView(),
                 ),
+                if (checkOut.isAfter(checkIn)) ...[
+                  const SizedBox(height: 12),
+                  CustomRowWidget(
+                    icon: Icons.date_range,
+                    label: trans().number_of_days,
+                    value: "$daysCount ${trans().day}",
+                  ),
+                  const SizedBox(height: 12),
+                  CustomRowWidget(
+                    icon: Icons.logout,
+                    label: trans().check_out_date,
+                    value: checkOut.toDateDateView(),
+                  ),
+                ],
 
                 const SizedBox(height: 12),
                 // period

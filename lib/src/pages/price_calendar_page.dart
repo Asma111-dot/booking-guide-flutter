@@ -25,10 +25,11 @@ class PriceAndCalendarPage extends ConsumerStatefulWidget {
 }
 
 class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
-  DateTime? selectedDay;
   RoomPrice? selectedPrice;
   Map<DateTime, List<dynamic>> events = {};
   bool hasSuccessfulAttempt = false;
+  DateTime? rangeStart;
+  DateTime? rangeEnd;
 
   @override
   void initState() {
@@ -43,9 +44,8 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
 
     final roomPrices = ref.read(roomPricesProvider).data;
     if (roomPrices != null && roomPrices.isNotEmpty) {
-      final defaultPrice = roomPrices.first;
       setState(() {
-        selectedPrice = defaultPrice; // Ensure there's a default price
+        selectedPrice = null;
       });
       _populateEvents();
     } else {
@@ -98,176 +98,172 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
         appTitle: trans().availabilityCalendar,
         icon: arrowBackIcon,
       ),
-      body: Stack(
-        children: [
-          ViewWidget<List<RoomPrice>>(
-            meta: roomPriceState.meta,
-            data: roomPriceState.data,
-            refresh: () async => await ref.read(roomPricesProvider.notifier).fetch(roomId: widget.roomId),
-            forceShowLoaded: roomPriceState.data != null,
-            onLoaded: (data) {
-              return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // عرض العنوان والوصف
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            trans().view_price_list,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
+      body: ViewWidget<List<RoomPrice>>(
+        meta: roomPriceState.meta,
+        data: roomPriceState.data,
+        refresh: () async => await ref
+            .read(roomPricesProvider.notifier)
+            .fetch(roomId: widget.roomId),
+        forceShowLoaded: roomPriceState.data != null,
+        onLoaded: (data) {
+          return SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // العنوان والوصف
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14.0, vertical: 10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          trans().view_price_list,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            trans().select_period_and_day,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.black54,
-                            ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          trans().select_period_and_day,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black54,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
+                  ),
 
-                    // RoomPriceWidget
-                    SizedBox(
-                      height: 160,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: data.length,
-                        itemBuilder: (context, index) {
-                          final roomPrice = roomPriceState.data![index];
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                RoomPriceWidget(
-                                  roomPrice: roomPrice,
-                                  isSelected: selectedPrice == roomPrice,
-                                  onTap: () {
-                                    setState(() {
-                                      selectedPrice = roomPrice;
-                                      _populateEvents(selectedPrice: selectedPrice);
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-
-                    // باقي المحتوى
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            trans().question_title,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
+                  // قائمة الفترات بشكل أفقي
+                  SizedBox(
+                    height: 200,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        final roomPrice = data[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 4.0, vertical: 14.0),
+                          child: RoomPriceWidget(
+                            roomPrice: roomPrice,
+                            isSelected: selectedPrice == roomPrice,
+                            onTap: () {
+                              setState(() {
+                                selectedPrice = roomPrice;
+                                _populateEvents(selectedPrice: selectedPrice);
+                              });
+                            },
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            trans().question_description,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.black54,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // CustomCalendarWidget
-                    CustomCalendarWidget(
-                      events: events.map((key, value) {
-                        return MapEntry(key, value.map((e) => e.toString()).toList());
-                      }),
-                      initialSelectedDay: selectedDay,
-                      onDateSelected: (DateTime selectedDate) {
-                        setState(() {
-                          selectedDay = selectedDate;
-                        });
-                        if (events[selectedDate] == null || events[selectedDate]!.isEmpty) {
-                          debugPrint('Selected date: $selectedDate');
-                          debugPrint('Events: ${events[selectedDate]}');
-                        }
+                        );
                       },
                     ),
-                  ],
-                ),
-              );
-            },
-            onLoading: () => const Center(child: CircularProgressIndicator()),
-            onEmpty: () => Center(child: Text(trans().no_data)),
-            showError: true,
-            showEmpty: true,
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Button(
-                width: double.infinity,
-                title: trans().continueBooking,
-                icon: Icon(
-                  arrowForWordIcon,
-                  size: 20,
-                  color: Colors.white,
-                ),
-                iconAfterText: true,
-                disable: (selectedDay == null ||
-                    selectedPrice == null ||
-                    (events[selectedDay]?.isNotEmpty ?? false)) &&
-                    !hasSuccessfulAttempt,
-                onPressed: () async {
-                  if (selectedDay != null && selectedPrice != null && !(events[selectedDay]?.isNotEmpty ?? false)) {
-                    setState(() {
-                      hasSuccessfulAttempt = true;
-                    });
+                  ),
 
-                    debugPrint("Selected Day: $selectedDay");
-                    debugPrint("Selected Price: $selectedPrice");
+                  // نص توضيحي
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14.0, vertical: 10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          trans().question_title,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          trans().question_description,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
 
-                    ref.read(reservationSaveProvider.notifier).saveReservationDraft(
-                      Reservation(
-                        roomPriceId: selectedPrice!.id,
-                        checkInDate: selectedDay!,
-                        checkOutDate: selectedDay!,
-                        id: 0,
-                        bookingType: '',
-                      ),
-                    );
-
-                    Navigator.pushNamed(context, Routes.reservation, arguments: selectedPrice);
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('يرجى اختيار يوم وسعر غير محجوزين أولاً'),
-                      ),
-                    );
-                  }
-                },
+                  // تقويم الحجوزات
+                  CustomCalendarWidget(
+                    events: events.map((key, value) =>
+                        MapEntry(key, value.map((e) => e.toString()).toList())),
+                    selectionType: SelectionType.range,
+                    initialSelectedDay: null,
+                    onSingleDateSelected: (date) {
+                      print("Selected single date: $date");
+                    },
+                    onRangeSelected: (range) {
+                      setState(() {
+                        rangeStart = range.start;
+                        rangeEnd = range.end;
+                      });
+                      print("Selected range: ${range.start} to ${range.end}");
+                    },
+                  ),
+                ],
               ),
             ),
+          );
+        },
+        onLoading: () => const Center(child: CircularProgressIndicator()),
+        onEmpty: () => Center(child: Text(trans().no_data)),
+        showError: true,
+        showEmpty: true,
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Button(
+          width: double.infinity,
+          title: trans().continueBooking,
+          icon: Icon(
+            arrowForWordIcon,
+            size: 20,
+            color: Colors.white,
           ),
-        ],
+          iconAfterText: true,
+          disable: (rangeStart == null ||
+                  rangeEnd == null ||
+                  selectedPrice == null) &&
+              !hasSuccessfulAttempt,
+          onPressed: () async {
+            if (rangeStart != null &&
+                rangeEnd != null &&
+                selectedPrice != null) {
+              setState(() {
+                hasSuccessfulAttempt = true;
+              });
+
+              ref.read(reservationSaveProvider.notifier).saveReservationDraft(
+                    Reservation(
+                      roomPriceId: selectedPrice!.id,
+                      checkInDate: rangeStart!,
+                      checkOutDate: rangeEnd!,
+                      id: 0,
+                      bookingType: '',
+                    ),
+                  );
+
+              Navigator.pushNamed(context, Routes.reservation,
+                  arguments: selectedPrice);
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('يرجى اختيار فترة وتحديد السعر أولاً'),
+                ),
+              );
+            }
+          },
+        ),
       ),
     );
   }

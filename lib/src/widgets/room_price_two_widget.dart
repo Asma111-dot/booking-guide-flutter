@@ -80,7 +80,7 @@ class RoomPriceWidget extends StatelessWidget {
     return Row(
       children: [
         Icon(icon, size: 20, color: _getColor()),
-        const SizedBox(width: 12),
+        const SizedBox(width: 10),
         Flexible(
           child: Text(
             text,

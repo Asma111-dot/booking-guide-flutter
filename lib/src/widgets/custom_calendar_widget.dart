@@ -3,16 +3,24 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../utils/theme.dart';
 
+enum SelectionType { single, range }
+
 class CustomCalendarWidget extends StatefulWidget {
   final Map<DateTime, List<String>> events;
+  final SelectionType selectionType;
   final DateTime? initialSelectedDay;
-  final Function(DateTime selectedDate) onDateSelected;
+  final DateTimeRange? initialSelectedRange;
+  final Function(DateTime selectedDate)? onSingleDateSelected;
+  final Function(DateTimeRange selectedRange)? onRangeSelected;
 
   const CustomCalendarWidget({
     super.key,
     required this.events,
+    required this.selectionType,
     this.initialSelectedDay,
-    required this.onDateSelected,
+    this.initialSelectedRange,
+    this.onSingleDateSelected,
+    this.onRangeSelected,
   });
 
   @override
@@ -20,47 +28,72 @@ class CustomCalendarWidget extends StatefulWidget {
 }
 
 class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
-  late DateTime? selectedDay;
+  DateTime? selectedDay;
+  DateTimeRange? selectedRange;
 
   @override
   void initState() {
     super.initState();
     selectedDay = widget.initialSelectedDay;
+    selectedRange = widget.initialSelectedRange;
+  }
+
+  bool _isRangeValid(DateTime start, DateTime end) {
+    for (DateTime d = start;
+    d.isBefore(end) || d.isAtSameMomentAs(end);
+    d = d.add(const Duration(days: 1))) {
+      if (widget.events[d]?.isNotEmpty ?? false) {
+        return false;
+      }
+    }
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.4,
+      height: MediaQuery.of(context).size.height * 0.45,
       child: SfDateRangePicker(
+        minDate: DateTime.now(),
         backgroundColor: Colors.white,
         view: DateRangePickerView.month,
         showNavigationArrow: true,
         showTodayButton: false,
-        selectionMode: DateRangePickerSelectionMode.single,
-        onSelectionChanged: (args) async {
-          final selectedDate = args.value as DateTime;
+        selectionMode: widget.selectionType == SelectionType.single
+            ? DateRangePickerSelectionMode.single
+            : DateRangePickerSelectionMode.range,
+        todayHighlightColor: CustomTheme.primaryColor,
+        onSelectionChanged: (args) {
+          if (widget.selectionType == SelectionType.single) {
+            final selected = args.value as DateTime;
+            if (widget.events[selected]?.isNotEmpty ?? false) {
+              _showDateBookedMessage(context);
+            } else {
+              setState(() => selectedDay = selected);
+              widget.onSingleDateSelected?.call(selected);
+            }
+          } else if (args.value is PickerDateRange) {
+            final range = args.value as PickerDateRange;
+            final start = range.startDate;
+            final end = range.endDate ?? range.startDate;
 
-          if (widget.events[selectedDate]?.isNotEmpty ?? false) {
-            _showDateBookedMessage(context);
-          } else {
-            setState(() {
-              selectedDay = selectedDate;
-            });
-            widget.onDateSelected(selectedDate);
-
+            if (_isRangeValid(start!, end!)) {
+              setState(() => selectedRange = DateTimeRange(start: start, end: end));
+              widget.onRangeSelected?.call(DateTimeRange(start: start, end: end));
+            } else {
+              _showDateBookedMessage(context);
+            }
           }
         },
         monthViewSettings: DateRangePickerMonthViewSettings(
-          dayFormat: 'E',
-          specialDates: widget.events.keys.toList(),
+          dayFormat: 'EEE',
+          blackoutDates: widget.events.keys.toList(),
           showTrailingAndLeadingDates: false,
-          weekendDays: <int>[DateTime.tuesday, DateTime.friday],
+          weekendDays: const [DateTime.tuesday, DateTime.friday],
         ),
         monthCellStyle: DateRangePickerMonthCellStyle(
-          specialDatesTextStyle: const TextStyle(
+          blackoutDateTextStyle: const TextStyle(
             color: Colors.grey,
-            fontWeight: FontWeight.bold,
             decoration: TextDecoration.lineThrough,
           ),
           todayTextStyle: const TextStyle(
@@ -75,18 +108,16 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
   void _showDateBookedMessage(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("عذرا!!"),
-          content: const Text("هذا اليوم محجوز بالفعل، الرجاء اختيار يوم آخر."),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text("حسنًا"),
-            ),
-          ],
-        );
-      },
+      builder: (context) => AlertDialog(
+        title: const Text("عذرًا!"),
+        content: const Text("التاريخ المحدد محجوز. الرجاء اختيار يوم آخر."),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("حسنًا"),
+          ),
+        ],
+      ),
     );
   }
 }

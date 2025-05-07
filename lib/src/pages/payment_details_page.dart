@@ -25,8 +25,7 @@ class PaymentDetailsPage extends ConsumerStatefulWidget {
   const PaymentDetailsPage({super.key, required this.paymentId});
 
   @override
-  ConsumerState<PaymentDetailsPage> createState() =>
-      _PaymentDetailsPageState();
+  ConsumerState<PaymentDetailsPage> createState() => _PaymentDetailsPageState();
 }
 
 class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
@@ -36,13 +35,16 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
   void initState() {
     super.initState();
     Future.microtask(() async {
-      await ref.read(paymentProvider.notifier).fetch(paymentId: widget.paymentId);
+      await ref
+          .read(paymentProvider.notifier)
+          .fetch(paymentId: widget.paymentId);
     });
   }
 
   Future<void> _shareScreenshot() async {
     try {
-      RenderRepaintBoundary boundary = _shareKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      RenderRepaintBoundary boundary =
+          _shareKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
       final image = await boundary.toImage(pixelRatio: 3.0);
       final byteData = await image.toByteData(format: ImageByteFormat.png);
       final pngBytes = byteData!.buffer.asUint8List();
@@ -51,10 +53,14 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
       final file = await File('${tempDir.path}/payment_details.png').create();
       await file.writeAsBytes(pngBytes);
 
-      await Share.shareXFiles([XFile(file.path)], text: trans().payment_details);
+      await Share.shareXFiles(
+        [XFile(file.path)],
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("حدث خطأ أثناء مشاركة الصورة")),
+        SnackBar(
+          content: Text("حدث خطأ أثناء مشاركة الصورة"),
+        ),
       );
     }
   }
@@ -81,9 +87,9 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                     Text(
                       trans().payment_details,
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: CustomTheme.whiteColor,
                         fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
                   ],
@@ -92,95 +98,160 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
             ),
           ),
         ),
-        body: Container(
-          // color: CustomTheme.whiteColor,
-          child: ViewWidget<p.Payment>(
-            meta: paymentState.meta,
-            data: paymentState.data,
-            refresh: () async => await ref.read(paymentProvider.notifier).fetch(paymentId: widget.paymentId),
-            forceShowLoaded: paymentState.data != null,
-            onLoaded: (data) {
-              final reservation = data.reservation;
+        body: ViewWidget<p.Payment>(
+          meta: paymentState.meta,
+          data: paymentState.data,
+          refresh: () async => await ref
+              .read(paymentProvider.notifier)
+              .fetch(paymentId: widget.paymentId),
+          forceShowLoaded: paymentState.data != null,
+          onLoaded: (data) {
+            final reservation = data.reservation;
 
-              return SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        if (reservation?.roomPrice?.room?.facility?.logo != null)
-                          Container(
-                            height: 100,
-                            width: 100,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: NetworkImage(reservation!.roomPrice!.room!.facility!.logo!),
-                                fit: BoxFit.cover,
-                              ),
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      if (reservation?.roomPrice?.room?.facility?.logo != null)
+                        Container(
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: NetworkImage(reservation!
+                                  .roomPrice!.room!.facility!.logo!),
+                              fit: BoxFit.cover,
                             ),
                           ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                reservation?.roomPrice?.room?.facility?.name ?? trans().not_available,
-                                style: const TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: CustomTheme.primaryColor,
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  const Icon(Icons.location_on_outlined, size: 16, color: CustomTheme.color2),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    reservation?.roomPrice?.room?.facility?.address ?? trans().not_available,
-                                    style: const TextStyle(fontSize: 16, color: CustomTheme.color3),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    const Divider(),
-                    const SizedBox(height: 10),
-                    Text(trans().payment_details, style: Theme.of(context).textTheme.titleLarge),
-                    const SizedBox(height: 10),
-                    CustomRowWidget(icon: Icons.price_change, label: trans().paid_amount, value: "${data.amount.toInt()} ${trans().riyalY}"),
-                    CustomRowWidget(icon: Icons.date_range, label: trans().payment_date, value: data.date.toDateView()),
-                    CustomRowWidget(icon: Icons.payment, label: trans().status, value: data.status),
-                    const Divider(height: 30),
-                    Text(trans().reservationDetails, style: Theme.of(context).textTheme.titleLarge),
-                    const SizedBox(height: 10),
-                    if (reservation != null) ...[
-                      CustomRowWidget(icon: Icons.calendar_today, label: trans().check_in_date, value: reservation.checkInDate.toDateDateView()),
-                      CustomRowWidget(icon: Icons.calendar_today_outlined, label: trans().check_out_date, value: reservation.checkOutDate.toDateDateView()),
-                      CustomRowWidget(icon: Icons.access_time, label: trans().access_time, value: "${reservation.roomPrice?.timeFrom?.fromTimeToDateTime()?.toTimeView() ?? '--:--'} - ${reservation.roomPrice?.timeTo?.fromTimeToDateTime()?.toTimeView() ?? '--:--'}"),
-                      CustomRowWidget(icon: Icons.people, label: trans().adults_count, value: "${reservation.adultsCount} ${trans().person}"),
-                      CustomRowWidget(icon: Icons.child_care, label: trans().children_count, value: "${reservation.childrenCount} ${trans().person}"),
-                      const Divider(height: 30),
-                      Text(trans().other_details, style: Theme.of(context).textTheme.titleLarge),
-                      CustomRowWidget(icon: Icons.money, label: trans().total_price, value: "${reservation.totalPrice?.toInt()} ${trans().riyalY}"),
-                      CustomRowWidget(icon: Icons.paid, label: trans().paid_amount, value: "${data.amount.toInt()} ${trans().riyalY}"),
-                      CustomRowWidget(icon: Icons.price_check, label: trans().remaining_amount, value: "${(reservation.totalPrice?.toInt() ?? 0) - (data.amount.toInt())} ${trans().riyalY}"),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              reservation?.roomPrice?.room?.facility?.name ??
+                                  trans().not_available,
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: CustomTheme.primaryColor,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                const Icon(Icons.location_on_outlined,
+                                    size: 16, color: CustomTheme.color2),
+                                const SizedBox(width: 8),
+                                Text(
+                                  reservation?.roomPrice?.room?.facility
+                                          ?.address ??
+                                      trans().not_available,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: CustomTheme.color3,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
+                  ),
+                  const SizedBox(height: 20),
+                  const Divider(),
+                  const SizedBox(height: 10),
+                  Text(
+                    trans().payment_details,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: CustomTheme.primaryColor,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  CustomRowWidget(
+                      icon: Icons.price_change,
+                      label: trans().paid_amount,
+                      value: "${data.amount.toInt()} ${trans().riyalY}"),
+                  CustomRowWidget(
+                      icon: Icons.date_range,
+                      label: trans().payment_date,
+                      value: data.date.toDateView()),
+                  CustomRowWidget(
+                      icon: Icons.payment,
+                      label: trans().status,
+                      value: data.status),
+                  const Divider(height: 30),
+                  Text(
+                    trans().reservationDetails,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: CustomTheme.primaryColor,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  if (reservation != null) ...[
+                    CustomRowWidget(
+                        icon: Icons.calendar_today,
+                        label: trans().check_in_date,
+                        value: reservation.checkInDate.toDateDateView()),
+                    CustomRowWidget(
+                        icon: Icons.calendar_today_outlined,
+                        label: trans().check_out_date,
+                        value: reservation.checkOutDate.toDateDateView()),
+                    CustomRowWidget(
+                        icon: Icons.access_time,
+                        label: trans().access_time,
+                        value:
+                            "${reservation.roomPrice?.timeFrom?.fromTimeToDateTime()?.toTimeView() ?? '--:--'} - ${reservation.roomPrice?.timeTo?.fromTimeToDateTime()?.toTimeView() ?? '--:--'}"),
+                    CustomRowWidget(
+                        icon: Icons.people,
+                        label: trans().adults_count,
+                        value: "${reservation.adultsCount} ${trans().person}"),
+                    CustomRowWidget(
+                        icon: Icons.child_care,
+                        label: trans().children_count,
+                        value:
+                            "${reservation.childrenCount} ${trans().person}"),
+                    const Divider(height: 30),
+                    Text(
+                      trans().other_details,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: CustomTheme.primaryColor,
+                      ),
+                    ),
+                    CustomRowWidget(
+                        icon: Icons.money,
+                        label: trans().total_price,
+                        value:
+                            "${reservation.totalPrice?.toInt()} ${trans().riyalY}"),
+                    CustomRowWidget(
+                        icon: Icons.paid,
+                        label: trans().paid_amount,
+                        value: "${data.amount.toInt()} ${trans().riyalY}"),
+                    CustomRowWidget(
+                        icon: Icons.price_check,
+                        label: trans().remaining_amount,
+                        value:
+                            "${(reservation.totalPrice?.toInt() ?? 0) - (data.amount.toInt())} ${trans().riyalY}"),
                   ],
-                ),
-              );
-            },
-            onLoading: () => const Center(child: CircularProgressIndicator()),
-            onEmpty: () => Center(child: Text(trans().no_data)),
-            showError: true,
-            showEmpty: true,
-          ),
+                ],
+              ),
+            );
+          },
+          onLoading: () => const Center(child: CircularProgressIndicator()),
+          onEmpty: () => Center(child: Text(trans().no_data)),
+          showError: true,
+          showEmpty: true,
         ),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -189,7 +260,11 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
               Expanded(
                 child: Button(
                   title: trans().close_and_go_back,
-                  icon: const Icon(Icons.close, size: 20, color: Colors.white),
+                  icon: const Icon(
+                    Icons.close,
+                    size: 20,
+                    color: CustomTheme.whiteColor,
+                  ),
                   iconAfterText: true,
                   disable: false,
                   onPressed: () async {
@@ -204,7 +279,11 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
               Expanded(
                 child: Button(
                   title: trans().share,
-                  icon: const Icon(Icons.share, size: 20, color: Colors.white),
+                  icon: const Icon(
+                    Icons.share,
+                    size: 20,
+                    color: CustomTheme.whiteColor,
+                  ),
                   iconAfterText: true,
                   disable: false,
                   onPressed: _shareScreenshot,
