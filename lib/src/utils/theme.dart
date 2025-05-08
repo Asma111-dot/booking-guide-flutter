@@ -10,29 +10,15 @@ class CustomTheme {
     required this.isDark,
   });
 
+  // String getFont(String languageCode) {
+  //   return languageCode == 'ar' ? 'AraHamahAlFiddaa' : 'Unbounded';
+  // }
+
   String getFont(String languageCode) {
-    return languageCode == 'ar' ? 'AraHamahAlFiddaa' : 'Unbounded';
+    // return 'Cairo';
+    return 'Tajawal';
   }
 
-
-  // String getFont() => 'Roboto';
-// اللون الأساسي يمكن أن يكون أحد اللونين
-//   static const Color primaryColor = Color(0xFF007BA7); // أزرق سماوي
-//
-// // التدرج اللوني
-//   static const LinearGradient primaryGradient = LinearGradient(
-//     colors: [
-//       Color(0xFF092668), // أزرق داكن
-//       Color(0xFF007BA7), // أزرق سماوي
-//     ],
-//     begin: Alignment.topLeft,
-//     end: Alignment.bottomRight,
-//   );
-  // Container(
-  // decoration: BoxDecoration(
-  // gradient: primaryGradient,
-  // ),
-  // );
 
   static const Color color1 = Color(0xFFB114E9); // b114e9
   static const Color color2 = Color(0xFF860EEE); // 860eee
