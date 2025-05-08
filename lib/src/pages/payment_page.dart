@@ -149,11 +149,17 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                               TextEditingController();
 
                           return AlertDialog(
-                            title:  Text((trans().confirm_payment)),
+                            title: Text(
+                              (trans().confirm_payment),
+                              style: TextStyle(
+                                color: CustomTheme.color2,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                             content: TextField(
                               controller: confirmationController,
                               keyboardType: TextInputType.number,
-                              decoration:  InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: trans().enter_confirmation_number,
                               ),
                             ),
@@ -166,8 +172,9 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                               ),
                               TextButton(
                                 onPressed: () async {
-                                  final confirmationCode =
-                                      int.tryParse(confirmationController.text);
+                                  final confirmationCode = int.tryParse(
+                                      convertToEnglishNumbers(
+                                          confirmationController.text.trim()));
 
                                   if (confirmationCode != null) {
                                     Navigator.of(context).pop();
@@ -184,25 +191,36 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                                       if (confirmState.isLoaded()) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
-                                           SnackBar(
-                                            content:
-                                                Text(trans().payment_confirmed_successfully),
+                                          SnackBar(
+                                            content: Text(
+                                              trans()
+                                                  .payment_confirmed_successfully,
+                                              style: TextStyle(
+                                                color: CustomTheme.color2,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
                                           ),
                                         );
                                       } else {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
-                                            content: Text(
-                                              confirmState.meta.message
-                                            ),
+                                            content:
+                                                Text(confirmState.meta.message),
                                           ),
                                         );
                                       }
                                     }
                                   }
                                 },
-                                child: Text(trans().verify),
+                                child: Text(
+                                  trans().verify,
+                                  style: TextStyle(
+                                    color: CustomTheme.primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
                             ],
                           );

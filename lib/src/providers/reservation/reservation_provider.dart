@@ -19,7 +19,7 @@ class Reservation extends _$Reservation {
     state = state.copyWith(data: reservation);
   }
 
-  Future fetch({required int roomPriceId, res.Reservation? reservation}) async {
+  Future fetch({required int reservationId, res.Reservation? reservation}) async {
     if (reservation != null) {
       state = state.copyWith(data: reservation);
       //state = state.setLoaded();
@@ -28,7 +28,7 @@ class Reservation extends _$Reservation {
 
     state = state.setLoading();
     await request<res.Reservation>(
-      url: getReservationUrl(reservationId: roomPriceId),
+      url: getReservationUrl(reservationId: reservationId),
       method: Method.get,
     ).then((value) async {
       //state = state.copyWith(meta: value.meta, data: value.data);

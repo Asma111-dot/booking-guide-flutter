@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import '../utils/theme.dart';
 
-class CustomRowWidget extends StatelessWidget {
+class CustomRowDetailsWidget extends StatelessWidget {
   final IconData icon;
   final String label;
   final String value;
 
-  const CustomRowWidget({
-    Key? key,
+  const CustomRowDetailsWidget({
+    super.key,
     required this.icon,
     required this.label,
     required this.value,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

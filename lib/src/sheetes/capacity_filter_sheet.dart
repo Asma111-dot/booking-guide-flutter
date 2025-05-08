@@ -54,7 +54,7 @@ void showCapacityBottomSheet({
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                final value = toEnglishNumbers(controller.text.trim());
+                final value = convertToEnglishNumbers(controller.text.trim());
                 if (value.isNotEmpty) {
                   onSelected(value);
                   Navigator.pop(context);

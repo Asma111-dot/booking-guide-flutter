@@ -103,7 +103,7 @@ void showAvailableDayBottomSheet({
                   onPressed: () {
                     if (date.value != null) {
                       onSelected(
-                        toEnglishNumbers(
+                        convertToEnglishNumbers(
                           date.value!.toSqlDateOnly(),
                         ),
                       );

@@ -46,10 +46,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           : AutovalidateMode.disabled,
                       child: Column(
                         children: [
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 100),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 40),
-                            child: Image.asset(myBooking, height: 100),
+                            child: Image.asset(myBooking, height: 50),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -85,8 +85,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide: BorderSide(
-                                  color: CustomTheme.primaryColor
-                                      .withValues(alpha: 0.1 * 255),
+                                  color: CustomTheme.primaryColor.withValues(alpha: 0.1 * 255),
                                   width: 1.5,
                                 ),
                               ),
@@ -103,13 +102,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 return trans().phoneFieldIsRequired;
                               } else if (value.length != 9) {
                                 return "رقم الهاتف يجب أن يتكون من 9 أرقام";
-                              } else if (!value.startsWith('7')) {
+                              } else if (!value.startsWith('7') && !value.startsWith('٧')) {
                                 return "رقم الهاتف يجب أن يبدأ بـ 7";
                               }
                               return null;
                             },
-                            onChanged: (value) =>
-                                ref.read(phoneProvider.notifier).state = value,
+                            onChanged: (value) {
+                              final normalized = convertToEnglishNumbers(value);
+                              ref.read(phoneProvider.notifier).state = normalized;
+                            },
                           ),
                         ],
                       ),

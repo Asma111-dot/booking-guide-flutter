@@ -13,9 +13,9 @@ class BookingPage extends ConsumerStatefulWidget {
   final int userId;
 
   const BookingPage({
-    Key? key,
+    super.key,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<BookingPage> createState() => _BookingPageState();
@@ -96,6 +96,11 @@ class _BookingPageState extends ConsumerState<BookingPage>
         final logo = reservation.roomPrice?.room?.facility?.logo;
         final imageUrl = (logo != null && logo.isNotEmpty) ? logo : logoCoverImage;
 
+        final checkIn = reservation.checkInDate;
+        final checkOut = reservation.checkOutDate;
+        final daysCount = checkOut.difference(checkIn).inDays;
+        final showDays = daysCount > 0;
+
         return Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           elevation: 1,
@@ -142,6 +147,28 @@ class _BookingPageState extends ConsumerState<BookingPage>
                           fontSize: 15,
                         ),
                       ),
+                      if (showDays)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 6),
+                          child: Text(
+                            "${trans().number_of_days} : ${formatDaysAr(daysCount)}",
+                            style: TextStyle(
+                              color: CustomTheme.color1,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 6),
+                        child: Text(
+                          "${trans().check_out_date} : ${reservation.checkOutDate.toDateView()}",
+                          style: TextStyle(
+                            color: CustomTheme.color1,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+
                       const SizedBox(height: 6),
                       Text(
                         "${trans().created_at} : ${reservation.createdAt?.toDateView()}",

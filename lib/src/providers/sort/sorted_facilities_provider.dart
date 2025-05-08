@@ -1,7 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../models/facility.dart';
-import '../../models/response/meta.dart';
 import '../../models/response/response.dart';
 import '../../services/request_service.dart';
 import '../../utils/urls.dart';
@@ -17,7 +16,7 @@ class SortedFacilities extends _$SortedFacilities {
   }
 
   Future<void> fetchSortedFacilities([String? customSortKey]) async {
-    final key = customSortKey ?? this.sortKey;
+    final key = customSortKey ?? sortKey;
 
     state = state.setLoading();
 
@@ -34,10 +33,9 @@ class SortedFacilities extends _$SortedFacilities {
       // final List<dynamic> dataList = result.data?['data']?['data'] ?? [];
       final facilities = Facility.fromJsonList(dataList);
 
-      // ✅ لاحظ هنا
       state = Response<List<Facility>>(
         data: facilities,
-        meta: result.meta ?? const Meta(message: ''),
+        meta: result.meta ,
       ).setLoaded();
     } catch (error) {
       state = state.setError(error.toString());

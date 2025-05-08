@@ -9,15 +9,16 @@ import '../utils/theme.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar_clipper.dart';
 import '../extensions/date_formatting.dart';
-import '../widgets/custom_row_widget.dart';
+import '../widgets/custom_header_details_widget.dart';
+import '../widgets/custom_row_details_widget.dart';
 import '../widgets/view_widget.dart';
 
 class ReservationDetailsPage extends ConsumerStatefulWidget {
-  final int roomPriceId;
+  final int reservationId;
 
   const ReservationDetailsPage({
     super.key,
-    required this.roomPriceId,
+    required this.reservationId,
   });
 
   @override
@@ -33,7 +34,7 @@ class _ReservationDetailsPageState
     Future.microtask(() {
       ref
           .read(reservationProvider.notifier)
-          .fetch(roomPriceId: widget.roomPriceId);
+          .fetch(reservationId: widget.reservationId);
     });
   }
 
@@ -46,82 +47,29 @@ class _ReservationDetailsPageState
       appBar: CustomAppBarClipper(
         title: trans().reservationDetails,
       ),
+      resizeToAvoidBottomInset: true,
       body: ViewWidget<res.Reservation>(
         meta: reservationState.meta,
         data: reservationState.data,
         refresh: () async => await ref
             .read(reservationProvider.notifier)
-            .fetch(roomPriceId: widget.roomPriceId),
+            .fetch(reservationId: widget.reservationId),
         forceShowLoaded: reservationState.data != null,
         onLoaded: (data) {
           final checkIn = data.checkInDate;
           final checkOut = data.checkOutDate;
-          final daysCount = checkOut.difference(checkIn).inDays;
+          final daysCount = checkOut.difference(checkIn).inDays + 1;
 
           return SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
+            // 🟢 إضافة مساحة للزر
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // name & logo
-                Row(
-                  children: [
-                    if (data.roomPrice?.room?.facility?.logo != null) ...[
-                      Container(
-                        height: 100,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withValues(alpha: 0.1 * 255),
-                              spreadRadius: 2,
-                              blurRadius: 7,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                          image: DecorationImage(
-                            image: NetworkImage(
-                                data.roomPrice!.room!.facility!.logo!),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                    ],
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "  ${data.roomPrice?.room?.facility?.name ?? trans().not_available}",
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: CustomTheme.primaryColor,
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.location_on_outlined,
-                                color: CustomTheme.color2,
-                                size: 16,
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                " ${data.roomPrice?.room?.facility?.address ?? trans().not_available}",
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  color: CustomTheme.color3,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                CustomHeaderDetailsWidget(
+                  logo: data.roomPrice?.room?.facility?.logo,
+                  name: data.roomPrice?.room?.facility?.name,
+                  address: data.roomPrice?.room?.facility?.address,
                 ),
 
                 const SizedBox(height: 10),
@@ -129,20 +77,20 @@ class _ReservationDetailsPageState
                 const SizedBox(height: 10),
 
                 // reservation date
-                CustomRowWidget(
+                CustomRowDetailsWidget(
                   icon: Icons.calendar_today,
                   label: trans().reservation_date,
                   value: data.checkInDate.toDateDateView(),
                 ),
                 if (checkOut.isAfter(checkIn)) ...[
                   const SizedBox(height: 12),
-                  CustomRowWidget(
+                  CustomRowDetailsWidget(
                     icon: Icons.date_range,
                     label: trans().number_of_days,
-                    value: "$daysCount ${trans().day}",
+                    value: formatDaysAr(daysCount),
                   ),
                   const SizedBox(height: 12),
-                  CustomRowWidget(
+                  CustomRowDetailsWidget(
                     icon: Icons.logout,
                     label: trans().check_out_date,
                     value: checkOut.toDateDateView(),
@@ -151,14 +99,14 @@ class _ReservationDetailsPageState
 
                 const SizedBox(height: 12),
                 // period
-                CustomRowWidget(
+                CustomRowDetailsWidget(
                   icon: Icons.playlist_add_check_rounded,
                   label: trans().period,
                   value: data.roomPrice?.period ?? trans().not_available,
                 ),
                 const SizedBox(height: 12),
                 // Time
-                CustomRowWidget(
+                CustomRowDetailsWidget(
                   icon: Icons.access_time,
                   label: trans().access_time,
                   value:
@@ -170,14 +118,14 @@ class _ReservationDetailsPageState
                 const SizedBox(height: 15),
 
                 // Attendance data
-                CustomRowWidget(
+                CustomRowDetailsWidget(
                   icon: Icons.personal_injury_outlined,
                   label: trans().attendance_type,
                   value: data.bookingType,
                 ),
                 const SizedBox(height: 12),
                 //
-                CustomRowWidget(
+                CustomRowDetailsWidget(
                   icon: Icons.groups_2_outlined,
                   label: trans().adults_count,
                   value: data.adultsCount != null
@@ -185,7 +133,7 @@ class _ReservationDetailsPageState
                       : trans().not_available,
                 ),
                 const SizedBox(height: 12),
-                CustomRowWidget(
+                CustomRowDetailsWidget(
                   icon: Icons.groups_2,
                   label: trans().children_count,
                   value: data.childrenCount != null
@@ -198,7 +146,7 @@ class _ReservationDetailsPageState
                 const SizedBox(height: 15),
 
                 // Price data
-                CustomRowWidget(
+                CustomRowDetailsWidget(
                   icon: Icons.price_check_rounded,
                   label: trans().total_price,
                   value: data.totalPrice != null
@@ -207,45 +155,38 @@ class _ReservationDetailsPageState
                 ),
 
                 const SizedBox(height: 12),
-                CustomRowWidget(
+                CustomRowDetailsWidget(
                   icon: Icons.money_off_csred,
                   label: "${trans().amount_to_be_paid} (${trans().deposit})",
                   value: data.roomPrice?.deposit != null
                       ? '${data.roomPrice!.deposit?.toInt()} ${trans().riyalY}'
                       : trans().not_available,
                 ),
-
-                const SizedBox(height: 20),
-                Center(
-                  child: Button(
-                    width: MediaQuery.of(context).size.width - 40,
-                    title: trans().payment_now,
-                    icon: Icon(
-                      Icons.arrow_forward,
-                      size: 20,
-                      color: Colors.white,
-                    ),
-                    iconAfterText: true,
-                    disable: false,
-                    onPressed: () async {
-                      Navigator.pushNamed(
-                        context,
-                        Routes.payment,
-                        arguments: data.id,
-                      );
-                    },
-                  ),
-                ),
               ],
             ),
           );
         },
         onLoading: () => const Center(child: CircularProgressIndicator()),
-        onEmpty: () => Center(
-          child: Text(trans().no_data),
-        ),
+        onEmpty: () => Center(child: Text(trans().no_data)),
         showError: true,
         showEmpty: true,
+      ),
+      bottomNavigationBar: SafeArea(
+        minimum: const EdgeInsets.all(16),
+        child: Button(
+          width: double.infinity,
+          title: trans().payment_now,
+          icon: const Icon(Icons.arrow_forward, size: 20, color: Colors.white),
+          iconAfterText: true,
+          disable: false,
+          onPressed: () async {
+            Navigator.pushNamed(
+              context,
+              Routes.payment,
+              arguments: reservationState.data?.id,
+            );
+          },
+        ),
       ),
     );
   }

@@ -67,8 +67,8 @@ void showPriceRangeBottomSheet({
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                final min = toEnglishNumbers(minController.text.trim());
-                final max = toEnglishNumbers(maxController.text.trim());
+                final min = convertToEnglishNumbers(minController.text.trim());
+                final max = convertToEnglishNumbers(maxController.text.trim());
                 if (min.isNotEmpty && max.isNotEmpty) {
                   onSelected('$min,$max');
                   Navigator.pop(context);

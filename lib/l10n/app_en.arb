@@ -227,7 +227,10 @@
   "share_subject": "Amazing app! Try it now 👇",
   "share_app_message": "Try our new booking app now!",
   "number_of_days": "Number of days",
-  "day": "day",
+  "day_1": "day",
+  "day_2": "2 days",
+  "day_3_10": "{count} days",
+  "day_11_plus": "{count} days",
   "booking_type_hint": "Please select the appropriate booking type (Family / Women / Men / Company)",
   "adults_hint": "Specify the number of adults attending.",
   "children_hint": "Specify the number of children (optional – only if applicable)"

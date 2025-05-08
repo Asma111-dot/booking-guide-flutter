@@ -30,19 +30,26 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
   late TextEditingController childrenController;
   final GlobalKey<FormState> reservationKey = GlobalKey<FormState>();
   String? bookingType;
+  late final ValueNotifier<bool> isButtonDisabled;
 
   @override
   void initState() {
     super.initState();
     adultsController = TextEditingController();
     childrenController = TextEditingController();
+    isButtonDisabled = ValueNotifier(true);
+
+    adultsController.addListener(_updateButtonState);
+    childrenController.addListener(_updateButtonState);
   }
 
-  @override
-  void dispose() {
-    adultsController.dispose();
-    childrenController.dispose();
-    super.dispose();
+  void _updateButtonState() {
+    final isDisabled = ref.read(reservationSaveProvider).isLoading() ||
+        bookingType == null ||
+        adultsController.text.trim().isEmpty ||
+        int.tryParse(adultsController.text.trim()) == 0;
+
+    isButtonDisabled.value = isDisabled;
   }
 
   InputDecoration _inputDecoration(String label, {bool hasError = false}) {
@@ -74,6 +81,14 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
   }
 
   @override
+  void dispose() {
+    adultsController.dispose();
+    childrenController.dispose();
+    isButtonDisabled.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final reservation = ref.watch(reservationSaveProvider);
     final roomPriceState = ref.watch(roomPricesProvider);
@@ -92,184 +107,180 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
           roomId: widget.roomPrice.reservations.first.id,
         ),
         forceShowLoaded: roomPriceState.data != null,
-        onLoaded: (data) => Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.only(bottom: 80),
-                child: Form(
-                  key: reservationKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+        onLoaded: (data) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.only(bottom: 100),
+            child: Form(
+              key: reservationKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Icon(Icons.info_outline,
-                              size: 16, color: Colors.grey),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              trans().booking_type_hint,
-                              style: TextStyle(
-                                  fontSize: 13, color: Colors.grey[700]),
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      DropdownButtonFormField<String>(
-                        value: bookingType,
-                        items: [
-                          DropdownMenuItem(
-                            value: 'عائلة',
-                            child: Text(trans().family),
-                          ),
-                          DropdownMenuItem(
-                            value: 'نساء',
-                            child: Text(trans().women),
-                          ),
-                          DropdownMenuItem(
-                            value: 'رجال',
-                            child: Text(trans().men),
-                          ),
-                          DropdownMenuItem(
-                            value: 'شركة',
-                            child: Text(trans().companies),
-                          ),
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            bookingType = value!;
-                          });
-                        },
-                        decoration: _inputDecoration(trans().booking_type),
-                        validator: (value) => value == null
-                            ? trans().please_choose_booking_type
-                            : null,
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          const Icon(Icons.people_alt_outlined,
-                              size: 16, color: Colors.grey),
-                          const SizedBox(width: 6),
-                          Text(
-                            trans().adults_hint,
-                            style: TextStyle(
-                                fontSize: 13, color: Colors.grey[700]),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      TextFormField(
-                        controller: adultsController,
-                        keyboardType: TextInputType.number,
-                        decoration: _inputDecoration(trans().adults_count),
-                        validator: (value) => value!.isEmpty
-                            ? trans().please_enter_adults_count
-                            : null,
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          const Icon(Icons.child_care_outlined,
-                              size: 16, color: Colors.grey),
-                          const SizedBox(width: 6),
-                          Text(
-                            trans().children_hint,
-                            style: TextStyle(
-                                fontSize: 13, color: Colors.grey[700]),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      TextFormField(
-                        controller: childrenController,
-                        keyboardType: TextInputType.number,
-                        decoration: _inputDecoration(trans().children_count),
-                        validator: (value) {
-                          if (value != null &&
-                              value.isNotEmpty &&
-                              int.tryParse(value) == null) {}
-                          return null;
-                        },
+                      const Icon(Icons.info_outline, size: 16, color: Colors.grey),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          trans().booking_type_hint,
+                          style: TextStyle(fontSize: 13, color: Colors.grey[700]),
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ],
                   ),
-                ),
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<String>(
+                    value: bookingType,
+                    items: [
+                      DropdownMenuItem(value: 'عائلة', child: Text(trans().family)),
+                      DropdownMenuItem(value: 'نساء', child: Text(trans().women)),
+                      DropdownMenuItem(value: 'رجال', child: Text(trans().men)),
+                      DropdownMenuItem(value: 'شركة', child: Text(trans().companies)),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        bookingType = value;
+                        _updateButtonState();
+                      });
+                    },
+                    decoration: _inputDecoration(trans().booking_type),
+                    validator: (value) =>
+                    value == null ? trans().please_choose_booking_type : null,
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      const Icon(Icons.people_alt_outlined,
+                          size: 16, color: Colors.grey),
+                      const SizedBox(width: 6),
+                      Text(
+                        trans().adults_hint,
+                        style: TextStyle(
+                            fontSize: 13, color: Colors.grey[700]),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: adultsController,
+                    keyboardType: TextInputType.number,
+                    decoration: _inputDecoration(trans().adults_count),
+                    validator: (value) =>
+                    value!.isEmpty ? trans().please_enter_adults_count : null,
+                    onChanged: (value) {
+                      final normalized = convertToEnglishNumbers(value);
+                      if (value != normalized) {
+                        adultsController.value = TextEditingValue(
+                          text: normalized,
+                          selection: TextSelection.collapsed(offset: normalized.length),
+                        );
+                      } else {
+                        _updateButtonState();
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      const Icon(Icons.child_care_outlined,
+                          size: 16, color: Colors.grey),
+                      const SizedBox(width: 6),
+                      Text(
+                        trans().children_hint,
+                        style: TextStyle(
+                            fontSize: 13, color: Colors.grey[700]),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: childrenController,
+                    keyboardType: TextInputType.number,
+                    decoration: _inputDecoration(trans().children_count),
+                    validator: (value) => null,
+                    onChanged: (value) {
+                      final normalized = convertToEnglishNumbers(value);
+                      if (value != normalized) {
+                        childrenController.value = TextEditingValue(
+                          text: normalized,
+                          selection: TextSelection.collapsed(offset: normalized.length),
+                        );
+                      }
+                    },
+                  ),
+                ],
               ),
             ),
-            Positioned(
-              left: 16,
-              right: 16,
-              bottom: 16,
-              child: Button(
-                width: double.infinity,
-                title: trans().completeTheReservation,
-                icon: const Icon(Icons.arrow_forward, size: 20, color: Colors.white),
-                iconAfterText: true,
-                disable: reservation.isLoading(),
-                onPressed: () async {
-                  if (reservationKey.currentState!.validate()) {
-                    final adultsCount = adultsController.text.isNotEmpty
-                        ? int.parse(adultsController.text)
-                        : 0;
-                    final childrenCount = childrenController.text.isNotEmpty
-                        ? int.parse(childrenController.text)
-                        : 0;
-                    final bookingType = this.bookingType ?? '';
+          ),
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        minimum: const EdgeInsets.all(16),
+        child: ValueListenableBuilder<bool>(
+          valueListenable: isButtonDisabled,
+          builder: (context, disabled, _) => Button(
+            width: double.infinity,
+            title: trans().completeTheReservation,
+            icon: const Icon(Icons.arrow_forward, size: 20, color: Colors.white),
+            iconAfterText: true,
+            disable: disabled,
+            onPressed: disabled
+                ? null
+                : () async {
+              if (reservationKey.currentState!.validate()) {
+                final adultsCount = int.parse(adultsController.text.trim());
+                final childrenCount = childrenController.text.isNotEmpty
+                    ? int.parse(childrenController.text.trim())
+                    : 0;
 
-                    if (bookingType.isEmpty || adultsCount == 0) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                            content: Text(
-                                trans().please_complete_data_correctly)),
-                      );
-                      return;
-                    }
+                try {
+                  final savedReservation = await ref
+                      .read(reservationSaveProvider.notifier)
+                      .saveReservation(
+                    reservation.data!,
+                    adultsCount: adultsCount,
+                    childrenCount: childrenCount,
+                    bookingType: bookingType!,
+                  );
 
-                    try {
-                      await ref
-                          .read(reservationSaveProvider.notifier)
-                          .saveReservation(
-                        reservation.data!,
-                        adultsCount: adultsCount,
-                        childrenCount: childrenCount,
-                        bookingType: bookingType,
-                      );
+                  if (savedReservation != null && savedReservation.id != 0) {
+                    await ref.read(reservationProvider.notifier).fetch(
+                      reservationId: savedReservation.id,
+                    );
 
-                      final reservationData = reservation.data;
-                      await ref.read(reservationProvider.notifier).fetch(
-                        roomPriceId: reservationData?.roomPriceId ?? 0,
-                      );
-
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        Routes.reservationDetails,
-                            (r) => false,
-                        arguments: reservationData?.roomPriceId,
-                      );
-                    } catch (error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                            content:
-                            Text(trans().error_occurred_during_save)),
-                      );
-                    }
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      Routes.reservationDetails,
+                          (r) => false,
+                      arguments: savedReservation.id,
+                    );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                          content: Text(trans().please_complete_data_correctly)),
+                        content: Text(
+                          "حدثت مشكلة في جلب تفاصيل الحجز، حاول مرة أخرى.",
+                        ),
+                      ),
                     );
                   }
-                },
-              ),
-            ),
-          ],
+                } catch (error) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(trans().error_occurred_during_save),
+                    ),
+                  );
+                }
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(trans().please_complete_data_correctly),
+                  ),
+                );
+              }
+            },
+          ),
         ),
       ),
     );

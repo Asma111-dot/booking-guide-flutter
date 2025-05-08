@@ -15,7 +15,8 @@ import '../providers/payment/payment_provider.dart';
 import '../utils/theme.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar_clipper.dart';
-import '../widgets/custom_row_widget.dart';
+import '../widgets/custom_header_details_widget.dart';
+import '../widgets/custom_row_details_widget.dart';
 import '../widgets/view_widget.dart';
 import 'navigation_menu.dart';
 
@@ -53,12 +54,10 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
       final file = await File('${tempDir.path}/payment_details.png').create();
       await file.writeAsBytes(pngBytes);
 
-      await Share.shareXFiles(
-        [XFile(file.path)],
-      );
+      await Share.shareXFiles([XFile(file.path)]);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text("حدث خطأ أثناء مشاركة الصورة"),
         ),
       );
@@ -69,205 +68,170 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
   Widget build(BuildContext context) {
     final paymentState = ref.watch(paymentProvider);
 
-    return RepaintBoundary(
-      key: _shareKey,
-      child: Scaffold(
-        appBar: CustomAppBarClipper(
-          title: trans().payment_details,
-        ),
-        body: ViewWidget<p.Payment>(
-          meta: paymentState.meta,
-          data: paymentState.data,
-          refresh: () async => await ref
-              .read(paymentProvider.notifier)
-              .fetch(paymentId: widget.paymentId),
-          forceShowLoaded: paymentState.data != null,
-          onLoaded: (data) {
-            final reservation = data.reservation;
+    return Scaffold(
+      backgroundColor: CustomTheme.whiteColor,
+      appBar: CustomAppBarClipper(title: trans().payment_details),
+      body: ViewWidget<p.Payment>(
+        meta: paymentState.meta,
+        data: paymentState.data,
+        refresh: () async => await ref
+            .read(paymentProvider.notifier)
+            .fetch(paymentId: widget.paymentId),
+        forceShowLoaded: paymentState.data != null,
+        onLoaded: (data) {
+          final reservation = data.reservation;
+          final checkIn = reservation?.checkInDate;
+          final checkOut = reservation?.checkOutDate;
+          final daysCount = (checkIn != null && checkOut != null)
+              ? checkOut.difference(checkIn).inDays + 1
+              : 0;
 
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      if (reservation?.roomPrice?.room?.facility?.logo != null)
-                        Container(
-                          height: 100,
-                          width: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: NetworkImage(reservation!
-                                  .roomPrice!.room!.facility!.logo!),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              reservation?.roomPrice?.room?.facility?.name ??
-                                  trans().not_available,
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: CustomTheme.primaryColor,
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                const Icon(Icons.location_on_outlined,
-                                    size: 16, color: CustomTheme.color2),
-                                const SizedBox(width: 8),
-                                Text(
-                                  reservation?.roomPrice?.room?.facility
-                                          ?.address ??
-                                      trans().not_available,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    color: CustomTheme.color3,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  const Divider(),
-                  const SizedBox(height: 10),
-                  Text(
-                    trans().payment_details,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: CustomTheme.primaryColor,
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: RepaintBoundary(
+              key: _shareKey,
+              child: Container(
+                color: CustomTheme.whiteColor,
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomHeaderDetailsWidget(
+                      logo: reservation?.roomPrice?.room?.facility?.logo,
+                      name: reservation?.roomPrice?.room?.facility?.name,
+                      address: reservation?.roomPrice?.room?.facility?.address,
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  CustomRowWidget(
-                      icon: Icons.price_change,
-                      label: trans().paid_amount,
-                      value: "${data.amount.toInt()} ${trans().riyalY}"),
-                  CustomRowWidget(
-                      icon: Icons.date_range,
-                      label: trans().payment_date,
-                      value: data.date.toDateView()),
-                  CustomRowWidget(
-                      icon: Icons.payment,
-                      label: trans().status,
-                      value: data.status),
-                  const Divider(height: 30),
-                  Text(
-                    trans().reservationDetails,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: CustomTheme.primaryColor,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  if (reservation != null) ...[
-                    CustomRowWidget(
-                        icon: Icons.calendar_today,
-                        label: trans().check_in_date,
-                        value: reservation.checkInDate.toDateDateView()),
-                    CustomRowWidget(
-                        icon: Icons.calendar_today_outlined,
-                        label: trans().check_out_date,
-                        value: reservation.checkOutDate.toDateDateView()),
-                    CustomRowWidget(
-                        icon: Icons.access_time,
-                        label: trans().access_time,
-                        value:
-                            "${reservation.roomPrice?.timeFrom?.fromTimeToDateTime()?.toTimeView() ?? '--:--'} - ${reservation.roomPrice?.timeTo?.fromTimeToDateTime()?.toTimeView() ?? '--:--'}"),
-                    CustomRowWidget(
-                        icon: Icons.people,
-                        label: trans().adults_count,
-                        value: "${reservation.adultsCount} ${trans().person}"),
-                    CustomRowWidget(
-                        icon: Icons.child_care,
-                        label: trans().children_count,
-                        value:
-                            "${reservation.childrenCount} ${trans().person}"),
-                    const Divider(height: 30),
+                    const SizedBox(height: 20),
+                    const Divider(),
+                    const SizedBox(height: 10),
                     Text(
-                      trans().other_details,
+                      trans().payment_details,
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: CustomTheme.primaryColor,
                       ),
                     ),
-                    CustomRowWidget(
-                        icon: Icons.money,
-                        label: trans().total_price,
-                        value:
-                            "${reservation.totalPrice?.toInt()} ${trans().riyalY}"),
-                    CustomRowWidget(
-                        icon: Icons.paid,
+                    const SizedBox(height: 10),
+                    CustomRowDetailsWidget(
+                        icon: Icons.price_change,
                         label: trans().paid_amount,
                         value: "${data.amount.toInt()} ${trans().riyalY}"),
-                    CustomRowWidget(
-                        icon: Icons.price_check,
-                        label: trans().remaining_amount,
-                        value:
-                            "${(reservation.totalPrice?.toInt() ?? 0) - (data.amount.toInt())} ${trans().riyalY}"),
+                    CustomRowDetailsWidget(
+                        icon: Icons.date_range,
+                        label: trans().payment_date,
+                        value: data.date.toDateView()),
+                    // CustomRowWidget(
+                    //     icon: Icons.payment,
+                    //     label: trans().status,
+                    //     value: data.status),
+                    const Divider(height: 30),
+                    Text(
+                      trans().reservationDetails,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: CustomTheme.primaryColor,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    if (reservation != null) ...[
+                      CustomRowDetailsWidget(
+                        icon: Icons.calendar_today,
+                        label: trans().check_in_date,
+                        value: reservation.checkInDate.toDateDateView(),
+                      ),
+                      CustomRowDetailsWidget(
+                        icon: Icons.calendar_today_outlined,
+                        label: trans().check_out_date,
+                        value: reservation.checkOutDate.toDateDateView(),
+                      ),
+                      CustomRowDetailsWidget(
+                        icon: Icons.date_range,
+                        label: trans().number_of_days,
+                        value: formatDaysAr(daysCount),
+                      ),
+                      CustomRowDetailsWidget(
+                          icon: Icons.access_time,
+                          label: trans().access_time,
+                          value:
+                              "${reservation.roomPrice?.timeFrom?.fromTimeToDateTime()?.toTimeView() ?? '--:--'} - ${reservation.roomPrice?.timeTo?.fromTimeToDateTime()?.toTimeView() ?? '--:--'}"),
+                      CustomRowDetailsWidget(
+                          icon: Icons.people,
+                          label: trans().adults_count,
+                          value:
+                              "${reservation.adultsCount} ${trans().person}"),
+                      CustomRowDetailsWidget(
+                          icon: Icons.child_care,
+                          label: trans().children_count,
+                          value:
+                              "${reservation.childrenCount} ${trans().person}"),
+                      const Divider(height: 30),
+                      Text(
+                        trans().other_details,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: CustomTheme.primaryColor,
+                        ),
+                      ),
+                      CustomRowDetailsWidget(
+                          icon: Icons.money,
+                          label: trans().total_price,
+                          value:
+                              "${reservation.totalPrice?.toInt()} ${trans().riyalY}"),
+                      CustomRowDetailsWidget(
+                          icon: Icons.paid,
+                          label: trans().paid_amount,
+                          value: "${data.amount.toInt()} ${trans().riyalY}"),
+                      CustomRowDetailsWidget(
+                          icon: Icons.price_check,
+                          label: trans().remaining_amount,
+                          value:
+                              "${(reservation.totalPrice?.toInt() ?? 0) - (data.amount.toInt())} ${trans().riyalY}"),
+                    ],
                   ],
-                ],
-              ),
-            );
-          },
-          onLoading: () => const Center(child: CircularProgressIndicator()),
-          onEmpty: () => Center(child: Text(trans().no_data)),
-          showError: true,
-          showEmpty: true,
-        ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: Button(
-                  title: trans().close_and_go_back,
-                  icon: const Icon(
-                    Icons.close,
-                    size: 20,
-                    color: CustomTheme.whiteColor,
-                  ),
-                  iconAfterText: true,
-                  disable: false,
-                  onPressed: () async {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (_) => NavigationMenu()),
-                    );
-                  },
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Button(
-                  title: trans().share,
-                  icon: const Icon(
-                    Icons.share,
-                    size: 20,
-                    color: CustomTheme.whiteColor,
-                  ),
-                  iconAfterText: true,
-                  disable: false,
-                  onPressed: _shareScreenshot,
-                ),
+            ),
+          );
+        },
+        onLoading: () => const Center(child: CircularProgressIndicator()),
+        onEmpty: () => Center(child: Text(trans().no_data)),
+        showError: true,
+        showEmpty: true,
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Expanded(
+              child: Button(
+                title: trans().close_and_go_back,
+                icon: const Icon(Icons.close,
+                    size: 20, color: CustomTheme.whiteColor),
+                iconAfterText: true,
+                disable: false,
+                onPressed: () async {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => NavigationMenu()),
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Button(
+                title: trans().share,
+                icon: const Icon(Icons.share,
+                    size: 20, color: CustomTheme.whiteColor),
+                iconAfterText: true,
+                disable: false,
+                onPressed: _shareScreenshot,
+              ),
+            ),
+          ],
         ),
       ),
     );
