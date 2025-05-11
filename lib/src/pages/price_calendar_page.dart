@@ -68,6 +68,9 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
 
     for (var reservation in selectedPrice.reservations) {
       try {
+        // ✅ تجاهل الحجوزات غير المؤكدة
+        if (reservation.status != 'confirmed') continue;
+
         final checkInDate = reservation.checkInDate is String
             ? DateTime.parse(reservation.checkInDate as String)
             : reservation.checkInDate;
@@ -85,6 +88,7 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
         debugPrint('Error processing reservation: $e');
       }
     }
+
     setState(() {});
   }
 

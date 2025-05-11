@@ -6,6 +6,7 @@ import '../helpers/general_helper.dart';
 import '../models/reservation.dart' as r;
 import '../providers/reservation/reservations_provider.dart';
 import '../utils/assets.dart';
+import '../utils/routes.dart';
 import '../utils/theme.dart';
 import '../extensions/date_formatting.dart';
 
@@ -101,116 +102,125 @@ class _BookingPageState extends ConsumerState<BookingPage>
         final daysCount = checkOut.difference(checkIn).inDays;
         final showDays = daysCount > 0;
 
-        return Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          elevation: 1,
-          margin: const EdgeInsets.only(bottom: 16),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: CachedNetworkImage(
-                    imageUrl: imageUrl,
-                    width: 110,
-                    height: 110,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) =>
-                    const Center(child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) => Image.asset(
-                      logoCoverImage,
+        return GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              Routes.bookingDetails, // تأكد من أن هذا route موجود في Routes
+              arguments: reservation.id,
+            );
+          },
+          child: Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            elevation: 1,
+            margin: const EdgeInsets.only(bottom: 16),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: CachedNetworkImage(
+                      imageUrl: imageUrl,
                       width: 110,
                       height: 110,
                       fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                      const Center(child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) => Image.asset(
+                        logoCoverImage,
+                        width: 110,
+                        height: 110,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        placeName,
-                        style: TextStyle(
-                          color: CustomTheme.primaryColor,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          placeName,
+                          style: TextStyle(
+                            color: CustomTheme.primaryColor,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        "${trans().reservation_date} : ${reservation.checkInDate.toDateView()}",
-                        style: TextStyle(
-                          color: CustomTheme.color1,
-                          fontSize: 15,
+                        const SizedBox(height: 6),
+                        Text(
+                          "${trans().reservation_date} : ${reservation.checkInDate.toDateView()}",
+                          style: TextStyle(
+                            color: CustomTheme.color1,
+                            fontSize: 15,
+                          ),
                         ),
-                      ),
-                      if (showDays)
+                        if (showDays)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: Text(
+                              "${trans().number_of_days} : ${formatDaysAr(daysCount)}",
+                              style: TextStyle(
+                                color: CustomTheme.color1,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
                         Padding(
                           padding: const EdgeInsets.only(top: 6),
                           child: Text(
-                            "${trans().number_of_days} : ${formatDaysAr(daysCount)}",
+                            "${trans().check_out_date} : ${reservation.checkOutDate.toDateView()}",
                             style: TextStyle(
                               color: CustomTheme.color1,
                               fontSize: 15,
                             ),
                           ),
                         ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 6),
-                        child: Text(
-                          "${trans().check_out_date} : ${reservation.checkOutDate.toDateView()}",
+          
+                        const SizedBox(height: 6),
+                        Text(
+                          "${trans().created_at} : ${reservation.createdAt?.toDateView()}",
                           style: TextStyle(
-                            color: CustomTheme.color1,
-                            fontSize: 15,
+                            color: CustomTheme.color2,
+                            fontSize: 14,
                           ),
                         ),
-                      ),
-
-                      const SizedBox(height: 6),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
                       Text(
-                        "${trans().created_at} : ${reservation.createdAt?.toDateView()}",
+                        "#${reservation.id}",
+                        style: const TextStyle(color: CustomTheme.color4, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "${reservation.totalPrice?.toStringAsFixed(0) ?? trans().priceNotAvailable} ${trans().riyalY}",
                         style: TextStyle(
-                          color: CustomTheme.color2,
-                          fontSize: 14,
+                          color: CustomTheme.color3,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: _getStatusColor(reservation.status),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Text(
+                          _getStatusText(reservation.status),
+                          style: const TextStyle(color: Colors.white, fontSize: 15),
                         ),
                       ),
                     ],
                   ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      "#${reservation.id}",
-                      style: const TextStyle(color: CustomTheme.color4, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      "${reservation.totalPrice?.toStringAsFixed(0) ?? trans().priceNotAvailable} ${trans().riyalY}",
-                      style: TextStyle(
-                        color: CustomTheme.color3,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: _getStatusColor(reservation.status),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Text(
-                        _getStatusText(reservation.status),
-                        style: const TextStyle(color: Colors.white, fontSize: 15),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

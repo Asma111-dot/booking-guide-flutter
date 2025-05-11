@@ -233,6 +233,8 @@
   "day_11_plus": "{count} days",
   "booking_type_hint": "Please select the appropriate booking type (Family / Women / Men / Company)",
   "adults_hint": "Specify the number of adults attending.",
-  "children_hint": "Specify the number of children (optional – only if applicable)"
+  "children_hint": "Specify the number of children (optional – only if applicable)",
+  "booking_not_confirmed_warning": "Note: The reservation is not confirmed until payment is completed.",
+  "go_back": "Back and return"
 
 }

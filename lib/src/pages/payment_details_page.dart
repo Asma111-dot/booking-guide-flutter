@@ -116,7 +116,8 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                     CustomRowDetailsWidget(
                         icon: Icons.price_change,
                         label: trans().paid_amount,
-                        value: "${data.amount.toInt()} ${trans().riyalY}"),
+                        value:
+                            "${data.reservation?.totalDeposit?.toInt()} ${trans().riyalY}"),
                     CustomRowDetailsWidget(
                         icon: Icons.date_range,
                         label: trans().payment_date,
@@ -183,12 +184,14 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                       CustomRowDetailsWidget(
                           icon: Icons.paid,
                           label: trans().paid_amount,
-                          value: "${data.amount.toInt()} ${trans().riyalY}"),
-                      CustomRowDetailsWidget(
-                          icon: Icons.price_check,
-                          label: trans().remaining_amount,
                           value:
-                              "${(reservation.totalPrice?.toInt() ?? 0) - (data.amount.toInt())} ${trans().riyalY}"),
+                              "${data.reservation?.totalDeposit?.toInt()} ${trans().riyalY}"),
+                      CustomRowDetailsWidget(
+                        icon: Icons.price_check,
+                        label: trans().remaining_amount,
+                        value:
+                            "${((reservation.totalPrice ?? 0) - (data.reservation?.totalDeposit ?? 0)).toInt()} ${trans().riyalY}",
+                      ),
                     ],
                   ],
                 ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/facility.dart';
 import '../models/room_price.dart';
+import '../pages/booking_details_page.dart';
 import '../pages/facility_filter_page.dart';
 import '../pages/facility_page.dart';
 import '../pages/map_page.dart';
@@ -29,6 +30,7 @@ class Routes {
   static const String myBookings = '/my_reservations';
   static const String priceAndCalendar = '/price_calendar';
   static const String reservationDetails = '/reservation_details';
+  static const String bookingDetails = '/booking-details';
   static const String payment = '/payment';
   static const String paymentDetails = '/payment_details';
   static const String map = '/map';
@@ -88,6 +90,14 @@ class Routes {
           builder: (_) => ReservationDetailsPage(reservationId: reservationId,),
           settings: settings,
         );
+
+      case bookingDetails:
+        final reservationId = settings.arguments as int;
+        return MaterialPageRoute(
+          builder: (_) => BookingDetailsPage(reservationId: reservationId),
+          settings: settings,
+        );
+
       case payment:
         return MaterialPageRoute(
           builder: (_) => PaymentPage(reservationId: args as int),

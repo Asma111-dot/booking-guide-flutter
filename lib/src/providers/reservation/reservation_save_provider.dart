@@ -52,6 +52,7 @@ class ReservationSave extends _$ReservationSave {
     requestBody['adults_count'] = adultsCount;
     requestBody['children_count'] = childrenCount;
     requestBody['booking_type'] = bookingType;
+    requestBody['status'] = 'cancelled'; // 👈 نرسلها يدويًا بالحالة الملغاة
 
     try {
       final response = await request<res.Reservation>(

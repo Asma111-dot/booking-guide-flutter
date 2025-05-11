@@ -38,16 +38,16 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
     adultsController = TextEditingController();
     childrenController = TextEditingController();
     isButtonDisabled = ValueNotifier(true);
-
-    adultsController.addListener(_updateButtonState);
-    childrenController.addListener(_updateButtonState);
   }
 
   void _updateButtonState() {
+    final rawText = adultsController.text.trim();
+    final normalizedText = convertToEnglishNumbers(rawText); // ✅ التحويل هنا
+
     final isDisabled = ref.read(reservationSaveProvider).isLoading() ||
         bookingType == null ||
-        adultsController.text.trim().isEmpty ||
-        int.tryParse(adultsController.text.trim()) == 0;
+        normalizedText.isEmpty ||
+        int.tryParse(normalizedText) == 0;
 
     isButtonDisabled.value = isDisabled;
   }
@@ -104,8 +104,8 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
         meta: roomPriceState.meta,
         data: roomPriceState.data,
         refresh: () => ref.read(roomPricesProvider.notifier).fetch(
-          roomId: widget.roomPrice.reservations.first.id,
-        ),
+              roomId: widget.roomPrice.reservations.first.id,
+            ),
         forceShowLoaded: roomPriceState.data != null,
         onLoaded: (data) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -118,12 +118,14 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                 children: [
                   Row(
                     children: [
-                      const Icon(Icons.info_outline, size: 16, color: Colors.grey),
+                      const Icon(Icons.info_outline,
+                          size: 16, color: Colors.grey),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           trans().booking_type_hint,
-                          style: TextStyle(fontSize: 13, color: Colors.grey[700]),
+                          style:
+                              TextStyle(fontSize: 13, color: Colors.grey[700]),
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -134,20 +136,24 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                   DropdownButtonFormField<String>(
                     value: bookingType,
                     items: [
-                      DropdownMenuItem(value: 'عائلة', child: Text(trans().family)),
-                      DropdownMenuItem(value: 'نساء', child: Text(trans().women)),
+                      DropdownMenuItem(
+                          value: 'عائلة', child: Text(trans().family)),
+                      DropdownMenuItem(
+                          value: 'نساء', child: Text(trans().women)),
                       DropdownMenuItem(value: 'رجال', child: Text(trans().men)),
-                      DropdownMenuItem(value: 'شركة', child: Text(trans().companies)),
+                      DropdownMenuItem(
+                          value: 'شركة', child: Text(trans().companies)),
                     ],
                     onChanged: (value) {
                       setState(() {
                         bookingType = value;
-                        _updateButtonState();
                       });
+                      _updateButtonState(); // ✅ خارج setState لضمان التحديث
                     },
                     decoration: _inputDecoration(trans().booking_type),
-                    validator: (value) =>
-                    value == null ? trans().please_choose_booking_type : null,
+                    validator: (value) => value == null
+                        ? trans().please_choose_booking_type
+                        : null,
                   ),
                   const SizedBox(height: 20),
                   Row(
@@ -157,30 +163,32 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                       const SizedBox(width: 6),
                       Text(
                         trans().adults_hint,
-                        style: TextStyle(
-                            fontSize: 13, color: Colors.grey[700]),
+                        style: TextStyle(fontSize: 13, color: Colors.grey[700]),
                       ),
                     ],
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
-                    controller: adultsController,
-                    keyboardType: TextInputType.number,
-                    decoration: _inputDecoration(trans().adults_count),
-                    validator: (value) =>
-                    value!.isEmpty ? trans().please_enter_adults_count : null,
-                    onChanged: (value) {
-                      final normalized = convertToEnglishNumbers(value);
-                      if (value != normalized) {
-                        adultsController.value = TextEditingValue(
-                          text: normalized,
-                          selection: TextSelection.collapsed(offset: normalized.length),
-                        );
-                      } else {
-                        _updateButtonState();
-                      }
-                    },
-                  ),
+                      controller: adultsController,
+                      keyboardType: TextInputType.number,
+                      decoration: _inputDecoration(trans().adults_count),
+                      validator: (value) => value!.isEmpty
+                          ? trans().please_enter_adults_count
+                          : null,
+                      onChanged: (value) {
+                        final normalized = convertToEnglishNumbers(value);
+                        if (value != normalized) {
+                          adultsController.value = TextEditingValue(
+                            text: normalized,
+                            selection: TextSelection.collapsed(
+                                offset: normalized.length),
+                          );
+                        }
+                        // ✅ تأكد أن الزر يتم تحديثه بعد التعديل البصري
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _updateButtonState();
+                        });
+                      }),
                   const SizedBox(height: 20),
                   Row(
                     children: [
@@ -189,8 +197,7 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                       const SizedBox(width: 6),
                       Text(
                         trans().children_hint,
-                        style: TextStyle(
-                            fontSize: 13, color: Colors.grey[700]),
+                        style: TextStyle(fontSize: 13, color: Colors.grey[700]),
                       ),
                     ],
                   ),
@@ -205,7 +212,8 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                       if (value != normalized) {
                         childrenController.value = TextEditingValue(
                           text: normalized,
-                          selection: TextSelection.collapsed(offset: normalized.length),
+                          selection: TextSelection.collapsed(
+                              offset: normalized.length),
                         );
                       }
                     },
@@ -223,63 +231,66 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
           builder: (context, disabled, _) => Button(
             width: double.infinity,
             title: trans().completeTheReservation,
-            icon: const Icon(Icons.arrow_forward, size: 20, color: Colors.white),
+            icon:
+                const Icon(Icons.arrow_forward, size: 20, color: Colors.white),
             iconAfterText: true,
             disable: disabled,
             onPressed: disabled
                 ? null
                 : () async {
-              if (reservationKey.currentState!.validate()) {
-                final adultsCount = int.parse(adultsController.text.trim());
-                final childrenCount = childrenController.text.isNotEmpty
-                    ? int.parse(childrenController.text.trim())
-                    : 0;
+                    if (reservationKey.currentState!.validate()) {
+                      final adultsCount =
+                          int.parse(adultsController.text.trim());
+                      final childrenCount = childrenController.text.isNotEmpty
+                          ? int.parse(childrenController.text.trim())
+                          : 0;
 
-                try {
-                  final savedReservation = await ref
-                      .read(reservationSaveProvider.notifier)
-                      .saveReservation(
-                    reservation.data!,
-                    adultsCount: adultsCount,
-                    childrenCount: childrenCount,
-                    bookingType: bookingType!,
-                  );
+                      try {
+                        final savedReservation = await ref
+                            .read(reservationSaveProvider.notifier)
+                            .saveReservation(
+                              reservation.data!,
+                              adultsCount: adultsCount,
+                              childrenCount: childrenCount,
+                              bookingType: bookingType!,
+                            );
 
-                  if (savedReservation != null && savedReservation.id != 0) {
-                    await ref.read(reservationProvider.notifier).fetch(
-                      reservationId: savedReservation.id,
-                    );
+                        if (savedReservation != null &&
+                            savedReservation.id != 0) {
+                          await ref.read(reservationProvider.notifier).fetch(
+                                reservationId: savedReservation.id,
+                              );
 
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      Routes.reservationDetails,
-                          (r) => false,
-                      arguments: savedReservation.id,
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          "حدثت مشكلة في جلب تفاصيل الحجز، حاول مرة أخرى.",
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            Routes.reservationDetails,
+                            (r) => false,
+                            arguments: savedReservation.id,
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                "حدثت مشكلة في جلب تفاصيل الحجز، حاول مرة أخرى.",
+                              ),
+                            ),
+                          );
+                        }
+                      } catch (error) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(trans().error_occurred_during_save),
+                          ),
+                        );
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(trans().please_complete_data_correctly),
                         ),
-                      ),
-                    );
-                  }
-                } catch (error) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(trans().error_occurred_during_save),
-                    ),
-                  );
-                }
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(trans().please_complete_data_correctly),
-                  ),
-                );
-              }
-            },
+                      );
+                    }
+                  },
           ),
         ),
       ),

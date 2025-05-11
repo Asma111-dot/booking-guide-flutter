@@ -12,6 +12,7 @@ class Reservation {
   DateTime checkOutDate;
   String? status;
   double? totalPrice;
+  double? totalDeposit;
   String bookingType;
   int? adultsCount;
   int? childrenCount;
@@ -29,6 +30,7 @@ class Reservation {
     required this.checkOutDate,
     this.status,
     this.totalPrice,
+    this.totalDeposit,
     required this.bookingType,
     this.adultsCount,
     this.childrenCount,
@@ -45,6 +47,7 @@ class Reservation {
         checkOutDate = DateTime.now(),
         status = '',
         totalPrice = 0.0,
+        totalDeposit = 0.0,
         bookingType = '',
         adultsCount = 0,
         childrenCount = 0,
@@ -52,55 +55,30 @@ class Reservation {
         roomPrice = null,
         createdAt = null;
 
-  // factory Reservation.fromJson(Map<String, dynamic> jsonMap) {
-  //   if (jsonMap['user_id'] == null) {
-  //     print('Warning: user_id is null or missing!');
-  //   }
-  //
-  //   return Reservation(
-  //     id: jsonMap['id'] ?? 0,
-  //     userId: jsonMap['user_id'] ?? 0,
-  //     roomPriceId: jsonMap['room_price_id'] ?? 0,
-  //     checkInDate:
-  //         DateTime.tryParse(jsonMap['check_in_date'] ?? '') ?? DateTime.now(),
-  //     checkOutDate:
-  //         DateTime.tryParse(jsonMap['check_out_date'] ?? '') ?? DateTime.now(),
-  //     status: jsonMap['status'],
-  //     totalPrice: jsonMap['total_price'] != null
-  //         ? double.tryParse(jsonMap['total_price'].toString()) ?? 0.0
-  //         : 0.0,
-  //     bookingType: jsonMap['booking_type'] ?? '',
-  //     adultsCount: jsonMap['adults_count'] ?? 0,
-  //     childrenCount: jsonMap['children_count'] ?? 0,
-  //     payments: (jsonMap['payments'] as List<dynamic>?)
-  //             ?.map((item) => Payment.fromJson(item))
-  //             .toList() ??
-  //         [],
-  //     roomPrice: jsonMap['room_price'] != null
-  //         ? RoomPrice.fromJson(jsonMap['room_price'])
-  //         : null,
-  //     createdAt: jsonMap['created_at'] != null
-  //         ? DateTime.tryParse(jsonMap['created_at'])
-  //         : null,
-  //   );
-  // }
-
   factory Reservation.fromJson(Map<String, dynamic> jsonMap) {
     return Reservation(
       id: jsonMap['id'] ?? 0,
       userId: jsonMap['user_id'] ?? 0,
       roomPriceId: jsonMap['room_price_id'] ?? 0,
-      checkInDate: DateTime.tryParse(jsonMap['check_in_date']?.toString() ?? '') ?? DateTime.now(),
-      checkOutDate: DateTime.tryParse(jsonMap['check_out_date']?.toString() ?? '') ?? DateTime.now(),
+      checkInDate:
+          DateTime.tryParse(jsonMap['check_in_date']?.toString() ?? '') ??
+              DateTime.now(),
+      checkOutDate:
+          DateTime.tryParse(jsonMap['check_out_date']?.toString() ?? '') ??
+              DateTime.now(),
       status: jsonMap['status'],
       totalPrice: (jsonMap['total_price'] != null)
           ? double.tryParse(jsonMap['total_price'].toString()) ?? 0.0
+          : 0.0,
+      totalDeposit: (jsonMap['total_deposit'] != null)
+          ? double.tryParse(jsonMap['total_deposit'].toString()) ?? 0.0
           : 0.0,
       bookingType: jsonMap['booking_type'] ?? '',
       adultsCount: jsonMap['adults_count'] ?? 0,
       childrenCount: jsonMap['children_count'] ?? 0,
       payments: (jsonMap['payments'] is List)
-          ? List<Payment>.from((jsonMap['payments'] as List).map((item) => Payment.fromJson(item)))
+          ? List<Payment>.from((jsonMap['payments'] as List)
+              .map((item) => Payment.fromJson(item)))
           : [],
       roomPrice: (jsonMap['room_price'] is Map)
           ? RoomPrice.fromJson(jsonMap['room_price'])
@@ -118,6 +96,7 @@ class Reservation {
       'check_out_date': checkOutDate.toSqlDateOnly(),
       'status': status,
       'total_price': totalPrice,
+      'total_deposit': totalDeposit,
       'booking_type': bookingType,
       'adults_count': adultsCount,
       'children_count': childrenCount,
@@ -142,7 +121,7 @@ class Reservation {
 
   @override
   String toString() {
-    return 'Reservation(id: $id, userId: $userId, roomPriceId: $roomPriceId, checkInDate: "$checkInDate", checkOutDate: "$checkOutDate", status: "$status", totalPrice: $totalPrice, bookingType: "$bookingType", adultsCount: $adultsCount, childrenCount: $childrenCount)';
+    return 'Reservation(id: $id, userId: $userId, roomPriceId: $roomPriceId, checkInDate: "$checkInDate", checkOutDate: "$checkOutDate", status: "$status", totalPrice: $totalPrice,totalDeposit: $totalDeposit,bookingType: "$bookingType", adultsCount: $adultsCount, childrenCount: $childrenCount)';
   }
 
   @override
@@ -157,6 +136,7 @@ class Reservation {
             checkOutDate == other.checkOutDate &&
             status == other.status &&
             totalPrice == other.totalPrice &&
+            totalDeposit == other.totalDeposit &&
             bookingType == other.bookingType &&
             adultsCount == other.adultsCount &&
             childrenCount == other.childrenCount;
@@ -171,6 +151,7 @@ class Reservation {
       checkOutDate.hashCode ^
       status.hashCode ^
       totalPrice.hashCode ^
+      totalDeposit.hashCode ^
       bookingType.hashCode ^
       adultsCount.hashCode ^
       childrenCount.hashCode;
