@@ -16,7 +16,8 @@ class CustomTheme {
 
   String getFont(String languageCode) {
     // return 'Cairo';
-    return 'Tajawal';
+    // return 'Tajawal';
+    return 'GESS';
   }
 
 
@@ -63,7 +64,7 @@ class CustomTheme {
 
   scaffoldColor() => isDark ? Color(0xff383838) : Color(0xffF0F0F0);
 
-  lightBackgroundColor() => isDark ? Color(0xff) : Color(0xff4A90E2);
+  lightBackgroundColor() => isDark ? Color(0xffffffff) : Color(0xff4A90E2);
 
   appBarColor() => isDark ? Colors.grey[900] : Color(0xff4A90E2);
 

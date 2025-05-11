@@ -145,12 +145,21 @@ flutter:
         - asset: assets/fonts/Tajawal/Tajawal-Black.ttf
           weight: 900
 
+    - family: GESS
+      fonts:
+        - asset: assets/fonts/GESS/GE_SS_Two_Light.otf
+          weight: 300
+        - asset: assets/fonts/GESS/GE_SS_Two_Medium.otf
+          weight: 500
+        - asset: assets/fonts/GESS/GE_SS_Two_Bold.otf
+          weight: 700
+
 
 
 l10n:
-    arb-dir: lib/l10n
-    template-arb-file: app_en.arb
-    output-localization-file: app_localizations.dart
+  arb-dir: lib/l10n
+  template-arb-file: app_en.arb
+  output-localization-file: app_localizations.dart
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
