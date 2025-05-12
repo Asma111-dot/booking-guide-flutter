@@ -5,6 +5,7 @@ import '../models/reservation.dart';
 import '../models/room_price.dart';
 import '../helpers/general_helper.dart';
 import '../providers/reservation/reservation_save_provider.dart';
+import '../providers/reservation/reservations_provider.dart';
 import '../providers/room_price/room_prices_provider.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
@@ -54,7 +55,6 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
       });
     }
   }
-
   void _populateEvents({RoomPrice? selectedPrice}) {
     events.clear();
     final roomPrices = ref.read(roomPricesProvider).data;
@@ -66,21 +66,16 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
       return;
     }
 
+    // ✅ 1. حجوزات النظام (من قاعدة البيانات)
     for (var reservation in selectedPrice.reservations) {
       try {
-        // ✅ تجاهل الحجوزات غير المؤكدة
         if (reservation.status != 'confirmed') continue;
 
-        final checkInDate = reservation.checkInDate is String
-            ? DateTime.parse(reservation.checkInDate as String)
-            : reservation.checkInDate;
-        final checkOutDate = reservation.checkOutDate is String
-            ? DateTime.parse(reservation.checkOutDate as String)
-            : reservation.checkOutDate;
+        final checkInDate = DateTime.parse(reservation.checkInDate.toString());
+        final checkOutDate = DateTime.parse(reservation.checkOutDate.toString());
 
         DateTime currentDate = checkInDate;
-        while (currentDate.isBefore(checkOutDate) ||
-            currentDate.isAtSameMomentAs(checkOutDate)) {
+        while (currentDate.isBefore(checkOutDate) || currentDate.isAtSameMomentAs(checkOutDate)) {
           events[currentDate] = [...(events[currentDate] ?? []), reservation];
           currentDate = currentDate.add(const Duration(days: 1));
         }
@@ -89,12 +84,62 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
       }
     }
 
+    // ✅ 2. تواريخ Google Calendar
+    final bookedDates = ref.read(reservationsProvider.notifier).bookedDates;
+    for (final dateStr in bookedDates) {
+      try {
+        final date = DateTime.parse(dateStr);
+        events[date] = [...(events[date] ?? []), 'محجوز من Google Calendar'];
+      } catch (e) {
+        debugPrint('Invalid date from Google Calendar: $dateStr');
+      }
+    }
+
     setState(() {});
   }
+
+  // void _populateEvents({RoomPrice? selectedPrice}) {
+  //   events.clear();
+  //   final roomPrices = ref.read(roomPricesProvider).data;
+  //
+  //   if (roomPrices == null || selectedPrice == null) {
+  //     setState(() {
+  //       events = {};
+  //     });
+  //     return;
+  //   }
+  //
+  //   for (var reservation in selectedPrice.reservations) {
+  //     try {
+  //       // ✅ تجاهل الحجوزات غير المؤكدة
+  //       if (reservation.status != 'confirmed') continue;
+  //
+  //       final checkInDate = reservation.checkInDate is String
+  //           ? DateTime.parse(reservation.checkInDate as String)
+  //           : reservation.checkInDate;
+  //       final checkOutDate = reservation.checkOutDate is String
+  //           ? DateTime.parse(reservation.checkOutDate as String)
+  //           : reservation.checkOutDate;
+  //
+  //       DateTime currentDate = checkInDate;
+  //       while (currentDate.isBefore(checkOutDate) ||
+  //           currentDate.isAtSameMomentAs(checkOutDate)) {
+  //         events[currentDate] = [...(events[currentDate] ?? []), reservation];
+  //         currentDate = currentDate.add(const Duration(days: 1));
+  //       }
+  //     } catch (e) {
+  //       debugPrint('Error processing reservation: $e');
+  //     }
+  //   }
+  //
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
     final roomPriceState = ref.watch(roomPricesProvider);
+    final reservationsNotifier = ref.watch(reservationsProvider.notifier);
+    final bookedDatesFromGoogle = reservationsNotifier.bookedDates;
 
     return Scaffold(
       backgroundColor: Colors.white,

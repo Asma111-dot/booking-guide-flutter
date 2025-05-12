@@ -69,7 +69,7 @@ String getFacilitiesUrl({int? facilityTypeId}) {
 String searchFacilitiesUrl(Map<String, String> filters) {
   String url = "${apiUrl}facilities/search";
   if (filters.isNotEmpty) {
-    url += '?' + Uri(queryParameters: filters).query;
+    url += '?${Uri(queryParameters: filters).query}';
   }
   return url;
 }

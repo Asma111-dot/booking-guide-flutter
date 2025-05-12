@@ -114,132 +114,137 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Button(
-          width: MediaQuery.of(context).size.width - 40,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width - 40,
           title: trans().completeTheReservation,
           disable: selectedPaymentMethod == null || isLoading,
           icon: isLoading
               ? const CircularProgressIndicator(color: CustomTheme.color2)
               : const Icon(
-                  Icons.arrow_forward,
-                  size: 20,
-                  color: Colors.white,
-                ),
+            Icons.arrow_forward,
+            size: 20,
+            color: Colors.white,
+          ),
           iconAfterText: true,
           onPressed: selectedPaymentMethod == null || isLoading
               ? null
               : () async {
-                  setState(() {
-                    isLoading = true;
-                  });
-                  if (selectedPaymentMethod == 'فلوسك') {
-                    final payment = pay.Payment.basic(
-                      reservationId: widget.reservationId,
-                    );
+            setState(() {
+              isLoading = true;
+            });
+            if (selectedPaymentMethod == 'فلوسك') {
+              final payment = pay.Payment.basic(
+                reservationId: widget.reservationId,
+              );
 
-                    await paymentState.savePayment(payment);
-                    final currentState = ref.read(paymentSaveProvider);
+              await paymentState.savePayment(payment);
+              final currentState = ref.read(paymentSaveProvider);
 
-                    if (currentState.isLoaded()) {
-                      paymentId = currentState.data?.id;
+              if (currentState.isLoaded()) {
+                paymentId = currentState.data?.id;
 
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          final TextEditingController confirmationController =
-                              TextEditingController();
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    final TextEditingController confirmationController =
+                    TextEditingController();
 
-                          return AlertDialog(
-                            title: Text(
-                              (trans().confirm_payment),
-                              style: TextStyle(
-                                color: CustomTheme.color2,
-                                fontWeight: FontWeight.bold,
-                              ),
+                    return AlertDialog(
+                      title: Text(
+                        (trans().confirm_payment),
+                        style: TextStyle(
+                          color: CustomTheme.color2,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      content: TextField(
+                        controller: confirmationController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          hintText: trans().enter_confirmation_number,
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(trans().cancel),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            final confirmationCode = int.tryParse(
+                                convertToEnglishNumbers(
+                                    confirmationController.text.trim()));
+
+                            if (confirmationCode != null) {
+                              Navigator.of(context).pop();
+
+                              if (paymentId != null) {
+                                await paymentConfirm.confirmPayment(
+                                  paymentId!,
+                                  confirmationCode,
+                                );
+
+                                final confirmState =
+                                ref.read(paymentConfirmProvider);
+
+                                if (confirmState.isLoaded()) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        trans()
+                                            .payment_confirmed_successfully,
+                                        style: TextStyle(
+                                          color: CustomTheme.color2,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(
+                                    SnackBar(
+                                      content:
+                                      Text(confirmState.meta.message),
+                                    ),
+                                  );
+                                }
+                              }
+                            }
+                          },
+                          child: Text(
+                            trans().verify,
+                            style: TextStyle(
+                              color: CustomTheme.primaryColor,
+                              fontWeight: FontWeight.bold,
                             ),
-                            content: TextField(
-                              controller: confirmationController,
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                hintText: trans().enter_confirmation_number,
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text(trans().cancel),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  final confirmationCode = int.tryParse(
-                                      convertToEnglishNumbers(
-                                          confirmationController.text.trim()));
-
-                                  if (confirmationCode != null) {
-                                    Navigator.of(context).pop();
-
-                                    if (paymentId != null) {
-                                      await paymentConfirm.confirmPayment(
-                                        paymentId!,
-                                        confirmationCode,
-                                      );
-
-                                      final confirmState =
-                                          ref.read(paymentConfirmProvider);
-
-                                      if (confirmState.isLoaded()) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              trans()
-                                                  .payment_confirmed_successfully,
-                                              style: TextStyle(
-                                                color: CustomTheme.color2,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content:
-                                                Text(confirmState.meta.message),
-                                          ),
-                                        );
-                                      }
-                                    }
-                                  }
-                                },
-                                child: Text(
-                                  trans().verify,
-                                  style: TextStyle(
-                                    color: CustomTheme.primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            currentState.meta.message,
                           ),
                         ),
-                      );
-                    }
-                  }
-                  setState(() {
-                    isLoading = false;
-                  });
-                },
+                      ],
+                    );
+                  },
+                );
+              } else {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        currentState.meta.message,
+                      ),
+                    ),
+                  );
+                }
+              }
+            }
+            setState(() {
+              isLoading = false;
+            });
+          },
         ),
       ),
     );
