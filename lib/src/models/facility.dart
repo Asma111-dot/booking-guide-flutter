@@ -13,7 +13,7 @@ class Facility {
   String? logo;
   bool isFavorite;
   double? price;
-  int? firstRoomId; // ✅ تمت إضافته
+  int? firstRoomId;
 
   List<Room> rooms;
 

@@ -126,9 +126,22 @@ Future<Response<T>> request<T>({
       }
 
       try {
+        // if (parsed is Map && parsed.containsKey(key)) {
+        //   if (parsed[key] is List) {
+        //     data = listModel<T>(parsed[key]);
+        //   } else if (parsed[key] is Map) {
+        //     data = model<T>(parsed[key]);
+        //   } else {
+        //     data = parsed[key];
+        //   }
         if (parsed is Map && parsed.containsKey(key)) {
           if (parsed[key] is List) {
-            data = listModel<T>(parsed[key]);
+            // ✅ معالجة خاصة إذا كنا نطلب List<String>
+            if (T.toString() == 'List<String>') {
+              data = List<String>.from(parsed[key].map((e) => e.toString()));
+            } else {
+              data = listModel<T>(parsed[key]);
+            }
           } else if (parsed[key] is Map) {
             data = model<T>(parsed[key]);
           } else {

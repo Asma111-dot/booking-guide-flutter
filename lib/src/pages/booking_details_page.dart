@@ -37,6 +37,7 @@ class _BookingDetailsPageState extends ConsumerState<BookingDetailsPage> {
       backgroundColor: Colors.white,
       appBar: CustomAppBarClipper(
         title: trans().reservationDetails,
+
       ),
       body: ViewWidget<res.Reservation>(
         meta: reservationState.meta,

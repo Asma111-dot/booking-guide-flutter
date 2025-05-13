@@ -7,7 +7,6 @@ import '../../utils/urls.dart';
 
 part 'reservations_provider.g.dart';
 
-
 @Riverpod(keepAlive: false)
 class Reservations extends _$Reservations {
   List<String> bookedDates = [];
@@ -20,61 +19,61 @@ class Reservations extends _$Reservations {
     state = state.copyWith();
   }
 
+  Future<void> fetchBookedDates(int facilityId) async {
+    state = state.setLoading();
+
+    try {
+      final response = await request<List<String>>(
+        url: getBookedDatesUrl(facilityId),
+        method: Method.get,
+        key: 'dates',
+      );
+
+      bookedDates = response.data ?? [];
+      print("📅 التواريخ المحجوزة: $bookedDates");
+
+      state = state.setLoaded();
+    } catch (e, s) {
+      print("❌ Error fetching booked dates from Google Calendar: $e");
+      print("📌 Stacktrace: $s");
+      state = state.setError(e.toString());
+    }
+  }
+
   Future fetch({required int userId, int? facilityId}) async {
     state = state.setLoading();
 
     try {
-      final response = await request<Map<String, dynamic>>(
+      final response = await request<dynamic>(
         url: facilityId != null
             ? "${getReservationsUrl()}?facility_id=$facilityId"
             : getReservationsUrl(userId: userId),
         method: Method.get,
       );
 
-      final reservationsJson = response.data?['data'] ?? [];
-      final bookedDatesJson = response.data?['booked_dates'] ?? [];
+      final raw = response.data;
+      List<dynamic> reservationsJson;
+
+      if (raw is Map<String, dynamic> && raw['data'] is List) {
+        reservationsJson = raw['data'];
+      } else if (raw is List) {
+        reservationsJson = raw;
+      } else {
+        throw Exception("Invalid response format: Unable to parse reservations");
+      }
 
       final reservations = Reservation.fromJsonList(reservationsJson)
           .where((reservation) => reservation.userId == userId)
           .toList();
 
-      // تحديث حالة المزود بالبيانات
-      bookedDates = List<String>.from(bookedDatesJson);
-
       state = state.copyWith(data: reservations, meta: response.meta);
       state = state.setLoaded();
     } catch (e, s) {
-      print("Error while fetching reservations: $e");
-      print("Stacktrace: $s");
+      print("❌ Error while fetching reservations: $e");
+      print("📌 Stacktrace: $s");
       state = state.setError(e.toString());
     }
   }
-
-  // Future fetch({required int userId}) async {
-  //   state = state.setLoading();
-  //   try {
-  //     await request<List<dynamic>>(
-  //       url: getReservationsUrl(userId: userId),
-  //       method: Method.get,
-  //     ).then((value) async {
-  //       final reservationsJson = value.data ?? [];
-  //
-  //       final reservations = Reservation.fromJsonList(reservationsJson)
-  //           .where((reservation) => reservation.userId == userId)
-  //           .toList();
-  //
-  //       state = state.copyWith(data: reservations, meta: value.meta);
-  //       state = state.setLoaded();
-  //     }).catchError((error) {
-  //       print("Error while fetching reservations: $error");
-  //       state = state.setError(error.toString());
-  //     });
-  //   } catch (e, s) {
-  //     print("Unexpected error: $e");
-  //     print("Stacktrace: $s");
-  //   }
-  // }
-
 
   Future save(Reservation reservation) async {
     state = state.setLoading();
@@ -93,6 +92,7 @@ class Reservations extends _$Reservations {
       state = state.setError(error.toString());
     });
   }
+
   void addOrUpdateReservation(Reservation reservation) {
     if (state.data!.any((e) => e.id == reservation.id)) {
       var index = state.data!.indexWhere((e) => e.id == reservation.id);

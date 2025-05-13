@@ -135,6 +135,9 @@ String getReservationsUrl({int? userId}) {
   return url;
 }
 
+// URLs Date from google
+String getBookedDatesUrl(int facilityId) => "${apiUrl}facilities/$facilityId/booked-dates";
+
 // URLs Payment
 String getPaymentUrl({required int paymentId}) => "${apiUrl}payments/$paymentId";
 

@@ -106,7 +106,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
           onTap: () {
             Navigator.pushNamed(
               context,
-              Routes.bookingDetails, // تأكد من أن هذا route موجود في Routes
+              Routes.bookingDetails,
               arguments: reservation.id,
             );
           },

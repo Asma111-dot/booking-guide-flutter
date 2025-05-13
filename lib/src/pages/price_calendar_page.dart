@@ -89,7 +89,8 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
     for (final dateStr in bookedDates) {
       try {
         final date = DateTime.parse(dateStr);
-        events[date] = [...(events[date] ?? []), 'محجوز من Google Calendar'];
+        // events[date] = [...(events[date] ?? []), 'محجوز من Google Calendar'];
+        events[date] = [...(events[date] ?? []), {'type': 'google', 'label': 'محجوز من Google Calendar'}];
       } catch (e) {
         debugPrint('Invalid date from Google Calendar: $dateStr');
       }
@@ -98,42 +99,6 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
     setState(() {});
   }
 
-  // void _populateEvents({RoomPrice? selectedPrice}) {
-  //   events.clear();
-  //   final roomPrices = ref.read(roomPricesProvider).data;
-  //
-  //   if (roomPrices == null || selectedPrice == null) {
-  //     setState(() {
-  //       events = {};
-  //     });
-  //     return;
-  //   }
-  //
-  //   for (var reservation in selectedPrice.reservations) {
-  //     try {
-  //       // ✅ تجاهل الحجوزات غير المؤكدة
-  //       if (reservation.status != 'confirmed') continue;
-  //
-  //       final checkInDate = reservation.checkInDate is String
-  //           ? DateTime.parse(reservation.checkInDate as String)
-  //           : reservation.checkInDate;
-  //       final checkOutDate = reservation.checkOutDate is String
-  //           ? DateTime.parse(reservation.checkOutDate as String)
-  //           : reservation.checkOutDate;
-  //
-  //       DateTime currentDate = checkInDate;
-  //       while (currentDate.isBefore(checkOutDate) ||
-  //           currentDate.isAtSameMomentAs(checkOutDate)) {
-  //         events[currentDate] = [...(events[currentDate] ?? []), reservation];
-  //         currentDate = currentDate.add(const Duration(days: 1));
-  //       }
-  //     } catch (e) {
-  //       debugPrint('Error processing reservation: $e');
-  //     }
-  //   }
-  //
-  //   setState(() {});
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -202,12 +167,43 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
                           child: RoomPriceWidget(
                             roomPrice: roomPrice,
                             isSelected: selectedPrice == roomPrice,
-                            onTap: () {
+                            // onTap: () {
+                            //   setState(() {
+                            //     selectedPrice = roomPrice;
+                            //     _populateEvents(selectedPrice: selectedPrice);
+                            //   });
+                            // },
+                            // onTap: () async {
+                            //   setState(() {
+                            //     selectedPrice = roomPrice;
+                            //   });
+                            //
+                            //   // ✅ جلب التواريخ المحجوزة من تقويم Google
+                            //   if (selectedPrice?.room?.facilityId != null) {
+                            //     await ref.read(reservationsProvider.notifier)
+                            //         .fetchBookedDates(roomPrice.room?.facility?.id ?? 0);
+                            //
+                            //   } else {
+                            //     print("❌ facilityId غير موجود، لا يمكن جلب التواريخ المحجوزة");
+                            //     ref.read(reservationsProvider.notifier).bookedDates = [];
+                            //   }
+                            //   _populateEvents(selectedPrice: selectedPrice);
+                            // }
+                            onTap: () async {
                               setState(() {
                                 selectedPrice = roomPrice;
-                                _populateEvents(selectedPrice: selectedPrice);
                               });
+
+                              final facilityId = roomPrice.room?.facility?.id ?? roomPrice.room?.facilityId;
+                              if (facilityId == null || facilityId == 0) {
+                                print("❌ facilityId غير موجود، لا يمكن جلب التواريخ المحجوزة");
+                              } else {
+                                await ref.read(reservationsProvider.notifier).fetchBookedDates(facilityId);
+                              }
+
+                              _populateEvents(selectedPrice: selectedPrice);
                             },
+
                           ),
                         );
                       },
