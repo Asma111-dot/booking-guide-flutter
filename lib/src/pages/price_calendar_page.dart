@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/reservation.dart';
 import '../models/room_price.dart';
 import '../helpers/general_helper.dart';
+import '../providers/reservation/booked_dates_from_google_calendar_provider.dart';
 import '../providers/reservation/reservation_save_provider.dart';
-import '../providers/reservation/reservations_provider.dart';
 import '../providers/room_price/room_prices_provider.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
@@ -47,26 +47,28 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
     if (roomPrices != null && roomPrices.isNotEmpty) {
       setState(() {
         selectedPrice = null;
+        events = {}; // ⬅️ لا توجد أحداث لأن السعر لم يُحدد بعد
       });
-      _populateEvents();
     } else {
       setState(() {
         events = {};
       });
     }
   }
-  void _populateEvents({RoomPrice? selectedPrice}) {
-    events.clear();
-    final roomPrices = ref.read(roomPricesProvider).data;
 
-    if (roomPrices == null || selectedPrice == null) {
-      setState(() {
-        events = {};
-      });
-      return;
+  void _populateEvents({
+    required RoomPrice selectedPrice,
+    required List<Map<String, dynamic>> bookedDates,
+  }) {
+    if (selectedPrice.period == null) {
+      debugPrint('❌ خطأ: selectedPrice.period فارغة!');
+      return; // أو تصرف مناسب
+    } else {
     }
+    debugPrint('📌 بدء معالجة الأحداث للسعر: ${selectedPrice.id}');
+    final Map<DateTime, List<dynamic>> tempEvents = {};
 
-    // ✅ 1. حجوزات النظام (من قاعدة البيانات)
+    // ✅ حجوزات النظام
     for (var reservation in selectedPrice.reservations) {
       try {
         if (reservation.status != 'confirmed') continue;
@@ -75,36 +77,81 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
         final checkOutDate = DateTime.parse(reservation.checkOutDate.toString());
 
         DateTime currentDate = checkInDate;
-        while (currentDate.isBefore(checkOutDate) || currentDate.isAtSameMomentAs(checkOutDate)) {
-          events[currentDate] = [...(events[currentDate] ?? []), reservation];
+        while (currentDate.isBefore(checkOutDate) ||
+            currentDate.isAtSameMomentAs(checkOutDate)) {
+          final normalized = DateTime(currentDate.year, currentDate.month, currentDate.day);
+          tempEvents[normalized] = [...(tempEvents[normalized] ?? []), reservation];
           currentDate = currentDate.add(const Duration(days: 1));
         }
       } catch (e) {
-        debugPrint('Error processing reservation: $e');
+        debugPrint('❌ خطأ أثناء معالجة الحجز: $e');
       }
     }
 
     // ✅ 2. تواريخ Google Calendar
-    final bookedDates = ref.read(reservationsProvider.notifier).bookedDates;
-    for (final dateStr in bookedDates) {
+    // final bookedDates = ref.read(reservationsProvider.notifier).bookedDates;
+    // for (final dateStr in bookedDates) {
+    //   try {
+    //     final date = DateTime.parse(dateStr);
+    //     // events[date] = [...(events[date] ?? []), 'محجوز من Google Calendar'];
+    //     events[date] = [...(events[date] ?? []), {'type': 'google', 'label': 'محجوز من Google Calendar'}];
+    //   } catch (e) {
+    //     debugPrint('Invalid date from Google Calendar: $dateStr');
+    //   }
+    // }
+    for (final item in bookedDates) {
       try {
-        final date = DateTime.parse(dateStr);
-        // events[date] = [...(events[date] ?? []), 'محجوز من Google Calendar'];
-        events[date] = [...(events[date] ?? []), {'type': 'google', 'label': 'محجوز من Google Calendar'}];
+        debugPrint('🔁 فحص عنصر جديد من Google Calendar: $item');
+
+        if (!item.containsKey('date') || !item.containsKey('period')) {
+          debugPrint('❌ عنصر غير مكتمل: $item');
+          continue;
+        }
+
+        final rawDate = item['date'];
+        final rawPeriod = item['period'];
+        final selectedRawPeriod = selectedPrice.period;
+
+        if (rawDate == null || rawDate.toString().trim().isEmpty) {
+          debugPrint('❌ تاريخ غير صالح: $item');
+          continue;
+        }
+
+        final period = rawPeriod.toString().trim().toLowerCase();
+        final selectedPeriod = selectedRawPeriod.toString().trim().toLowerCase();
+
+        debugPrint('🔍 المقارنة الأصلية: "$rawPeriod" == "$selectedRawPeriod"');
+        debugPrint('🔍 بعد التنسيق: "$period" == "$selectedPeriod"');
+
+        final parsed = DateTime.parse(rawDate);
+        final date = DateTime(parsed.year, parsed.month, parsed.day);
+
+        if (period == selectedPeriod) {
+          tempEvents[date] = [
+            ...(tempEvents[date] ?? []),
+            {
+              'type': 'google',
+              'label': 'محجوز: $rawPeriod',
+            }
+          ];
+          debugPrint('📅 تمت إضافة Google Calendar: $date => محجوز: $rawPeriod');
+        } else {
+          debugPrint('🕵️‍♂️ تجاهل التاريخ $date لأن الفترة ($period) ≠ ($selectedPeriod)');
+        }
       } catch (e) {
-        debugPrint('Invalid date from Google Calendar: $dateStr');
+        debugPrint('❌ خطأ في تحليل التاريخ من Google Calendar: $e');
       }
     }
 
+    events = tempEvents;
+    debugPrint('✅ عدد التواريخ المحجوزة: ${events.length}');
     setState(() {});
   }
-
 
   @override
   Widget build(BuildContext context) {
     final roomPriceState = ref.watch(roomPricesProvider);
-    final reservationsNotifier = ref.watch(reservationsProvider.notifier);
-    final bookedDatesFromGoogle = reservationsNotifier.bookedDates;
+    final bookedDates = ref.watch(bookedDatesFromGoogleCalendarProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -167,28 +214,6 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
                           child: RoomPriceWidget(
                             roomPrice: roomPrice,
                             isSelected: selectedPrice == roomPrice,
-                            // onTap: () {
-                            //   setState(() {
-                            //     selectedPrice = roomPrice;
-                            //     _populateEvents(selectedPrice: selectedPrice);
-                            //   });
-                            // },
-                            // onTap: () async {
-                            //   setState(() {
-                            //     selectedPrice = roomPrice;
-                            //   });
-                            //
-                            //   // ✅ جلب التواريخ المحجوزة من تقويم Google
-                            //   if (selectedPrice?.room?.facilityId != null) {
-                            //     await ref.read(reservationsProvider.notifier)
-                            //         .fetchBookedDates(roomPrice.room?.facility?.id ?? 0);
-                            //
-                            //   } else {
-                            //     print("❌ facilityId غير موجود، لا يمكن جلب التواريخ المحجوزة");
-                            //     ref.read(reservationsProvider.notifier).bookedDates = [];
-                            //   }
-                            //   _populateEvents(selectedPrice: selectedPrice);
-                            // }
                             onTap: () async {
                               setState(() {
                                 selectedPrice = roomPrice;
@@ -197,13 +222,16 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
                               final facilityId = roomPrice.room?.facility?.id ?? roomPrice.room?.facilityId;
                               if (facilityId == null || facilityId == 0) {
                                 print("❌ facilityId غير موجود، لا يمكن جلب التواريخ المحجوزة");
-                              } else {
-                                await ref.read(reservationsProvider.notifier).fetchBookedDates(facilityId);
+                                return;
                               }
 
-                              _populateEvents(selectedPrice: selectedPrice);
+                              await ref.read(bookedDatesFromGoogleCalendarProvider.notifier).fetch(facilityId);
+                              final googleBookedDates = ref.read(bookedDatesFromGoogleCalendarProvider);
+                              _populateEvents(
+                                selectedPrice: roomPrice,
+                                bookedDates: googleBookedDates,
+                              );
                             },
-
                           ),
                         );
                       },
@@ -240,6 +268,7 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
 
                   // تقويم الحجوزات
                   CustomCalendarWidget(
+                    key: ValueKey('${selectedPrice?.id}-${DateTime.now().millisecondsSinceEpoch}'),
                     events: events.map((key, value) =>
                         MapEntry(key, value.map((e) => e.toString()).toList())),
                     selectionType: SelectionType.range,
@@ -254,7 +283,7 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
                       });
                       print("Selected range: ${range.start} to ${range.end}");
                     },
-                  ),
+                  )
                 ],
               ),
             ),

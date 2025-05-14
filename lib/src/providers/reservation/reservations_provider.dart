@@ -9,7 +9,7 @@ part 'reservations_provider.g.dart';
 
 @Riverpod(keepAlive: false)
 class Reservations extends _$Reservations {
-  List<String> bookedDates = [];
+  List<Map<String, String>> bookedDates = [];
 
   @override
   Response<List<Reservation>> build() =>
@@ -19,26 +19,33 @@ class Reservations extends _$Reservations {
     state = state.copyWith();
   }
 
-  Future<void> fetchBookedDates(int facilityId) async {
-    state = state.setLoading();
-
-    try {
-      final response = await request<List<String>>(
-        url: getBookedDatesUrl(facilityId),
-        method: Method.get,
-        key: 'dates',
-      );
-
-      bookedDates = response.data ?? [];
-      print("📅 التواريخ المحجوزة: $bookedDates");
-
-      state = state.setLoaded();
-    } catch (e, s) {
-      print("❌ Error fetching booked dates from Google Calendar: $e");
-      print("📌 Stacktrace: $s");
-      state = state.setError(e.toString());
-    }
-  }
+  // Future<void> fetchBookedDates(int facilityId) async {
+  //   state = state.setLoading();
+  //
+  //   try {
+  //     final response = await request<List<dynamic>>(
+  //       url: getBookedDatesUrl(facilityId),
+  //       method: Method.get,
+  //       key: 'dates',
+  //     );
+  //
+  //     final List<Map<String, String>> dates = (response.data ?? [])
+  //         .map<Map<String, String>>((e) => {
+  //       'date': e['date'].toString(),
+  //       'period': e['period'].toString(),
+  //     })
+  //         .toList();
+  //
+  //     bookedDates = dates;
+  //     print("📅 التواريخ المحجوزة: $bookedDates");
+  //
+  //     state = state.setLoaded();
+  //   } catch (e, s) {
+  //     print("❌ Error fetching booked dates from Google Calendar: $e");
+  //     print("📌 Stacktrace: $s");
+  //     state = state.setError(e.toString());
+  //   }
+  // }
 
   Future fetch({required int userId, int? facilityId}) async {
     state = state.setLoading();
@@ -59,7 +66,8 @@ class Reservations extends _$Reservations {
       } else if (raw is List) {
         reservationsJson = raw;
       } else {
-        throw Exception("Invalid response format: Unable to parse reservations");
+        throw Exception(
+            "Invalid response format: Unable to parse reservations");
       }
 
       final reservations = Reservation.fromJsonList(reservationsJson)

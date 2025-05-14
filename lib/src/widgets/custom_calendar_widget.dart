@@ -42,19 +42,32 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
     for (DateTime d = start;
     d.isBefore(end) || d.isAtSameMomentAs(end);
     d = d.add(const Duration(days: 1))) {
-      if (widget.events[d]?.isNotEmpty ?? false) {
-        return false;
-      }
+      if (widget.events[d]?.isNotEmpty ?? false) return false;
     }
     return true;
   }
 
   @override
   Widget build(BuildContext context) {
+    print('🚨 مفاتيح blackoutDates:');
+    final normalizedEvents = {
+      for (var entry in widget.events.entries)
+        DateUtils.dateOnly(entry.key): entry.value,
+    };
+    final blackoutDates = normalizedEvents.keys.toList();
+
+    // final blackoutDates = widget.events.keys
+    //     .map((date) => DateUtils.dateOnly(date))
+    //     .toSet()
+    //     .toList();
+
+// ثم في monthViewSettings:
+
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.45,
       child: SfDateRangePicker(
         minDate: DateTime.now(),
+        enablePastDates: false,
         backgroundColor: Colors.white,
         view: DateRangePickerView.month,
         showNavigationArrow: true,
@@ -67,7 +80,7 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
           if (widget.selectionType == SelectionType.single) {
             final selected = args.value as DateTime;
             if (widget.events[selected]?.isNotEmpty ?? false) {
-              _showDateBookedMessage(context);
+              // _showDateBookedMessage(context);
             } else {
               setState(() => selectedDay = selected);
               widget.onSingleDateSelected?.call(selected);
@@ -78,16 +91,16 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
             final end = range.endDate ?? range.startDate;
 
             if (_isRangeValid(start!, end!)) {
-              setState(() => selectedRange = DateTimeRange(start: start, end: end));
-              widget.onRangeSelected?.call(DateTimeRange(start: start, end: end));
+              setState(() => selectedRange =
+                  DateTimeRange(start: start, end: end));
+              widget.onRangeSelected?.call(selectedRange!);
             } else {
-              _showDateBookedMessage(context);
+              // _showDateBookedMessage(context);
             }
           }
         },
         monthViewSettings: DateRangePickerMonthViewSettings(
-          dayFormat: 'EEE',
-          blackoutDates: widget.events.keys.toList(),
+          blackoutDates: blackoutDates,
           showTrailingAndLeadingDates: false,
           weekendDays: const [DateTime.tuesday, DateTime.friday],
         ),
@@ -105,19 +118,19 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
     );
   }
 
-  void _showDateBookedMessage(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("عذرًا!"),
-        content: const Text("التاريخ المحدد محجوز. الرجاء اختيار يوم آخر."),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text("حسنًا"),
-          ),
-        ],
-      ),
-    );
-  }
+  // void _showDateBookedMessage(BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //       title: const Text("عذرًا!"),
+  //       content: const Text("التاريخ المحدد محجوز. الرجاء اختيار يوم آخر."),
+  //       actions: [
+  //         TextButton(
+  //           onPressed: () => Navigator.of(context).pop(),
+  //           child: const Text("حسنًا"),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
