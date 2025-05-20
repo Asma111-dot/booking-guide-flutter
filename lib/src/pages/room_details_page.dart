@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../helpers/general_helper.dart';
+import '../utils/amenity_icon_helper.dart';
 import '../utils/routes.dart';
 import '../utils/theme.dart';
 import '../widgets/button_widget.dart';
@@ -34,10 +34,21 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
   late PageController pageController;
   Timer? imageTimer;
   late GoogleMapController mapController;
+  final GlobalKey _descKey = GlobalKey();
+  final GlobalKey _typeKey = GlobalKey();
+  final GlobalKey _aboutKey = GlobalKey();
+
+  bool showAboutFull = false;
+  bool showTypeFull = false;
+  bool showDescFull = false;
+
+  bool showReadMore = false;
 
   @override
   void initState() {
     super.initState();
+
+    // تحميل بيانات الغرفة
     Future.microtask(() async {
       final roomId = widget.facility.firstRoomId;
       if (roomId != null) {
@@ -50,11 +61,13 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
         ref.read(roomProvider.notifier).setEmpty();
       }
     });
+
     tabController = TabController(length: 3, vsync: this);
     pageController = PageController(viewportFraction: 1);
     pageController.addListener(() {
       setState(() {});
     });
+
     imageTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
       final room = ref.read(roomProvider).data;
 
@@ -73,7 +86,26 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
       }
     });
   }
+  bool isOverflowingText(String text, TextStyle style, double maxWidth, int maxLines) {
+    final textPainter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      maxLines: maxLines,
+      textDirection: TextDirection.rtl,
+    )..layout(maxWidth: maxWidth);
+    return textPainter.didExceedMaxLines;
+  }
 
+  bool isTextOverflowing(
+      String text, TextStyle style, double maxWidth, int maxLines) {
+    final span = TextSpan(text: text, style: style);
+    final tp = TextPainter(
+      text: span,
+      textDirection: TextDirection.rtl,
+      maxLines: maxLines,
+    );
+    tp.layout(maxWidth: maxWidth);
+    return tp.didExceedMaxLines;
+  }
   @override
   void dispose() {
     tabController.dispose();
@@ -99,6 +131,33 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
         },
         forceShowLoaded: roomState.data != null,
         onLoaded: (room) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            final descHeight = _descKey.currentContext?.size?.height ?? 0;
+            final typeHeight = _typeKey.currentContext?.size?.height ?? 0;
+            final aboutHeight = _aboutKey.currentContext?.size?.height ?? 0;
+
+            if (descHeight > 50 || typeHeight > 50 || aboutHeight > 50) {
+              setState(() => showReadMore = true);
+            }
+          });
+
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            final textStyle = const TextStyle(fontSize: 16);
+            final maxWidth =
+                MediaQuery.of(context).size.width - 32; // حسب Padding
+
+            final overflowing = isTextOverflowing(
+              "${widget.facility.desc}\n${room.type}\n${room.desc}",
+              textStyle,
+              maxWidth,
+              2,
+            );
+
+            if (overflowing && !showReadMore) {
+              setState(() => showReadMore = true);
+            }
+          });
+
           return Stack(
             children: [
               Positioned(
@@ -186,7 +245,8 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                     ),
                     onPressed: () async {
                       final room = ref.read(roomProvider).data;
-                      final text = "شاهد هذه المنشأة في تطبيقنا: ${room?.name ?? ''} \n📍 ${room?.facility?.address ?? ''}\nرابط المنشأة: https://myapp.com/room";
+                      final text =
+                          "شاهد هذه المنشأة في تطبيقنا: ${room?.facility?.name ?? ''} \n📍 ${room?.facility?.address ?? ''}\nرابط المنشأة: https://myapp.com/room";
                       await Share.share(text);
                     },
                   ),
@@ -239,7 +299,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            room.name,
+                            widget.facility.name,
                             style: TextStyle(
                               color: CustomTheme.primaryColor,
                               fontSize: 22,
@@ -296,19 +356,16 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                           ),
                           TabBar(
                             controller: tabController,
+                            isScrollable: true,
                             labelColor: CustomTheme.primaryColor,
                             unselectedLabelColor: Colors.grey,
                             indicatorColor: CustomTheme.color2,
+                            labelPadding:
+                                const EdgeInsets.symmetric(horizontal: 12),
                             tabs: [
-                              Tab(
-                                text: trans().description,
-                              ),
-                              Tab(
-                                text: trans().amenity,
-                              ),
-                              Tab(
-                                text: trans().price,
-                              ),
+                              Tab(text: trans().description),
+                              Tab(text: trans().amenity),
+                              Tab(text: trans().price_list),
                             ],
                           ),
                           SizedBox(
@@ -320,55 +377,271 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                                 SingleChildScrollView(
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      room.desc,
-                                      style: const TextStyle(fontSize: 16),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // 🏡 عن الشاليه
+                                        // Text(
+                                        //   trans().about_facility,
+                                        //   style: const TextStyle(
+                                        //     fontSize: 18,
+                                        //     fontWeight: FontWeight.bold,
+                                        //     color: CustomTheme.primaryColor,
+                                        //   ),
+                                        // ),
+                                        // 🏡 عن الشاليه
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              trans().about_facility,
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: CustomTheme.primaryColor,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              widget.facility.desc,
+                                              style: const TextStyle(fontSize: 16),
+                                              maxLines: showAboutFull ? null : 2,
+                                              overflow: showAboutFull ? TextOverflow.visible : TextOverflow.ellipsis,
+                                            ),
+                                            if (widget.facility.desc.length > 150)
+                                              TextButton(
+                                                onPressed: () => setState(() => showAboutFull = !showAboutFull),
+                                                child: Text(showAboutFull ? 'عرض أقل' : 'قراءة المزيد'),
+                                              ),
+                                          ],
+                                        ),
+
+                                        const Divider(color: Colors.grey, thickness: 1),
+                                        const SizedBox(height: 8),
+
+// 📜 شروط وسياسات المكان
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              trans().read_terms_before_booking,
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: CustomTheme.primaryColor,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              room.type,
+                                              style: const TextStyle(fontSize: 16),
+                                              maxLines: showTypeFull ? null : 2,
+                                              overflow: showTypeFull ? TextOverflow.visible : TextOverflow.ellipsis,
+                                            ),
+                                            if (room.type.length > 150)
+                                              TextButton(
+                                                onPressed: () => setState(() => showTypeFull = !showTypeFull),
+                                                child: Text(showTypeFull ? 'عرض أقل' : 'قراءة المزيد'),
+                                              ),
+                                          ],
+                                        ),
+
+                                        const Divider(color: Colors.grey, thickness: 1),
+                                        const SizedBox(height: 8),
+
+// 🛡️ التأمين على ممتلكات المكان
+                                        StatefulBuilder(
+                                          builder: (context, localSetState) {
+                                            final text = room.desc;
+                                            final textStyle = const TextStyle(fontSize: 16);
+
+                                            return LayoutBuilder(
+                                              builder: (context, constraints) {
+                                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                  final textPainter = TextPainter(
+                                                    text: TextSpan(text: text, style: textStyle),
+                                                    textDirection: TextDirection.rtl,
+                                                    textAlign: TextAlign.start,
+                                                    maxLines: 2,
+                                                  )..layout(maxWidth: constraints.maxWidth);
+
+                                                  final lines = textPainter.computeLineMetrics();
+                                                  final isOverflowing = lines.length > 2;
+
+                                                  if (isOverflowing && !showDescFull && mounted) {
+                                                    localSetState(() {}); // لإجبار إعادة البناء
+                                                  }
+                                                });
+
+                                                return Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      trans().insurance_coverage_question,
+                                                      style: const TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: CustomTheme.primaryColor,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 4),
+                                                    Text(
+                                                      text,
+                                                      style: textStyle,
+                                                      textAlign: TextAlign.start,
+                                                      maxLines: showDescFull ? null : 2,
+                                                      overflow: showDescFull ? TextOverflow.visible : TextOverflow.ellipsis,
+                                                    ),
+                                                    if (text.length > 150) // أو اجعلها isOverflowing إذا اشتغلت
+                                                      TextButton(
+                                                        onPressed: () => localSetState(() => showDescFull = !showDescFull),
+                                                        child: Text(showDescFull ? 'عرض أقل' : 'قراءة المزيد'),
+                                                      ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          },
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
-                                // Tab 2: Amenities
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: SingleChildScrollView(
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      children: room.amenities.isNotEmpty
-                                          ? room.amenities.map((a) {
-                                              return Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 8.0),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      FontAwesomeIcons
-                                                          .checkDouble,
-                                                      size: 18,
-                                                      color: CustomTheme.color2,
-                                                    ),
-                                                    const SizedBox(width: 8),
-                                                    Text(
-                                                      a.name,
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        color: CustomTheme
-                                                            .primaryColor,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            }).toList()
-                                          : [
-                                              Text(
-                                                "${trans().amenity}: ${trans().noAmenities}",
-                                                style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
+                                      children: [
+                                        // 🛏️ العنوان: المساحات المتوفرة
+                                        Text(
+                                          trans().available_spaces,
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: CustomTheme.primaryColor,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 6),
+
+                                        ...(room.availableSpaces).map((space) {
+                                          final type = space['type'] ?? '';
+                                          final count = int.tryParse(
+                                                  space['count'].toString()) ??
+                                              1;
+                                          final icon =
+                                              AmenityIconHelper.getAmenityIcon(
+                                                  type);
+
+                                          return Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 8.0),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Icon(
+                                                  icon,
+                                                  size: 18,
                                                   color: CustomTheme.color2,
                                                 ),
+                                                const SizedBox(width: 8),
+                                                Expanded(
+                                                  child: Text(
+                                                    count > 1
+                                                        ? '$count $type'
+                                                        : '$type',
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      color: CustomTheme
+                                                          .primaryColor,
+                                                    ),
+                                                    softWrap: true,
+                                                    maxLines: null,
+                                                    overflow:
+                                                        TextOverflow.visible,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        }),
+
+                                        const Divider(
+                                            color: Colors.grey, thickness: 1),
+                                        const SizedBox(height: 12),
+
+                                        // 🛎️ العنوان: وسائل الراحة
+                                        Text(
+                                          trans().amenities_and_facilities,
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: CustomTheme.primaryColor,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+
+                                        room.amenities.isNotEmpty
+                                            ? Column(
+                                                children:
+                                                    room.amenities.map((a) {
+                                                  final icon = AmenityIconHelper
+                                                      .getAmenityIcon(a.name);
+
+                                                  return Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 8.0),
+                                                    child: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Icon(
+                                                          icon,
+                                                          size: 18,
+                                                          color: CustomTheme
+                                                              .color2,
+                                                        ),
+                                                        const SizedBox(
+                                                            width: 8),
+                                                        Expanded(
+                                                          child: Text(
+                                                            a.name,
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 16,
+                                                              color: CustomTheme
+                                                                  .primaryColor,
+                                                            ),
+                                                            softWrap: true,
+                                                            maxLines: null,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .visible,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                }).toList(),
+                                              )
+                                            : Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 4),
+                                                child: Text(
+                                                  "${trans().amenity}: ${trans().noAmenities}",
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: CustomTheme.color2,
+                                                  ),
+                                                ),
                                               ),
-                                            ],
+                                      ],
                                     ),
                                   ),
                                 ),

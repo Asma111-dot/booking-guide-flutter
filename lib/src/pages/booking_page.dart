@@ -93,7 +93,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
       itemCount: reservations.length,
       itemBuilder: (context, index) {
         final reservation = reservations[index];
-        final placeName = reservation.roomPrice?.room?.name ?? '---';
+        final placeName = reservation.roomPrice?.room?.facility?.name ?? '---';
         final logo = reservation.roomPrice?.room?.facility?.logo;
         final imageUrl = (logo != null && logo.isNotEmpty) ? logo : logoCoverImage;
 

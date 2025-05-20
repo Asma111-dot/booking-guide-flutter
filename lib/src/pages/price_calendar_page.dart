@@ -60,12 +60,7 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
     required RoomPrice selectedPrice,
     required List<Map<String, dynamic>> bookedDates,
   }) {
-    if (selectedPrice.period == null) {
-      debugPrint('❌ خطأ: selectedPrice.period فارغة!');
-      return; // أو تصرف مناسب
-    } else {
-    }
-    debugPrint('📌 بدء معالجة الأحداث للسعر: ${selectedPrice.id}');
+      debugPrint('📌 بدء معالجة الأحداث للسعر: ${selectedPrice.id}');
     final Map<DateTime, List<dynamic>> tempEvents = {};
 
     // ✅ حجوزات النظام
