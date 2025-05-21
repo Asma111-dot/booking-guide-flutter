@@ -9,10 +9,10 @@ class UnauthorizedWidget extends StatelessWidget {
   final double? height;
 
   const UnauthorizedWidget({
-    Key? key,
+    super.key,
     this.message = '',
     this.height,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

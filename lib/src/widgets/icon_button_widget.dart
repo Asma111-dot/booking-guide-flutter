@@ -11,14 +11,14 @@ class IconButtonWidget extends StatelessWidget {
   final bool useLottie;
 
   const IconButtonWidget({
-    Key? key,
+    super.key,
     required this.icon,
     this.onPressed,
     this.color,
     this.size,
     this.tooltip,
     this.useLottie = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

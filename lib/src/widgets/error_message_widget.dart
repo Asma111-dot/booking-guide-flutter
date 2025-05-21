@@ -10,7 +10,7 @@ class ErrorMessageWidget extends StatelessWidget {
   final IconData? errorIcon;
 
   const ErrorMessageWidget({
-    Key? key,
+    super.key,
     this.message = 'An error occurred.',
     this.isEmpty = false,
     this.textOnly = false,
@@ -18,7 +18,7 @@ class ErrorMessageWidget extends StatelessWidget {
     this.headerWidget,
     this.onTap,
     this.errorIcon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

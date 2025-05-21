@@ -136,7 +136,6 @@ Future<Response<T>> request<T>({
         //   }
         if (parsed is Map && parsed.containsKey(key)) {
           if (parsed[key] is List) {
-            // ✅ معالجة خاصة إذا كنا نطلب List<String>
             if (T.toString() == 'List<String>') {
               data = List<String>.from(parsed[key].map((e) => e.toString()));
             } else {
@@ -221,7 +220,6 @@ Future<Response<T>> request<T>({
   }
 }
 
-// ✅ دالة عرض الرسائل بعد نهاية request<T>()
 void showMessage(Meta meta) {
   if (meta.message.isNotEmpty) {
     showNotify(

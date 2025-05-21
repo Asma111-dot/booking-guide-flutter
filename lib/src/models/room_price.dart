@@ -43,24 +43,6 @@ class RoomPrice {
         reservations = [],
   room = null;
 
-  // factory RoomPrice.fromJson(Map<String, dynamic> jsonMap) {
-  //   return RoomPrice(
-  //     id: jsonMap['id'] ?? 0,
-  //     roomId: jsonMap['room_id'] ?? 0,
-  //     capacity: jsonMap['capacity'] ?? 0,
-  //     amount: double.tryParse(jsonMap['amount']?.toString() ?? '0.0') ?? 0.0,
-  //     deposit: double.tryParse(jsonMap['deposit']?.toString() ?? '') ?? null,
-  //     currency: jsonMap['currency'] ?? '',
-  //     period: jsonMap['period'] ?? '',
-  //     timeFrom: jsonMap['time_from'] ?? null,
-  //     timeTo: jsonMap['time_to'] ?? null,
-  //     reservations: (jsonMap['reservations'] as List<dynamic>? ?? [])
-  //         .map((item) => Reservation.fromJson(item))
-  //         .toList(),
-  //     room: jsonMap['room'] != null
-  //         ? Room.fromJson(jsonMap['room']) : null,
-  //   );
-  // }
   factory RoomPrice.fromJson(Map<String, dynamic> jsonMap) {
     return RoomPrice(
       id: int.tryParse(jsonMap['id']?.toString() ?? '') ?? 0,

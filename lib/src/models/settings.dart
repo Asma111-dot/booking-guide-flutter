@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 
 import '../enums/display_mode.dart';

@@ -19,34 +19,6 @@ class Reservations extends _$Reservations {
     state = state.copyWith();
   }
 
-  // Future<void> fetchBookedDates(int facilityId) async {
-  //   state = state.setLoading();
-  //
-  //   try {
-  //     final response = await request<List<dynamic>>(
-  //       url: getBookedDatesUrl(facilityId),
-  //       method: Method.get,
-  //       key: 'dates',
-  //     );
-  //
-  //     final List<Map<String, String>> dates = (response.data ?? [])
-  //         .map<Map<String, String>>((e) => {
-  //       'date': e['date'].toString(),
-  //       'period': e['period'].toString(),
-  //     })
-  //         .toList();
-  //
-  //     bookedDates = dates;
-  //     print("📅 التواريخ المحجوزة: $bookedDates");
-  //
-  //     state = state.setLoaded();
-  //   } catch (e, s) {
-  //     print("❌ Error fetching booked dates from Google Calendar: $e");
-  //     print("📌 Stacktrace: $s");
-  //     state = state.setError(e.toString());
-  //   }
-  // }
-
   Future fetch({required int userId, int? facilityId}) async {
     state = state.setLoading();
 

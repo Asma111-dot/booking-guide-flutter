@@ -118,19 +118,4 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
     );
   }
 
-  // void _showDateBookedMessage(BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //       title: const Text("عذرًا!"),
-  //       content: const Text("التاريخ المحدد محجوز. الرجاء اختيار يوم آخر."),
-  //       actions: [
-  //         TextButton(
-  //           onPressed: () => Navigator.of(context).pop(),
-  //           child: const Text("حسنًا"),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 }

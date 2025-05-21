@@ -6,7 +6,7 @@ import '../utils/theme.dart';
 class RoomPriceWidget extends StatelessWidget {
   final dynamic price;
 
-  const RoomPriceWidget({Key? key, required this.price}) : super(key: key);
+  const RoomPriceWidget({super.key, required this.price});
 
   @override
   Widget build(BuildContext context) {

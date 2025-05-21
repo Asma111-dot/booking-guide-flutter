@@ -7,10 +7,10 @@ class MapDialog extends StatelessWidget {
   final List<Facility> facilities;
 
   const MapDialog({
-    Key? key,
+    super.key,
     required this.facility,
     required this.facilities,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

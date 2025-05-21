@@ -15,14 +15,14 @@ class IconTextWidget extends StatelessWidget {
   final bool useLottie;
 
   const IconTextWidget({
-    Key? key,
+    super.key,
     this.icon,
     this.lottieAsset,
     required this.text,
     this.color,
     this.textSize,
     this.useLottie = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

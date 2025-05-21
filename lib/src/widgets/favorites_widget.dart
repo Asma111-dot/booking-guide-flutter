@@ -11,10 +11,10 @@ class FavoriteWidget extends StatelessWidget {
   final VoidCallback onRemove;
 
   const FavoriteWidget({
-    Key? key,
+    super.key,
     required this.facility,
     required this.onRemove,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

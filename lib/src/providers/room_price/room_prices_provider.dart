@@ -13,7 +13,7 @@ class RoomPrices extends _$RoomPrices {
   Response<List<RoomPrice>> build() =>
       const Response<List<RoomPrice>>(data: []);
 
-  setData(RoomPrice room_price) {
+  setData(RoomPrice roomPrice) {
     state = state.copyWith();
   }
 

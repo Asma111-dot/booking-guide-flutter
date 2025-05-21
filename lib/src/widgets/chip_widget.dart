@@ -11,12 +11,12 @@ class ChipWidget extends StatelessWidget {
   final double? lottieHeight;
 
   const ChipWidget({
-    Key? key,
+    super.key,
     required this.child,
     this.onPressed,
     this.lottieAsset,
     this.lottieHeight,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

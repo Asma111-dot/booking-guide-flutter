@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 
-//فحص حالة الاتصال بالشبكة
 late StreamSubscription<List<ConnectivityResult>> subscription;
 ValueNotifier<List<ConnectivityResult>> connectivityResult = ValueNotifier([ConnectivityResult.none]);
 

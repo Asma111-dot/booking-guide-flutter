@@ -31,7 +31,7 @@ class Facility {
     this.isFavorite = false,
     this.price,
     this.rooms = const [],
-    this.firstRoomId, // ✅ مضاف هنا
+    this.firstRoomId,
   });
 
   Facility.init()
@@ -47,7 +47,7 @@ class Facility {
         logo = null,
         isFavorite = false,
         price = null,
-        firstRoomId = null, // ✅
+        firstRoomId = null,
         rooms = [];
 
   Facility copyWith({
@@ -63,7 +63,7 @@ class Facility {
     String? logo,
     bool? isFavorite,
     double? price,
-    int? firstRoomId, // ✅
+    int? firstRoomId,
     List<Room>? rooms,
   }) {
     return Facility(
@@ -79,7 +79,7 @@ class Facility {
       logo: logo ?? this.logo,
       isFavorite: isFavorite ?? this.isFavorite,
       price: price ?? this.price,
-      firstRoomId: firstRoomId ?? this.firstRoomId, // ✅
+      firstRoomId: firstRoomId ?? this.firstRoomId,
       rooms: rooms ?? this.rooms,
     );
   }
@@ -97,7 +97,7 @@ class Facility {
       geojson: jsonMap['geojson'],
       logo: jsonMap['logo'],
       price: jsonMap['price'] != null ? double.tryParse(jsonMap['price'].toString()) : null,
-      firstRoomId: jsonMap['first_room_id'], // ✅
+      firstRoomId: jsonMap['first_room_id'],
       rooms: (jsonMap['rooms'] is List)
           ? List<Room>.from((jsonMap['rooms'] as List).map((item) => Room.fromJson(item)))
           : [],
@@ -121,7 +121,7 @@ class Facility {
       'logo': logo,
       'is_favorite': isFavorite,
       'price': price,
-      'first_room_id': firstRoomId, // ✅
+      'first_room_id': firstRoomId,
       'rooms': rooms.map((room) => room.toJson()).toList(),
     };
   }
@@ -159,7 +159,7 @@ class Facility {
             logo == other.logo &&
             isFavorite == other.isFavorite &&
             price == other.price &&
-            firstRoomId == other.firstRoomId && // ✅
+            firstRoomId == other.firstRoomId &&
             rooms == other.rooms;
   }
 
@@ -177,6 +177,6 @@ class Facility {
       logo.hashCode ^
       isFavorite.hashCode ^
       price.hashCode ^
-      firstRoomId.hashCode ^ // ✅
+      firstRoomId.hashCode ^
       rooms.hashCode;
 }

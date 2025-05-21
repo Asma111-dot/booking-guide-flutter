@@ -21,7 +21,6 @@ model<T>(dynamic map) {
       case 'Room':
         return Room.fromJson(map);
       case 'RoomPrice':
-        print("asma");
         return RoomPrice.fromJson(map);
       case 'Reservation':
         return Reservation.fromJson(map);
