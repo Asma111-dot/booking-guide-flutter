@@ -53,9 +53,10 @@ class Facilities extends _$Facilities {
         } else if (target == FacilityTarget.filters) {
         }
 
+        state = Response<List<Facility>>(data: facilities, meta: value.meta).setLoaded();
 
-        state = state.copyWith(data: facilities, meta: value.meta);
-        state = state.setLoaded();
+        // state = state.copyWith(data: facilities, meta: value.meta);
+        // state = state.setLoaded();
       }).catchError((error) {
         state = state.setError(error.toString());
         print("❌ خطأ أثناء جلب البيانات: $error");

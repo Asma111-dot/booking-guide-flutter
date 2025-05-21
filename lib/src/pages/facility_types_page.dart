@@ -139,7 +139,8 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                       );
                     },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 12),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(15),
@@ -185,7 +186,8 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                       gradient: CustomTheme.primaryGradient,
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    child: const Icon(Icons.tune,
+                    child: const Icon(
+                      Icons.tune,
                       color: Colors.white,
                     ),
                   ),
@@ -197,28 +199,48 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: facilityTypesState.data == null ||
-                facilityTypesState.data!.isEmpty
+                    facilityTypesState.data!.isEmpty
                 ? const Center(child: CircularProgressIndicator())
-                : Row(
-              children: facilityTypesState.data!.map((facilityType) {
-                return Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: _buildTypeButtonWithIcon(
-                    context,
-                    facilityType.name,
-                    facilityType.id,
-                    facilityType.id == 1 ? Icons.hotel : Icons.pool,
+                : SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: facilityTypesState.data!.map((facilityType) {
+                        IconData icon;
+
+                        switch (facilityType.id) {
+                          case 1:
+                            icon = Icons.hotel;
+                            break;
+                          case 2:
+                            icon = Icons.pool;
+                            break;
+                          case 3:
+                            icon = FontAwesomeIcons.dove;
+                            break;
+                          default:
+                            icon = Icons.home_work;
+                        }
+
+                        return Padding(
+
+                          padding: const EdgeInsets.only(right: 10),
+                          child: _buildTypeButtonWithIcon(
+                            context,
+                            facilityType.name,
+                            facilityType.id,
+                            icon,
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ),
-                );
-              }).toList(),
-            ),
           ),
           const SizedBox(height: 10),
           Expanded(
             child: selectedFacilityType == null
                 ? Center(child: Text(trans().selectFacilityType))
                 : FacilityPage(facilityTypeId: selectedFacilityType!),
-          )
+          ),
         ],
       ),
     );
