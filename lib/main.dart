@@ -15,14 +15,14 @@ import 'src/utils/theme.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  /* Storage */
+  // ✅ تهيئة التخزين
   await hive_service.init();
 
-  /* Connectivity */
+  // ✅ تهيئة الاتصال
   ConnectivityService.init();
 
-  /* Screen Orientations */
-  SystemChrome.setPreferredOrientations([
+  // ✅ قفل اتجاه الشاشة على الوضع العمودي
+  await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
@@ -43,7 +43,14 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorKey: navKey,
-      builder: BotToastInit(),
+      // ✅ دعم BotToast مع Directionality حسب اللغة
+      builder: (context, child) {
+        final isArabic = settings.languageCode == 'ar';
+        return Directionality(
+          textDirection: isArabic ? TextDirection.rtl : TextDirection.ltr,
+          child: BotToastInit()(context, child),
+        );
+      },
       navigatorObservers: [BotToastNavigatorObserver()],
       initialRoute: Routes.welcome,
       onGenerateRoute: Routes.generate,
@@ -51,10 +58,13 @@ class MyApp extends ConsumerWidget {
       locale: Locale(settings.languageCode),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-
       theme: customTheme.fromSeed(settings.languageCode),
       darkTheme: CustomTheme(isDark: true).fromSeed(settings.languageCode),
-      themeMode: settings.displayMode.isDark() ? ThemeMode.dark : ThemeMode.light,
+      themeMode: settings.displayMode == DisplayMode.dark
+          ? ThemeMode.dark
+          : settings.displayMode == DisplayMode.light
+          ? ThemeMode.light
+          : ThemeMode.system,
     );
   }
 }

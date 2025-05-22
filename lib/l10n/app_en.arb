@@ -51,6 +51,7 @@
   "save": "Save",
   "cancel": "Cancel",
   "settings": "Settings",
+  "settings_desc": "Language & appearance",
   "language": "Language",
   "selectLanguage": "Select Language",
   "profile": "Profile",

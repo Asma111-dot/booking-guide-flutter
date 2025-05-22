@@ -12,6 +12,7 @@ import '../widgets/mune_item_widget.dart';
 import '../widgets/social_links_widget.dart';
 import 'privacy_policy_page .dart';
 import '../sheetes/support_bottom_sheet.dart';
+import 'settings_page.dart';
 import 'user_profile_page.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
@@ -86,7 +87,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          user?.email ?? "user@example.com",
+                          user?.email ?? "user@myBooking.com",
                           style: const TextStyle(
                             fontSize: 14,
                             color: CustomTheme.color3,
@@ -127,6 +128,21 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   //     icon: LineAwesomeIcons.language_solid,
                   //   ),
                   // ),
+                  _buildMenuCard(
+                    MenuItem(
+                      title: trans().settings,
+                      subtitle: trans().settings_desc,
+                      icon: LineAwesomeIcons.cog_solid,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SettingsPage(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                   _buildMenuCard(
                     MenuItem(
                       title: trans().policies,

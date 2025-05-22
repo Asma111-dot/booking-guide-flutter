@@ -51,6 +51,7 @@
   "save": "حفظ",
   "cancel": "إلغاء",
   "settings": "الإعدادات",
+  "settings_desc": "اللغة والمظهر",
   "language": "اللغة",
   "selectLanguage": "اختر اللغة",
   "profile": "الملف الشخصي",
