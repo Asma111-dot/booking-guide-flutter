@@ -5,14 +5,15 @@ import 'package:share_plus/share_plus.dart';
 
 import '../helpers/general_helper.dart';
 import '../providers/auth/user_provider.dart';
+import '../sheetes/language_bottom_sheet.dart';
 import '../sheetes/logout_bottom_sheet.dart';
 import '../utils/assets.dart';
 import '../utils/theme.dart';
+import '../widgets/display_mode_toggle.dart';
 import '../widgets/mune_item_widget.dart';
 import '../widgets/social_links_widget.dart';
 import 'privacy_policy_page .dart';
 import '../sheetes/support_bottom_sheet.dart';
-import 'settings_page.dart';
 import 'user_profile_page.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
@@ -34,8 +35,6 @@ class _AccountPageState extends ConsumerState<AccountPage> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider).data;
-
-    // var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -47,18 +46,20 @@ class _AccountPageState extends ConsumerState<AccountPage> {
               ),
         ),
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         iconTheme: const IconThemeData(color: CustomTheme.color2),
-        // actions: [
-        //   IconButton(
-        //       onPressed: () {},
-        //       icon: Icon(isDark ? LineAwesomeIcons.sun : LineAwesomeIcons.moon))
-        // ],
+        leading: Directionality.of(context) == TextDirection.rtl
+            ? buildDisplayModeToggle(ref, context).first
+            : null,
+        actions: Directionality.of(context) == TextDirection.ltr
+            ? buildDisplayModeToggle(ref, context)
+            : null,
       ),
-      backgroundColor: Colors.white70,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(10),
+          color: Theme.of(context).scaffoldBackgroundColor,
           child: Column(
             children: [
               Directionality(
@@ -79,11 +80,10 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       children: [
                         Text(
                           user?.name ?? "User",
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: CustomTheme.primaryColor,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 4),
                         Text(
@@ -120,25 +120,20 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       icon: LineAwesomeIcons.user_circle,
                     ),
                   ),
-                  // _buildMenuCard(
-                  //   MenuItem(
-                  //     title: trans().language,
-                  //     subtitle: trans().language_desc,
-                  //     onPressed: () {},
-                  //     icon: LineAwesomeIcons.language_solid,
-                  //   ),
-                  // ),
                   _buildMenuCard(
                     MenuItem(
                       title: trans().settings,
                       subtitle: trans().settings_desc,
                       icon: LineAwesomeIcons.cog_solid,
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SettingsPage(),
+                        showModalBottomSheet(
+                          context: context,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                           ),
+                          backgroundColor: Colors.grey.shade100,
+                          isScrollControlled: true,
+                          builder: (context) => const LanguageBottomSheet(),
                         );
                       },
                     ),
