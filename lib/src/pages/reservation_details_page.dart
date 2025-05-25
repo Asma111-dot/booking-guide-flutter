@@ -8,7 +8,6 @@ import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar_clipper.dart';
 import '../widgets/reservation_details_content.dart';
 import '../widgets/view_widget.dart';
-import 'navigation_menu.dart';
 
 class ReservationDetailsPage extends ConsumerStatefulWidget {
   final int reservationId;
@@ -89,12 +88,13 @@ class _ReservationDetailsPageState
 
             // 🔙 زر التراجع
             OutlinedButton.icon(
-                onPressed: () async {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => NavigationMenu()),
-                  );
-                },
+              onPressed: () async {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.navigationMenu,
+                  (route) => false,
+                );
+              },
               icon: const Icon(Icons.arrow_back),
               label: Text(trans().go_back),
               style: OutlinedButton.styleFrom(
@@ -109,7 +109,8 @@ class _ReservationDetailsPageState
             Button(
               width: double.infinity,
               title: trans().payment_now,
-              icon: const Icon(Icons.arrow_forward, size: 20, color: Colors.white),
+              icon: const Icon(Icons.arrow_forward,
+                  size: 20, color: Colors.white),
               iconAfterText: true,
               disable: false,
               onPressed: () async {

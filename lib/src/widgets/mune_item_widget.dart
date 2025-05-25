@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
-import '../utils/theme.dart';
-
 class MenuItem extends StatelessWidget {
   final String title;
   final String? subtitle;
@@ -19,6 +17,9 @@ class MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return ListTile(
       onTap: onPressed,
       contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -27,31 +28,31 @@ class MenuItem extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
-          color: CustomTheme.primaryColor.withValues(alpha: 0.1 * 255),
+          color: colorScheme.secondary.withOpacity(0.1),
         ),
-        child: Icon(icon, color: CustomTheme.color2),
+        child: Icon(icon, color: colorScheme.primary),
       ),
       title: Text(
         title,
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          fontWeight: FontWeight.w600,
-          color: CustomTheme.primaryColor
+        style: theme.textTheme.bodyMedium?.copyWith(
+          fontWeight: FontWeight.w700,
+          fontSize: 15,
+          color: colorScheme.primary,
         ),
       ),
       subtitle: subtitle != null
           ? Text(
         subtitle!,
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: Colors.grey[600],
-          fontSize: 11,
+        style: theme.textTheme.bodySmall?.copyWith(
+          fontSize: 12,
+          color: colorScheme.onSurface.withOpacity(0.6),
         ),
       )
           : null,
-      trailing: SizedBox(
-        width: 30,
-        height: 30,
-        child: Icon(LineAwesomeIcons.angle_left_solid,
-            color: CustomTheme.color2, size: 18),
+      trailing: Icon(
+        LineAwesomeIcons.angle_left_solid,
+        color: colorScheme.primary,
+        size: 20,
       ),
     );
   }

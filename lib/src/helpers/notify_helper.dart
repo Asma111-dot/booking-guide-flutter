@@ -1,7 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
-import 'package:booking_guide/src/extensions/theme_extension.dart';
 import 'package:flutter/material.dart';
 
+import '../extensions/theme_extension.dart';
 import '../enums/alert.dart';
 import '../utils/routes.dart';
 import '../utils/theme.dart';

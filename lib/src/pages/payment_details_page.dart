@@ -12,13 +12,13 @@ import '../extensions/string_formatting.dart';
 import '../helpers/general_helper.dart';
 import '../models/payment.dart' as p;
 import '../providers/payment/payment_provider.dart';
+import '../utils/routes.dart';
 import '../utils/theme.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar_clipper.dart';
 import '../widgets/custom_header_details_widget.dart';
 import '../widgets/custom_row_details_widget.dart';
 import '../widgets/view_widget.dart';
-import 'navigation_menu.dart';
 
 class PaymentDetailsPage extends ConsumerStatefulWidget {
   final int paymentId;
@@ -216,9 +216,10 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                 iconAfterText: true,
                 disable: false,
                 onPressed: () async {
-                  Navigator.pushReplacement(
+                  Navigator.pushNamedAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (_) => NavigationMenu()),
+                    Routes.navigationMenu,
+                        (route) => false,
                   );
                 },
               ),

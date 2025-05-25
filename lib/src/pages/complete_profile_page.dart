@@ -5,11 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../helpers/general_helper.dart';
 import '../providers/auth/login_provider.dart';
+import '../utils/routes.dart';
 import '../utils/theme.dart';
 import '../widgets/avatar_picker.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_text_field.dart';
-import 'navigation_menu.dart';
 
 class CompleteProfilePage extends ConsumerStatefulWidget {
   const CompleteProfilePage({super.key});
@@ -34,20 +34,20 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
     setState(() => isLoading = true);
 
     final isSuccess = await ref.read(loginProvider.notifier).completeProfile(
-      name: nameController.text.trim(),
-      email: emailController.text.trim(),
-      address: addressController.text.trim(),
-      avatarFile: _avatarFile,
-    );
+          name: nameController.text.trim(),
+          email: emailController.text.trim(),
+          address: addressController.text.trim(),
+          avatarFile: _avatarFile,
+        );
 
     if (!mounted) return;
 
     setState(() => isLoading = false);
 
     if (isSuccess) {
-      Navigator.pushAndRemoveUntil(
+      Navigator.pushNamedAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (_) => const NavigationMenu()),
+        Routes.navigationMenu,
         (route) => false,
       );
     } else {
@@ -99,25 +99,20 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
                   },
                 ),
                 const SizedBox(height: 40),
-
                 CustomTextField(
                   controller: nameController,
                   label: trans().fullName,
                 ),
                 const SizedBox(height: 20),
-
                 CustomTextField(
                   controller: emailController,
                   label: trans().email,
                 ),
                 const SizedBox(height: 20),
-
                 CustomTextField(
                   controller: addressController,
                   label: trans().address,
                 ),
-
-
                 const SizedBox(height: 40),
                 Button(
                   width: double.infinity,

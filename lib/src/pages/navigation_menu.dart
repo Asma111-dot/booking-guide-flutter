@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import '../helpers/general_helper.dart';
 import '../storage/auth_storage.dart';
 import '../utils/assets.dart';
-import '../utils/theme.dart';
 import 'booking_page.dart';
 import 'facility_types_page.dart';
 import 'favorites_page.dart';
@@ -24,17 +23,20 @@ class NavigationMenu extends StatelessWidget {
     ));
 
     return Obx(() => Scaffold(
-      body: controller.screens[controller.selectedIndex.value],
+          body: controller.screens[controller.selectedIndex.value],
       bottomNavigationBar: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(30),
             topRight: Radius.circular(30),
           ),
           boxShadow: [
-            BoxShadow(color: Colors.black12, blurRadius: 8),
+            BoxShadow(
+              color: Theme.of(context).colorScheme.secondary.withOpacity(0.08),
+              blurRadius: 8,
+            ),
           ],
         ),
         child: Row(
@@ -59,41 +61,46 @@ class NavigationMenu extends StatelessWidget {
             ][index];
 
             return Expanded(
-                child: GestureDetector(
+              child: GestureDetector(
                 onTap: () => controller.selectedIndex.value = index,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 250),
-                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? CustomTheme.color3.withAlpha(25)
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      iconData,
-                      color: isSelected ? CustomTheme.color2 : CustomTheme.tertiaryColor,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      label,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                        color: isSelected ? CustomTheme.primaryColor : CustomTheme.tertiaryColor,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        iconData,
+                        color: isSelected
+                            ? Theme.of(context).colorScheme.secondary
+                            : Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 4),
+                      Text(
+                        label,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                          color: isSelected
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),);
+            );
           }),
         ),
       ),
-    ));
+        ));
   }
 }
 

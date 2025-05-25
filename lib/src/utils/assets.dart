@@ -21,8 +21,8 @@ const unauthorizedJson = "${_lottieBase}unauthorized.json";
 const defaultAvatar = "${_imageBase}default_avatar.jpg";
 const logoCoverImage = "${_imageBase}logo_cover.png";
 const appIcon = "${_imageBase}app_icon.png";
-const myBooking = "${_imageBase}my_booking.png";
-const myBookingWhite = "${_imageBase}My_booking_white.png";
+const mybooking = "${_imageBase}my_booking.png";
+const mybookingWhite = "${_imageBase}My_booking_white.png";
 const booking = "${_imageBase}booking1.png";
 const chaletImage = "${_imageBase}chalet.jpg";
 const hotelImage = "${_imageBase}hotel.jpg";
@@ -69,5 +69,4 @@ const cameraIcon = Icons.camera_alt_outlined;
 const cameraSourceIcon = Icons.camera_alt;
 const gallerySourceIcon = Icons.photo;
 
-// Videos -----------------------------------------------------------------------
-const welcome = "${_videoBase}welcome.mp4";
+

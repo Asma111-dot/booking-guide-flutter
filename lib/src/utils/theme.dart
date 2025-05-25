@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:booking_guide/src/extensions/theme_extension.dart';
+import 'package:flutter/material.dart';
 import 'routes.dart';
 
 class CustomTheme {
@@ -17,10 +17,12 @@ class CustomTheme {
   static const Color color2 = Color(0xFF860EEE);
   static const Color color3 = Color(0xFF565BF2);
   static const Color color4 = Color(0xFF0DD7FC);
+
   static const Color primaryColor = Color(0xFF140B2D);
-  static const Color secondaryColor = Color(0xFF03DAC6);
-  static const Color tertiaryColor = Color(0xFF2C3E50);
-  static const Color fourthColor = Color(0xffF0F0F0);
+  // static const Color primaryColor = color2; // 0xFF860EEE
+  static const Color secondaryColor = color3; // 0xFF565BF2
+  static const Color tertiaryColor = color4; // 0xFF0DD7FC
+  static const Color accentColor = color1; // 0xFFB114E9
   static const Color whiteColor = Colors.white;
 
   static const Color shimmerBaseColor = Color(0xffdcdcdc);
@@ -68,13 +70,18 @@ class CustomTheme {
         useMaterial3: true,
         brightness: isDark ? Brightness.dark : Brightness.light,
         fontFamily: getFont(languageCode),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: primaryColor,
+        colorScheme: ColorScheme(
           brightness: isDark ? Brightness.dark : Brightness.light,
-          primary: primaryColor,
-          secondary: secondaryColor,
-          tertiary: tertiaryColor,
-          primaryContainer: isDark ? Colors.grey[700] : Colors.grey[200],
+          primary: color2,
+          onPrimary: Colors.white,
+          secondary: color3,
+          onSecondary: Colors.white,
+          background: scaffoldColor(),
+          onBackground: isDark ? Colors.white : Colors.black,
+          surface: cardColor(),
+          onSurface: isDark ? Colors.white : Colors.black,
+          error: dangerColor(),
+          onError: Colors.white,
         ),
         scaffoldBackgroundColor: scaffoldColor(),
         cardColor: cardColor(),

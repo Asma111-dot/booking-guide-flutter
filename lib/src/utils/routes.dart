@@ -6,6 +6,7 @@ import '../pages/booking_details_page.dart';
 import '../pages/facility_filter_page.dart';
 import '../pages/facility_page.dart';
 import '../pages/map_page.dart';
+import '../pages/navigation_menu.dart';
 import '../pages/payment_details_page.dart';
 import '../pages/payment_page.dart';
 import '../pages/price_calendar_page.dart';
@@ -27,14 +28,15 @@ class Routes {
   static const String hotelDetails = '/hotel_details';
   static const String reservation = '/reservation';
   static const String myAccount = '/account';
-  static const String myBookings = '/my_reservations';
+  static const String mybookings = '/my_reservations';
   static const String priceAndCalendar = '/price_calendar';
   static const String reservationDetails = '/reservation_details';
   static const String bookingDetails = '/booking-details';
   static const String payment = '/payment';
   static const String paymentDetails = '/payment_details';
-  static const String map = '/map';
   static const String filter = '/filters';
+  static const String navigationMenu = '/menu';
+
 
   static Route? generate(RouteSettings settings) {
     final args = settings.arguments;
@@ -109,17 +111,16 @@ class Routes {
           settings: settings,
         );
 
-      case map:
-        final facilityTypeId = args as int? ?? 0;
-        return MaterialPageRoute(
-          builder: (_) => MapPage(facilityId: facilityTypeId),
-          settings: settings,
-        );
-
       case filter:
         final facilityTypeId = settings.arguments as int;
         return MaterialPageRoute(
           builder: (_) => FacilityFilterPage(initialFacilityTypeId: facilityTypeId),
+          settings: settings,
+        );
+
+      case navigationMenu:
+        return MaterialPageRoute(
+          builder: (_) => const NavigationMenu(),
           settings: settings,
         );
 

@@ -8,7 +8,6 @@ import '../providers/auth/user_provider.dart';
 import '../sheetes/language_bottom_sheet.dart';
 import '../sheetes/logout_bottom_sheet.dart';
 import '../utils/assets.dart';
-import '../utils/theme.dart';
 import '../widgets/display_mode_toggle.dart';
 import '../widgets/mune_item_widget.dart';
 import '../widgets/social_links_widget.dart';
@@ -35,19 +34,24 @@ class _AccountPageState extends ConsumerState<AccountPage> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider).data;
+
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
           trans().persons,
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: CustomTheme.color2,
-                fontWeight: FontWeight.bold,
-              ),
+          style: theme.textTheme.headlineMedium?.copyWith(
+            color: colorScheme.primary,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         elevation: 0,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        iconTheme: const IconThemeData(color: CustomTheme.color2),
+        backgroundColor: theme.scaffoldBackgroundColor,
+        iconTheme: IconThemeData(color: colorScheme.secondary),
         leading: Directionality.of(context) == TextDirection.rtl
             ? buildDisplayModeToggle(ref, context).first
             : null,
@@ -55,11 +59,11 @@ class _AccountPageState extends ConsumerState<AccountPage> {
             ? buildDisplayModeToggle(ref, context)
             : null,
       ),
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(10),
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: theme.scaffoldBackgroundColor,
           child: Column(
             children: [
               Directionality(
@@ -69,7 +73,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   children: [
                     CircleAvatar(
                       radius: 40,
-                      backgroundColor: Colors.grey.shade200,
+                      backgroundColor: colorScheme.surfaceVariant,
                       backgroundImage: (user?.media.isNotEmpty ?? false)
                           ? NetworkImage(user!.media.first.original_url)
                           : AssetImage(defaultAvatar) as ImageProvider,
@@ -80,17 +84,17 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       children: [
                         Text(
                           user?.name ?? "User",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
+                          style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            color: colorScheme.primary,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          user?.email ?? "user@myBooking.com",
-                          style: const TextStyle(
+                          user?.email ?? "user@mybooking.com",
+                          style: TextStyle(
                             fontSize: 14,
-                            color: CustomTheme.color3,
+                            color: colorScheme.secondary,
                           ),
                         ),
                       ],
@@ -106,6 +110,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
                   _buildMenuCard(
+                    theme,
                     MenuItem(
                       title: trans().personal_data,
                       subtitle: trans().personal_data_desc,
@@ -121,6 +126,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     ),
                   ),
                   _buildMenuCard(
+                    theme,
                     MenuItem(
                       title: trans().settings,
                       subtitle: trans().settings_desc,
@@ -129,9 +135,10 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                         showModalBottomSheet(
                           context: context,
                           shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                            borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(20)),
                           ),
-                          backgroundColor: Colors.grey.shade100,
+                          backgroundColor: colorScheme.surface,
                           isScrollControlled: true,
                           builder: (context) => const LanguageBottomSheet(),
                         );
@@ -139,6 +146,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     ),
                   ),
                   _buildMenuCard(
+                    theme,
                     MenuItem(
                       title: trans().policies,
                       subtitle: trans().policies_desc,
@@ -154,6 +162,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     ),
                   ),
                   _buildMenuCard(
+                    theme,
                     MenuItem(
                       title: trans().support,
                       subtitle: trans().support_desc,
@@ -162,9 +171,9 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                           context: context,
                           shape: const RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.vertical(top: Radius.circular(20)),
+                            BorderRadius.vertical(top: Radius.circular(20)),
                           ),
-                          backgroundColor: Colors.grey.shade100,
+                          backgroundColor: colorScheme.surface,
                           isScrollControlled: true,
                           builder: (context) => const SupportBottomSheet(),
                         );
@@ -173,6 +182,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     ),
                   ),
                   _buildMenuCard(
+                    theme,
                     MenuItem(
                       title: trans().logout,
                       subtitle: trans().logout_desc,
@@ -184,12 +194,13 @@ class _AccountPageState extends ConsumerState<AccountPage> {
               ),
               const SizedBox(height: 20),
               _buildMenuCard(
+                theme,
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
                       Image.asset(
-                        myBooking,
+                        mybooking,
                         width: 150,
                         height: 40,
                         fit: BoxFit.contain,
@@ -206,18 +217,17 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                             subject: trans().share_subject,
                           );
                         },
-                        icon:
-                            const Icon(Icons.share, color: CustomTheme.color2),
+                        icon: Icon(Icons.share, color: colorScheme.secondary),
                         label: Text(
                           trans().share_app,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: CustomTheme.primaryColor,
+                            color: colorScheme.primary,
                           ),
                         ),
                         style: TextButton.styleFrom(
-                          foregroundColor: CustomTheme.color2,
+                          foregroundColor: colorScheme.secondary,
                         ),
                       ),
                     ],
@@ -233,8 +243,9 @@ class _AccountPageState extends ConsumerState<AccountPage> {
   }
 }
 
-Widget _buildMenuCard(Widget child) {
+Widget _buildMenuCard(ThemeData theme, Widget child) {
   return Card(
+    color: theme.colorScheme.surface,
     elevation: 0,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(16),

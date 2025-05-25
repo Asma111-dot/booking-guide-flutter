@@ -6,7 +6,6 @@ import '../storage/auth_storage.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../providers/auth/user_provider.dart';
-import 'navigation_menu.dart';
 
 class WelcomePage extends ConsumerStatefulWidget {
   const WelcomePage({super.key});
@@ -22,7 +21,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
   void initState() {
     super.initState();
 
-    _controller = VideoPlayerController.asset(welcome)
+    _controller = VideoPlayerController.asset(mybooking)
       ..initialize().then((_) {
         setState(() {});
         _controller.setLooping(false);
@@ -57,9 +56,10 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
       await setFirstTimeFalse();
       Navigator.pushReplacementNamed(context, Routes.login);
     } else {
-      Navigator.pushReplacement(
+      Navigator.pushNamedAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const NavigationMenu()),
+        Routes.navigationMenu,
+            (route) => false,
       );
     }
   }

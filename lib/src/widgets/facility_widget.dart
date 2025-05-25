@@ -8,7 +8,6 @@ import '../providers/favorite/favorite_provider.dart';
 import '../storage/auth_storage.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
-import '../utils/theme.dart';
 
 class FacilityWidget extends ConsumerWidget {
   final Facility facility;
@@ -24,6 +23,9 @@ class FacilityWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     final isFavorite = ref.watch(favoritesProvider.select(
           (state) => state.data?.any((f) => f.id == facility.id) ?? false,
     ));
@@ -39,30 +41,30 @@ class FacilityWidget extends ConsumerWidget {
     }
 
     return GestureDetector(
-        onTap: () {
-          if (facility.firstRoomId == null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('لا توجد غرف متوفرة لهذه المنشأة')),
-            );
-            return;
-          }
-
-          Navigator.pushNamed(
-            context,
-            Routes.roomDetails,
-            arguments: facility,
+      onTap: () {
+        if (facility.firstRoomId == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('لا توجد غرف متوفرة لهذه المنشأة')),
           );
-        },
+          return;
+        }
+
+        Navigator.pushNamed(
+          context,
+          Routes.roomDetails,
+          arguments: facility,
+        );
+      },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: colorScheme.surface,
           borderRadius: BorderRadius.circular(15),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: Colors.black26,
+              color: isDark ? Colors.black12 : Colors.grey.withOpacity(0.1),
               blurRadius: 6,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -95,7 +97,7 @@ class FacilityWidget extends ConsumerWidget {
                     Text(
                       facility.name,
                       style: TextStyle(
-                        color: CustomTheme.primaryColor,
+                        color: colorScheme.primary,
                         fontSize: 16,
                         fontWeight: FontWeight.w900,
                       ),
@@ -106,7 +108,9 @@ class FacilityWidget extends ConsumerWidget {
                           ? '${trans().priceStartFrom} ${firstPrice.toStringAsFixed(0)}${trans().riyalY}'
                           : trans().priceNotAvailable,
                       style: TextStyle(
-                        color: firstPrice > 0 ? CustomTheme.color4 : Colors.redAccent,
+                        color: firstPrice > 0
+                            ? colorScheme.tertiary
+                            : colorScheme.onSurface.withOpacity(0.4),
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                       ),
@@ -114,13 +118,17 @@ class FacilityWidget extends ConsumerWidget {
                     const SizedBox(height: 6),
                     Row(
                       children: [
-                        const Icon(Icons.location_on_outlined, color: CustomTheme.color3, size: 16),
+                        Icon(
+                          Icons.location_on_outlined,
+                          color: colorScheme.secondary,
+                          size: 16,
+                        ),
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
                             facility.address ?? trans().address,
                             style: TextStyle(
-                              color: CustomTheme.color1,
+                              color: colorScheme.secondary,
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
                             ),
@@ -135,7 +143,9 @@ class FacilityWidget extends ConsumerWidget {
               IconButton(
                 icon: Icon(
                   isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: isFavorite ? CustomTheme.color1 : Colors.grey,
+                  color: isFavorite
+                      ? colorScheme.primary
+                      : colorScheme.onSurface.withOpacity(0.4),
                 ),
                 onPressed: () async {
                   final userId = currentUser()?.id;

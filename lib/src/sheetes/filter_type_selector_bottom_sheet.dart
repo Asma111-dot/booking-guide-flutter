@@ -1,6 +1,6 @@
-import 'package:booking_guide/src/helpers/general_helper.dart';
 import 'package:flutter/material.dart';
 
+import '../helpers/general_helper.dart';
 import '../enums/facility_filter_type.dart';
 import '../utils/theme.dart';
 

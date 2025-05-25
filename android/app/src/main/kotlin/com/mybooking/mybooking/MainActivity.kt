@@ -1,4 +1,4 @@
-package com.mybooking.booking_guide
+package com.mybooking.mybooking
 
 import io.flutter.embedding.android.FlutterActivity
 

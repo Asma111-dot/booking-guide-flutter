@@ -1,10 +1,10 @@
-import 'package:booking_guide/src/enums/display_mode.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'src/enums/display_mode.dart';
 import 'src/providers/public/settings_provider.dart';
 import 'src/services/connectivity_service.dart';
 import 'src/services/hive_service.dart' as hive_service;

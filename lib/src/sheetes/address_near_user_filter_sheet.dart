@@ -1,6 +1,6 @@
-import 'package:booking_guide/src/helpers/general_helper.dart';
 import 'package:flutter/material.dart';
 
+import '../helpers/general_helper.dart';
 import '../utils/theme.dart';
 
 typedef OnAddressSelected = void Function(String value);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:booking_guide/src/extensions/theme_extension.dart';
 
+import '../extensions/theme_extension.dart';
 import '../utils/theme.dart';
 
 class ChipWidget extends StatelessWidget {

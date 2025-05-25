@@ -1,5 +1,4 @@
-import 'package:booking_guide/src/extensions/date_formatting.dart';
-
+import '../extensions/date_formatting.dart';
 import '../storage/auth_storage.dart';
 import 'payment.dart';
 import 'room_price.dart';

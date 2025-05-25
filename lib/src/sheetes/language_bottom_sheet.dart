@@ -1,6 +1,7 @@
-import 'package:booking_guide/src/helpers/general_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../helpers/general_helper.dart';
 import '../providers/public/settings_provider.dart';
 import '../utils/theme.dart';
 
