@@ -1,4 +1,3 @@
-import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,40 +14,18 @@ class WelcomePage extends ConsumerStatefulWidget {
 }
 
 class _WelcomePageState extends ConsumerState<WelcomePage> {
-  late VideoPlayerController _controller;
-
   @override
   void initState() {
     super.initState();
 
-    _controller = VideoPlayerController.asset(mybooking)
-      ..initialize().then((_) {
-        setState(() {});
-        _controller.setLooping(false);
-        _controller.play();
-      });
-
-    _controller.addListener(() async {
-      if (_controller.value.position >= _controller.value.duration &&
-          !_controller.value.isPlaying) {
-        _navigateToNextScreen();
-      }
-    });
+    Future.delayed(const Duration(seconds: 3), _navigateToNextScreen);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await ref.read(userProvider.notifier).loadUserFromStorage();
     });
   }
 
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
   Future<void> _navigateToNextScreen() async {
-
     final firstTime = await isFirstTime();
     final loggedIn = isUserLoggedIn();
 
@@ -70,15 +47,10 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          if (_controller.value.isInitialized)
-            FittedBox(
-              fit: BoxFit.cover,
-              child: SizedBox(
-                width: _controller.value.size.width,
-                height: _controller.value.size.height,
-                child: VideoPlayer(_controller),
-              ),
-            ),
+          FittedBox(
+            fit: BoxFit.contain,
+            child: Image.asset(mybooking),
+          ),
         ],
       ),
     );

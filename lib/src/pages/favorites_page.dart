@@ -40,7 +40,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesPage> {
     final favoritesState = ref.watch(favoritesProvider);
 
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -61,7 +61,8 @@ class _FavoritesScreenState extends ConsumerState<FavoritesPage> {
             tabs: [
               Tab(text: trans().all),
               Tab(text: trans().hotel),
-              Tab(text: trans().chalet)
+              Tab(text: trans().chalet),
+              Tab(text: trans().hall),
             ],
           ),
         ),
@@ -83,6 +84,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesPage> {
                 _buildFavoriteList(data, 0), // الكل
                 _buildFavoriteList(data, 1), // فنادق
                 _buildFavoriteList(data, 2), // شاليهات
+                _buildFavoriteList(data, 3), // قاعة
               ],
             );
           },

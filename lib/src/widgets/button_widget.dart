@@ -21,52 +21,66 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textColor = colorScheme.onPrimary;
+
     return SizedBox(
-        width: width,
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: CustomTheme.primaryGradient,
-            borderRadius: BorderRadius.circular(30),
+      width: width,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: CustomTheme.primaryGradient,
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: ElevatedButton(
+          onPressed: disable ? null : () => onPressed?.call(),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            foregroundColor: textColor,
+            disabledForegroundColor: textColor.withOpacity(0.4),
+            disabledBackgroundColor: Colors.grey.withOpacity(0.3),
           ),
-          child: ElevatedButton(
-            onPressed: disable ? null : () => onPressed?.call(),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.transparent,
-              shadowColor: Colors.transparent,
-              foregroundColor: Colors.white,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: iconAfterText
-                  ? [
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      if (icon != null) ...[
-                        const SizedBox(width: 8),
-                        icon!,
-                      ],
-                    ]
-                  : [
-                      if (icon != null) ...[
-                        icon!,
-                        const SizedBox(width: 8),
-                      ],
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: iconAfterText
+                ? [
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                ),
+              ),
+              if (icon != null) ...[
+                const SizedBox(width: 8),
+                IconTheme(
+                  data: IconThemeData(color: textColor),
+                  child: icon!,
+                ),
+              ],
+            ]
+                : [
+              if (icon != null) ...[
+                IconTheme(
+                  data: IconThemeData(color: textColor),
+                  child: icon!,
+                ),
+                const SizedBox(width: 8),
+              ],
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                ),
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

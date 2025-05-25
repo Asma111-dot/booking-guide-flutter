@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
-
 import '../utils/theme.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
-  const CustomAppBar({super.key, this.appTitle, this.route, this.icon, this.actions});
+  const CustomAppBar({
+    super.key,
+    this.appTitle,
+    this.route,
+    this.icon,
+    this.actions,
+  });
+
   @override
   Size get preferredSize => const Size.fromHeight(60);
 
@@ -19,18 +25,20 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return AppBar(
       automaticallyImplyLeading: true,
-      backgroundColor: Colors.white, //background color is white in this app
+      backgroundColor: theme.scaffoldBackgroundColor,
       elevation: 0,
       title: Text(
-        widget.appTitle!,
-        style: const TextStyle(
+        widget.appTitle ?? '',
+        style: TextStyle(
           fontSize: 20,
-          color: CustomTheme.color2,
+          color: colorScheme.primary, // ✅ dynamic text color
         ),
       ),
-      //if icon is not set, return null
       leading: widget.icon != null
           ? Container(
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -40,11 +48,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
         ),
         child: IconButton(
           onPressed: () {
-            //if route is given, then this icon button will navigate to that route
             if (widget.route != null) {
               Navigator.of(context).pushNamed(widget.route!);
             } else {
-              //else, just simply pop back to previous page
               Navigator.of(context).pop();
             }
           },
@@ -54,7 +60,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
         ),
       )
           : null,
-      //if action is not set, return null
       actions: widget.actions,
     );
   }

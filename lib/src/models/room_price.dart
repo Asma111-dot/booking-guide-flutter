@@ -5,7 +5,7 @@ class RoomPrice {
   int id;
   int roomId;
   int capacity;
-  double amount;
+  double price;
   double? deposit;
   String currency;
   String period;
@@ -13,42 +13,41 @@ class RoomPrice {
   String? timeTo;
 
   List<Reservation> reservations;
-
   Room? room;
 
   RoomPrice({
     required this.id,
     required this.roomId,
     required this.capacity,
-    required this.amount,
+    required this.price,
     this.deposit,
     required this.currency,
     required this.period,
-    this.timeFrom, // Nullable
+    this.timeFrom,
     this.timeTo,
     this.reservations = const [],
-    this.room
+    this.room,
   });
 
   RoomPrice.init()
       : id = 0,
         roomId = 0,
         capacity = 0,
-        amount = 0.0,
+        price = 0.0,
         deposit = null,
         currency = '',
         period = '',
         timeFrom = null,
         timeTo = null,
         reservations = [],
-  room = null;
+        room = null;
 
   factory RoomPrice.fromJson(Map<String, dynamic> jsonMap) {
     return RoomPrice(
       id: int.tryParse(jsonMap['id']?.toString() ?? '') ?? 0,
       roomId: int.tryParse(jsonMap['room_id']?.toString() ?? '') ?? 0,
       capacity: int.tryParse(jsonMap['capacity']?.toString() ?? '') ?? 0,
-      amount: double.tryParse(jsonMap['amount']?.toString() ?? '0.0') ?? 0.0,
+      price: double.tryParse(jsonMap['price']?.toString() ?? '0.0') ?? 0.0, // تم تعديل المفتاح هنا
       deposit: double.tryParse(jsonMap['deposit']?.toString() ?? ''),
       currency: jsonMap['currency'] ?? '',
       period: jsonMap['period'] ?? '',
@@ -67,7 +66,7 @@ class RoomPrice {
     'id': id,
     'room_id': roomId,
     'capacity': capacity,
-    'amount': amount,
+    'price': price, // تم تعديل المفتاح هنا
     'deposit': deposit,
     'currency': currency,
     'period': period,
@@ -92,6 +91,6 @@ class RoomPrice {
 
   @override
   String toString() {
-    return 'RoomPrice(id: $id, roomId: $roomId, capacity: $capacity, amount: $amount, deposit: $deposit, currency: $currency, period: $period, timeFrom: $timeFrom, timeTo: $timeTo)';
+    return 'RoomPrice(id: $id, roomId: $roomId, capacity: $capacity, price: $price, deposit: $deposit, currency: $currency, period: $period, timeFrom: $timeFrom, timeTo: $timeTo)';
   }
 }

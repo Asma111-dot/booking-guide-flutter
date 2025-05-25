@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import '../helpers/general_helper.dart';
-import '../utils/theme.dart';
 
 class RoomPriceWidget extends StatelessWidget {
   final dynamic price;
@@ -10,18 +8,20 @@ class RoomPriceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        border: Border.all(
-          color: CustomTheme.primaryColor.withValues(alpha: 0.1 * 255),
-        ),
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
+        border: Border.all(
+          color: colorScheme.outline.withOpacity(0.1),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1 * 255),
+            color: colorScheme.shadow.withOpacity(0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -33,37 +33,39 @@ class RoomPriceWidget extends StatelessWidget {
           // period
           Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.calendar_today,
-                color: CustomTheme.color2,
+                color: colorScheme.secondary,
                 size: 16,
               ),
               const SizedBox(width: 8),
               Text(
                 price.period,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
-                  color: CustomTheme.primaryColor,
+                  color: colorScheme.primary,
                 ),
               ),
             ],
           ),
-          // amount
+
           const SizedBox(height: 8),
+
+          // price
           Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.monetization_on_outlined,
-                color: CustomTheme.color2,
+                color: colorScheme.secondary,
                 size: 16,
               ),
               const SizedBox(width: 8),
               Text(
-              "${price.amount?.toInt() ?? 0} ${trans().riyalY}",
-                style: const TextStyle(
+                "${price.price?.toInt() ?? 0} ${trans().riyalY}",
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: CustomTheme.primaryColor,
+                  color: colorScheme.primary,
                 ),
               ),
             ],

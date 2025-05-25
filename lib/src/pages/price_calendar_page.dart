@@ -147,9 +147,10 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
   Widget build(BuildContext context) {
     final roomPriceState = ref.watch(roomPricesProvider);
     final bookedDates = ref.watch(bookedDatesFromGoogleCalendarProvider);
+    final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: CustomAppBar(
         appTitle: trans().availabilityCalendar,
         icon: arrowBackIcon,
@@ -176,19 +177,19 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
                       children: [
                         Text(
                           trans().view_price_list,
-                          style: const TextStyle(
+                          style:  TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
-                            color: Colors.black87,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           trans().select_period_and_day,
-                          style: const TextStyle(
+                          style:  TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
-                            color: Colors.black54,
+                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                           ),
                         ),
                       ],
@@ -210,6 +211,7 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
                             roomPrice: roomPrice,
                             isSelected: selectedPrice == roomPrice,
                             onTap: () async {
+                              if (selectedPrice?.id == roomPrice.id) return; // 👈 تجنب إعادة التحميل
                               setState(() {
                                 selectedPrice = roomPrice;
                               });
@@ -242,19 +244,19 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
                       children: [
                         Text(
                           trans().question_title,
-                          style: const TextStyle(
+                          style:  TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
-                            color: Colors.black87,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           trans().question_description,
-                          style: const TextStyle(
+                          style:  TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
-                            color: Colors.black54,
+                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                           ),
                         ),
                       ],
@@ -297,7 +299,7 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
           icon: Icon(
             arrowForWordIcon,
             size: 20,
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.background,
           ),
           iconAfterText: true,
           disable: (rangeStart == null ||

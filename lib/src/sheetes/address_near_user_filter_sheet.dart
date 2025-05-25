@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../helpers/general_helper.dart';
-import '../utils/theme.dart';
 
 typedef OnAddressSelected = void Function(String value);
 
@@ -10,10 +9,13 @@ void showAddressNearUserBottomSheet({
   required OnAddressSelected onSelected,
 }) {
   final controller = TextEditingController();
+  final theme = Theme.of(context);
+  final colorScheme = theme.colorScheme;
 
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
+    backgroundColor: theme.scaffoldBackgroundColor,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),
@@ -30,10 +32,9 @@ void showAddressNearUserBottomSheet({
           children: [
             Text(
               trans().enter_current_address,
-              style: TextStyle(
-                fontSize: 14,
+              style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: CustomTheme.color2,
+                color: colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 16),
@@ -44,22 +45,27 @@ void showAddressNearUserBottomSheet({
                 labelStyle: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
-                  color: CustomTheme.primaryColor,
+                  color: colorScheme.primary,
                 ),
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                final address = controller.text.trim();
-                if (address.isNotEmpty) {
-                  onSelected(address);
-                  Navigator.pop(context);
-                }
-              },
-              child: Text(
-                trans().apply_filter,
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  final address = controller.text.trim();
+                  if (address.isNotEmpty) {
+                    onSelected(address);
+                    Navigator.pop(context);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: colorScheme.primary,
+                  foregroundColor: colorScheme.onPrimary,
+                ),
+                child: Text(trans().apply_filter),
               ),
             ),
           ],

@@ -56,26 +56,34 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
     };
     final blackoutDates = normalizedEvents.keys.toList();
 
-    // final blackoutDates = widget.events.keys
-    //     .map((date) => DateUtils.dateOnly(date))
-    //     .toSet()
-    //     .toList();
+    final colorScheme = Theme.of(context).colorScheme;
 
-// ثم في monthViewSettings:
-
+    // لا نحذف أي سطر، فقط نضيف التعديلات على الألوان
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.45,
       child: SfDateRangePicker(
         minDate: DateTime.now(),
         enablePastDates: false,
-        backgroundColor: Colors.white,
+        backgroundColor: colorScheme.background, // ✅ دعم الوضع الليلي
         view: DateRangePickerView.month,
         showNavigationArrow: true,
         showTodayButton: false,
         selectionMode: widget.selectionType == SelectionType.single
             ? DateRangePickerSelectionMode.single
             : DateRangePickerSelectionMode.range,
-        todayHighlightColor: CustomTheme.primaryColor,
+        todayHighlightColor: CustomTheme.color2,
+        selectionColor: CustomTheme.primaryColor,
+        rangeSelectionColor: CustomTheme.primaryColor.withOpacity(0.3),
+        startRangeSelectionColor: CustomTheme.primaryColor,
+        endRangeSelectionColor: CustomTheme.primaryColor,
+        selectionTextStyle: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+        rangeTextStyle: TextStyle(
+          color: Colors.white,
+        ),
+
         onSelectionChanged: (args) {
           if (widget.selectionType == SelectionType.single) {
             final selected = args.value as DateTime;
@@ -105,17 +113,19 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
           weekendDays: const [DateTime.tuesday, DateTime.friday],
         ),
         monthCellStyle: DateRangePickerMonthCellStyle(
-          blackoutDateTextStyle: const TextStyle(
-            color: Colors.grey,
+          blackoutDateTextStyle: TextStyle(
+            color: colorScheme.onSurface.withOpacity(0.4), // ✅ دعم الوضع الليلي
             decoration: TextDecoration.lineThrough,
           ),
-          todayTextStyle: const TextStyle(
+          todayTextStyle: TextStyle(
             color: CustomTheme.color2,
             fontWeight: FontWeight.bold,
+          ),
+          textStyle: TextStyle(
+            color: colorScheme.onSurface, // ✅ دعم الوضع الليلي
           ),
         ),
       ),
     );
   }
-
 }

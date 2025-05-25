@@ -8,8 +8,11 @@ class PrivacyPolicyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: CustomAppBar(
         appTitle: trans().policies,
         icon: arrowBackIcon,
@@ -20,7 +23,11 @@ class PrivacyPolicyPage extends StatelessWidget {
           child: Text(
             privacyPolicyContent,
             textDirection: TextDirection.rtl,
-            style: const TextStyle(fontSize: 16, height: 1.6),
+            style: TextStyle(
+              fontSize: 16,
+              height: 1.6,
+              color: colorScheme.onSurface,
+            ),
           ),
         ),
       ),

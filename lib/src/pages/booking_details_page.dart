@@ -31,13 +31,15 @@ class _BookingDetailsPageState extends ConsumerState<BookingDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     final reservationState = ref.watch(reservationProvider);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.background,
       appBar: CustomAppBarClipper(
         title: trans().reservationDetails,
-
       ),
       body: ViewWidget<res.Reservation>(
         meta: reservationState.meta,
@@ -57,7 +59,7 @@ class _BookingDetailsPageState extends ConsumerState<BookingDetailsPage> {
         child: Button(
           width: double.infinity,
           title: "استعراض تفاصيل المنشأة",
-          icon: const Icon(Icons.apartment, color: Colors.white),
+          icon: Icon(Icons.apartment, color: colorScheme.onPrimary),
           iconAfterText: true,
           disable: false,
           onPressed: () async {

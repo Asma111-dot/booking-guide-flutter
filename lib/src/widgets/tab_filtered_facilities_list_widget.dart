@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../helpers/general_helper.dart';
 import '../providers/sort/sorted_facilities_provider.dart';
-import '../utils/theme.dart';
 import 'facility_widget.dart';
 
 class TabFilteredFacilitiesListWidget extends ConsumerWidget {
@@ -17,30 +16,39 @@ class TabFilteredFacilitiesListWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final allFacilitiesAsync = ref.watch(sortedFacilitiesProvider(''));
+    final colorScheme = Theme.of(context).colorScheme;
 
     if (allFacilitiesAsync.isLoading()) {
       return const Center(child: CircularProgressIndicator());
     }
     if (allFacilitiesAsync.isError()) {
-      return Center(child: Text('خطأ: ${allFacilitiesAsync.message()}'));
+      return Center(
+        child: Text(
+          'خطأ: ${allFacilitiesAsync.message()}',
+          style: TextStyle(color: colorScheme.error),
+        ),
+      );
     }
 
     final allFacilities = allFacilitiesAsync.data ?? [];
     final filteredFacilities =
-        allFacilities.where((f) => f.facilityTypeId == facilityTypeId).toList();
+    allFacilities.where((f) => f.facilityTypeId == facilityTypeId).toList();
 
     final title = facilityTypeId == 1
         ? trans().all_available_hotels
-        : trans().all_available_chalets;
+        : facilityTypeId == 2
+        ? trans().all_available_chalets
+        : trans().all_available_halls;
+
 
     if (filteredFacilities.isEmpty) {
       return Center(
         child: Text(
           trans().no_facilities_available,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Colors.grey,
+            color: colorScheme.onSurface.withOpacity(0.6),
           ),
           textAlign: TextAlign.center,
         ),
@@ -51,13 +59,13 @@ class TabFilteredFacilitiesListWidget extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.only(bottom: 10, left: 12, right: 12),
           child: Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
-              color: CustomTheme.primaryColor,
+              color: colorScheme.primary,
             ),
           ),
         ),

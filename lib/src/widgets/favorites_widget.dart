@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../helpers/general_helper.dart';
 import '../models/facility.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
-import '../utils/theme.dart';
 
 class FavoriteWidget extends StatelessWidget {
   final Facility facility;
@@ -17,13 +17,26 @@ class FavoriteWidget extends StatelessWidget {
   });
 
   @override
+  @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     final defaultImage = facility.logo?.isNotEmpty == true
         ? facility.logo!
         : (facility.facilityTypeId == 1 ? hotelImage : chaletImage);
 
-    final typeLabel = facility.facilityTypeId == 1 ? "فندق" : "شاليه";
-    final typeIcon = facility.facilityTypeId == 1 ? Icons.hotel : Icons.pool;
+    final typeLabel = facility.facilityTypeId == 1
+        ? "فندق"
+        : facility.facilityTypeId == 2
+        ? "شاليه"
+        : "قاعة أعراس";
+
+    final typeIcon = facility.facilityTypeId == 1
+        ? Icons.hotel
+        : facility.facilityTypeId == 2
+        ? Icons.pool
+        : FontAwesomeIcons.dove;
 
     return GestureDetector(
       onTap: () {
@@ -36,11 +49,11 @@ class FavoriteWidget extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.1 * 255),
+              color: colorScheme.shadow.withOpacity(0.1),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),
@@ -75,20 +88,18 @@ class FavoriteWidget extends StatelessWidget {
                   top: 6,
                   left: 6,
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.1 * 255),
+                      color: colorScheme.onSurface.withOpacity(0.4),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
                       children: [
                         Icon(typeIcon, color: Colors.white, size: 14),
                         const SizedBox(width: 4),
-                        Text(
+                         Text(
                           typeLabel,
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 12),
+                          style: TextStyle(color: Colors.white, fontSize: 12),
                         ),
                       ],
                     ),
@@ -99,32 +110,29 @@ class FavoriteWidget extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       facility.name,
-                      style: const TextStyle(
-                        fontSize: 18,
+                      style: theme.textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: CustomTheme.primaryColor,
+                        color: colorScheme.primary,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        const Icon(Icons.location_on_outlined,
-                            color: CustomTheme.color2, size: 16),
+                        Icon(Icons.location_on_outlined,
+                            color: colorScheme.secondary, size: 16),
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
                             facility.address ?? trans().address,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: CustomTheme.color3,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: colorScheme.onSurface.withOpacity(0.7),
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -142,18 +150,18 @@ class FavoriteWidget extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: colorScheme.surface,
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withValues(alpha: 0.1 * 255),
+                        color: colorScheme.shadow.withOpacity(0.1),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),
                     ],
                   ),
-                  child: const Icon(Icons.favorite,
-                      color: CustomTheme.color1, size: 22),
+                  child: Icon(Icons.favorite,
+                      color: colorScheme.primary, size: 22),
                 ),
               ),
             ),

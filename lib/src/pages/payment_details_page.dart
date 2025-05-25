@@ -66,17 +66,18 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final paymentState = ref.watch(paymentProvider);
 
     return Scaffold(
-      backgroundColor: CustomTheme.whiteColor,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: CustomAppBarClipper(title: trans().payment_details),
       body: ViewWidget<p.Payment>(
         meta: paymentState.meta,
         data: paymentState.data,
-        refresh: () async => await ref
-            .read(paymentProvider.notifier)
-            .fetch(paymentId: widget.paymentId),
+        refresh: () async =>
+        await ref.read(paymentProvider.notifier).fetch(paymentId: widget.paymentId),
         forceShowLoaded: paymentState.data != null,
         onLoaded: (data) {
           final reservation = data.reservation;
@@ -91,7 +92,7 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
             child: RepaintBoundary(
               key: _shareKey,
               child: Container(
-                color: CustomTheme.whiteColor,
+                color: colorScheme.surface,
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,37 +103,32 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                       address: reservation?.roomPrice?.room?.facility?.address,
                     ),
                     const SizedBox(height: 20),
-                    const Divider(),
+                    Divider(color: colorScheme.outline.withOpacity(0.3)),
                     const SizedBox(height: 10),
                     Text(
                       trans().payment_details,
-                      style: const TextStyle(
-                        fontSize: 20,
+                      style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: CustomTheme.primaryColor,
+                        color: colorScheme.primary,
                       ),
                     ),
                     const SizedBox(height: 10),
                     CustomRowDetailsWidget(
-                        icon: Icons.price_change,
-                        label: trans().paid_amount,
-                        value:
-                            "${data.reservation?.totalDeposit?.toInt()} ${trans().riyalY}"),
+                      icon: Icons.price_change,
+                      label: trans().paid_amount,
+                      value: "${reservation?.totalDeposit?.toInt()} ${trans().riyalY}",
+                    ),
                     CustomRowDetailsWidget(
-                        icon: Icons.date_range,
-                        label: trans().payment_date,
-                        value: data.date.toDateView()),
-                    // CustomRowWidget(
-                    //     icon: Icons.payment,
-                    //     label: trans().status,
-                    //     value: data.status),
-                    const Divider(height: 30),
+                      icon: Icons.date_range,
+                      label: trans().payment_date,
+                      value: data.date.toDateView(),
+                    ),
+                    Divider(height: 30, color: colorScheme.outline.withOpacity(0.3)),
                     Text(
                       trans().reservationDetails,
-                      style: const TextStyle(
-                        fontSize: 20,
+                      style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: CustomTheme.primaryColor,
+                        color: colorScheme.primary,
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -153,44 +149,44 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                         value: formatDaysAr(daysCount),
                       ),
                       CustomRowDetailsWidget(
-                          icon: Icons.access_time,
-                          label: trans().access_time,
-                          value:
-                              "${reservation.roomPrice?.timeFrom?.fromTimeToDateTime()?.toTimeView() ?? '--:--'} - ${reservation.roomPrice?.timeTo?.fromTimeToDateTime()?.toTimeView() ?? '--:--'}"),
+                        icon: Icons.access_time,
+                        label: trans().access_time,
+                        value:
+                        "${reservation.roomPrice?.timeFrom?.fromTimeToDateTime()?.toTimeView() ?? '--:--'} - ${reservation.roomPrice?.timeTo?.fromTimeToDateTime()?.toTimeView() ?? '--:--'}",
+                      ),
                       CustomRowDetailsWidget(
-                          icon: Icons.people,
-                          label: trans().adults_count,
-                          value:
-                              "${reservation.adultsCount} ${trans().person}"),
+                        icon: Icons.people,
+                        label: trans().adults_count,
+                        value: "${reservation.adultsCount} ${trans().person}",
+                      ),
                       CustomRowDetailsWidget(
-                          icon: Icons.child_care,
-                          label: trans().children_count,
-                          value:
-                              "${reservation.childrenCount} ${trans().person}"),
-                      const Divider(height: 30),
+                        icon: Icons.child_care,
+                        label: trans().children_count,
+                        value: "${reservation.childrenCount} ${trans().person}",
+                      ),
+                      Divider(height: 30, color: colorScheme.outline.withOpacity(0.3)),
                       Text(
                         trans().other_details,
-                        style: const TextStyle(
-                          fontSize: 20,
+                        style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: CustomTheme.primaryColor,
+                          color: colorScheme.primary,
                         ),
                       ),
                       CustomRowDetailsWidget(
-                          icon: Icons.money,
-                          label: trans().total_price,
-                          value:
-                              "${reservation.totalPrice?.toInt()} ${trans().riyalY}"),
+                        icon: Icons.money,
+                        label: trans().total_price,
+                        value: "${reservation.totalPrice?.toInt()} ${trans().riyalY}",
+                      ),
                       CustomRowDetailsWidget(
-                          icon: Icons.paid,
-                          label: trans().paid_amount,
-                          value:
-                              "${data.reservation?.totalDeposit?.toInt()} ${trans().riyalY}"),
+                        icon: Icons.paid,
+                        label: trans().paid_amount,
+                        value: "${reservation.totalDeposit?.toInt()} ${trans().riyalY}",
+                      ),
                       CustomRowDetailsWidget(
                         icon: Icons.price_check,
                         label: trans().remaining_amount,
                         value:
-                            "${((reservation.totalPrice ?? 0) - (data.reservation?.totalDeposit ?? 0)).toInt()} ${trans().riyalY}",
+                        "${((reservation.totalPrice ?? 0) - (reservation.totalDeposit ?? 0)).toInt()} ${trans().riyalY}",
                       ),
                     ],
                   ],
@@ -211,8 +207,7 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
             Expanded(
               child: Button(
                 title: trans().close_and_go_back,
-                icon: const Icon(Icons.close,
-                    size: 20, color: CustomTheme.whiteColor),
+                icon: Icon(Icons.close, size: 20, color: colorScheme.onPrimary),
                 iconAfterText: true,
                 disable: false,
                 onPressed: () async {
@@ -228,8 +223,7 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
             Expanded(
               child: Button(
                 title: trans().share,
-                icon: const Icon(Icons.share,
-                    size: 20, color: CustomTheme.whiteColor),
+                icon: Icon(Icons.share, size: 20, color: colorScheme.onPrimary),
                 iconAfterText: true,
                 disable: false,
                 onPressed: _shareScreenshot,

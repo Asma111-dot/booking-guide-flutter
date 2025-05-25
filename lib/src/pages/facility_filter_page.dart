@@ -49,7 +49,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
     super.initState();
     values[FacilityFilterType.facilityTypeId] = 1;
     selectedFilter = FacilityFilterType.name;
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _tabController.index = 0;
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) return;
@@ -100,7 +100,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
       isSorting = false;
       showResults = false;
 
-      values[FacilityFilterType.facilityTypeId] = (index == 0 ? 1 : 2);
+      values[FacilityFilterType.facilityTypeId] = (index == 0 ? 1 : index == 1 ? 2 : 3);
 
       textController.clear();
       selectedFilter = FacilityFilterType.name;
@@ -117,8 +117,11 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: CustomAppBar(
         appTitle: '',
         icon: arrowBackIcon,
@@ -135,19 +138,19 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                 children: [
                   Text(
                     trans().discoverBestPlace,
-                    style: const TextStyle(
+                    style:  TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black87,
+                      color: colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     trans().searchByNameAddress,
-                    style: const TextStyle(
+                    style:  TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w300,
-                      color: Colors.black54,
+                      color: colorScheme.onSurface.withOpacity(0.6),
                     ),
                   ),
                 ],
@@ -155,12 +158,13 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
             ),
             TabBar(
               controller: _tabController,
-              indicatorColor: CustomTheme.color2,
-              labelColor: CustomTheme.primaryColor,
-              unselectedLabelColor: Colors.grey,
+              indicatorColor: colorScheme.secondary,
+              labelColor: colorScheme.primary,
+              unselectedLabelColor: colorScheme.onSurface.withOpacity(0.4),
               tabs: [
                 Tab(text: trans().hotel),
                 Tab(text: trans().chalet),
+                Tab(text: trans().hall),
               ],
             ),
             const SizedBox(height: 8),
@@ -175,11 +179,11 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                       horizontal: 10,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
+                      color: colorScheme.surface,
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: [
                         BoxShadow(
-                            color: Colors.black12,
+                            color: colorScheme.shadow.withOpacity(0.08),
                             blurRadius: 3,
                             offset: Offset(0, 2)),
                       ],
@@ -221,7 +225,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                       hintStyle: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w400,
-                        color: Colors.grey.shade600,
+                        color: colorScheme.onSurface.withOpacity(0.5),
                       ),
                       prefixIcon: const Icon(
                         Icons.search,
@@ -313,7 +317,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                   label: Text(
                     trans().reset_filters,
                     style: TextStyle(
-                      color: Colors.grey,
+                      color: colorScheme.onSurface.withOpacity(0.6),
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                     ),
@@ -353,6 +357,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
   }
 
   void _openFilterBottomSheet() {
+    final theme = Theme.of(context);
     final filters = FacilityFilterType.values
         .where((f) =>
             f != FacilityFilterType.facilityTypeId &&
@@ -362,7 +367,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),

@@ -68,22 +68,25 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: CustomTheme.whiteColor,
+        backgroundColor: colorScheme.background,
         appBar: AppBar(
           centerTitle: true,
           title: Text(
             trans().completeProfile,
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: CustomTheme.color2,
-                  fontWeight: FontWeight.w200,
-                ),
+            style: theme.textTheme.headlineMedium?.copyWith(
+              color: colorScheme.onBackground,
+              fontWeight: FontWeight.w200,
+            ),
           ),
           elevation: 1,
-          backgroundColor: CustomTheme.whiteColor,
-          iconTheme: const IconThemeData(color: Colors.black),
+          backgroundColor: colorScheme.background,
+          iconTheme: IconThemeData(color: colorScheme.onBackground),
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
@@ -118,10 +121,10 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
                   width: double.infinity,
                   title: trans().save,
                   disable: isLoading,
-                  icon: const Icon(Icons.save_alt, color: Colors.white),
+                  icon: Icon(Icons.save_alt, color: colorScheme.onPrimary),
                   iconAfterText: true,
                   onPressed: submit,
-                )
+                ),
               ],
             ),
           ),

@@ -22,11 +22,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final login = ref.watch(loginProvider);
 
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: true,
+        backgroundColor: colorScheme.background,
         body: Stack(
           children: [
             Column(
@@ -34,7 +37,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 CustomAppBarClipper(
                   title: trans().login,
                 ),
-
                 Expanded(
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
@@ -55,10 +57,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             child: Text(
                               trans().login_subtitle,
-                              style: TextStyle(
-                                fontSize: 12,
+                              style: theme.textTheme.bodySmall?.copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.grey[700],
+                                color: colorScheme.onSurface.withOpacity(0.7),
                               ),
                               textAlign: TextAlign.start,
                             ),
@@ -68,16 +69,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             keyboardType: TextInputType.phone,
                             readOnly: login.isLoading(),
                             decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.phone),
-                              prefixIconColor: CustomTheme.color2,
+                              prefixIcon: Icon(Icons.phone, color: colorScheme.primary),
                               prefixText: '+967 ',
-                              prefixStyle: const TextStyle(
-                                color: CustomTheme.color3,
+                              prefixStyle: theme.textTheme.bodyMedium?.copyWith(
+                                color: colorScheme.onSurface,
                                 fontWeight: FontWeight.w400,
                               ),
                               labelText: trans().phone_number,
-                              labelStyle: const TextStyle(
-                                color: CustomTheme.color3,
+                              labelStyle: theme.textTheme.bodyMedium?.copyWith(
+                                color: colorScheme.onSurface.withOpacity(0.7),
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
@@ -85,14 +85,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide: BorderSide(
-                                  color: CustomTheme.primaryColor.withValues(alpha: 0.1 * 255),
+                                  color: colorScheme.outline.withOpacity(0.3),
                                   width: 1.5,
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(
-                                  color: CustomTheme.primaryColor,
+                                borderSide: BorderSide(
+                                  color: colorScheme.primary,
                                   width: 1.5,
                                 ),
                               ),
@@ -136,15 +136,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 width: double.infinity,
                 title: trans().login,
                 disable: login.isLoading(),
-                icon: const Icon(Icons.login, color: Colors.white),
+                icon: Icon(Icons.login, color: colorScheme.onPrimary),
                 iconAfterText: true,
                 onPressed: () async {
                   final phone = ref.read(phoneProvider);
                   if (phone.length != 9 || !phone.startsWith('7')) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text(
-                            "الرجاء إدخال رقم هاتف صحيح مكون من 9 أرقام ويبدأ بـ 7"),
+                        content: Text("الرجاء إدخال رقم هاتف صحيح مكون من 9 أرقام ويبدأ بـ 7"),
                       ),
                     );
                     return;

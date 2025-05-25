@@ -22,6 +22,7 @@ class ReservationDetailsContent extends StatelessWidget {
     final checkIn = data.checkInDate;
     final checkOut = data.checkOutDate;
     final daysCount = checkOut.difference(checkIn).inDays + 1;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return SingleChildScrollView(
       padding: padding,
@@ -35,10 +36,9 @@ class ReservationDetailsContent extends StatelessWidget {
           ),
 
           const SizedBox(height: 10),
-          const Divider(color: Colors.grey),
+          Divider(color: colorScheme.outline.withOpacity(0.5)),
           const SizedBox(height: 10),
 
-          // Dates
           CustomRowDetailsWidget(
             icon: Icons.calendar_today,
             label: trans().reservation_date,
@@ -74,7 +74,7 @@ class ReservationDetailsContent extends StatelessWidget {
           ),
 
           const SizedBox(height: 15),
-          const Divider(color: Colors.grey),
+          Divider(color: colorScheme.outline.withOpacity(0.5)),
           const SizedBox(height: 15),
 
           CustomRowDetailsWidget(
@@ -100,7 +100,7 @@ class ReservationDetailsContent extends StatelessWidget {
           ),
 
           const SizedBox(height: 15),
-          const Divider(color: Colors.grey),
+          Divider(color: colorScheme.outline.withOpacity(0.5)),
           const SizedBox(height: 15),
 
           CustomRowDetailsWidget(

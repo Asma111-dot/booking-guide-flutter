@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../utils/assets.dart';
-import '../utils/theme.dart';
 import '../helpers/general_helper.dart';
 
 class CustomHeaderDetailsWidget extends StatelessWidget {
@@ -18,7 +17,11 @@ class CustomHeaderDetailsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (logo != null) ...[
           Container(
@@ -28,7 +31,7 @@ class CustomHeaderDetailsWidget extends StatelessWidget {
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: CustomTheme.color2.withOpacity(0.1),
+                  color: colorScheme.primary.withOpacity(0.1),
                   spreadRadius: 2,
                   blurRadius: 3,
                   offset: const Offset(0, 3),
@@ -56,26 +59,33 @@ class CustomHeaderDetailsWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "  ${name ?? trans().not_available}",
-                style: const TextStyle(
-                  fontSize: 24,
+                name ?? trans().not_available,
+                style: TextStyle(
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: CustomTheme.primaryColor,
+                  color: colorScheme.primary,
                 ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
+              const SizedBox(height: 4),
               Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.location_on_outlined,
-                    color: CustomTheme.color2,
+                    color: colorScheme.secondary,
                     size: 16,
                   ),
-                  const SizedBox(width: 8),
-                  Text(
-                    " ${address ?? trans().not_available}",
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: CustomTheme.color3,
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: Text(
+                      address ?? trans().not_available,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: colorScheme.onSurface.withOpacity(0.7),
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                     ),
                   ),
                 ],

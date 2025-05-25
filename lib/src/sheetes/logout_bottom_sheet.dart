@@ -5,21 +5,23 @@ import '../providers/auth/user_provider.dart';
 import '../utils/theme.dart';
 
 void showLogoutBottomSheet(BuildContext context, WidgetRef ref) {
+  final colorScheme = Theme.of(context).colorScheme;
+
   showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
     ),
-    backgroundColor: Colors.white,
+    backgroundColor: colorScheme.background,
     builder: (_) => Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(
+          Icon(
             Icons.logout,
             size: 30,
-            color: CustomTheme.color2,
+            color: colorScheme.primary,
           ),
           const SizedBox(height: 15),
           Text(
@@ -27,7 +29,7 @@ void showLogoutBottomSheet(BuildContext context, WidgetRef ref) {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: CustomTheme.primaryColor,
+              color: colorScheme.onSurface,
             ),
             textAlign: TextAlign.start,
           ),

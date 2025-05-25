@@ -7,7 +7,14 @@ class CustomTheme {
 
   CustomTheme({required this.isDark});
 
-  String getFont(String languageCode) => 'GESS';
+  // String getFont(String languageCode) => 'GESS';
+  String getFont(String languageCode) {
+    switch (languageCode) {
+      case 'ar': return 'Tajawal';
+      case 'en': return 'GESS';
+      default: return 'Cairo';
+    }
+  }
 
   // return 'Tajawal';
   // return 'Cairo';
@@ -80,8 +87,9 @@ class CustomTheme {
           onBackground: isDark ? Colors.white : Colors.black,
           surface: cardColor(),
           onSurface: isDark ? Colors.white : Colors.black,
-          error: dangerColor(),
-          onError: Colors.white,
+          error: primaryColor,
+          tertiary: color4,
+          onError: Colors.black,
         ),
         scaffoldBackgroundColor: scaffoldColor(),
         cardColor: cardColor(),
@@ -200,7 +208,15 @@ class CustomTheme {
         checkboxTheme: CheckboxThemeData(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         ),
-      );
+    snackBarTheme: SnackBarThemeData(
+      backgroundColor: isDark ? Colors.black : Colors.black, // مضمون
+      contentTextStyle: const TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+        fontSize: 14,
+      ),
+    ),
+  );
 }
 
 BoxDecoration boxDecoration(BuildContext context) {

@@ -26,11 +26,13 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final paymentState = ref.watch(paymentSaveProvider.notifier);
     final paymentConfirm = ref.watch(paymentConfirmProvider.notifier);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: CustomAppBar(
         appTitle: trans().payment,
         icon: arrowBackIcon,
@@ -44,8 +46,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
               padding: const EdgeInsets.all(16.0),
               child: Text(
                 trans().payment_methods,
-                style: const TextStyle(
-                  fontSize: 18,
+                style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -59,12 +60,12 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
               },
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey[100],
+                  color: colorScheme.surfaceVariant.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
                     color: selectedPaymentMethod == 'فلوسك'
-                        ? CustomTheme.primaryColor
-                        : Colors.grey,
+                        ? colorScheme.primary
+                        : colorScheme.outline,
                     width: 1,
                   ),
                 ),
@@ -78,18 +79,15 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                       floosakImage,
                       width: 40,
                       height: 40,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Icon(Icons.error, color: Colors.grey, size: 40);
-                      },
+                      errorBuilder: (context, error, stackTrace) =>
+                          Icon(Icons.error, color: colorScheme.error, size: 40),
                     ),
                     const SizedBox(width: 16),
                     Flexible(
                       child: Text(
                         trans().floosak,
-                        style: const TextStyle(
-                          fontSize: 16,
+                        style: theme.textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -100,8 +98,8 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                           ? Icons.radio_button_checked
                           : Icons.radio_button_off,
                       color: selectedPaymentMethod == 'فلوسك'
-                          ? CustomTheme.primaryColor
-                          : Colors.grey,
+                          ? colorScheme.primary
+                          : colorScheme.outline,
                       size: 24,
                     ),
                   ],
@@ -114,26 +112,17 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Button(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width - 40,
+          width: MediaQuery.of(context).size.width - 40,
           title: trans().completeTheReservation,
           disable: selectedPaymentMethod == null || isLoading,
           icon: isLoading
-              ? const CircularProgressIndicator(color: CustomTheme.color2)
-              : const Icon(
-            Icons.arrow_forward,
-            size: 20,
-            color: Colors.white,
-          ),
+              ? CircularProgressIndicator(color: colorScheme.secondary)
+              : Icon(Icons.arrow_forward, size: 20, color: colorScheme.onPrimary),
           iconAfterText: true,
           onPressed: selectedPaymentMethod == null || isLoading
               ? null
               : () async {
-            setState(() {
-              isLoading = true;
-            });
+            setState(() => isLoading = true);
             if (selectedPaymentMethod == 'فلوسك') {
               final payment = pay.Payment.basic(
                 reservationId: widget.reservationId,
@@ -152,10 +141,11 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                     TextEditingController();
 
                     return AlertDialog(
+                      backgroundColor: colorScheme.background,
                       title: Text(
-                        (trans().confirm_payment),
-                        style: TextStyle(
-                          color: CustomTheme.color2,
+                        trans().confirm_payment,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: colorScheme.primary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -168,59 +158,56 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                       ),
                       actions: [
                         TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text(trans().cancel),
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: Text(
+                            trans().cancel,
+                            style: TextStyle(color: colorScheme.secondary),
+                          ),
                         ),
                         TextButton(
                           onPressed: () async {
                             final confirmationCode = int.tryParse(
-                                convertToEnglishNumbers(
-                                    confirmationController.text.trim()));
+                              convertToEnglishNumbers(
+                                confirmationController.text.trim(),
+                              ),
+                            );
 
-                            if (confirmationCode != null) {
+                            if (confirmationCode != null &&
+                                paymentId != null) {
                               Navigator.of(context).pop();
 
-                              if (paymentId != null) {
-                                await paymentConfirm.confirmPayment(
-                                  paymentId!,
-                                  confirmationCode,
-                                );
+                              await paymentConfirm.confirmPayment(
+                                paymentId!,
+                                confirmationCode,
+                              );
 
-                                final confirmState =
-                                ref.read(paymentConfirmProvider);
+                              final confirmState =
+                              ref.read(paymentConfirmProvider);
 
-                                if (confirmState.isLoaded()) {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        trans()
-                                            .payment_confirmed_successfully,
-                                        style: TextStyle(
-                                          color: CustomTheme.color2,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    confirmState.isLoaded()
+                                        ? trans().payment_confirmed_successfully
+                                        : confirmState.meta.message,
+                                    style: TextStyle(
+                                      color: confirmState.isLoaded()
+                                          ? colorScheme.onPrimary
+                                          : colorScheme.onError,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                  );
-                                } else {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(
-                                    SnackBar(
-                                      content:
-                                      Text(confirmState.meta.message),
-                                    ),
-                                  );
-                                }
-                              }
+                                  ),
+                                  backgroundColor: confirmState.isLoaded()
+                                      ? colorScheme.primary
+                                      : colorScheme.error,
+                                ),
+                              );
                             }
                           },
                           child: Text(
                             trans().verify,
                             style: TextStyle(
-                              color: CustomTheme.primaryColor,
+                              color: colorScheme.primary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -233,17 +220,13 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(
-                        currentState.meta.message,
-                      ),
+                      content: Text(currentState.meta.message),
                     ),
                   );
                 }
               }
             }
-            setState(() {
-              isLoading = false;
-            });
+            setState(() => isLoading = false);
           },
         ),
       ),

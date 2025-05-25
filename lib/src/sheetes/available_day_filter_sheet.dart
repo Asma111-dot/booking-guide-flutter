@@ -13,10 +13,13 @@ void showAvailableDayBottomSheet({
   final date = ValueNotifier<DateTime?>(null);
   final controller = TextEditingController();
   final today = DateTime.now();
+  final theme = Theme.of(context);
+  final colorScheme = theme.colorScheme;
 
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
+    backgroundColor: theme.scaffoldBackgroundColor,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),
@@ -36,10 +39,9 @@ void showAvailableDayBottomSheet({
               children: [
                 Text(
                   trans().select_availability_day,
-                  style: TextStyle(
-                    fontSize: 14,
+                  style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: CustomTheme.color2,
+                    color: colorScheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -51,12 +53,12 @@ void showAvailableDayBottomSheet({
                     labelStyle: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: CustomTheme.primaryColor,
+                      color: colorScheme.primary,
                     ),
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                     suffixIcon: Icon(
                       Icons.calendar_today,
-                      color: CustomTheme.color2,
+                      color: colorScheme.secondary,
                     ),
                   ),
                   onTap: () async {
@@ -65,12 +67,15 @@ void showAvailableDayBottomSheet({
                       builder: (_) {
                         DateTime temp = date.value ?? today;
                         return AlertDialog(
-                          title: Text(trans().select_date,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: CustomTheme.color2,
-                              )),
+                          backgroundColor: colorScheme.background,
+                          title: Text(
+                            trans().select_date,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: colorScheme.onSurface,
+                            ),
+                          ),
                           content: SizedBox(
                             height: 300,
                             child: dp.DayPicker.single(
@@ -79,11 +84,13 @@ void showAvailableDayBottomSheet({
                               firstDate: today,
                               lastDate: DateTime(2100),
                               datePickerStyles: dp.DatePickerRangeStyles(
-                                selectedDateStyle:
-                                    const TextStyle(color: Colors.white),
+                                selectedDateStyle: const TextStyle(color: Colors.white),
                                 selectedSingleDateDecoration: BoxDecoration(
-                                  color: CustomTheme.color2,
+                                  color: colorScheme.secondary,
                                   shape: BoxShape.circle,
+                                ),
+                                dayHeaderStyle: dp.DayHeaderStyle(
+                                  textStyle: TextStyle(color: colorScheme.onSurface),
                                 ),
                               ),
                             ),
@@ -99,19 +106,24 @@ void showAvailableDayBottomSheet({
                   },
                 ),
                 const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    if (date.value != null) {
-                      onSelected(
-                        convertToEnglishNumbers(
-                          date.value!.toSqlDateOnly(),
-                        ),
-                      );
-                      Navigator.pop(context);
-                    }
-                  },
-                  child: Text(
-                    trans().apply_filter,
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: colorScheme.primary,
+                      foregroundColor: colorScheme.onPrimary,
+                    ),
+                    onPressed: () {
+                      if (date.value != null) {
+                        onSelected(
+                          convertToEnglishNumbers(
+                            date.value!.toSqlDateOnly(),
+                          ),
+                        );
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Text(trans().apply_filter),
                   ),
                 ),
               ],

@@ -43,28 +43,33 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
     childrenController = TextEditingController();
   }
 
-  InputDecoration _inputDecoration(String label, {bool hasError = false}) {
+  InputDecoration _inputDecoration(BuildContext context, String label, {bool hasError = false}) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return InputDecoration(
       labelText: label,
       labelStyle: TextStyle(
-        color: hasError ? Colors.red : CustomTheme.color2,
+        color: hasError ? colorScheme.error : colorScheme.primary,
         fontWeight: FontWeight.w500,
       ),
+      filled: true,
+      fillColor: theme.inputDecorationTheme.fillColor ?? colorScheme.surface,
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: CustomTheme.color2, width: 1.5),
+        borderSide: BorderSide(color: colorScheme.primary, width: 1.5),
         borderRadius: BorderRadius.circular(15),
       ),
       errorBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: Colors.red, width: 2),
+        borderSide: BorderSide(color: colorScheme.error, width: 2),
         borderRadius: BorderRadius.circular(8),
       ),
       focusedErrorBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: Colors.redAccent, width: 2),
+        borderSide: BorderSide(color: colorScheme.error, width: 2),
         borderRadius: BorderRadius.circular(8),
       ),
-      errorStyle: const TextStyle(
-        color: Colors.red,
+      errorStyle: TextStyle(
+        color: colorScheme.error,
         fontWeight: FontWeight.bold,
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
@@ -83,8 +88,12 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
     final reservation = ref.watch(reservationSaveProvider);
     final roomPriceState = ref.watch(roomPricesProvider);
 
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textColor = colorScheme.onSurface;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: CustomAppBar(
         appTitle: trans().continueBooking,
         icon: arrowBackIcon,
@@ -94,8 +103,8 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
         meta: roomPriceState.meta,
         data: roomPriceState.data,
         refresh: () => ref.read(roomPricesProvider.notifier).fetch(
-              roomId: widget.roomPrice.reservations.first.id,
-            ),
+          roomId: widget.roomPrice.reservations.first.id,
+        ),
         forceShowLoaded: roomPriceState.data != null,
         onLoaded: (data) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -108,14 +117,14 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                 children: [
                   Row(
                     children: [
-                      const Icon(Icons.info_outline,
-                          size: 16, color: Colors.grey),
+                      Icon(Icons.info_outline, size: 16, color: colorScheme.outline),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           trans().booking_type_hint,
-                          style:
-                              TextStyle(fontSize: 13, color: Colors.grey[700]),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: textColor.withOpacity(0.7),
+                          ),
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -126,20 +135,13 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                   DropdownButtonFormField<String>(
                     value: bookingType,
                     items: [
-                      DropdownMenuItem(
-                          value: 'عائلة', child: Text(trans().family)),
-                      DropdownMenuItem(
-                          value: 'نساء', child: Text(trans().women)),
+                      DropdownMenuItem(value: 'عائلة', child: Text(trans().family)),
+                      DropdownMenuItem(value: 'نساء', child: Text(trans().women)),
                       DropdownMenuItem(value: 'رجال', child: Text(trans().men)),
-                      DropdownMenuItem(
-                          value: 'شركة', child: Text(trans().companies)),
+                      DropdownMenuItem(value: 'شركة', child: Text(trans().companies)),
                     ],
-                    onChanged: (value) {
-                      setState(() {
-                        bookingType = value;
-                      });
-                    },
-                    decoration: _inputDecoration(trans().booking_type),
+                    onChanged: (value) => setState(() => bookingType = value),
+                    decoration: _inputDecoration(context, trans().booking_type),
                     validator: (value) => value == null
                         ? trans().please_choose_booking_type
                         : null,
@@ -152,7 +154,8 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                       const SizedBox(width: 6),
                       Text(
                         trans().adults_hint,
-                        style: TextStyle(fontSize: 13, color: Colors.grey[700]),
+                        style:
+                        TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7))
                       ),
                     ],
                   ),
@@ -160,7 +163,7 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                   TextFormField(
                       controller: adultsController,
                       keyboardType: TextInputType.number,
-                      decoration: _inputDecoration(trans().adults_count),
+                      decoration: _inputDecoration(context, trans().adults_count),
                       validator: (value) => value!.isEmpty
                           ? trans().please_enter_adults_count
                           : null,
@@ -183,7 +186,8 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                       const SizedBox(width: 6),
                       Text(
                         trans().children_hint,
-                        style: TextStyle(fontSize: 13, color: Colors.grey[700]),
+                        style:
+                        TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7))
                       ),
                     ],
                   ),
@@ -191,7 +195,7 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                   TextFormField(
                     controller: childrenController,
                     keyboardType: TextInputType.number,
-                    decoration: _inputDecoration(trans().children_count),
+                    decoration: _inputDecoration(context, trans().children_count),
                     validator: (value) => null,
                     onChanged: (value) {
                       final normalized = convertToEnglishNumbers(value);
@@ -215,8 +219,7 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
         child: Button(
           width: double.infinity,
           title: trans().completeTheReservation,
-          icon:
-          const Icon(Icons.arrow_forward, size: 20, color: Colors.white),
+          icon: Icon(Icons.arrow_forward, size: 20, color: Theme.of(context).colorScheme.onPrimary),
           iconAfterText: true,
           disable: false,
           onPressed: () async {
@@ -272,7 +275,6 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
           },
         ),
       ),
-
     );
   }
 }

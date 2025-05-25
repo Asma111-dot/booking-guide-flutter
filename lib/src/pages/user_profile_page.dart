@@ -45,8 +45,11 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
 
 
   @override
+  @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider).data;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     if (user == null) {
       return const Scaffold(
@@ -55,7 +58,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: CustomAppBar(
         appTitle: trans().edit_personal_data,
         icon: arrowBackIcon,
@@ -75,7 +78,6 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
             ),
 
             const SizedBox(height: 30),
-
             CustomTextField(
               controller: nameController,
               label: trans().fullName,
@@ -95,18 +97,19 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
 
             const SizedBox(height: 30),
 
-            /// حذف الحساب
+            /// زر حذف الحساب
             ElevatedButton.icon(
               onPressed: () async {
                 final confirm = await showDialog<bool>(
                   context: context,
                   builder: (_) => AlertDialog(
+                    backgroundColor: colorScheme.surface,
                     title: Text(
                       trans().are_you_sure,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: CustomTheme.color2,
+                        color: colorScheme.primary,
                       ),
                     ),
                     content: Text(
@@ -114,7 +117,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: CustomTheme.primaryColor,
+                        color: colorScheme.onSurface.withOpacity(0.7),
                       ),
                     ),
                     actions: [
@@ -123,7 +126,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                         child: Text(
                           trans().cancel,
                           style: TextStyle(
-                            color: CustomTheme.primaryColor,
+                            color: colorScheme.primary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -133,7 +136,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                         child: Text(
                           trans().verify,
                           style: TextStyle(
-                            color: Colors.grey[700],
+                            color: colorScheme.error,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
@@ -148,18 +151,18 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
               },
               label: Text(
                 trans().delete_account,
-                style: TextStyle(color: Colors.red.shade700),
+                style: TextStyle(color: colorScheme.error),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
+                backgroundColor: colorScheme.background,
                 elevation: 2,
-                side: BorderSide(color: Colors.red.shade700),
+                side: BorderSide(color: colorScheme.error),
                 minimumSize: const Size(double.infinity, 50),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              icon: Icon(Icons.delete_forever, color: Colors.red.shade700),
+              icon: Icon(Icons.delete_forever, color: colorScheme.error),
             ),
 
             const SizedBox(height: 40),
@@ -180,11 +183,10 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                           email: emailController.text.trim(),
                           address: addressController.text.trim(),
                         );
-
                         await ref.read(userProvider.notifier).updateUser(
-                              updatedUser,
-                              selectedImage,
-                            );
+                          updatedUser,
+                          selectedImage,
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,
@@ -209,9 +211,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
+                      onPressed: () => Navigator.pop(context),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,
                         shadowColor: Colors.transparent,

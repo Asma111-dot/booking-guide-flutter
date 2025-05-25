@@ -11,6 +11,7 @@ class LanguageBottomSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Padding(
       padding: const EdgeInsets.all(20),
@@ -23,7 +24,7 @@ class LanguageBottomSheet extends ConsumerWidget {
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: CustomTheme.color2,
+              color: colorScheme.primary,
             ),
             textAlign: TextAlign.center,
           ),
@@ -34,6 +35,7 @@ class LanguageBottomSheet extends ConsumerWidget {
             label: 'العربية',
             value: 'ar',
             selected: settings.languageCode == 'ar',
+            colorScheme: colorScheme,
           ),
           const SizedBox(height: 10),
           _buildLanguageOption(
@@ -42,6 +44,7 @@ class LanguageBottomSheet extends ConsumerWidget {
             label: 'English',
             value: 'en',
             selected: settings.languageCode == 'en',
+            colorScheme: colorScheme,
           ),
         ],
       ),
@@ -54,9 +57,10 @@ class LanguageBottomSheet extends ConsumerWidget {
         required String label,
         required String value,
         required bool selected,
+        required ColorScheme colorScheme,
       }) {
     return Material(
-      color: Colors.white,
+      color: colorScheme.surface,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         onTap: () {
@@ -64,13 +68,13 @@ class LanguageBottomSheet extends ConsumerWidget {
           Navigator.pop(context);
         },
         borderRadius: BorderRadius.circular(12),
-        splashColor: CustomTheme.color2.withOpacity(0.1),
-        highlightColor: CustomTheme.color2.withOpacity(0.05),
+        splashColor: colorScheme.primary.withOpacity(0.1),
+        highlightColor: colorScheme.primary.withOpacity(0.05),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.grey.shade300),
+            border: Border.all(color: colorScheme.outline.withOpacity(0.2)),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,11 +83,11 @@ class LanguageBottomSheet extends ConsumerWidget {
                 label,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: selected ? CustomTheme.color2 : Colors.black,
+                  color: selected ? colorScheme.primary : colorScheme.onSurface,
                 ),
               ),
               if (selected)
-                const Icon(Icons.check_circle, color: CustomTheme.color2),
+                Icon(Icons.check_circle, color: colorScheme.primary),
             ],
           ),
         ),

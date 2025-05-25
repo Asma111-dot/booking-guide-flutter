@@ -37,9 +37,11 @@ class _ReservationDetailsPageState
   @override
   Widget build(BuildContext context) {
     final reservationState = ref.watch(reservationProvider);
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: CustomAppBarClipper(
         title: trans().reservationDetails,
       ),
@@ -63,54 +65,47 @@ class _ReservationDetailsPageState
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // ⚠️ ملاحظة تنبيه للمستخدم
             Container(
               padding: const EdgeInsets.symmetric(vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.amber.shade50,
+                color: colorScheme.secondaryContainer.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.info_outline, color: Colors.amber),
+                  Icon(Icons.info_outline, color: colorScheme.secondary),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       trans().booking_not_confirmed_warning,
-                      style: const TextStyle(color: Colors.black87),
+                      style: TextStyle(color: colorScheme.onSurface),
                     ),
                   ),
                 ],
               ),
             ),
-
             const SizedBox(height: 12),
-
-            // 🔙 زر التراجع
             OutlinedButton.icon(
               onPressed: () async {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   Routes.navigationMenu,
-                  (route) => false,
+                      (route) => false,
                 );
               },
               icon: const Icon(Icons.arrow_back),
               label: Text(trans().go_back),
               style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: Colors.grey),
+                side: BorderSide(color: colorScheme.outline),
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
             ),
-
             const SizedBox(height: 12),
-
-            // 💳 زر الدفع
             Button(
               width: double.infinity,
               title: trans().payment_now,
-              icon: const Icon(Icons.arrow_forward,
-                  size: 20, color: Colors.white),
+              icon: Icon(Icons.arrow_forward,
+                  size: 20, color: colorScheme.onPrimary),
               iconAfterText: true,
               disable: false,
               onPressed: () async {

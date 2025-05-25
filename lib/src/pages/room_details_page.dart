@@ -86,7 +86,9 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
       }
     });
   }
-  bool isOverflowingText(String text, TextStyle style, double maxWidth, int maxLines) {
+
+  bool isOverflowingText(
+      String text, TextStyle style, double maxWidth, int maxLines) {
     final textPainter = TextPainter(
       text: TextSpan(text: text, style: style),
       maxLines: maxLines,
@@ -106,6 +108,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
     tp.layout(maxWidth: maxWidth);
     return tp.didExceedMaxLines;
   }
+
   @override
   void dispose() {
     tabController.dispose();
@@ -117,9 +120,11 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
   @override
   Widget build(BuildContext context) {
     final roomState = ref.watch(roomProvider);
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: ViewWidget<r.Room>(
         meta: roomState.meta,
         data: roomState.data,
@@ -216,14 +221,14 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                 child: Container(
                   padding: const EdgeInsets.all(0),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 150),
+                    color: colorScheme.surface.withOpacity(0.8),
                     // 178 ≈ 0.7 * 255
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: IconButton(
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.arrow_back_ios,
-                      color: CustomTheme.color2,
+                      color: colorScheme.onSurface,
                     ),
                     onPressed: () => Navigator.pop(context),
                   ),
@@ -235,13 +240,13 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                 child: Container(
                   padding: const EdgeInsets.all(0),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 150),
+                    color: colorScheme.surface.withOpacity(0.8),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: IconButton(
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.share,
-                      color: CustomTheme.color2,
+                      color: colorScheme.onSurface,
                     ),
                     onPressed: () async {
                       final room = ref.read(roomProvider).data;
@@ -265,7 +270,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                   child: Text(
                     "${pageController.positions.isNotEmpty ? (pageController.page?.toInt() ?? 0) + 1 : 1}/${room.media.length}",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: colorScheme.onPrimary,
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
@@ -280,14 +285,14 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                   return Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: colorScheme.background,
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(20),
                           topRight: Radius.circular(20),
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.1 * 255),
+                            color: colorScheme.shadow.withOpacity(0.1),
                             blurRadius: 10,
                             offset: const Offset(0, -4),
                           ),
@@ -311,17 +316,20 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                             children: [
                               Icon(
                                 Icons.location_on_outlined,
-                                color: CustomTheme.color2,
+                                color: colorScheme.onSurface,
                                 size: 20,
                               ),
-                              SizedBox(width: 4),
-                              Text(
-                                widget.facility.address?.toString() ??
-                                    trans().address_not_available,
-                                style: TextStyle(
-                                  color: CustomTheme.color3,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                              const SizedBox(width: 4),
+                              Expanded(
+                                child: Text(
+                                  widget.facility.address?.toString() ?? trans().address_not_available,
+                                  style: const TextStyle(
+                                    color: CustomTheme.color3,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
                                 ),
                               ),
                             ],
@@ -392,7 +400,8 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                                         // ),
                                         // 🏡 عن الشاليه
                                         Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               trans().about_facility,
@@ -405,24 +414,36 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                                             const SizedBox(height: 4),
                                             Text(
                                               widget.facility.desc,
-                                              style: const TextStyle(fontSize: 16),
-                                              maxLines: showAboutFull ? null : 2,
-                                              overflow: showAboutFull ? TextOverflow.visible : TextOverflow.ellipsis,
+                                              style:
+                                                  const TextStyle(fontSize: 16),
+                                              maxLines:
+                                                  showAboutFull ? null : 2,
+                                              overflow: showAboutFull
+                                                  ? TextOverflow.visible
+                                                  : TextOverflow.ellipsis,
                                             ),
-                                            if (widget.facility.desc.length > 150)
+                                            if (widget.facility.desc.length >
+                                                150)
                                               TextButton(
-                                                onPressed: () => setState(() => showAboutFull = !showAboutFull),
-                                                child: Text(showAboutFull ? 'عرض أقل' : 'قراءة المزيد'),
+                                                onPressed: () => setState(() =>
+                                                    showAboutFull =
+                                                        !showAboutFull),
+                                                child: Text(showAboutFull
+                                                    ? 'عرض أقل'
+                                                    : 'قراءة المزيد'),
                                               ),
                                           ],
                                         ),
 
-                                        const Divider(color: Colors.grey, thickness: 1),
+                                         Divider(
+                                            color: colorScheme.outline.withOpacity(0.3),
+                                            thickness: 1),
                                         const SizedBox(height: 8),
 
 // 📜 شروط وسياسات المكان
                                         Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               trans().read_terms_before_booking,
@@ -435,68 +456,108 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                                             const SizedBox(height: 4),
                                             Text(
                                               room.type,
-                                              style: const TextStyle(fontSize: 16),
+                                              style:
+                                                  const TextStyle(fontSize: 16),
                                               maxLines: showTypeFull ? null : 2,
-                                              overflow: showTypeFull ? TextOverflow.visible : TextOverflow.ellipsis,
+                                              overflow: showTypeFull
+                                                  ? TextOverflow.visible
+                                                  : TextOverflow.ellipsis,
                                             ),
                                             if (room.type.length > 150)
                                               TextButton(
-                                                onPressed: () => setState(() => showTypeFull = !showTypeFull),
-                                                child: Text(showTypeFull ? 'عرض أقل' : 'قراءة المزيد'),
+                                                onPressed: () => setState(() =>
+                                                    showTypeFull =
+                                                        !showTypeFull),
+                                                child: Text(showTypeFull
+                                                    ? 'عرض أقل'
+                                                    : 'قراءة المزيد'),
                                               ),
                                           ],
                                         ),
 
-                                        const Divider(color: Colors.grey, thickness: 1),
+                                        Divider(
+                                          color: colorScheme.outline.withOpacity(0.3),
+                                          thickness: 1,
+                                        ),
+
                                         const SizedBox(height: 8),
 
 // 🛡️ التأمين على ممتلكات المكان
                                         StatefulBuilder(
                                           builder: (context, localSetState) {
                                             final text = room.desc;
-                                            final textStyle = const TextStyle(fontSize: 16);
+                                            final textStyle =
+                                                const TextStyle(fontSize: 16);
 
                                             return LayoutBuilder(
                                               builder: (context, constraints) {
-                                                WidgetsBinding.instance.addPostFrameCallback((_) {
-                                                  final textPainter = TextPainter(
-                                                    text: TextSpan(text: text, style: textStyle),
-                                                    textDirection: TextDirection.rtl,
+                                                WidgetsBinding.instance
+                                                    .addPostFrameCallback((_) {
+                                                  final textPainter =
+                                                      TextPainter(
+                                                    text: TextSpan(
+                                                        text: text,
+                                                        style: textStyle),
+                                                    textDirection:
+                                                        TextDirection.rtl,
                                                     textAlign: TextAlign.start,
                                                     maxLines: 2,
-                                                  )..layout(maxWidth: constraints.maxWidth);
+                                                  )..layout(
+                                                          maxWidth: constraints
+                                                              .maxWidth);
 
-                                                  final lines = textPainter.computeLineMetrics();
-                                                  final isOverflowing = lines.length > 2;
+                                                  final lines = textPainter
+                                                      .computeLineMetrics();
+                                                  final isOverflowing =
+                                                      lines.length > 2;
 
-                                                  if (isOverflowing && !showDescFull && mounted) {
-                                                    localSetState(() {}); // لإجبار إعادة البناء
+                                                  if (isOverflowing &&
+                                                      !showDescFull &&
+                                                      mounted) {
+                                                    localSetState(
+                                                        () {}); // لإجبار إعادة البناء
                                                   }
                                                 });
 
                                                 return Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      trans().insurance_coverage_question,
+                                                      trans()
+                                                          .insurance_coverage_question,
                                                       style: const TextStyle(
                                                         fontSize: 18,
-                                                        fontWeight: FontWeight.bold,
-                                                        color: CustomTheme.primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: CustomTheme
+                                                            .primaryColor,
                                                       ),
                                                     ),
                                                     const SizedBox(height: 4),
                                                     Text(
                                                       text,
                                                       style: textStyle,
-                                                      textAlign: TextAlign.start,
-                                                      maxLines: showDescFull ? null : 2,
-                                                      overflow: showDescFull ? TextOverflow.visible : TextOverflow.ellipsis,
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      maxLines: showDescFull
+                                                          ? null
+                                                          : 2,
+                                                      overflow: showDescFull
+                                                          ? TextOverflow.visible
+                                                          : TextOverflow
+                                                              .ellipsis,
                                                     ),
-                                                    if (text.length > 150) // أو اجعلها isOverflowing إذا اشتغلت
+                                                    if (text.length >
+                                                        150) // أو اجعلها isOverflowing إذا اشتغلت
                                                       TextButton(
-                                                        onPressed: () => localSetState(() => showDescFull = !showDescFull),
-                                                        child: Text(showDescFull ? 'عرض أقل' : 'قراءة المزيد'),
+                                                        onPressed: () =>
+                                                            localSetState(() =>
+                                                                showDescFull =
+                                                                    !showDescFull),
+                                                        child: Text(showDescFull
+                                                            ? 'عرض أقل'
+                                                            : 'قراءة المزيد'),
                                                       ),
                                                   ],
                                                 );
@@ -569,8 +630,10 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                                           );
                                         }),
 
-                                        const Divider(
-                                            color: Colors.grey, thickness: 1),
+                                        Divider(
+                                          color: colorScheme.outline.withOpacity(0.3),
+                                          thickness: 1,
+                                        ),
                                         const SizedBox(height: 12),
 
                                         // 🛎️ العنوان: وسائل الراحة
@@ -603,8 +666,8 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                                                         Icon(
                                                           icon,
                                                           size: 18,
-                                                          color: CustomTheme
-                                                              .color2,
+                                                          color: CustomTheme.color2,
+
                                                         ),
                                                         const SizedBox(
                                                             width: 8),
@@ -634,10 +697,11 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                                                     top: 4),
                                                 child: Text(
                                                   "${trans().amenity}: ${trans().noAmenities}",
-                                                  style: const TextStyle(
+                                                  style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
-                                                    color: CustomTheme.color2,
+                                                    color:
+                                                        colorScheme.onSurface,
                                                   ),
                                                 ),
                                               ),
@@ -656,10 +720,11 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                                         : [
                                             Text(
                                               "${trans().price}: ${trans().priceNotAvailable}",
-                                              style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: CustomTheme.color2),
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: colorScheme.onSurface,
+                                              ),
                                             ),
                                           ],
                                   ),
@@ -689,7 +754,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                   icon: Icon(
                     Icons.calendar_today,
                     size: 20,
-                    color: Colors.white,
+                      color: colorScheme.onPrimary
                   ),
                   //  iconAfterText: true,
                 ),

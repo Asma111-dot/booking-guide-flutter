@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../helpers/general_helper.dart';
-import '../utils/theme.dart';
 
 typedef OnPriceSelected = void Function(String value);
 
@@ -8,12 +7,15 @@ void showPriceRangeBottomSheet({
   required BuildContext context,
   required OnPriceSelected onSelected,
 }) {
+  final theme = Theme.of(context);
+  final colorScheme = theme.colorScheme;
   final minController = TextEditingController();
   final maxController = TextEditingController();
 
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
+    backgroundColor: theme.scaffoldBackgroundColor,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),
@@ -33,7 +35,7 @@ void showPriceRangeBottomSheet({
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
-                color: CustomTheme.color2,
+                color: colorScheme.secondary,
               ),
             ),
             const SizedBox(height: 16),
@@ -45,9 +47,9 @@ void showPriceRangeBottomSheet({
                 labelStyle: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
-                  color: CustomTheme.primaryColor,
+                  color: colorScheme.primary,
                 ),
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 12),
@@ -59,9 +61,9 @@ void showPriceRangeBottomSheet({
                 labelStyle: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
-                  color: CustomTheme.primaryColor,
+                  color: colorScheme.primary,
                 ),
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 16),
@@ -74,9 +76,11 @@ void showPriceRangeBottomSheet({
                   Navigator.pop(context);
                 }
               },
-              child: Text(
-                trans().apply_filter,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: colorScheme.primary,
+                foregroundColor: colorScheme.onPrimary,
               ),
+              child: Text(trans().apply_filter),
             ),
           ],
         ),

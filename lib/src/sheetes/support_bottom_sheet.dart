@@ -3,58 +3,61 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../helpers/general_helper.dart';
-import '../utils/theme.dart';
 
 class SupportBottomSheet extends StatelessWidget {
   const SupportBottomSheet({super.key});
 
   @override
+  @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              trans().support,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: CustomTheme.color2,
-                  ),
-              textAlign: TextAlign.center,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            trans().support,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: colorScheme.primary,
             ),
-            const SizedBox(height: 10),
-            Text(
-              trans().support_message,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.grey[700],
-                  ),
-              textAlign: TextAlign.right,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            trans().support_message,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: colorScheme.onSurface.withOpacity(0.7),
             ),
-            const SizedBox(height: 20),
-            _buildSupportOption(
-              context,
-              icon: Icons.phone,
-              label: '775421110',
-              onTap: () => _launchPhone('775421110'),
-            ),
-            const SizedBox(height: 10),
-            _buildSupportOption(
-              context,
-              icon: FontAwesomeIcons.whatsapp,
-              label: '775421110',
-              onTap: () => _launchWhatsApp(context, '775421110'),
-            ),
-            const SizedBox(height: 10),
-            _buildSupportOption(
-              context,
-              icon: Icons.email_outlined,
-              label: 'bookingguide999@gmail.com',
-              onTap: () => _launchEmail(context, 'bookingguide999@gmail.com'),
-            ),
-          ]),
+            textAlign: TextAlign.right,
+          ),
+          const SizedBox(height: 20),
+          _buildSupportOption(
+            context,
+            icon: Icons.phone,
+            label: '775421110',
+            onTap: () => _launchPhone('775421110'),
+          ),
+          const SizedBox(height: 10),
+          _buildSupportOption(
+            context,
+            icon: FontAwesomeIcons.whatsapp,
+            label: '775421110',
+            onTap: () => _launchWhatsApp(context, '775421110'),
+          ),
+          const SizedBox(height: 10),
+          _buildSupportOption(
+            context,
+            icon: Icons.email_outlined,
+            label: 'bookingguide999@gmail.com',
+            onTap: () => _launchEmail(context, 'bookingguide999@gmail.com'),
+          ),
+        ],
+      ),
     );
   }
 
@@ -64,25 +67,33 @@ class SupportBottomSheet extends StatelessWidget {
         required String label,
         required VoidCallback onTap,
       }) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Material(
-      color: Colors.white,
+      color: colorScheme.surface,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
-        splashColor: CustomTheme.color2.withOpacity(0.1),
-        highlightColor: CustomTheme.color2.withOpacity(0.05),
+        splashColor: colorScheme.primary.withOpacity(0.1),
+        highlightColor: colorScheme.primary.withOpacity(0.05),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.grey.shade300),
+            border: Border.all(color: colorScheme.outline.withOpacity(0.2)),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
-              Icon(icon, color: CustomTheme.color2),
+              Text(
+                label,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: colorScheme.onSurface,
+                ),
+              ),
+              Icon(icon, color: colorScheme.primary),
             ],
           ),
         ),

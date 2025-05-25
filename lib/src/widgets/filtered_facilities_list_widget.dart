@@ -24,6 +24,9 @@ class FilteredFacilitiesListWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     final provider = filteredFacilitiesProvider(filters);
     final filtered = ref.watch(provider);
 
@@ -31,7 +34,15 @@ class FilteredFacilitiesListWidget extends ConsumerWidget {
       return const Center(child: CircularProgressIndicator());
     }
     if (filtered.isError()) {
-      return Center(child: Text(filtered.message()));
+      return Center(
+        child: Text(
+          filtered.message(),
+          style: TextStyle(
+            color: colorScheme.error,
+            fontSize: 14,
+          ),
+        ),
+      );
     }
 
     final facilities = filtered.data ?? [];
@@ -40,10 +51,10 @@ class FilteredFacilitiesListWidget extends ConsumerWidget {
       return Center(
         child: Text(
           trans().no_matching_facilities,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Colors.grey,
+            color: colorScheme.onSurface.withOpacity(0.6),
           ),
           textAlign: TextAlign.center,
         ),
@@ -53,38 +64,30 @@ class FilteredFacilitiesListWidget extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.only(top: 8, bottom: 8),
       children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 4),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (selectedFilter != null && values[selectedFilter] != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 2),
-                  child: Text(
-                    buildFilterDescription(
-                      selectedFilter!,
-                      values[selectedFilter],
-                    ),
-                    style: const TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: CustomTheme.primaryColor,
-                    ),
-                  ),
-                ),
-            ],
+        if (selectedFilter != null && values[selectedFilter] != null)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+            child: Text(
+              buildFilterDescription(
+                selectedFilter!,
+                values[selectedFilter],
+              ),
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+                color: colorScheme.primary,
+              ),
+            ),
           ),
-        ),
         const SizedBox(height: 10),
         ...facilities.map(
-          (facility) {
+              (facility) {
             return FacilityWidget(
               facility: facility,
               minPriceFilter:
-                  minPrice != null ? double.tryParse(minPrice!) : null,
+              minPrice != null ? double.tryParse(minPrice!) : null,
               maxPriceFilter:
-                  maxPrice != null ? double.tryParse(maxPrice!) : null,
+              maxPrice != null ? double.tryParse(maxPrice!) : null,
             );
           },
         ),
