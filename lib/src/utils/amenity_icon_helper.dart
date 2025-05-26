@@ -1,3 +1,4 @@
+// ملف: utils/amenity_icon_helper.dart
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -5,125 +6,77 @@ class AmenityIconHelper {
   static IconData getAmenityIcon(String name) {
     final lowerName = name.toLowerCase();
 
-    // المرافق الشائعة
-    if (lowerName.contains('wifi') || lowerName.contains('انترنت')) {
-      return Icons.wifi;
-    } else if (lowerName.contains('tv') || lowerName.contains('تلفاز') || lowerName.contains('شاشة')) {
-      return Icons.tv;
-    } else if (lowerName.contains('بروجكتر')) {
-      return FontAwesomeIcons.video;
-    } else if (lowerName.contains('مسبح') && lowerName.contains('كبار')) {
-      return FontAwesomeIcons.personSwimming;
-    } else if (lowerName.contains('مسبح') && lowerName.contains('اطفال')) {
-      return FontAwesomeIcons.baby;
-    } else if (lowerName.contains('مسبح')) {
-      return Icons.pool;
-    } else if (lowerName.contains('موقف')) {
-      return Icons.local_parking;
-    } else if (lowerName.contains('تكييف') || lowerName.contains('مكيف')) {
-      return Icons.ac_unit;
-    } else if (lowerName.contains('تدفئة') || lowerName.contains('heating')) {
-      return Icons.fireplace;
-    } else if (lowerName.contains('مطبخ')) {
-      return Icons.kitchen;
-    } else if (lowerName.contains('غسالة')) {
-      return Icons.local_laundry_service;
-    } else if (lowerName.contains('كاميرا') || lowerName.contains('مراقبة')) {
-      return Icons.videocam;
-    } else if (lowerName.contains('استيم') || lowerName.contains('بخار')) {
-      return FontAwesomeIcons.spa;
-    } else if (lowerName.contains('جاكوزي')) {
-      return FontAwesomeIcons.hotTubPerson;
-    } else if (lowerName.contains('نوم')) {
-      return Icons.bed;
-    } else if (lowerName.contains('جلوس') || lowerName.contains('مجالس')) {
-      return FontAwesomeIcons.couch;
-    } else if (lowerName.contains('حمام')) {
-      return FontAwesomeIcons.bath;
-    } else if (lowerName.contains('شواء') || lowerName.contains('grill')) {
-      return FontAwesomeIcons.fireBurner;
-    } else if (lowerName.contains('ملعب')) {
-      return FontAwesomeIcons.futbol;
-    } else if (lowerName.contains('سينما')) {
-      return FontAwesomeIcons.film;
-    } else if (lowerName.contains('بقالة')) {
-      return FontAwesomeIcons.store;
-    } else if ((lowerName.contains('طاولة') || lowerName.contains('تنس')) && lowerName.contains('كرة')) {
-      return FontAwesomeIcons.tableTennisPaddleBall;
-    } else if (lowerName.contains('قدم') || lowerName.contains('فوتبول')) {
-      return FontAwesomeIcons.futbol;
-    } else if (lowerName.contains('حيوان') || lowerName.contains('حيوانات')) {
-      return FontAwesomeIcons.paw;
-    } else if (lowerName.contains('شرفة') || lowerName.contains('بلكونة') || lowerName.contains('balcony')) {
-      return FontAwesomeIcons.warehouse;
-    } else if (lowerName.contains('حديقة')) {
-      return FontAwesomeIcons.seedling;
-    } else if (lowerName.contains('بلوتوث') || lowerName.contains('مكبر') || lowerName.contains('سماعة')) {
-      return FontAwesomeIcons.volumeHigh;
-    } else if (lowerName.contains('فلتر') || lowerName.contains('منقي') || lowerName.contains('filter')) {
-      return FontAwesomeIcons.wind;
-
-      // إضافات جديدة
-
-      // وحدات إقامة
-    } else if (lowerName.contains('جناح')) {
-      return FontAwesomeIcons.personBooth;
-    } else if (lowerName.contains('غرفة نوم عائلية')) {
-      return FontAwesomeIcons.peopleRoof;
-    } else if (lowerName.contains('غرفة بسريرين')) {
-      return FontAwesomeIcons.bed;
-    } else if (lowerName.contains('تجهّز العرسان')) {
-      return FontAwesomeIcons.ring;
-    }
+    // وحدات الإقامة
+    if (lowerName.contains('مجالس')) return FontAwesomeIcons.couch;
+    if (lowerName.contains('جناح')) return FontAwesomeIcons.personBooth;
+    if (lowerName.contains('غرفة نوم عائلية')) return FontAwesomeIcons.peopleRoof;
+    if (lowerName.contains('غرفة نوم')) return Icons.bed;
+    if (lowerName.contains('غرفة بسريرين')) return FontAwesomeIcons.bed;
+    if (lowerName.contains('عرسان')) return FontAwesomeIcons.ring;
 
     // خدمات الطعام
-    else if (lowerName.contains('كافيتيريا')) {
-      return FontAwesomeIcons.mugHot;
-    } else if (lowerName.contains('مطعم')) {
-      return FontAwesomeIcons.utensils;
-    } else if (lowerName.contains('بوفيه')) {
-      return FontAwesomeIcons.bowlFood;
-    } else if (lowerName.contains('طعام')) {
-      return FontAwesomeIcons.utensils;
-    }
+    if (lowerName.contains('كافيتيريا')) return FontAwesomeIcons.mugHot;
+    if (lowerName.contains('مطبخ')) return Icons.kitchen;
+    if (lowerName.contains('حمامات')) return FontAwesomeIcons.bath;
+    if (lowerName.contains('مطعم')) return FontAwesomeIcons.utensils;
+    if (lowerName.contains('بوفيه')) return FontAwesomeIcons.bowlFood;
+    if (lowerName.contains('غرفة طعام')) return FontAwesomeIcons.utensils;
 
-    // القاعات
-    else if (lowerName.contains('أفراح')) {
-      return FontAwesomeIcons.champagneGlasses;
-    } else if (lowerName.contains('اجتماعات')) {
-      return FontAwesomeIcons.peopleGroup;
-    } else if (lowerName.contains('مؤتمرات')) {
-      return FontAwesomeIcons.rankingStar;
-    } else if (lowerName.contains('مسرح')) {
-      return FontAwesomeIcons.theaterMasks;
-    } else if (lowerName.contains('احتفالات')) {
-      return FontAwesomeIcons.cakeCandles;
-    } else if (lowerName.contains('تدريب')) {
-      return FontAwesomeIcons.chalkboardUser;
-    }
+    // القاعات والفعاليات
+    if (lowerName.contains('أفراح')) return FontAwesomeIcons.champagneGlasses;
+    if (lowerName.contains('اجتماعات')) return FontAwesomeIcons.peopleGroup;
+    if (lowerName.contains('مؤتمرات')) return FontAwesomeIcons.rankingStar;
+    if (lowerName.contains('مسرح')) return FontAwesomeIcons.theaterMasks;
+    if (lowerName.contains('متعددة الأغراض')) return FontAwesomeIcons.rankingStar;
+    if (lowerName.contains('احتفالات')) return FontAwesomeIcons.cakeCandles;
+    if (lowerName.contains('تدريب')) return FontAwesomeIcons.chalkboardUser;
 
-    // جلسات خارجية
-    else if (lowerName.contains('جلسة خارجية')) {
-      return FontAwesomeIcons.umbrellaBeach;
-    } else if (lowerName.contains('سطح')) {
-      return FontAwesomeIcons.building;
-    }
+    // المرافق الخارجية
+    if (lowerName.contains('جلسة خارجية')) return FontAwesomeIcons.umbrellaBeach;
+    if (lowerName.contains('حديقة أطفال')) return FontAwesomeIcons.children;
+    if (lowerName.contains('حديقة')) return FontAwesomeIcons.seedling;
+    if (lowerName.contains('ملعب')) return FontAwesomeIcons.futbol;
+    if (lowerName.contains('سطح')) return FontAwesomeIcons.building;
+    if (lowerName.contains('مسبح') && lowerName.contains('داخلي')) return FontAwesomeIcons.personSwimming;
+    if (lowerName.contains('مسبح') && lowerName.contains('خارجي')) return FontAwesomeIcons.waterLadder;
+    if (lowerName.contains('مسبح') && lowerName.contains('أطفال')) return FontAwesomeIcons.baby;
+    if (lowerName.contains('شرفة') || lowerName.contains('بلكونة')) return FontAwesomeIcons.warehouse;
 
     // مواقف سيارات
-    else if (lowerName.contains('خارجي') && lowerName.contains('موقف')) {
-      return FontAwesomeIcons.carSide;
-    } else if (lowerName.contains('داخلي') && lowerName.contains('موقف')) {
-      return FontAwesomeIcons.squareParking;
-    }
+    if (lowerName.contains('موقف سيارات خارجي')) return FontAwesomeIcons.carSide;
+    if (lowerName.contains('موقف سيارات داخلي')) return FontAwesomeIcons.squareParking;
 
-    // استقبال
-    else if (lowerName.contains('استقبال')) {
-      return FontAwesomeIcons.bellConcierge;
-    } else if (lowerName.contains('كونسيرج')) {
-      return FontAwesomeIcons.userTie;
-    }
+    // الاستقبال والخدمات
+    if (lowerName.contains('استقبال')) return FontAwesomeIcons.bellConcierge;
+    if (lowerName.contains('كونسيرج')) return FontAwesomeIcons.userTie;
 
-    // افتراضية
+    // وسائل الراحة من الصورة:
+    if (lowerName.contains('كاميرا')) return Icons.videocam;
+    if (lowerName.contains('تكييف مركزي')) return FontAwesomeIcons.fan;
+    if (lowerName.contains('مكيف')) return Icons.ac_unit;
+    if (lowerName.contains('كوفى شوب')) return FontAwesomeIcons.mugSaucer;
+    if (lowerName.contains('حيوانات أليفة')) return FontAwesomeIcons.paw;
+    if (lowerName.contains('سبا') || lowerName.contains('بخار')) return FontAwesomeIcons.spa;
+    if (lowerName.contains('سينما')) return FontAwesomeIcons.film;
+    if (lowerName.contains('تراس') || lowerName.contains('الأرآس')) return FontAwesomeIcons.umbrella;
+    if (lowerName.contains('جاكوزي')) return FontAwesomeIcons.hotTubPerson;
+    if (lowerName.contains('الشواء') || lowerName.contains('باربكيو')) return FontAwesomeIcons.fireBurner;
+    if (lowerName.contains('بروجكتر')) return FontAwesomeIcons.video;
+    if (lowerName.contains('wifi')) return Icons.wifi;
+    if (lowerName.contains('tv')) return Icons.tv;
+    if (lowerName.contains('مروحة')) return FontAwesomeIcons.fan;
+    if (lowerName.contains('مراوح')) return FontAwesomeIcons.wind;
+    if (lowerName.contains('غسالة صحون')) return FontAwesomeIcons.soap;
+    if (lowerName.contains('غسالة ملابس')) return FontAwesomeIcons.shirt;
+    if (lowerName.contains('مصعد')) return FontAwesomeIcons.arrowsUpDown;
+    if (lowerName.contains('نافورة')) return FontAwesomeIcons.water;
+    if (lowerName.contains('شلال')) return FontAwesomeIcons.water;
+    if (lowerName.contains('اضاءة')) return FontAwesomeIcons.lightbulb;
+    if (lowerName.contains('نظام تدفئة')) return FontAwesomeIcons.fireFlameCurved;
+    if (lowerName.contains('مكان مخصص للتصوير')) return FontAwesomeIcons.cameraRetro;
+    if (lowerName.contains('مسبح')) return FontAwesomeIcons.waterLadder;
+
+    // fallback
     return FontAwesomeIcons.circleQuestion;
   }
 }
