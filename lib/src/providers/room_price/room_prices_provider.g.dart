@@ -6,7 +6,7 @@ part of 'room_prices_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$roomPricesHash() => r'375ec27c34055a70777fb793542ec8d726cc7c0c';
+String _$roomPricesHash() => r'07fc2735acaaf0001a9ce1b2f85d004ba981ddd6';
 
 /// See also [RoomPrices].
 @ProviderFor(RoomPrices)

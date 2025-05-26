@@ -31,6 +31,8 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
   bool hasSuccessfulAttempt = false;
   DateTime? rangeStart;
   DateTime? rangeEnd;
+  bool useRange = true;
+  DateTime? someDate = DateTime.now();
 
   @override
   void initState() {
@@ -47,7 +49,7 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
     if (roomPrices != null && roomPrices.isNotEmpty) {
       setState(() {
         selectedPrice = null;
-        events = {}; // ⬅️ لا توجد أحداث لأن السعر لم يُحدد بعد
+        events = {};
       });
     } else {
       setState(() {
@@ -60,22 +62,26 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
     required RoomPrice selectedPrice,
     required List<Map<String, dynamic>> bookedDates,
   }) {
-      debugPrint('📌 بدء معالجة الأحداث للسعر: ${selectedPrice.id}');
+    debugPrint('📌 بدء معالجة الأحداث للسعر: ${selectedPrice.id}');
     final Map<DateTime, List<dynamic>> tempEvents = {};
 
-    // ✅ حجوزات النظام
     for (var reservation in selectedPrice.reservations) {
       try {
         if (reservation.status != 'confirmed') continue;
 
         final checkInDate = DateTime.parse(reservation.checkInDate.toString());
-        final checkOutDate = DateTime.parse(reservation.checkOutDate.toString());
+        final checkOutDate =
+            DateTime.parse(reservation.checkOutDate.toString());
 
         DateTime currentDate = checkInDate;
         while (currentDate.isBefore(checkOutDate) ||
             currentDate.isAtSameMomentAs(checkOutDate)) {
-          final normalized = DateTime(currentDate.year, currentDate.month, currentDate.day);
-          tempEvents[normalized] = [...(tempEvents[normalized] ?? []), reservation];
+          final normalized =
+              DateTime(currentDate.year, currentDate.month, currentDate.day);
+          tempEvents[normalized] = [
+            ...(tempEvents[normalized] ?? []),
+            reservation
+          ];
           currentDate = currentDate.add(const Duration(days: 1));
         }
       } catch (e) {
@@ -83,17 +89,6 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
       }
     }
 
-    // ✅ 2. تواريخ Google Calendar
-    // final bookedDates = ref.read(reservationsProvider.notifier).bookedDates;
-    // for (final dateStr in bookedDates) {
-    //   try {
-    //     final date = DateTime.parse(dateStr);
-    //     // events[date] = [...(events[date] ?? []), 'محجوز من Google Calendar'];
-    //     events[date] = [...(events[date] ?? []), {'type': 'google', 'label': 'محجوز من Google Calendar'}];
-    //   } catch (e) {
-    //     debugPrint('Invalid date from Google Calendar: $dateStr');
-    //   }
-    // }
     for (final item in bookedDates) {
       try {
         debugPrint('🔁 فحص عنصر جديد من Google Calendar: $item');
@@ -113,7 +108,8 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
         }
 
         final period = rawPeriod.toString().trim().toLowerCase();
-        final selectedPeriod = selectedRawPeriod.toString().trim().toLowerCase();
+        final selectedPeriod =
+            selectedRawPeriod.toString().trim().toLowerCase();
 
         debugPrint('🔍 المقارنة الأصلية: "$rawPeriod" == "$selectedRawPeriod"');
         debugPrint('🔍 بعد التنسيق: "$period" == "$selectedPeriod"');
@@ -129,9 +125,11 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
               'label': 'محجوز: $rawPeriod',
             }
           ];
-          debugPrint('📅 تمت إضافة Google Calendar: $date => محجوز: $rawPeriod');
+          debugPrint(
+              '📅 تمت إضافة Google Calendar: $date => محجوز: $rawPeriod');
         } else {
-          debugPrint('🕵️‍♂️ تجاهل التاريخ $date لأن الفترة ($period) ≠ ($selectedPeriod)');
+          debugPrint(
+              '🕵️‍♂️ تجاهل التاريخ $date لأن الفترة ($period) ≠ ($selectedPeriod)');
         }
       } catch (e) {
         debugPrint('❌ خطأ في تحليل التاريخ من Google Calendar: $e');
@@ -177,7 +175,7 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
                       children: [
                         Text(
                           trans().view_price_list,
-                          style:  TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: Theme.of(context).colorScheme.onSurface,
@@ -186,10 +184,13 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
                         const SizedBox(height: 4),
                         Text(
                           trans().select_period_and_day,
-                          style:  TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
-                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withOpacity(0.6),
                           ),
                         ),
                       ],
@@ -211,19 +212,26 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
                             roomPrice: roomPrice,
                             isSelected: selectedPrice == roomPrice,
                             onTap: () async {
-                              if (selectedPrice?.id == roomPrice.id) return; // 👈 تجنب إعادة التحميل
+                              if (selectedPrice?.id == roomPrice.id)
+                                return; // 👈 تجنب إعادة التحميل
                               setState(() {
                                 selectedPrice = roomPrice;
                               });
 
-                              final facilityId = roomPrice.room?.facility?.id ?? roomPrice.room?.facilityId;
+                              final facilityId = roomPrice.room?.facility?.id ??
+                                  roomPrice.room?.facilityId;
                               if (facilityId == null || facilityId == 0) {
-                                print("❌ facilityId غير موجود، لا يمكن جلب التواريخ المحجوزة");
+                                print(
+                                    "❌ facilityId غير موجود، لا يمكن جلب التواريخ المحجوزة");
                                 return;
                               }
 
-                              await ref.read(bookedDatesFromGoogleCalendarProvider.notifier).fetch(facilityId);
-                              final googleBookedDates = ref.read(bookedDatesFromGoogleCalendarProvider);
+                              await ref
+                                  .read(bookedDatesFromGoogleCalendarProvider
+                                      .notifier)
+                                  .fetch(facilityId);
+                              final googleBookedDates = ref
+                                  .read(bookedDatesFromGoogleCalendarProvider);
                               _populateEvents(
                                 selectedPrice: roomPrice,
                                 bookedDates: googleBookedDates,
@@ -244,7 +252,7 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
                       children: [
                         Text(
                           trans().question_title,
-                          style:  TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: Theme.of(context).colorScheme.onSurface,
@@ -253,10 +261,13 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
                         const SizedBox(height: 4),
                         Text(
                           trans().question_description,
-                          style:  TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
-                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withOpacity(0.6),
                           ),
                         ),
                       ],
@@ -265,22 +276,37 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
 
                   // تقويم الحجوزات
                   CustomCalendarWidget(
-                    key: ValueKey('${selectedPrice?.id}-${DateTime.now().millisecondsSinceEpoch}'),
-                    events: events.map((key, value) =>
-                        MapEntry(key, value.map((e) => e.toString()).toList())),
-                    selectionType: SelectionType.range,
-                    initialSelectedDay: null,
+                    key: ValueKey(
+                      '${selectedPrice?.id}-${DateTime.now().millisecondsSinceEpoch}',
+                    ),
+                    events: events.map(
+                          (key, value) => MapEntry(
+                        key,
+                        value.map((e) => e.toString()).toList(),
+                      ),
+                    ),
+                    selectionType: useRange ? SelectionType.range : SelectionType.single,
+                    initialSelectedDay: useRange ? null : someDate,
+                    initialSelectedRange: useRange
+                        ? (rangeStart != null && rangeEnd != null
+                        ? DateTimeRange(start: rangeStart!, end: rangeEnd!)
+                        : null)
+                        : null,
                     onSingleDateSelected: (date) {
-                      print("Selected single date: $date");
+                      setState(() {
+                        rangeStart = date;
+                        rangeEnd = date;
+                      });
+                      print("📅 Single: $date");
                     },
                     onRangeSelected: (range) {
                       setState(() {
                         rangeStart = range.start;
                         rangeEnd = range.end;
                       });
-                      print("Selected range: ${range.start} to ${range.end}");
+                      print("📅 Range: ${range.start} - ${range.end}");
                     },
-                  )
+                  ),
                 ],
               ),
             ),

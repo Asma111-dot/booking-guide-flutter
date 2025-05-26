@@ -39,19 +39,19 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
     selectedRange = widget.initialSelectedRange;
     if (widget.selectionType == SelectionType.single && selectedDay != null) {
       _controller.selectedDate = selectedDay;
-    } else if (widget.selectionType == SelectionType.range && selectedRange != null) {
+    } else if (widget.selectionType == SelectionType.range &&
+        selectedRange != null) {
       _controller.selectedRange = PickerDateRange(
         selectedRange!.start,
         selectedRange!.end,
       );
     }
-
   }
 
   bool _isRangeValid(DateTime start, DateTime end) {
     for (DateTime d = start;
-    d.isBefore(end) || d.isAtSameMomentAs(end);
-    d = d.add(const Duration(days: 1))) {
+        d.isBefore(end) || d.isAtSameMomentAs(end);
+        d = d.add(const Duration(days: 1))) {
       if (widget.events[d]?.isNotEmpty ?? false) return false;
     }
     return true;
@@ -59,8 +59,6 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print("📅 minDate: ${DateTime.now()}");
-    print("📅 selectedDay: $selectedDay");
     print('🚨 مفاتيح blackoutDates:');
     final normalizedEvents = {
       for (var entry in widget.events.entries)
@@ -70,26 +68,27 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
 
     final colorScheme = Theme.of(context).colorScheme;
 
-    // لا نحذف أي سطر، فقط نضيف التعديلات على الألوان
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.45,
       child: SfDateRangePicker(
         controller: _controller,
-        minDate: DateTime.now(),
-        enablePastDates: false,
-        backgroundColor: colorScheme.background, // ✅ دعم الوضع الليلي
-        view: DateRangePickerView.month,
-        showNavigationArrow: true,
-        showTodayButton: false,
+        initialDisplayDate: widget.selectionType == SelectionType.single
+            ? (selectedDay ?? widget.initialSelectedDay ?? DateTime.now())
+            : (selectedRange?.start ?? widget.initialSelectedRange?.start ?? DateTime.now()),
         selectionMode: widget.selectionType == SelectionType.single
             ? DateRangePickerSelectionMode.single
             : DateRangePickerSelectionMode.range,
+        minDate: DateTime.now(),
+        enablePastDates: false,
+        backgroundColor: colorScheme.background,
+        view: DateRangePickerView.month,
+        showNavigationArrow: true,
+        showTodayButton: false,
         todayHighlightColor: CustomTheme.color2,
-        // selectionColor: CustomTheme.color4,
-        selectionColor: Colors.greenAccent,
-        rangeSelectionColor: CustomTheme.primaryColor.withOpacity(0.3),
-        startRangeSelectionColor: CustomTheme.primaryColor,
-        endRangeSelectionColor: CustomTheme.primaryColor,
+        selectionColor: CustomTheme.color2,
+        rangeSelectionColor: CustomTheme.color2.withOpacity(0.3),
+        startRangeSelectionColor: CustomTheme.color2,
+        endRangeSelectionColor: CustomTheme.color2,
         selectionTextStyle: TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
@@ -99,25 +98,37 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
         ),
 
         onSelectionChanged: (args) {
-          if (widget.selectionType == SelectionType.single) {
-            final selected = args.value as DateTime;
+          if (args.value is DateTime && widget.selectionType == SelectionType.single) {
+            final selected = DateUtils.dateOnly(args.value as DateTime);
             if (widget.events[selected]?.isNotEmpty ?? false) {
-              // _showDateBookedMessage(context);
+              // يوم محجوز
             } else {
               setState(() => selectedDay = selected);
               widget.onSingleDateSelected?.call(selected);
             }
-    } else if (args.value is PickerDateRange) {
-    final range = args.value as PickerDateRange;
-    final start = range.startDate;
-    final end = range.endDate ?? range.startDate;
+          } else if (args.value is PickerDateRange &&
+              widget.selectionType == SelectionType.range) {
+            final range = args.value as PickerDateRange;
 
-            // if (start != null && end != null) {
-            // setState(() => selectedRange = DateTimeRange(start: start, end: end));
-            // widget.onRangeSelected?.call(selectedRange!);
-            // }
+            final rawStart = range.startDate;
+            final rawEnd = range.endDate ?? range.startDate;
+
+            if (rawStart == null || rawEnd == null) return;
+
+            final start = DateUtils.dateOnly(rawStart);
+            final end = DateUtils.dateOnly(rawEnd);
+
+            if (_isRangeValid(start, end)) {
+              setState(() => selectedRange = DateTimeRange(start: start, end: end));
+              widget.onRangeSelected?.call(selectedRange!);
+            } else {
+              // أظهر رسالة بأن المدى يحتوي تواريخ محجوزة
+            }
+          } else {
+            print("🚨 قيمة غير متوقعة من onSelectionChanged: ${args.value}");
           }
         },
+
         monthViewSettings: DateRangePickerMonthViewSettings(
           blackoutDates: blackoutDates,
           showTrailingAndLeadingDates: false,
@@ -126,15 +137,21 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
         monthCellStyle: DateRangePickerMonthCellStyle(
           blackoutDateTextStyle: TextStyle(
             color: Colors.grey,
-            decoration: TextDecoration.lineThrough,
+            decoration: TextDecoration.combine([
+              TextDecoration.lineThrough,
+              TextDecoration.lineThrough,
+            ]),
+            decorationColor: Colors.red,
+            decorationThickness: 3,
           ),
+
           todayTextStyle: TextStyle(
             color: CustomTheme.color2,
             fontWeight: FontWeight.bold,
           ),
-          // textStyle: TextStyle(
-          //   color: colorScheme.onSurface, // ✅ دعم الوضع الليلي
-          // ),
+          textStyle: TextStyle(
+            color: colorScheme.onSurface,
+          ),
         ),
       ),
     );

@@ -88,7 +88,8 @@ Future<Response<T>> request<T>({
       default:
         response = HttpService.instance.dio.get(
           url,
-          queryParameters: body ?? queryParameters,
+          queryParameters:
+              queryParameters ?? (body is Map<String, dynamic> ? body : null),
           cancelToken: cancelToken,
         );
         break;
@@ -151,13 +152,31 @@ Future<Response<T>> request<T>({
             deleted = parsed['deleted'].cast<String>();
           }
 
-          if (parsed.containsKey('meta')) {
+          // if (parsed.containsKey('meta')) {
+          //   meta = Meta.fromJson(Map<String, dynamic>.from(parsed['meta']));
+          //   if (parsed.containsKey('token')) {
+          //     meta = meta.copyWith(accessToken: parsed['token']);
+          //   }
+          // } else {
+          //   meta = Meta.fromJson(Map<String, dynamic>.from(parsed));
+          //   if (parsed.containsKey('token')) {
+          //     meta = meta.copyWith(accessToken: parsed['token']);
+          //   }
+          // }
+
+          if (parsed.containsKey('meta') && parsed['meta'] != null) {
             meta = Meta.fromJson(Map<String, dynamic>.from(parsed['meta']));
             if (parsed.containsKey('token')) {
               meta = meta.copyWith(accessToken: parsed['token']);
             }
           } else {
-            meta = Meta.fromJson(Map<String, dynamic>.from(parsed));
+            // fallback: use entire response if no 'meta' key
+            try {
+              meta = Meta.fromJson(Map<String, dynamic>.from(parsed));
+            } catch (_) {
+              meta = const Meta(status: Status.loaded, message: '');
+            }
+
             if (parsed.containsKey('token')) {
               meta = meta.copyWith(accessToken: parsed['token']);
             }
@@ -165,8 +184,8 @@ Future<Response<T>> request<T>({
 
           meta = meta.copyWith(
             status: (T.toString() != 'dynamic' &&
-                ((parsed[key] is List && (parsed[key] as List).isEmpty) ||
-                    parsed[key] == null))
+                    ((parsed[key] is List && (parsed[key] as List).isEmpty) ||
+                        parsed[key] == null))
                 ? Status.empty
                 : Status.loaded,
           );
@@ -180,7 +199,10 @@ Future<Response<T>> request<T>({
         debugPrint(
             "✅ Dio Response:\nT is ${T.toString()}\nData: ${data.runtimeType}\nMeta: $meta\nDeleted: $deleted");
 
-        return Response<T>(data: data as T, deleted: deleted, meta: meta);
+        return Response<T>(
+            data: data == null ? null as T : data as T,
+            deleted: deleted,
+            meta: meta);
       } catch (e, stack) {
         debugPrint('❌ Response Handling Error:\n$e\n$stack\n$url');
         return Response<T>(

@@ -64,8 +64,8 @@ Future clearCurrentUser() async {
 }
 
 /// حفظ التوكن
-void setToken(String value) {
-  box(_authBox).put(_tokenKey, value);
+Future<void> setToken(String value) async {
+  await box(_authBox).put(_tokenKey, value);
 }
 
 /// استرجاع التوكن
