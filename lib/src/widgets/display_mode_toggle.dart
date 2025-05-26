@@ -5,13 +5,14 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import '../enums/display_mode.dart' as model;
 import '../helpers/general_helper.dart';
 import '../providers/public/settings_provider.dart';
+import '../utils/assets.dart';
 import '../utils/theme.dart';
 
 List<Widget> buildDisplayModeToggle(WidgetRef ref, BuildContext context) {
   final settings = ref.watch(settingsProvider);
 
   final isDark = settings.displayMode == model.DisplayMode.dark;
-  final icon = isDark ? LineAwesomeIcons.moon : LineAwesomeIcons.sun;
+  final icon = isDark ? darkModeIcon : lightModeIcon;
 
   return [
     IconButton(

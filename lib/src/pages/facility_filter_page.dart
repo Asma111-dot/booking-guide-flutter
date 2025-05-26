@@ -100,7 +100,11 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
       isSorting = false;
       showResults = false;
 
-      values[FacilityFilterType.facilityTypeId] = (index == 0 ? 1 : index == 1 ? 2 : 3);
+      values[FacilityFilterType.facilityTypeId] = (index == 0
+          ? 1
+          : index == 1
+              ? 2
+              : 3);
 
       textController.clear();
       selectedFilter = FacilityFilterType.name;
@@ -138,7 +142,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                 children: [
                   Text(
                     trans().discoverBestPlace,
-                    style:  TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: colorScheme.onSurface,
@@ -147,7 +151,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                   const SizedBox(height: 4),
                   Text(
                     trans().searchByNameAddress,
-                    style:  TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w300,
                       color: colorScheme.onSurface.withOpacity(0.6),
@@ -205,7 +209,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                             ),
                           ),
                           const Icon(
-                            Icons.arrow_drop_down_rounded,
+                            dropDownIcon,
                             color: CustomTheme.color2,
                           ),
                         ],
@@ -228,7 +232,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                         color: colorScheme.onSurface.withOpacity(0.5),
                       ),
                       prefixIcon: const Icon(
-                        Icons.search,
+                        searchIcon,
                         color: CustomTheme.color2,
                       ),
                       border: OutlineInputBorder(
@@ -284,8 +288,8 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                       child: Icon(
                         key: ValueKey(currentSort),
                         currentSort == FacilitySortType.lowestPrice
-                            ? Icons.arrow_downward
-                            : Icons.arrow_upward,
+                            ? arrowdownIcon
+                            : arrowupIcon,
                         color: Colors.white,
                       ),
                     ),
@@ -311,7 +315,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                     });
                   },
                   icon: const Icon(
-                    Icons.refresh,
+                    refreshIcon,
                     color: Colors.red,
                   ),
                   label: Text(

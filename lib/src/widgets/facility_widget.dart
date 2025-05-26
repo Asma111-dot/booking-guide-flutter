@@ -119,7 +119,7 @@ class FacilityWidget extends ConsumerWidget {
                     Row(
                       children: [
                         Icon(
-                          Icons.location_on_outlined,
+                          mapIcon,
                           color: colorScheme.secondary,
                           size: 16,
                         ),
@@ -142,7 +142,7 @@ class FacilityWidget extends ConsumerWidget {
               ),
               IconButton(
                 icon: Icon(
-                  isFavorite ? Icons.favorite : Icons.favorite_border,
+                  isFavorite ? favoriteFullIcon : favoriteIcon,
                   color: isFavorite
                       ? colorScheme.primary
                       : colorScheme.onSurface.withOpacity(0.4),

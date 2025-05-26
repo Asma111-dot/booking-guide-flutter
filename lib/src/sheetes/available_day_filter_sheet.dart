@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
 import '../extensions/date_formatting.dart';
+import '../utils/assets.dart';
 import '../utils/theme.dart';
 import '../helpers/general_helper.dart';
 
@@ -57,7 +58,7 @@ void showAvailableDayBottomSheet({
                     ),
                     border: const OutlineInputBorder(),
                     suffixIcon: Icon(
-                      Icons.calendar_today,
+                      periodIcon,
                       color: colorScheme.secondary,
                     ),
                   ),

@@ -72,7 +72,7 @@ class CustomHeaderDetailsWidget extends StatelessWidget {
               Row(
                 children: [
                   Icon(
-                    Icons.location_on_outlined,
+                    mapIcon,
                     color: colorScheme.secondary,
                     size: 16,
                   ),

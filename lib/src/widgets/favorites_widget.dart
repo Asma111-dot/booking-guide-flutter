@@ -33,10 +33,10 @@ class FavoriteWidget extends StatelessWidget {
         : "قاعة أعراس";
 
     final typeIcon = facility.facilityTypeId == 1
-        ? Icons.hotel
+        ? hotelIcon
         : facility.facilityTypeId == 2
-        ? Icons.pool
-        : FontAwesomeIcons.dove;
+        ? poolIcon
+        : doveIcon;
 
     return GestureDetector(
       onTap: () {
@@ -125,7 +125,8 @@ class FavoriteWidget extends StatelessWidget {
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        Icon(Icons.location_on_outlined,
+                        Icon(
+                            mapIcon,
                             color: colorScheme.secondary, size: 16),
                         const SizedBox(width: 4),
                         Expanded(
@@ -160,7 +161,8 @@ class FavoriteWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: Icon(Icons.favorite,
+                  child: Icon(
+                      favoriteFullIcon,
                       color: colorScheme.primary, size: 22),
                 ),
               ),

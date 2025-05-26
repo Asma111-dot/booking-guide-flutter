@@ -117,7 +117,7 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.info_outline, size: 16, color: colorScheme.outline),
+                      Icon(errorIcon, size: 16, color: colorScheme.outline),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
@@ -149,7 +149,7 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                   const SizedBox(height: 20),
                   Row(
                     children: [
-                      const Icon(Icons.people_alt_outlined,
+                      const Icon(groups2Icon,
                           size: 16, color: Colors.grey),
                       const SizedBox(width: 6),
                       Text(
@@ -181,7 +181,7 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                   const SizedBox(height: 20),
                   Row(
                     children: [
-                      const Icon(Icons.child_care_outlined,
+                      const Icon(childIcon,
                           size: 16, color: Colors.grey),
                       const SizedBox(width: 6),
                       Text(
@@ -219,7 +219,7 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
         child: Button(
           width: double.infinity,
           title: trans().completeTheReservation,
-          icon: Icon(Icons.arrow_forward, size: 20, color: Theme.of(context).colorScheme.onPrimary),
+          icon: Icon(arrowForWordIcon, size: 20, color: Theme.of(context).colorScheme.onPrimary),
           iconAfterText: true,
           disable: false,
           onPressed: () async {

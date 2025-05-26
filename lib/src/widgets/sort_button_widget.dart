@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/sort/sort_key_provider.dart';
 import '../providers/sort/sorted_facilities_provider.dart';
+import '../utils/assets.dart';
 
 class SortButton extends ConsumerWidget {
   const SortButton({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class SortButton extends ConsumerWidget {
         duration: const Duration(milliseconds: 300),
         transitionBuilder: (child, animation) => RotationTransition(turns: animation, child: child),
         child: Icon(
-          sortKey == 'price' ? Icons.arrow_downward : Icons.arrow_upward,
+          sortKey == 'price' ? arrowdownIcon : arrowupIcon,
           key: ValueKey(sortKey),
         ),
       ),

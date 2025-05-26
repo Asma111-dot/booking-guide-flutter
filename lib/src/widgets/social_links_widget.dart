@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../utils/assets.dart';
 import '../utils/theme.dart';
 
 class SocialLinksWidget extends StatelessWidget {
@@ -12,7 +13,7 @@ class SocialLinksWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
-          icon: const Icon(LineAwesomeIcons.instagram, size: 32),
+          icon: const Icon(instagramIcon, size: 32),
           color: CustomTheme.color2,
           tooltip: 'تابعنا على إنستغرام',
           onPressed: () => _launchSocialLink(
@@ -23,7 +24,7 @@ class SocialLinksWidget extends StatelessWidget {
         ),
         const SizedBox(width: 10),
         IconButton(
-          icon: const Icon(LineAwesomeIcons.facebook, size: 32),
+          icon: const Icon(facebookIcon, size: 32),
           color: CustomTheme.color2,
           tooltip: 'تابعنا على فيسبوك',
           onPressed: () => _launchSocialLink(

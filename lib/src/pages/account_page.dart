@@ -122,7 +122,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                           ),
                         );
                       },
-                      icon: LineAwesomeIcons.user_circle,
+                      icon: userCircleIcon,
                     ),
                   ),
                   _buildMenuCard(
@@ -130,7 +130,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     MenuItem(
                       title: trans().settings,
                       subtitle: trans().settings_desc,
-                      icon: LineAwesomeIcons.cog_solid,
+                      icon: cogIcon,
                       onPressed: () {
                         showModalBottomSheet(
                           context: context,
@@ -150,7 +150,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     MenuItem(
                       title: trans().policies,
                       subtitle: trans().policies_desc,
-                      icon: LineAwesomeIcons.book_open_solid,
+                      icon: bookOpenIcon,
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -178,7 +178,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                           builder: (context) => const SupportBottomSheet(),
                         );
                       },
-                      icon: LineAwesomeIcons.headset_solid,
+                      icon: headSetIcon,
                     ),
                   ),
                   _buildMenuCard(
@@ -187,7 +187,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       title: trans().logout,
                       subtitle: trans().logout_desc,
                       onPressed: () => showLogoutBottomSheet(context, ref),
-                      icon: LineAwesomeIcons.sign_in_alt_solid,
+                      icon: singInIcon,
                     ),
                   ),
                 ],
@@ -217,7 +217,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                             subject: trans().share_subject,
                           );
                         },
-                        icon: Icon(Icons.share, color: colorScheme.secondary),
+                        icon: Icon(shareIcon, color: colorScheme.secondary),
                         label: Text(
                           trans().share_app,
                           style: TextStyle(

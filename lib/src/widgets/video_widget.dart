@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+import '../utils/assets.dart';
+
 class VideoWidget extends StatefulWidget {
   final String videoUrl;
 
@@ -22,7 +24,7 @@ class _VideoWidgetState extends State<VideoWidget> {
         setState(() {
           _isInitialized = true;
         });
-        _controller.play(); // لتشغيل الفيديو تلقائيًا
+        _controller.play();
       });
   }
 
@@ -50,7 +52,7 @@ class _VideoWidgetState extends State<VideoWidget> {
           bottom: 20,
           child: IconButton(
             icon: Icon(
-              _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+              _controller.value.isPlaying ? pauseIcon : playArrowIcon,
               size: 48,
               color: Colors.white,
             ),

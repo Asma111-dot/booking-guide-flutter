@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helpers/general_helper.dart';
 import '../providers/reservation/reservation_provider.dart';
 import '../models/reservation.dart' as res;
+import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar_clipper.dart';
@@ -73,7 +74,7 @@ class _ReservationDetailsPageState
               ),
               child: Row(
                 children: [
-                  Icon(Icons.info_outline, color: colorScheme.secondary),
+                  Icon(errorIcon, color: colorScheme.secondary),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -93,7 +94,7 @@ class _ReservationDetailsPageState
                       (route) => false,
                 );
               },
-              icon: const Icon(Icons.arrow_back),
+              icon: const Icon(goBackIcon),
               label: Text(trans().go_back),
               style: OutlinedButton.styleFrom(
                 side: BorderSide(color: colorScheme.outline),
@@ -104,7 +105,7 @@ class _ReservationDetailsPageState
             Button(
               width: double.infinity,
               title: trans().payment_now,
-              icon: Icon(Icons.arrow_forward,
+              icon: Icon(arrowForWordIcon,
                   size: 20, color: colorScheme.onPrimary),
               iconAfterText: true,
               disable: false,

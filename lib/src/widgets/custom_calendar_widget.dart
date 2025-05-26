@@ -30,12 +30,22 @@ class CustomCalendarWidget extends StatefulWidget {
 class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
   DateTime? selectedDay;
   DateTimeRange? selectedRange;
+  final DateRangePickerController _controller = DateRangePickerController();
 
   @override
   void initState() {
     super.initState();
     selectedDay = widget.initialSelectedDay;
     selectedRange = widget.initialSelectedRange;
+    if (widget.selectionType == SelectionType.single && selectedDay != null) {
+      _controller.selectedDate = selectedDay;
+    } else if (widget.selectionType == SelectionType.range && selectedRange != null) {
+      _controller.selectedRange = PickerDateRange(
+        selectedRange!.start,
+        selectedRange!.end,
+      );
+    }
+
   }
 
   bool _isRangeValid(DateTime start, DateTime end) {
@@ -49,6 +59,8 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print("📅 minDate: ${DateTime.now()}");
+    print("📅 selectedDay: $selectedDay");
     print('🚨 مفاتيح blackoutDates:');
     final normalizedEvents = {
       for (var entry in widget.events.entries)
@@ -62,6 +74,7 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.45,
       child: SfDateRangePicker(
+        controller: _controller,
         minDate: DateTime.now(),
         enablePastDates: false,
         backgroundColor: colorScheme.background, // ✅ دعم الوضع الليلي
@@ -72,7 +85,8 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
             ? DateRangePickerSelectionMode.single
             : DateRangePickerSelectionMode.range,
         todayHighlightColor: CustomTheme.color2,
-        selectionColor: CustomTheme.primaryColor,
+        // selectionColor: CustomTheme.color4,
+        selectionColor: Colors.greenAccent,
         rangeSelectionColor: CustomTheme.primaryColor.withOpacity(0.3),
         startRangeSelectionColor: CustomTheme.primaryColor,
         endRangeSelectionColor: CustomTheme.primaryColor,
@@ -93,18 +107,15 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
               setState(() => selectedDay = selected);
               widget.onSingleDateSelected?.call(selected);
             }
-          } else if (args.value is PickerDateRange) {
-            final range = args.value as PickerDateRange;
-            final start = range.startDate;
-            final end = range.endDate ?? range.startDate;
+    } else if (args.value is PickerDateRange) {
+    final range = args.value as PickerDateRange;
+    final start = range.startDate;
+    final end = range.endDate ?? range.startDate;
 
-            if (_isRangeValid(start!, end!)) {
-              setState(() => selectedRange =
-                  DateTimeRange(start: start, end: end));
-              widget.onRangeSelected?.call(selectedRange!);
-            } else {
-              // _showDateBookedMessage(context);
-            }
+            // if (start != null && end != null) {
+            // setState(() => selectedRange = DateTimeRange(start: start, end: end));
+            // widget.onRangeSelected?.call(selectedRange!);
+            // }
           }
         },
         monthViewSettings: DateRangePickerMonthViewSettings(
@@ -114,16 +125,16 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
         ),
         monthCellStyle: DateRangePickerMonthCellStyle(
           blackoutDateTextStyle: TextStyle(
-            color: colorScheme.onSurface.withOpacity(0.4), // ✅ دعم الوضع الليلي
+            color: Colors.grey,
             decoration: TextDecoration.lineThrough,
           ),
           todayTextStyle: TextStyle(
             color: CustomTheme.color2,
             fontWeight: FontWeight.bold,
           ),
-          textStyle: TextStyle(
-            color: colorScheme.onSurface, // ✅ دعم الوضع الليلي
-          ),
+          // textStyle: TextStyle(
+          //   color: colorScheme.onSurface, // ✅ دعم الوضع الليلي
+          // ),
         ),
       ),
     );

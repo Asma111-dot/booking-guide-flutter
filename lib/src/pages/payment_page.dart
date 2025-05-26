@@ -80,7 +80,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                       width: 40,
                       height: 40,
                       errorBuilder: (context, error, stackTrace) =>
-                          Icon(Icons.error, color: colorScheme.error, size: 40),
+                          Icon(errorIcon, color: colorScheme.error, size: 40),
                     ),
                     const SizedBox(width: 16),
                     Flexible(
@@ -95,8 +95,8 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                     const Spacer(),
                     Icon(
                       selectedPaymentMethod == 'فلوسك'
-                          ? Icons.radio_button_checked
-                          : Icons.radio_button_off,
+                          ? radioCheckIcon
+                          : radioOutIcon,
                       color: selectedPaymentMethod == 'فلوسك'
                           ? colorScheme.primary
                           : colorScheme.outline,

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:booking_guide/src/utils/assets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -206,7 +207,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                               placeholder: (context, url) => const Center(
                                   child: CircularProgressIndicator()),
                               errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
+                                  const Icon(errorIcon),
                             ),
                           ),
                         );
@@ -227,7 +228,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                   ),
                   child: IconButton(
                     icon: Icon(
-                      Icons.arrow_back_ios,
+                      arrowBacksIcon,
                       color: colorScheme.onSurface,
                     ),
                     onPressed: () => Navigator.pop(context),
@@ -245,7 +246,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                   ),
                   child: IconButton(
                     icon: Icon(
-                      Icons.share,
+                      shareIcon,
                       color: colorScheme.onSurface,
                     ),
                     onPressed: () async {
@@ -315,14 +316,15 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                           Row(
                             children: [
                               Icon(
-                                Icons.location_on_outlined,
+                                mapIcon,
                                 color: colorScheme.onSurface,
                                 size: 20,
                               ),
                               const SizedBox(width: 4),
                               Expanded(
                                 child: Text(
-                                  widget.facility.address?.toString() ?? trans().address_not_available,
+                                  widget.facility.address?.toString() ??
+                                      trans().address_not_available,
                                   style: const TextStyle(
                                     color: CustomTheme.color3,
                                     fontSize: 14,
@@ -435,8 +437,9 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                                           ],
                                         ),
 
-                                         Divider(
-                                            color: colorScheme.outline.withOpacity(0.3),
+                                        Divider(
+                                            color: colorScheme.outline
+                                                .withOpacity(0.3),
                                             thickness: 1),
                                         const SizedBox(height: 8),
 
@@ -476,7 +479,8 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                                         ),
 
                                         Divider(
-                                          color: colorScheme.outline.withOpacity(0.3),
+                                          color: colorScheme.outline
+                                              .withOpacity(0.3),
                                           thickness: 1,
                                         ),
 
@@ -631,7 +635,8 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                                         }),
 
                                         Divider(
-                                          color: colorScheme.outline.withOpacity(0.3),
+                                          color: colorScheme.outline
+                                              .withOpacity(0.3),
                                           thickness: 1,
                                         ),
                                         const SizedBox(height: 12),
@@ -666,8 +671,8 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                                                         Icon(
                                                           icon,
                                                           size: 18,
-                                                          color: CustomTheme.color2,
-
+                                                          color: CustomTheme
+                                                              .color2,
                                                         ),
                                                         const SizedBox(
                                                             width: 8),
@@ -751,11 +756,8 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                     );
                   },
                   title: trans().showAvailableDays,
-                  icon: Icon(
-                    Icons.calendar_today,
-                    size: 20,
-                      color: colorScheme.onPrimary
-                  ),
+                  icon:
+                      Icon(periodIcon, size: 20, color: colorScheme.onPrimary),
                   //  iconAfterText: true,
                 ),
               ),

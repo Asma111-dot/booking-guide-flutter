@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../helpers/general_helper.dart';
+import '../utils/assets.dart';
 
 class RoomPriceWidget extends StatelessWidget {
   final dynamic price;
@@ -34,7 +35,7 @@ class RoomPriceWidget extends StatelessWidget {
           Row(
             children: [
               Icon(
-                Icons.calendar_today,
+                periodIcon,
                 color: colorScheme.secondary,
                 size: 16,
               ),
@@ -55,7 +56,7 @@ class RoomPriceWidget extends StatelessWidget {
           Row(
             children: [
               Icon(
-                Icons.monetization_on_outlined,
+                priceIcon,
                 color: colorScheme.secondary,
                 size: 16,
               ),

@@ -69,7 +69,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             keyboardType: TextInputType.phone,
                             readOnly: login.isLoading(),
                             decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.phone, color: colorScheme.primary),
+                              prefixIcon: Icon(callIcon, color: colorScheme.primary),
                               prefixText: '+967 ',
                               prefixStyle: theme.textTheme.bodyMedium?.copyWith(
                                 color: colorScheme.onSurface,
@@ -136,7 +136,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 width: double.infinity,
                 title: trans().login,
                 disable: login.isLoading(),
-                icon: Icon(Icons.login, color: colorScheme.onPrimary),
+                icon: Icon(loginIcon, color: colorScheme.onPrimary),
                 iconAfterText: true,
                 onPressed: () async {
                   final phone = ref.read(phoneProvider);

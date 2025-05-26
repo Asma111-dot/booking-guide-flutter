@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helpers/general_helper.dart';
 import '../providers/auth/otp_state_provider.dart';
 import '../providers/auth/login_provider.dart';
+import '../utils/assets.dart';
 import '../utils/theme.dart';
 import '../widgets/button_widget.dart';
 
@@ -67,7 +68,7 @@ class OtpVerifySheet extends ConsumerWidget {
               width: double.infinity,
               title: trans().verify,
               disable: otp.length != 6,
-              icon: const Icon(Icons.check, color: Colors.white),
+              icon: const Icon(truesIcon, color: Colors.white),
               iconAfterText: true,
               onPressed: () async {
                 if (otp.length == 6) {

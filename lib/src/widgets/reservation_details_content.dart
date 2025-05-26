@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../extensions/string_formatting.dart';
 import '../extensions/date_formatting.dart';
 import '../models/reservation.dart' as res;
+import '../utils/assets.dart';
 import 'custom_header_details_widget.dart';
 import 'custom_row_details_widget.dart';
 import '../helpers/general_helper.dart';
@@ -40,20 +41,20 @@ class ReservationDetailsContent extends StatelessWidget {
           const SizedBox(height: 10),
 
           CustomRowDetailsWidget(
-            icon: Icons.calendar_today,
+            icon:   periodIcon,
             label: trans().reservation_date,
             value: data.checkInDate.toDateDateView(),
           ),
           if (checkOut.isAfter(checkIn)) ...[
             const SizedBox(height: 12),
             CustomRowDetailsWidget(
-              icon: Icons.date_range,
+              icon: rangeDataIcon,
               label: trans().number_of_days,
               value: formatDaysAr(daysCount),
             ),
             const SizedBox(height: 12),
             CustomRowDetailsWidget(
-              icon: Icons.logout,
+              icon: logoutIcon,
               label: trans().check_out_date,
               value: checkOut.toDateDateView(),
             ),
@@ -61,13 +62,13 @@ class ReservationDetailsContent extends StatelessWidget {
 
           const SizedBox(height: 12),
           CustomRowDetailsWidget(
-            icon: Icons.playlist_add_check_rounded,
+            icon: playListIcon,
             label: trans().period,
             value: data.roomPrice?.period ?? trans().not_available,
           ),
           const SizedBox(height: 12),
           CustomRowDetailsWidget(
-            icon: Icons.access_time,
+            icon: accessTimeIcon,
             label: trans().access_time,
             value:
             "${data.roomPrice?.timeFrom?.fromTimeToDateTime()?.toTimeView() ?? '--:--'} - ${data.roomPrice?.timeTo?.fromTimeToDateTime()?.toTimeView() ?? '--:--'}",
@@ -78,13 +79,13 @@ class ReservationDetailsContent extends StatelessWidget {
           const SizedBox(height: 15),
 
           CustomRowDetailsWidget(
-            icon: Icons.personal_injury_outlined,
+            icon: personalIcon,
             label: trans().attendance_type,
             value: data.bookingType,
           ),
           const SizedBox(height: 12),
           CustomRowDetailsWidget(
-            icon: Icons.groups_2_outlined,
+            icon: groupsIcon,
             label: trans().adults_count,
             value: data.adultsCount != null
                 ? '${data.adultsCount} ${trans().person}'
@@ -92,7 +93,7 @@ class ReservationDetailsContent extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           CustomRowDetailsWidget(
-            icon: Icons.groups_2,
+            icon: groups2Icon,
             label: trans().children_count,
             value: data.childrenCount != null
                 ? '${data.childrenCount} ${trans().person}'
@@ -104,7 +105,7 @@ class ReservationDetailsContent extends StatelessWidget {
           const SizedBox(height: 15),
 
           CustomRowDetailsWidget(
-            icon: Icons.price_check_rounded,
+            icon: priceCheckIcon,
             label: trans().total_price,
             value: data.totalPrice != null
                 ? '${data.totalPrice?.toInt()} ${trans().riyalY}'
@@ -113,7 +114,7 @@ class ReservationDetailsContent extends StatelessWidget {
 
           const SizedBox(height: 12),
           CustomRowDetailsWidget(
-            icon: Icons.money_off_csred,
+            icon: depositIcon,
             label: "${trans().amount_to_be_paid} (${trans().deposit})",
             value: data.totalDeposit != null
                 ? '${data.totalDeposit?.toInt()} ${trans().riyalY}'

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/reservation.dart' as res;
+import '../utils/assets.dart';
 import '../widgets/custom_app_bar_clipper.dart';
 import '../widgets/reservation_details_content.dart';
 import '../widgets/view_widget.dart';
@@ -59,7 +60,7 @@ class _BookingDetailsPageState extends ConsumerState<BookingDetailsPage> {
         child: Button(
           width: double.infinity,
           title: "استعراض تفاصيل المنشأة",
-          icon: Icon(Icons.apartment, color: colorScheme.onPrimary),
+          icon: Icon(apartmentIcon, color: colorScheme.onPrimary),
           iconAfterText: true,
           disable: false,
           onPressed: () async {

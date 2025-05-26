@@ -2,13 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../extensions/date_formatting.dart';
 import '../helpers/general_helper.dart';
 import '../models/reservation.dart' as r;
 import '../providers/reservation/reservations_provider.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../utils/theme.dart';
-import '../extensions/date_formatting.dart';
 
 class BookingPage extends ConsumerStatefulWidget {
   final int userId;

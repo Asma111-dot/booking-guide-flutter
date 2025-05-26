@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../helpers/general_helper.dart';
@@ -109,12 +108,12 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                       ),
                     ),
                     IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.whatsapp),
+                      icon: (whatsappIcon),
                       color: Colors.green,
                       onPressed: () => launchUrl(Uri.parse("https://wa.me/775421110")),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.notification_important_outlined),
+                      icon: const Icon(notificationIcon),
                       color: colorScheme.onSurface.withOpacity(0.6),
                       onPressed: () {},
                     ),
@@ -150,7 +149,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.search, color: colorScheme.secondary),
+                          Icon(searchIcon, color: colorScheme.secondary),
                           const SizedBox(width: 10),
                           Text(
                             trans().search_in_facilities,
@@ -187,7 +186,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                       ),
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    child: const Icon(Icons.tune, color: Colors.white),
+                    child: const Icon(trueIcon, color: Colors.white),
                   ),
                 ),
               ],
@@ -203,18 +202,15 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
               child: Row(
                 children: facilityTypesState.data!.map((facilityType) {
                   IconData icon;
-                  switch (facilityType.id) {
-                    case 1:
-                      icon = Icons.hotel;
-                      break;
-                    case 2:
-                      icon = Icons.pool;
-                      break;
-                    case 3:
-                      icon = FontAwesomeIcons.dove;
-                      break;
-                    default:
-                      icon = Icons.home_work;
+
+                  if (facilityType.id == 1) {
+                    icon = hotelIcon;
+                  } else if (facilityType.id == 2) {
+                    icon = poolIcon;
+                  } else if (facilityType.id == 3) {
+                    icon = doveIcon;
+                  } else {
+                    icon = defaultFacilityIcon;
                   }
 
                   return Padding(

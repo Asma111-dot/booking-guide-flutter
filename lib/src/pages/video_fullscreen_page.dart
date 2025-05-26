@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/assets.dart';
 import '../widgets/video_widget.dart';
 
 class VideoFullScreenPage extends StatelessWidget {
@@ -16,7 +17,7 @@ class VideoFullScreenPage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: colorScheme.onPrimary),
+          icon: Icon(arrowBacksIcon, color: colorScheme.onPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),

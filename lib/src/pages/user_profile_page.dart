@@ -162,7 +162,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              icon: Icon(Icons.delete_forever, color: colorScheme.error),
+              icon: Icon(deleteIcon, color: colorScheme.error),
             ),
 
             const SizedBox(height: 40),

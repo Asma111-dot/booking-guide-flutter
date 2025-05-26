@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../helpers/general_helper.dart';
+import '../utils/assets.dart';
 import '../utils/theme.dart';
 
 class ShareButton extends StatelessWidget {
@@ -56,10 +57,10 @@ class ShareButton extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              const Icon(Icons.share, size: 20, color: Colors.white),
+              const Icon(shareIcon, size: 20, color: Colors.white),
             ]
                 : [
-              const Icon(Icons.share, size: 20, color: Colors.white),
+              const Icon(shareIcon, size: 20, color: Colors.white),
             ],
           ),
         ),

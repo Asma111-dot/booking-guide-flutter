@@ -12,6 +12,7 @@ import '../extensions/string_formatting.dart';
 import '../helpers/general_helper.dart';
 import '../models/payment.dart' as p;
 import '../providers/payment/payment_provider.dart';
+import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../utils/theme.dart';
 import '../widgets/button_widget.dart';
@@ -114,12 +115,12 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                     ),
                     const SizedBox(height: 10),
                     CustomRowDetailsWidget(
-                      icon: Icons.price_change,
+                      icon: priceChangeIcon,
                       label: trans().paid_amount,
                       value: "${reservation?.totalDeposit?.toInt()} ${trans().riyalY}",
                     ),
                     CustomRowDetailsWidget(
-                      icon: Icons.date_range,
+                      icon: rangeDataIcon,
                       label: trans().payment_date,
                       value: data.date.toDateView(),
                     ),
@@ -134,33 +135,33 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                     const SizedBox(height: 10),
                     if (reservation != null) ...[
                       CustomRowDetailsWidget(
-                        icon: Icons.calendar_today,
+                        icon: periodIcon,
                         label: trans().check_in_date,
                         value: reservation.checkInDate.toDateDateView(),
                       ),
                       CustomRowDetailsWidget(
-                        icon: Icons.calendar_today_outlined,
+                        icon: calenderIcon,
                         label: trans().check_out_date,
                         value: reservation.checkOutDate.toDateDateView(),
                       ),
                       CustomRowDetailsWidget(
-                        icon: Icons.date_range,
+                        icon: rangeDataIcon,
                         label: trans().number_of_days,
                         value: formatDaysAr(daysCount),
                       ),
                       CustomRowDetailsWidget(
-                        icon: Icons.access_time,
+                        icon: accessTimeIcon,
                         label: trans().access_time,
                         value:
                         "${reservation.roomPrice?.timeFrom?.fromTimeToDateTime()?.toTimeView() ?? '--:--'} - ${reservation.roomPrice?.timeTo?.fromTimeToDateTime()?.toTimeView() ?? '--:--'}",
                       ),
                       CustomRowDetailsWidget(
-                        icon: Icons.people,
+                        icon: peopleIcon,
                         label: trans().adults_count,
                         value: "${reservation.adultsCount} ${trans().person}",
                       ),
                       CustomRowDetailsWidget(
-                        icon: Icons.child_care,
+                        icon: childIcon,
                         label: trans().children_count,
                         value: "${reservation.childrenCount} ${trans().person}",
                       ),
@@ -173,17 +174,17 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                         ),
                       ),
                       CustomRowDetailsWidget(
-                        icon: Icons.money,
+                        icon: moneyIcon,
                         label: trans().total_price,
                         value: "${reservation.totalPrice?.toInt()} ${trans().riyalY}",
                       ),
                       CustomRowDetailsWidget(
-                        icon: Icons.paid,
+                        icon: priceIcon,
                         label: trans().paid_amount,
                         value: "${reservation.totalDeposit?.toInt()} ${trans().riyalY}",
                       ),
                       CustomRowDetailsWidget(
-                        icon: Icons.price_check,
+                        icon: priceCheckIcon,
                         label: trans().remaining_amount,
                         value:
                         "${((reservation.totalPrice ?? 0) - (reservation.totalDeposit ?? 0)).toInt()} ${trans().riyalY}",
@@ -207,7 +208,7 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
             Expanded(
               child: Button(
                 title: trans().close_and_go_back,
-                icon: Icon(Icons.close, size: 20, color: colorScheme.onPrimary),
+                icon: Icon(closeIcon, size: 20, color: colorScheme.onPrimary),
                 iconAfterText: true,
                 disable: false,
                 onPressed: () async {
@@ -223,7 +224,7 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
             Expanded(
               child: Button(
                 title: trans().share,
-                icon: Icon(Icons.share, size: 20, color: colorScheme.onPrimary),
+                icon: Icon(shareIcon, size: 20, color: colorScheme.onPrimary),
                 iconAfterText: true,
                 disable: false,
                 onPressed: _shareScreenshot,

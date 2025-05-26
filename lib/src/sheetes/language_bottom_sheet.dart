@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../helpers/general_helper.dart';
 import '../providers/public/settings_provider.dart';
+import '../utils/assets.dart';
 import '../utils/theme.dart';
 
 class LanguageBottomSheet extends ConsumerWidget {
@@ -87,7 +88,7 @@ class LanguageBottomSheet extends ConsumerWidget {
                 ),
               ),
               if (selected)
-                Icon(Icons.check_circle, color: colorScheme.primary),
+                Icon(checkIcon, color: colorScheme.primary),
             ],
           ),
         ),

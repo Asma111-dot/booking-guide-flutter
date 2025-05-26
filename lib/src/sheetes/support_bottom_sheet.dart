@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../helpers/general_helper.dart';
+import '../utils/assets.dart';
 
 class SupportBottomSheet extends StatelessWidget {
   const SupportBottomSheet({super.key});
@@ -38,21 +39,21 @@ class SupportBottomSheet extends StatelessWidget {
           const SizedBox(height: 20),
           _buildSupportOption(
             context,
-            icon: Icons.phone,
+            icon: callIcon,
             label: '775421110',
             onTap: () => _launchPhone('775421110'),
           ),
           const SizedBox(height: 10),
           _buildSupportOption(
             context,
-            icon: FontAwesomeIcons.whatsapp,
+            icon: whatsappInIcon,
             label: '775421110',
             onTap: () => _launchWhatsApp(context, '775421110'),
           ),
           const SizedBox(height: 10),
           _buildSupportOption(
             context,
-            icon: Icons.email_outlined,
+            icon: emailIcon,
             label: 'bookingguide999@gmail.com',
             onTap: () => _launchEmail(context, 'bookingguide999@gmail.com'),
           ),
