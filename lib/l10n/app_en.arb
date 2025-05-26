@@ -6,9 +6,9 @@
   "ultimateDestination": "Your ultimate destination for reservations",
   "chooseOne": "Choose one of the options to enjoy the application services",
   "facilityTypes": "Facilities",
-  "showFacilities": "عرض المنشآت",
+  "showFacilities": "Show Facilities",
   "hotel": "Hotel",
-  "hall": "قاعة أعراس",
+  "hall": "Wedding Hall",
   "noHotel": "There are no hotels available at the moment.",
   "chalet": "Chalet",
   "noChalet": "There are no chalets available at the moment.",
@@ -189,7 +189,6 @@
   "delete_account": "Delete Account",
   "are_you_sure": "Are you sure?",
   "delete_account_confirmation": "Do you really want to delete the account?",
-
   "search_in_facilities": "Search in facilities...",
   "discoverBestPlace": "Discover the best place for your needs",
   "searchByNameAddress": "Search by name or address, specify the number of people, select the suitable date, and sort results by price easily.",
@@ -201,7 +200,6 @@
   "address_near_user": "Nearby Location",
   "capacity_at_least": "Minimum Capacity",
   "available_on_day": "Availability by Day",
-
   "desc_name": "Search for facilities by typing part of their name.",
   "desc_address_like": "Find facilities based on keywords in their address.",
   "desc_price_between": "Select a minimum and maximum price to display suitable facilities.",
@@ -248,6 +246,6 @@
   "adults_hint": "Specify the number of adults attending.",
   "children_hint": "Specify the number of children (optional – only if applicable)",
   "booking_not_confirmed_warning": "Note: The reservation is not confirmed until payment is completed.",
-  "go_back": "Back and return"
-
+  "go_back": "Back and return",
+  "viewFacilityDetails": "View Facility Details"
 }

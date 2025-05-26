@@ -59,7 +59,7 @@ class _BookingDetailsPageState extends ConsumerState<BookingDetailsPage> {
         minimum: const EdgeInsets.all(16),
         child: Button(
           width: double.infinity,
-          title: "استعراض تفاصيل المنشأة",
+          title: trans().viewFacilityDetails,
           icon: Icon(apartmentIcon, color: colorScheme.onPrimary),
           iconAfterText: true,
           disable: false,
