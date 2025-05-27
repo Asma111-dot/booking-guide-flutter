@@ -6,28 +6,34 @@ import '../../utils/urls.dart';
 
 part 'payment_save_provider.g.dart';
 
-@Riverpod(keepAlive: false)
+@Riverpod(keepAlive: true)
 class PaymentSave extends _$PaymentSave {
 
   @override
   Response<pay.Payment> build() => const Response<pay.Payment>();
 
   Future<void> savePayment(pay.Payment payment) async {
+
     state = state.setLoading();
     try {
       final response = await request<pay.Payment>(
+
         url: payment.isCreate()
             ? addPaymentUrl()
             : updatePaymentUrl(payment.id),
         method: payment.isCreate() ? Method.post : Method.put,
         body: payment.toJson(),
+
       );
+      print("📤 إرسال الدفع إلى: ${payment.isCreate() ? addPaymentUrl() : updatePaymentUrl(payment.id)}");
+      print("📦 بيانات الطلب: ${payment.toJson()}");
 
       if (response.isLoaded()) {
         state = state.copyWith(data: response.data, meta: response.meta);
         print("تم حفظ الدفع بنجاح مع ID: ${response.data?.id}");
       } else {
         print("خطأ أثناء الحفظ: ${response.meta.message}");
+
       }
     } catch (error) {
       print("خطأ أثناء الحفظ: $error");

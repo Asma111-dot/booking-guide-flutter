@@ -65,7 +65,7 @@ class NavigationMenu extends StatelessWidget {
                 onTap: () => controller.selectedIndex.value = index,
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
-                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                   decoration: BoxDecoration(
                     color: isSelected
                         ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
@@ -81,12 +81,12 @@ class NavigationMenu extends StatelessWidget {
                             ? Theme.of(context).colorScheme.secondary
                             : Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 3),
                       Text(
                         label,
                         style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                          fontSize: 10,
+                          fontWeight: isSelected ? FontWeight.w400 : FontWeight.w200,
                           color: isSelected
                               ? Theme.of(context).colorScheme.primary
                               : Theme.of(context).colorScheme.onSurface.withOpacity(0.6),

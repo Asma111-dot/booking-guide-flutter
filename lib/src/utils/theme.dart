@@ -10,8 +10,8 @@ class CustomTheme {
   // String getFont(String languageCode) => 'GESS';
   String getFont(String languageCode) {
     switch (languageCode) {
-      case 'ar': return 'Tajawal';
-      case 'en': return 'GESS';
+      case 'ar': return 'GESS';
+      case 'en': return 'Tajawal';
       default: return 'Cairo';
     }
   }
@@ -25,7 +25,7 @@ class CustomTheme {
   static const Color color3 = Color(0xFF565BF2);
   static const Color color4 = Color(0xFF0DD7FC);
 
-  static const Color primaryColor = Color(0xFF140B2D);
+  static const Color primaryColor = Color(0xFF150D33);
   // static const Color primaryColor = color2; // 0xFF860EEE
   static const Color secondaryColor = color3; // 0xFF565BF2
   static const Color tertiaryColor = color4; // 0xFF0DD7FC
@@ -83,13 +83,11 @@ class CustomTheme {
           onPrimary: Colors.white,
           secondary: color3,
           onSecondary: Colors.white,
-          background: scaffoldColor(),
-          onBackground: isDark ? Colors.white : Colors.black,
           surface: cardColor(),
-          onSurface: isDark ? Colors.white : Colors.black,
+          onSurface: isDark ? Colors.white : primaryColor,
           error: primaryColor,
           tertiary: color4,
-          onError: Colors.black,
+          onError: CustomTheme.color3,
         ),
         scaffoldBackgroundColor: scaffoldColor(),
         cardColor: cardColor(),
@@ -191,12 +189,12 @@ class CustomTheme {
             fontFamily: getFont(languageCode),
           ),
           secondaryLabelStyle: TextStyle(
-            color: isDark ? Colors.black : Colors.white,
+            color: isDark ? primaryColor : Colors.white,
             fontSize: 12,
             fontFamily: getFont(languageCode),
           ),
           iconTheme: IconThemeData(
-            color: isDark ? Colors.white : Colors.black,
+            color: isDark ? Colors.white : primaryColor,
           ),
           disabledColor: Colors.grey,
           checkmarkColor: isDark ? Colors.grey[300]! : Colors.grey[700]!,
@@ -209,7 +207,7 @@ class CustomTheme {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         ),
     snackBarTheme: SnackBarThemeData(
-      backgroundColor: isDark ? Colors.black : Colors.black, // مضمون
+      backgroundColor: isDark ? color3 : primaryColor,
       contentTextStyle: const TextStyle(
         color: Colors.white,
         fontWeight: FontWeight.bold,

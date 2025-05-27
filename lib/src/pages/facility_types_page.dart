@@ -174,16 +174,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                     height: 50,
                     width: 50,
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [
-                          CustomTheme.color1,
-                          CustomTheme.color2,
-                          CustomTheme.color3,
-                          CustomTheme.color4,
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
+                      gradient: CustomTheme.primaryGradient,
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: const Icon(trueIcon, color: Colors.white),
@@ -194,7 +185,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
           ),
           const SizedBox(height: 20),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: facilityTypesState.data == null || facilityTypesState.data!.isEmpty
                 ? const Center(child: CircularProgressIndicator())
                 : SingleChildScrollView(
@@ -214,7 +205,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                   }
 
                   return Padding(
-                    padding: const EdgeInsets.only(right: 10),
+                    padding: const EdgeInsets.only(right: 5),
                     child: _buildTypeButtonWithIcon(
                       context,
                       facilityType.name,

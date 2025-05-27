@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
+import '../utils/assets.dart';
+
 class MenuItem extends StatelessWidget {
   final String title;
   final String? subtitle;
@@ -42,17 +44,20 @@ class MenuItem extends StatelessWidget {
       ),
       subtitle: subtitle != null
           ? Text(
-        subtitle!,
-        style: theme.textTheme.bodySmall?.copyWith(
-          fontSize: 12,
-          color: colorScheme.onSurface.withOpacity(0.6),
-        ),
-      )
+              subtitle!,
+              style: theme.textTheme.bodySmall?.copyWith(
+                fontSize: 12,
+                color: colorScheme.onSurface.withOpacity(0.6),
+              ),
+            )
           : null,
       trailing: Icon(
-        LineAwesomeIcons.angle_left_solid,
+        Directionality.of(context) == TextDirection.rtl
+            ? angleLeftIcon
+            : angleRightIcon,
         color: colorScheme.primary,
         size: 20,
+        weight: 10,
       ),
     );
   }

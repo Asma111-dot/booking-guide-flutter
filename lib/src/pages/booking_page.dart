@@ -144,7 +144,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
                           placeName,
                           style: TextStyle(
                             color: CustomTheme.primaryColor,
-                            fontSize: 20,
+                            fontSize: 12,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -153,7 +153,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
                           "${trans().reservation_date} : ${reservation.checkInDate.toDateView()}",
                           style: TextStyle(
                             color: CustomTheme.color1,
-                            fontSize: 15,
+                            fontSize: 10,
                           ),
                         ),
                         if (showDays)
@@ -163,7 +163,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
                               "${trans().number_of_days} : ${formatDaysAr(daysCount)}",
                               style: TextStyle(
                                 color: CustomTheme.color1,
-                                fontSize: 15,
+                                fontSize: 10,
                               ),
                             ),
                           ),
@@ -173,7 +173,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
                             "${trans().check_out_date} : ${reservation.checkOutDate.toDateView()}",
                             style: TextStyle(
                               color: CustomTheme.color1,
-                              fontSize: 15,
+                              fontSize: 10,
                             ),
                           ),
                         ),
@@ -183,7 +183,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
                           "${trans().created_at} : ${reservation.createdAt?.toDateView()}",
                           style: TextStyle(
                             color: CustomTheme.color2,
-                            fontSize: 14,
+                            fontSize: 10,
                           ),
                         ),
                       ],
@@ -201,7 +201,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
                         "${reservation.totalPrice?.toStringAsFixed(0) ?? trans().priceNotAvailable} ${trans().riyalY}",
                         style: TextStyle(
                           color: CustomTheme.color3,
-                          fontSize: 15,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -214,7 +214,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
                         ),
                         child: Text(
                           _getStatusText(reservation.status),
-                          style: const TextStyle(color: Colors.white, fontSize: 15),
+                          style: const TextStyle(color: Colors.white, fontSize: 10),
                         ),
                       ),
                     ],

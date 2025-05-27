@@ -20,65 +20,76 @@ class RoomAmenitiesTab extends StatelessWidget {
             Text(
               trans().available_spaces,
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: CustomTheme.primaryColor,
+                color: CustomTheme.color2,
               ),
             ),
             const SizedBox(height: 6),
-            ...room.availableSpaces.map((space) {
-              final type = space['type'] ?? '';
-              final count = int.tryParse(space['count'].toString()) ?? 1;
-              final icon = AmenityIconHelper.getAmenityIcon(type);
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(icon, size: 18, color: CustomTheme.color2),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
+            Wrap(
+              spacing: 12,
+              runSpacing: 5,
+              children: room.availableSpaces.map((space) {
+                final type = space['type'] ?? '';
+                final count = int.tryParse(space['count'].toString()) ?? 1;
+                final icon = AmenityIconHelper.getAmenityIcon(type);
+
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: CustomTheme.color3.withOpacity(0.03),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(icon, size: 16, color: CustomTheme.color3),
+                      const SizedBox(width: 6),
+                      Text(
                         count > 1 ? '$count $type' : type,
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 12,
                           color: CustomTheme.primaryColor,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            }),
-            const Divider(),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+            const Divider(thickness: 2,),
             const SizedBox(height: 12),
             Text(
               trans().amenities_and_facilities,
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: CustomTheme.primaryColor,
+                color: CustomTheme.color2,
               ),
             ),
             const SizedBox(height: 8),
             room.amenities.isNotEmpty
-                ? Column(
+                ? Wrap(
+              spacing: 12,
+              runSpacing: 12,
               children: room.amenities.map((a) {
                 final icon = AmenityIconHelper.getAmenityIcon(a.name);
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: CustomTheme.color3.withOpacity(0.03),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(icon, size: 18, color: CustomTheme.color2),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          a.name,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: CustomTheme.primaryColor,
-                          ),
+                      Icon(icon, size: 16, color: CustomTheme.color3),
+                      const SizedBox(width: 6),
+                      Text(
+                        a.name,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: CustomTheme.primaryColor,
                         ),
                       ),
                     ],

@@ -5,7 +5,6 @@ import '../models/room_price.dart';
 import '../pages/booking_details_page.dart';
 import '../pages/facility_filter_page.dart';
 import '../pages/facility_page.dart';
-import '../pages/map_page.dart';
 import '../pages/navigation_menu.dart';
 import '../pages/payment_details_page.dart';
 import '../pages/payment_page.dart';

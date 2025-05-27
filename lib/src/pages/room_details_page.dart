@@ -57,6 +57,9 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
 
     tabController = TabController(length: 3, vsync: this);
     pageController = PageController(viewportFraction: 1);
+    pageController.addListener(() {
+      setState(() {});
+    });
 
     imageTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
       final room = ref.read(roomProvider).data;
@@ -144,7 +147,8 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                               imageUrl: mediaUrl,
                               fit: BoxFit.cover,
                               placeholder: (context, url) => const Center(
-                                  child: CircularProgressIndicator()),
+                                child: CircularProgressIndicator(),
+                              ),
                               errorWidget: (context, url, error) =>
                                   const Icon(errorIcon),
                             ),
@@ -204,7 +208,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.1 * 255),
+                    color: Colors.black.withValues(alpha: 0.3 * 255),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
@@ -239,7 +243,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                       ],
                     ),
                     child: SingleChildScrollView(
-                      // controller: scrollController,
+                      controller: scrollController,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -274,7 +278,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                           ),
                           const SizedBox(height: 10),
                           SizedBox(
-                            height: 150,
+                            height: 100,
                             child: GoogleMap(
                               initialCameraPosition: CameraPosition(
                                 target: LatLng(

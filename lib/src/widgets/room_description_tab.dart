@@ -37,15 +37,15 @@ class RoomDescriptionTab extends StatelessWidget {
           Text(
             trans().about_facility,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: CustomTheme.primaryColor,
+              color: CustomTheme.color2,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             facility.desc,
-            style: const TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 12),
             maxLines: showAboutFull ? null : 2,
             overflow:
             showAboutFull ? TextOverflow.visible : TextOverflow.ellipsis,
@@ -53,24 +53,31 @@ class RoomDescriptionTab extends StatelessWidget {
           if (facility.desc.length > 150)
             TextButton(
               onPressed: () => onShowAboutToggle(!showAboutFull),
-              child: Text(showAboutFull ? 'عرض أقل' : 'قراءة المزيد'),
+              child: Text(
+                showAboutFull ? 'عرض أقل' : 'قراءة المزيد',
+                style: TextStyle(
+                  color: CustomTheme.color3,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
 
-          const Divider(),
+          const Divider(thickness: 2,),
           const SizedBox(height: 8),
 
           Text(
             trans().read_terms_before_booking,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: CustomTheme.primaryColor,
+              color: CustomTheme.color2,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             room.type,
-            style: const TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 12),
             maxLines: showTypeFull ? null : 2,
             overflow:
             showTypeFull ? TextOverflow.visible : TextOverflow.ellipsis,
@@ -78,24 +85,31 @@ class RoomDescriptionTab extends StatelessWidget {
           if (room.type.length > 150)
             TextButton(
               onPressed: () => onShowTypeToggle(!showTypeFull),
-              child: Text(showTypeFull ? 'عرض أقل' : 'قراءة المزيد'),
+              child: Text(
+                showAboutFull ? 'عرض أقل' : 'قراءة المزيد',
+                style: TextStyle(
+                  color: CustomTheme.color3,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
 
-          const Divider(),
+          const Divider(thickness: 2,),
           const SizedBox(height: 8),
 
           Text(
             trans().insurance_coverage_question,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: CustomTheme.primaryColor,
+              color: CustomTheme.color2,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             room.desc,
-            style: const TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 12),
             maxLines: showDescFull ? null : 2,
             overflow:
             showDescFull ? TextOverflow.visible : TextOverflow.ellipsis,
@@ -103,7 +117,14 @@ class RoomDescriptionTab extends StatelessWidget {
           if (room.desc.length > 150)
             TextButton(
               onPressed: () => onShowDescToggle(!showDescFull),
-              child: Text(showDescFull ? 'عرض أقل' : 'قراءة المزيد'),
+              child: Text(
+                showAboutFull ? 'عرض أقل' : 'قراءة المزيد',
+                style: TextStyle(
+                  color: CustomTheme.color3,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
         ],
       ),
