@@ -39,9 +39,9 @@ class RoomDetailsTabs extends StatelessWidget {
       children: [
         TabBar(
           controller: tabController,
-          labelColor: CustomTheme.primaryColor,
+          labelColor:CustomTheme.color3,
           unselectedLabelColor: Colors.grey,
-          indicatorColor: CustomTheme.color2,
+          indicatorColor: CustomTheme.color3,
           labelPadding: const EdgeInsets.symmetric(horizontal: 12),
           tabs: [
             Tab(text: trans().description),
@@ -50,7 +50,7 @@ class RoomDetailsTabs extends StatelessWidget {
           ],
         ),
         SizedBox(
-          height: 300,
+          height: 400,
           child: TabBarView(
             controller: tabController,
             children: [

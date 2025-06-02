@@ -160,7 +160,6 @@
   "hello_user": "Hello,",
   "search": "Search",
   "notifications": "Notifications",
-  "selectFacilityType": "Select a facility type",
   "mapHint": "View all facilities on the map and pick your destination easily.",
   "created_at": "Booking Date",
   "noFavorites": "No favorite facilities yet",
@@ -177,6 +176,7 @@
   "support_desc": "Contact us for any inquiry or issue",
   "support_message": "We value your feedback and suggestions, and we welcome any communication through the following channels to enhance your experience.",
   "logout_desc": "Sign out of your account",
+  "remove_from_favorites_confirm": "Are you sure you want to remove this facility from your favorites?",
   "completeProfile": "Complete Your Profile",
   "fullName": "Full Name",
   "address_optional": "Address (optional)",
@@ -247,5 +247,7 @@
   "children_hint": "Specify the number of children (optional – only if applicable)",
   "booking_not_confirmed_warning": "Note: The reservation is not confirmed until payment is completed.",
   "go_back": "Back and return",
-  "viewFacilityDetails": "View Facility Details"
+  "viewFacilityDetails": "View Facility Details",
+  "show_less": "Show less",
+  "read_more": "Read more"
 }

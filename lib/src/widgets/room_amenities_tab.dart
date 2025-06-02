@@ -47,9 +47,9 @@ class RoomAmenitiesTab extends StatelessWidget {
                       const SizedBox(width: 6),
                       Text(
                         count > 1 ? '$count $type' : type,
-                        style: const TextStyle(
+                        style:  TextStyle(
                           fontSize: 12,
-                          color: CustomTheme.primaryColor,
+                          color: colorScheme.onSurface,
                         ),
                       ),
                     ],
@@ -87,9 +87,9 @@ class RoomAmenitiesTab extends StatelessWidget {
                       const SizedBox(width: 6),
                       Text(
                         a.name,
-                        style: const TextStyle(
+                        style:  TextStyle(
                           fontSize: 12,
-                          color: CustomTheme.primaryColor,
+                          color: colorScheme.onSurface,
                         ),
                       ),
                     ],

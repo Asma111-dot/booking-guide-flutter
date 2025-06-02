@@ -220,14 +220,13 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
           const SizedBox(height: 10),
           Expanded(
             child: selectedFacilityType == null
-                ? Center(child: Text(trans().selectFacilityType))
+                ? Center(child: CircularProgressIndicator())//edit ///
                 : FacilityPage(facilityTypeId: selectedFacilityType!),
           ),
         ],
       ),
     );
   }
-
   Widget _buildTypeButtonWithIcon(
       BuildContext context,
       String title,

@@ -13,6 +13,7 @@ import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../utils/theme.dart';
 import '../helpers/general_helper.dart';
+import '../widgets/full_map_widget.dart';
 import '../widgets/view_widget.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/video_widget.dart';
@@ -161,12 +162,11 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
               ),
               Positioned(
                 top: 20,
-                right: 10,
+                left: Directionality.of(context) == TextDirection.ltr ? 10 : null,
+                right: Directionality.of(context) == TextDirection.rtl ? 10 : null,
                 child: Container(
-                  padding: const EdgeInsets.all(0),
                   decoration: BoxDecoration(
                     color: colorScheme.surface.withOpacity(0.8),
-                    // 178 ≈ 0.7 * 255
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: IconButton(
@@ -180,9 +180,9 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
               ),
               Positioned(
                 top: 20,
-                left: 10,
+                right: Directionality.of(context) == TextDirection.ltr ? 10 : null,
+                left: Directionality.of(context) == TextDirection.rtl ? 10 : null,
                 child: Container(
-                  padding: const EdgeInsets.all(0),
                   decoration: BoxDecoration(
                     color: colorScheme.surface.withOpacity(0.8),
                     borderRadius: BorderRadius.circular(10),
@@ -202,13 +202,13 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                 ),
               ),
               Positioned(
-                top: 170,
+                top: 200,
                 left: 10,
                 child: Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.3 * 255),
+                    color: Colors.black.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
@@ -222,8 +222,8 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                 ),
               ),
               DraggableScrollableSheet(
-                initialChildSize: 0.70,
-                minChildSize: 0.70,
+                initialChildSize: 0.65,
+                minChildSize: 0.65,
                 maxChildSize: 0.9,
                 builder: (context, scrollController) {
                   return Container(
@@ -255,16 +255,14 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                               color: CustomTheme.primaryColor,
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 12),
                           Row(
                             children: [
-                              Icon(mapIcon,
-                                  color: colorScheme.onSurface, size: 20),
+                              Icon(mapIcon, color: colorScheme.onSurface, size: 20),
                               const SizedBox(width: 4),
                               Expanded(
                                 child: Text(
-                                  widget.facility.address ??
-                                      trans().address_not_available,
+                                  widget.facility.address ?? trans().address_not_available,
                                   style: const TextStyle(
                                     color: CustomTheme.color3,
                                     fontSize: 14,
@@ -274,34 +272,22 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                                   maxLines: 2,
                                 ),
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          SizedBox(
-                            height: 100,
-                            child: GoogleMap(
-                              initialCameraPosition: CameraPosition(
-                                target: LatLng(
-                                  widget.facility.latitude ?? 15.5520,
-                                  widget.facility.longitude ?? 48.5164,
-                                ),
-                                zoom: 12,
+                              IconButton(
+                                icon:  Icon(map2Icon, color: colorScheme.primary),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => FullMapWidget(
+                                        latitude: widget.facility.latitude,
+                                        longitude: widget.facility.longitude,
+                                        name: widget.facility.name,
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
-                              markers: {
-                                Marker(
-                                  markerId:
-                                      MarkerId(widget.facility.id.toString()),
-                                  position: LatLng(
-                                    widget.facility.latitude ?? 0.0,
-                                    widget.facility.longitude ?? 0.0,
-                                  ),
-                                  infoWindow:
-                                      InfoWindow(title: widget.facility.name),
-                                ),
-                              },
-                              onMapCreated: (controller) =>
-                                  mapController = controller,
-                            ),
+                            ],
                           ),
                           const SizedBox(height: 16),
                           RoomDetailsTabs(

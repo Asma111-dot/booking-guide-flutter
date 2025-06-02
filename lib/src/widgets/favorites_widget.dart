@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../helpers/general_helper.dart';
 import '../models/facility.dart';
+import '../sheetes/favorite_sheet.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
 
@@ -147,7 +147,12 @@ class FavoriteWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: GestureDetector(
-                onTap: onRemove,
+                onTap: () {
+                  showRemoveFavoriteSheet(
+                    context,
+                    onConfirm: onRemove,
+                  );
+                },
                 child: Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(

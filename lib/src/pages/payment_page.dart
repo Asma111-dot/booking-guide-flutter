@@ -23,6 +23,14 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
   String? selectedPaymentMethod;
   int? paymentId;
   bool isLoading = false;
+// خارج الكلاس تمامًا (RoomDetailsPage مثلًا)
+
+  String getCustomFallbackMessage(pay.Payment payment) {
+    if (payment.amount == 0) return 'المبلغ غير صالح.';
+    if (payment.transactionTypeId == 0) return 'نوع المعاملة غير محدد.';
+    if (payment.paymentMethodId == 0) return 'طريقة الدفع غير محددة.';
+    return 'حدث خطأ غير متوقع. يرجى المحاولة لاحقًا.';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -217,13 +225,33 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                   },
                 );
               } else {
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(currentState.meta.message),
+                // if (mounted) {
+                //   ScaffoldMessenger.of(context).showSnackBar(
+                //       SnackBar(
+                //         content: Text(currentState.meta.message),
+                //     ),
+                //   );
+                // }
+                final errorMessage = currentState.meta.message.trim().isEmpty
+                    ? getCustomFallbackMessage(payment)
+                    : currentState.meta.message;
+
+                print('❌ رسالة الخطأ: $errorMessage');
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      errorMessage,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  );
-                }
+                    backgroundColor: Theme.of(context).colorScheme.error,
+                    duration: Duration(seconds: 4),
+                  ),
+                );
+
               }
             }
             setState(() => isLoading = false);

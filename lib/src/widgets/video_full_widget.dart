@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import '../utils/assets.dart';
-import '../widgets/video_widget.dart';
+import 'video_widget.dart';
 
-class VideoFullScreenPage extends StatelessWidget {
+class VideoFullWidget extends StatelessWidget {
   final String videoUrl;
 
-  const VideoFullScreenPage({super.key, required this.videoUrl});
+  const VideoFullWidget({super.key, required this.videoUrl});
 
   @override
   Widget build(BuildContext context) {

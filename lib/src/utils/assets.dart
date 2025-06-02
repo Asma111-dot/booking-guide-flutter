@@ -59,6 +59,7 @@ const callIcon = Icons.phone_rounded;
 const phoneIcon = Icons.phone_iphone_rounded;
 const emailIcon = Icons.email_outlined;
 const mapIcon = Icons.location_on_outlined;
+const map2Icon = Icons.map_rounded;
 const bookingIcon = Icons.sticky_note_2_outlined;
 const favoriteIcon = Icons.favorite_outline_outlined;
 const favoriteFullIcon = Icons.favorite;

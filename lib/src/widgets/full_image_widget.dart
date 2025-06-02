@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class FullScreenImagePage extends StatelessWidget {
+class FullImageWidget extends StatelessWidget {
   final List<String> imageUrls;
   final int initialIndex;
 
-  const FullScreenImagePage({
+  const FullImageWidget({
     super.key,
     required this.imageUrls,
     this.initialIndex = 0,

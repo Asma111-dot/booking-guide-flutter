@@ -5,8 +5,8 @@ import '../helpers/general_helper.dart';
 import '../models/media.dart';
 import '../utils/assets.dart';
 import '../widgets/custom_app_bar.dart';
-import 'full_screen_image_page.dart';
-import 'video_fullscreen_page.dart';
+import '../widgets/full_image_widget.dart';
+import '../widgets/video_full_widget.dart';
 
 class ImageGalleryPage extends StatelessWidget {
   final List<Media> mediaList;
@@ -43,14 +43,14 @@ class ImageGalleryPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => VideoFullScreenPage(videoUrl: media.original_url),
+                    builder: (context) => VideoFullWidget(videoUrl: media.original_url),
                   ),
                 );
               } else {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => FullScreenImagePage(
+                    builder: (context) => FullImageWidget(
                       imageUrls: mediaList
                           .where((m) => !(m.mime_type?.startsWith('video') ?? false))
                           .map((m) => m.original_url)

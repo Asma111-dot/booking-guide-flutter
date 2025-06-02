@@ -61,6 +61,7 @@
   "updateProfile": "تحديث الملف الشخصي",
   "logout": "تسجيل الخروج",
   "areYouSureYouWantToLogout": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+  "remove_from_favorites_confirm": "هل أنت متأكد من إزالة المنشأة من المفضلة؟",
   "yes": "نعم",
   "no": "لا",
   "success": "نجاح",
@@ -160,7 +161,6 @@
   "hello_user": "مرحباً, ",
   "search": "بحث",
   "notifications": "الإشعارات",
-  "selectFacilityType": "اختر نوع المنشأة",
   "mapHint": "شاهد كل المنشآت على الخريطة وحدد وجهتك بسهولة.",
   "created_at": "تاريخ الطلب",
   "noFavorites": "لا توجد منشآت مفضلة حتى الآن",
@@ -247,5 +247,7 @@
   "children_hint": "حدد عدد الأطفال (اختياري – فقط إذا كان هناك أطفال)",
   "booking_not_confirmed_warning": "تنبيه: لا يعتبر الحجز مؤكدًا إلا بعد إتمام الدفع.",
   "go_back": "تراجع والعودة",
-  "viewFacilityDetails": "استعراض تفاصيل المنشأة"
+  "viewFacilityDetails": "استعراض تفاصيل المنشأة",
+  "show_less": "عرض أقل",
+  "read_more": "قراءة المزيد"
 }
