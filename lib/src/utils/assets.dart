@@ -7,7 +7,6 @@ const _base = 'assets/';
 const _lottieBase = "${_base}lottie/";
 const _imageBase = "${_base}images/";
 const _iconBase = "${_base}icons/";
-const _videoBase = "${_base}videos/";
 
 // Lottie (Json) ---------------------------------------------------------------
 const loadingJson = "${_lottieBase}loading_circular.json";
@@ -29,6 +28,9 @@ const booking = "${_imageBase}booking1.png";
 const chaletImage = "${_imageBase}chalet.jpg";
 const hotelImage = "${_imageBase}hotel.jpg";
 const floosakImage = "${_imageBase}floosak.png";
+const jibImage = "${_imageBase}Jib.png";
+const jawalyImage = "${_imageBase}Jawaly.png";
+
 
 // Icons -----------------------------------------------------------------------
 const externalLinkIcon = Feather.external_link;

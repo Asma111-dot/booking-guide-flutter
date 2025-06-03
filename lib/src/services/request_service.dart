@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 
 import '../helpers/general_helper.dart';
 import '../helpers/notify_helper.dart';
+import '../models/payment.dart' as pay;
 import '../models/response/meta.dart';
 import '../models/response/response.dart';
 import '../utils/data_binding.dart';
@@ -143,9 +144,11 @@ Future<Response<T>> request<T>({
               data = listModel<T>(parsed[key]);
             }
           } else if (parsed[key] is Map) {
-            data = model<T>(parsed[key]);
-          } else {
-            data = parsed[key];
+            if (T.toString() == 'Payment') {
+              data = pay.Payment.fromJson(parsed[key]);
+            } else {
+              data = model<T>(parsed[key]);
+            }
           }
 
           if (parsed.containsKey('deleted') && parsed['deleted'] is List) {

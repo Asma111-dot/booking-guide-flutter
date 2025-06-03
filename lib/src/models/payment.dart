@@ -1,5 +1,7 @@
+import '../enums/payment_method.dart';
 import '../extensions/date_formatting.dart';
 import 'reservation.dart';
+import 'payment_response.dart';
 
 class Payment {
   int id;
@@ -9,20 +11,20 @@ class Payment {
   double amount;
   DateTime date;
   String status;
-  Map<String, dynamic> response;
-
+  PaymentResponse? response;
   Reservation? reservation;
 
-  Payment(
-      {required this.id,
-      required this.reservationId,
-      required this.transactionTypeId,
-      required this.paymentMethodId,
-      required this.amount,
-      required this.date,
-      required this.status,
-      required this.response,
-      this.reservation});
+  Payment({
+    required this.id,
+    required this.reservationId,
+    required this.transactionTypeId,
+    required this.paymentMethodId,
+    required this.amount,
+    required this.date,
+    required this.status,
+    required this.response,
+    this.reservation,
+  });
 
   Payment.init()
       : id = 0,
@@ -32,17 +34,19 @@ class Payment {
         amount = 0.0,
         date = DateTime.now(),
         status = '',
-        response = {},
+        response = null,
         reservation = null;
 
-  Payment.basic({required this.reservationId})
-      : id = 0,
-        transactionTypeId = 0,
-        paymentMethodId = 0,
+  Payment.basic({
+    required this.reservationId,
+    required this.paymentMethodId,
+    this.transactionTypeId = 2,
+  })  : id = 0,
         amount = 0.0,
         date = DateTime.now(),
         status = '',
-        response = {};
+        response = null,
+        reservation = null;
 
   factory Payment.fromJson(Map<String, dynamic> jsonMap) {
     return Payment(
@@ -50,12 +54,12 @@ class Payment {
       reservationId: jsonMap['reservation_id'] ?? 0,
       transactionTypeId: jsonMap['transaction_type_id'] ?? 0,
       paymentMethodId: jsonMap['payment_method_id'] ?? 0,
-      // amount: jsonMap['amount']?.toDouble() ?? 0.0,
       amount: double.tryParse(jsonMap['amount'].toString()) ?? 0.0,
-      // Ensure double parsing
       date: DateTime.tryParse(jsonMap['date'] ?? '') ?? DateTime.now(),
       status: jsonMap['status'] ?? '',
-      response: jsonMap['response'] ?? {},
+      response: jsonMap['response'] != null
+          ? PaymentResponse.fromJson(jsonMap['response'])
+          : null,
       reservation: jsonMap['reservation'] != null
           ? Reservation.fromJson(jsonMap['reservation'])
           : null,
@@ -71,8 +75,8 @@ class Payment {
       'amount': amount.toString(),
       'date': date.toSqlDateOnly(),
       'status': status,
-      'response': response,
-      'reservation': reservation?.toString(),
+      'response': null, // لا نرسل `response` في POST/PUT
+      'reservation': null,
     };
   }
 
@@ -84,6 +88,8 @@ class Payment {
   }
 
   bool isCreate() => id == 0;
+
+  PaymentMethod? get paymentMethod => PaymentMethod.fromId(paymentMethodId);
 
   @override
   String toString() {
@@ -101,8 +107,7 @@ class Payment {
             paymentMethodId == other.paymentMethodId &&
             amount == other.amount &&
             date == other.date &&
-            status == other.status &&
-            response == other.response;
+            status == other.status;
   }
 
   @override
@@ -113,6 +118,5 @@ class Payment {
       paymentMethodId.hashCode ^
       amount.hashCode ^
       date.hashCode ^
-      status.hashCode ^
-      response.hashCode;
+      status.hashCode;
 }

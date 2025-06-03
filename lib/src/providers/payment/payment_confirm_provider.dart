@@ -1,4 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter/foundation.dart'; // for debugPrint
+
 import '../../models/payment.dart';
 import '../../models/response/response.dart';
 import '../../services/request_service.dart';
@@ -21,21 +23,25 @@ class PaymentConfirm extends _$PaymentConfirm {
         body: {'otp': otp},
       );
 
+      debugPrint("📤 Sending confirmation request to: ${confirmPaymentUrl(paymentId)}");
+      debugPrint("📦 Payload: {otp: $otp}");
+
       if (response.isLoaded()) {
-        state = state.copyWith(data: response.data, meta: response.meta);
-        print("تم تأكيد الدفع بنجاح مع ID: $paymentId");
-        // Navigate to payment details page
+        debugPrint("✅ Payment confirmed successfully for ID: $paymentId");
+
+
+      // Navigate to payment details page
         navKey.currentState?.pushNamedAndRemoveUntil(
           Routes.paymentDetails,
           (r) => false,
           arguments: paymentId,
         );
       } else {
-        print("خطأ أثناء التأكيد في: ${response.meta.message}");
+        debugPrint("❌ Failed to confirm payment. Message: ${response.meta.message}");
       }
     } catch (error) {
-      print("خطأ أثناء التأكيد: $error");
-      state = state.setError("خطأ أثناء التأكيد: $error");
+      debugPrint("❌ Exception during confirmation: $error");
+      state = state.setError("Error while confirming payment: $error");
     }
   }
 }

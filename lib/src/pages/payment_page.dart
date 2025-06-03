@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../enums/payment_method.dart';
 import '../helpers/general_helper.dart';
+import '../models/payment.dart' as pay;
 import '../providers/payment/payment_confirm_provider.dart';
 import '../providers/payment/payment_save_provider.dart';
 import '../utils/assets.dart';
-import '../utils/theme.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar.dart';
-import '../models/payment.dart' as pay;
 
 class PaymentPage extends ConsumerStatefulWidget {
   final int reservationId;
@@ -20,15 +20,12 @@ class PaymentPage extends ConsumerStatefulWidget {
 }
 
 class _PaymentPageState extends ConsumerState<PaymentPage> {
-  String? selectedPaymentMethod;
+  PaymentMethod? selectedPaymentMethod;
   int? paymentId;
   bool isLoading = false;
-// خارج الكلاس تمامًا (RoomDetailsPage مثلًا)
 
   String getCustomFallbackMessage(pay.Payment payment) {
     if (payment.amount == 0) return 'المبلغ غير صالح.';
-    if (payment.transactionTypeId == 0) return 'نوع المعاملة غير محدد.';
-    if (payment.paymentMethodId == 0) return 'طريقة الدفع غير محددة.';
     return 'حدث خطأ غير متوقع. يرجى المحاولة لاحقًا.';
   }
 
@@ -59,94 +56,121 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  selectedPaymentMethod = 'فلوسك';
-                });
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: colorScheme.surfaceVariant.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: selectedPaymentMethod == 'فلوسك'
-                        ? colorScheme.primary
-                        : colorScheme.outline,
-                    width: 1,
-                  ),
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      floosakImage,
-                      width: 40,
-                      height: 40,
-                      errorBuilder: (context, error, stackTrace) =>
-                          Icon(errorIcon, color: colorScheme.error, size: 40),
-                    ),
-                    const SizedBox(width: 16),
-                    Flexible(
-                      child: Text(
-                        trans().floosak,
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const Spacer(),
-                    Icon(
-                      selectedPaymentMethod == 'فلوسك'
-                          ? radioCheckIcon
-                          : radioOutIcon,
-                      color: selectedPaymentMethod == 'فلوسك'
+            ...PaymentMethod.values.map((method) {
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedPaymentMethod = method;
+                  });
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: colorScheme.surfaceVariant.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: selectedPaymentMethod == method
                           ? colorScheme.primary
                           : colorScheme.outline,
-                      size: 24,
+                      width: 1,
                     ),
-                  ],
+                  ),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: Row(
+                    children: [
+                      ClipOval(
+                        child: Image.asset(
+                          method.image,
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => Icon(
+                            Icons.image_not_supported,
+                            color: colorScheme.error,
+                            size: 40,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Text(
+                          method.name,
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Icon(
+                        selectedPaymentMethod == method
+                            ? radioCheckIcon
+                            : radioOutIcon,
+                        color: selectedPaymentMethod == method
+                            ? colorScheme.primary
+                            : colorScheme.outline,
+                        size: 24,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            }).toList(),
           ],
         ),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Button(
-          width: MediaQuery.of(context).size.width - 40,
-          title: trans().completeTheReservation,
-          disable: selectedPaymentMethod == null || isLoading,
-          icon: isLoading
-              ? CircularProgressIndicator(color: colorScheme.onPrimary)
-              : Icon(priceChangeIcon, size: 20, color: colorScheme.onPrimary),
-          iconAfterText: true,
-          onPressed: selectedPaymentMethod == null || isLoading
-              ? null
-              : () async {
-            setState(() => isLoading = true);
-            if (selectedPaymentMethod == 'فلوسك') {
-              final payment = pay.Payment.basic(
-                reservationId: widget.reservationId,
-              );
+            width: MediaQuery.of(context).size.width - 40,
+            title: trans().completeTheReservation,
+            disable: selectedPaymentMethod == null || isLoading,
+            icon: isLoading
+                ? CircularProgressIndicator(color: colorScheme.onPrimary)
+                : Icon(arrowForWordIcon, size: 20, color: colorScheme.onPrimary),
+            iconAfterText: true,
+            onPressed: selectedPaymentMethod == null || isLoading
+                ? null
+                : () async {
+                    setState(() => isLoading = true);
+                    debugPrint("====== [PAYMENT PROCESS STARTED] ======");
+                    debugPrint(
+                        "🔹 Selected Method: ${selectedPaymentMethod?.name} (ID: ${selectedPaymentMethod?.id})");
+                    debugPrint("🔹 Reservation ID: ${widget.reservationId}");
 
-              await paymentState.savePayment(payment);
-              final currentState = ref.read(paymentSaveProvider);
+                    final payment = pay.Payment.basic(
+                      reservationId: widget.reservationId,
+                      paymentMethodId: selectedPaymentMethod!.id,
+                    );
 
-              if (currentState.isLoaded()) {
-                paymentId = currentState.data?.id;
+                    debugPrint("➡️ Creating payment...");
+                    debugPrint("🧾 Payload: ${payment.toJson()}");
 
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    final TextEditingController confirmationController =
-                    TextEditingController();
+                    await paymentState.savePayment(payment);
+                    final currentState = ref.read(paymentSaveProvider);
+
+                    debugPrint("🔄 Save Response Meta: ${currentState.meta}");
+                    debugPrint("📦 Saved Payment: ${currentState.data}");
+
+                    if (currentState.isLoaded()) {
+                      final savedPayment = currentState.data!;
+                      paymentId = savedPayment.id;
+                      final isSuccess =
+                          savedPayment.response?.isSuccess ?? false;
+                      final netAmount =
+                          savedPayment.response?.purchase?.net ?? 0;
+
+                      debugPrint(
+                          "✅ Payment created successfully! ID: ${savedPayment.id}");
+                      debugPrint("📌 isSuccess = $isSuccess");
+                      debugPrint("📌 netAmount = $netAmount");
+
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          final TextEditingController confirmationController =
+                              TextEditingController();
 
                     return AlertDialog(
                       backgroundColor: colorScheme.background,
@@ -180,83 +204,73 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                               ),
                             );
 
-                            if (confirmationCode != null &&
-                                paymentId != null) {
-                              Navigator.of(context).pop();
+                                  if (confirmationCode != null &&
+                                      paymentId != null) {
+                                    Navigator.of(context).pop();
+                                    debugPrint(
+                                        "➡️ Sending OTP confirmation: $confirmationCode for payment ID: $paymentId");
 
-                              await paymentConfirm.confirmPayment(
-                                paymentId!,
-                                confirmationCode,
-                              );
+                                    await paymentConfirm.confirmPayment(
+                                      paymentId!,
+                                      confirmationCode,
+                                    );
 
-                              final confirmState =
-                              ref.read(paymentConfirmProvider);
+                                    final confirmState =
+                                        ref.read(paymentConfirmProvider);
 
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    confirmState.isLoaded()
-                                        ? trans().payment_confirmed_successfully
-                                        : confirmState.meta.message,
-                                    style: TextStyle(
-                                      color: confirmState.isLoaded()
-                                          ? colorScheme.onPrimary
-                                          : colorScheme.onError,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  backgroundColor: confirmState.isLoaded()
-                                      ? colorScheme.primary
-                                      : colorScheme.error,
-                                ),
-                              );
-                            }
-                          },
-                          child: Text(
-                            trans().verify,
-                            style: TextStyle(
-                              color: colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                                    debugPrint(
+                                        "🔄 Confirm Response Meta: ${confirmState.meta}");
+                                    debugPrint(
+                                        "📦 Confirmed Payment: ${confirmState.data}");
+
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          confirmState.isLoaded()
+                                              ? trans()
+                                                  .payment_confirmed_successfully
+                                              : confirmState.meta.message,
+                                        ),
+                                        backgroundColor: confirmState.isLoaded()
+                                            ? colorScheme.primary
+                                            : colorScheme.error,
+                                      ),
+                                    );
+                                  } else {
+                                    debugPrint("❌ Invalid or missing OTP.");
+                                  }
+                                },
+                                child: Text(trans().verify),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      final fallbackPayment = currentState.data ?? payment;
+
+                      final errorMessage =
+                          currentState.meta.message.trim().isEmpty
+                              ? getCustomFallbackMessage(fallbackPayment)
+                              : currentState.meta.message;
+
+                      debugPrint("❌ Payment creation failed.");
+                      debugPrint(
+                          "📄 Payment Fallback Data: ${fallbackPayment.toString()}");
+                      debugPrint("❗ Error Message: $errorMessage");
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(errorMessage),
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                          duration: Duration(seconds: 2),
                         ),
-                      ],
-                    );
-                  },
-                );
-              } else {
-                // if (mounted) {
-                //   ScaffoldMessenger.of(context).showSnackBar(
-                //       SnackBar(
-                //         content: Text(currentState.meta.message),
-                //     ),
-                //   );
-                // }
-                final errorMessage = currentState.meta.message.trim().isEmpty
-                    ? getCustomFallbackMessage(payment)
-                    : currentState.meta.message;
+                      );
+                    }
 
-                print('❌ رسالة الخطأ: $errorMessage');
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      errorMessage,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    backgroundColor: Theme.of(context).colorScheme.error,
-                    duration: Duration(seconds: 4),
-                  ),
-                );
-
-              }
-            }
-            setState(() => isLoading = false);
-          },
-        ),
+                    setState(() => isLoading = false);
+                    debugPrint("====== [PAYMENT PROCESS ENDED] ======");
+                  }),
       ),
     );
   }

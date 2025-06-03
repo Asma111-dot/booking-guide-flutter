@@ -1,4 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter/foundation.dart'; // for debugPrint
+
 import '../../models/payment.dart' as pay;
 import '../../models/response/response.dart';
 import '../../services/request_service.dart';
@@ -13,31 +15,37 @@ class PaymentSave extends _$PaymentSave {
   Response<pay.Payment> build() => const Response<pay.Payment>();
 
   Future<void> savePayment(pay.Payment payment) async {
-
     state = state.setLoading();
+
+    final url = payment.isCreate()
+        ? addPaymentUrl()
+        : updatePaymentUrl(payment.id);
+    final method = payment.isCreate() ? Method.post : Method.put;
+    final payload = payment.toJson();
+
+    debugPrint("📤 [PaymentSave] Sending request:");
+    debugPrint("→ URL: $url");
+    debugPrint("→ Method: ${method.name}");
+    debugPrint("→ Payload: $payload");
+
     try {
       final response = await request<pay.Payment>(
-
-        url: payment.isCreate()
-            ? addPaymentUrl()
-            : updatePaymentUrl(payment.id),
-        method: payment.isCreate() ? Method.post : Method.put,
-        body: payment.toJson(),
-
+        url: url,
+        method: method,
+        body: payload,
       );
-      print("📤 إرسال الدفع إلى: ${payment.isCreate() ? addPaymentUrl() : updatePaymentUrl(payment.id)}");
-      print("📦 بيانات الطلب: ${payment.toJson()}");
 
       if (response.isLoaded()) {
         state = state.copyWith(data: response.data, meta: response.meta);
-        print("تم حفظ الدفع بنجاح مع ID: ${response.data?.id}");
+        debugPrint("✅ [PaymentSave] Payment saved successfully. ID: ${response.data?.id}");
       } else {
-        print("خطأ أثناء الحفظ: ${response.meta.message}");
-
+        debugPrint("⚠️ [PaymentSave] Server responded with error: ${response.meta.message}");
+        state = state.copyWith(meta: response.meta);
       }
-    } catch (error) {
-      print("خطأ أثناء الحفظ: $error");
-      state = state.setError("خطأ أثناء الحفظ: $error");
+    } catch (error, stack) {
+      debugPrint("❌ [PaymentSave] Exception while saving payment: $error");
+      debugPrint("🪵 Stack Trace:\n$stack");
+      state = state.setError("Error while saving payment: $error");
     }
   }
 }
