@@ -10,22 +10,32 @@ class RoomPricesTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
-      child: room.roomPrices.isNotEmpty
-          ? ListView(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        children: room.roomPrices
-            .map((price) => RoomPriceWidget(price: price))
-            .toList(),
-      )
-          : Text(
-        "${trans().price}: ${trans().priceNotAvailable}",
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: colorScheme.onSurface,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            room.roomPrices.isNotEmpty
+                ? ListView(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              children: room.roomPrices
+                  .map((price) => RoomPriceWidget(price: price))
+                  .toList(),
+            )
+                : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                "${trans().price}: ${trans().priceNotAvailable}",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.onSurface,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
