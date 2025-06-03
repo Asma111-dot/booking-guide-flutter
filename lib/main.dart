@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/adapters.dart';
 
 import 'src/enums/display_mode.dart';
 import 'src/providers/public/settings_provider.dart';
@@ -15,13 +16,10 @@ import 'src/utils/theme.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ✅ تهيئة التخزين
+  await Hive.initFlutter();
+
   await hive_service.init();
-
-  // ✅ تهيئة الاتصال
   ConnectivityService.init();
-
-  // ✅ قفل اتجاه الشاشة على الوضع العمودي
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -63,8 +61,8 @@ class MyApp extends ConsumerWidget {
       themeMode: settings.displayMode == DisplayMode.dark
           ? ThemeMode.dark
           : settings.displayMode == DisplayMode.light
-          ? ThemeMode.light
-          : ThemeMode.system,
+              ? ThemeMode.light
+              : ThemeMode.system,
     );
   }
 }

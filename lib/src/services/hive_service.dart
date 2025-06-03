@@ -46,21 +46,17 @@ Future deleteBox<T>(String name) async {
 Future<HiveAesCipher?> _encrypt([String? storageKey]) async {
   if (storageKey?.isEmpty ?? true) return null;
 
-  var secureStorage = const FlutterSecureStorage();
-  late String encryptionKey;
+  const secureStorage = FlutterSecureStorage();
+  final keyName = storageKey!;
 
-  await secureStorage.read(key: storageKey!).then((String? value) async {
-    if (value == null) {
-      final key = Hive.generateSecureKey();
-      await secureStorage.write(
-        key: storageKey,
-        value: base64UrlEncode(key),
-      );
-      encryptionKey = await secureStorage.read(key: storageKey) ?? '';
-    } else {
-      encryptionKey = value;
-    }
-  });
+  String? encryptionKey = await secureStorage.read(key: keyName);
+
+  if (encryptionKey == null) {
+    final key = Hive.generateSecureKey();
+    final encodedKey = base64UrlEncode(key);
+    await secureStorage.write(key: keyName, value: encodedKey);
+    encryptionKey = encodedKey;
+  }
 
   return HiveAesCipher(base64Url.decode(encryptionKey));
 }
