@@ -176,7 +176,7 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
                         Text(
                           trans().view_price_list,
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: Theme.of(context).colorScheme.onSurface,
                           ),
@@ -185,7 +185,7 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
                         Text(
                           trans().select_period_and_day,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 10,
                             fontWeight: FontWeight.w400,
                             color: Theme.of(context)
                                 .colorScheme
@@ -253,7 +253,7 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
                         Text(
                           trans().question_title,
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: Theme.of(context).colorScheme.onSurface,
                           ),
@@ -262,7 +262,7 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
                         Text(
                           trans().question_description,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 10,
                             fontWeight: FontWeight.w400,
                             color: Theme.of(context)
                                 .colorScheme

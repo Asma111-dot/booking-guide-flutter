@@ -8,7 +8,6 @@ import '../providers/reservation/reservation_save_provider.dart';
 import '../providers/room_price/room_prices_provider.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
-import '../utils/theme.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/view_widget.dart';
@@ -43,7 +42,8 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
     childrenController = TextEditingController();
   }
 
-  InputDecoration _inputDecoration(BuildContext context, String label, {bool hasError = false}) {
+  InputDecoration _inputDecoration(BuildContext context, String label,
+      {bool hasError = false}) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -103,8 +103,8 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
         meta: roomPriceState.meta,
         data: roomPriceState.data,
         refresh: () => ref.read(roomPricesProvider.notifier).fetch(
-          roomId: widget.roomPrice.reservations.first.id,
-        ),
+              roomId: widget.roomPrice.reservations.first.id,
+            ),
         forceShowLoaded: roomPriceState.data != null,
         onLoaded: (data) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -117,28 +117,34 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                 children: [
                   Row(
                     children: [
-                      Icon(errorIcon, size: 16, color: colorScheme.outline),
+                      const Icon(arrowdownIcon, size: 16, color: Colors.grey),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           trans().booking_type_hint,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: textColor.withOpacity(0.7),
-                          ),
+                          style: TextStyle(
+                              fontSize: 10,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.7)),
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 6),
                   DropdownButtonFormField<String>(
                     value: bookingType,
                     items: [
-                      DropdownMenuItem(value: 'عائلة', child: Text(trans().family)),
-                      DropdownMenuItem(value: 'نساء', child: Text(trans().women)),
+                      DropdownMenuItem(
+                          value: 'عائلة', child: Text(trans().family)),
+                      DropdownMenuItem(
+                          value: 'نساء', child: Text(trans().women)),
                       DropdownMenuItem(value: 'رجال', child: Text(trans().men)),
-                      DropdownMenuItem(value: 'شركة', child: Text(trans().companies)),
+                      DropdownMenuItem(
+                          value: 'شركة', child: Text(trans().companies)),
                     ],
                     onChanged: (value) => setState(() => bookingType = value),
                     decoration: _inputDecoration(context, trans().booking_type),
@@ -149,21 +155,23 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                   const SizedBox(height: 20),
                   Row(
                     children: [
-                      const Icon(groups2Icon,
-                          size: 16, color: Colors.grey),
+                      const Icon(groups2Icon, size: 16, color: Colors.grey),
                       const SizedBox(width: 6),
-                      Text(
-                        trans().adults_hint,
-                        style:
-                        TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7))
-                      ),
+                      Text(trans().adults_hint,
+                          style: TextStyle(
+                              fontSize: 10,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.7))),
                     ],
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
                       controller: adultsController,
                       keyboardType: TextInputType.number,
-                      decoration: _inputDecoration(context, trans().adults_count),
+                      decoration:
+                          _inputDecoration(context, trans().adults_count),
                       validator: (value) => value!.isEmpty
                           ? trans().please_enter_adults_count
                           : null,
@@ -181,21 +189,23 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                   const SizedBox(height: 20),
                   Row(
                     children: [
-                      const Icon(childIcon,
-                          size: 16, color: Colors.grey),
+                      const Icon(childIcon, size: 16, color: Colors.grey),
                       const SizedBox(width: 6),
-                      Text(
-                        trans().children_hint,
-                        style:
-                        TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7))
-                      ),
+                      Text(trans().children_hint,
+                          style: TextStyle(
+                              fontSize: 10,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.7))),
                     ],
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
                     controller: childrenController,
                     keyboardType: TextInputType.number,
-                    decoration: _inputDecoration(context, trans().children_count),
+                    decoration:
+                        _inputDecoration(context, trans().children_count),
                     validator: (value) => null,
                     onChanged: (value) {
                       final normalized = convertToEnglishNumbers(value);
@@ -219,7 +229,8 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
         child: Button(
           width: double.infinity,
           title: trans().completeTheReservation,
-          icon: Icon(arrowForWordIcon, size: 20, color: Theme.of(context).colorScheme.onPrimary),
+          icon: Icon(arrowForWordIcon,
+              size: 20, color: Theme.of(context).colorScheme.onPrimary),
           iconAfterText: true,
           disable: false,
           onPressed: () async {
@@ -233,21 +244,21 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                 final savedReservation = await ref
                     .read(reservationSaveProvider.notifier)
                     .saveReservation(
-                  reservation.data!,
-                  adultsCount: adultsCount,
-                  childrenCount: childrenCount,
-                  bookingType: bookingType!,
-                );
+                      reservation.data!,
+                      adultsCount: adultsCount,
+                      childrenCount: childrenCount,
+                      bookingType: bookingType!,
+                    );
 
                 if (savedReservation != null && savedReservation.id != 0) {
                   await ref.read(reservationProvider.notifier).fetch(
-                    reservationId: savedReservation.id,
-                  );
+                        reservationId: savedReservation.id,
+                      );
 
                   Navigator.pushNamedAndRemoveUntil(
                     context,
                     Routes.reservationDetails,
-                        (r) => false,
+                    (r) => false,
                     arguments: savedReservation.id,
                   );
                 } else {

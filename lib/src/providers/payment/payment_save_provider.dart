@@ -21,7 +21,9 @@ class PaymentSave extends _$PaymentSave {
         ? addPaymentUrl()
         : updatePaymentUrl(payment.id);
     final method = payment.isCreate() ? Method.post : Method.put;
-    final payload = payment.toJson();
+    final payload = payment.isCreate()
+        ? payment.toJsonForCreate()
+        : payment.toJson();
 
     debugPrint("📤 [PaymentSave] Sending request:");
     debugPrint("→ URL: $url");

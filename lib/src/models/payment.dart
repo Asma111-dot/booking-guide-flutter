@@ -66,6 +66,14 @@ class Payment {
     );
   }
 
+  Map<String, dynamic> toJsonForCreate() {
+    return {
+      'reservation_id': reservationId,
+      'payment_method_id': paymentMethodId,
+      'transaction_type_id': transactionTypeId,
+    };
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,

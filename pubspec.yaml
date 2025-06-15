@@ -62,7 +62,7 @@ dependencies:
   font_awesome_flutter: ^10.8.0
   custom_info_window: ^1.0.1
   google_maps_flutter: ^2.10.0
-  syncfusion_flutter_datepicker: ^27.1.58
+  syncfusion_flutter_datepicker: ^29.2.8
   googleapis: ^13.2.0
   googleapis_auth: ^1.6.0
   share_plus: ^10.1.4

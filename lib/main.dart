@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import 'src/enums/display_mode.dart';
@@ -16,7 +17,13 @@ import 'src/utils/theme.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // const secureStorage = FlutterSecureStorage();
+  // await secureStorage.deleteAll(); // 🧹 امسح المفاتيح القديمة من التخزين الآمن
+
   await Hive.initFlutter();
+
+  // await Hive.deleteBoxFromDisk('auth');
+  // await Hive.deleteBoxFromDisk('settings');
 
   await hive_service.init();
   ConnectivityService.init();
@@ -61,8 +68,8 @@ class MyApp extends ConsumerWidget {
       themeMode: settings.displayMode == DisplayMode.dark
           ? ThemeMode.dark
           : settings.displayMode == DisplayMode.light
-              ? ThemeMode.light
-              : ThemeMode.system,
+          ? ThemeMode.light
+          : ThemeMode.system,
     );
   }
 }
