@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
 import '../helpers/general_helper.dart';
 import '../models/facility.dart';
 import '../sheetes/favorite_sheet.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
+import 'shimmer_image_placeholder.dart';
 
 class FavoriteWidget extends StatelessWidget {
   final Facility facility;
@@ -70,12 +72,7 @@ class FavoriteWidget extends StatelessWidget {
                     width: 110,
                     height: 110,
                     fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      width: 110,
-                      height: 110,
-                      alignment: Alignment.center,
-                      child: const Center(child: CircularProgressIndicator()),
-                    ),
+                    placeholder: (context, url) => const ShimmerImagePlaceholder(width: 80, height: 80),
                     errorWidget: (context, url, error) => Image.asset(
                       logoCoverImage,
                       width: 110,

@@ -72,6 +72,7 @@ dependencies:
   flutter_date_pickers: ^0.4.3
   video_player: ^2.9.5
   change_app_package_name: ^1.5.0
+  shimmer: ^3.0.0
 
 flutter_launcher_icons:
   android: true

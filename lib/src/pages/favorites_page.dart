@@ -6,6 +6,7 @@ import '../models/facility.dart';
 import '../providers/favorite/favorite_provider.dart';
 import '../storage/auth_storage.dart';
 import '../utils/theme.dart';
+import '../widgets/facility_shimmer_card.dart';
 import '../widgets/view_widget.dart';
 import '../widgets/favorites_widget.dart';
 
@@ -71,6 +72,11 @@ class _FavoritesScreenState extends ConsumerState<FavoritesPage> {
         body: ViewWidget<List<Facility>>(
           meta: favoritesState.meta,
           data: favoritesState.data,
+          onLoading: () => ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            itemCount: 6,
+            itemBuilder: (_, __) => const FacilityShimmerCard(),
+          ),
           onLoaded: (data) {
             if (data.isEmpty) {
               return Center(

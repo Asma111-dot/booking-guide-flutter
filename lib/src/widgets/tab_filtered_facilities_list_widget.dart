@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../helpers/general_helper.dart';
 import '../providers/sort/sorted_facilities_provider.dart';
+import 'facility_shimmer_card.dart';
 import 'facility_widget.dart';
 
 class TabFilteredFacilitiesListWidget extends ConsumerWidget {
@@ -19,8 +20,13 @@ class TabFilteredFacilitiesListWidget extends ConsumerWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     if (allFacilitiesAsync.isLoading()) {
-      return const Center(child: CircularProgressIndicator());
+      return ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        itemCount: 5,
+        itemBuilder: (_, __) => const FacilityShimmerCard(),
+      );
     }
+
     if (allFacilitiesAsync.isError()) {
       return Center(
         child: Text(

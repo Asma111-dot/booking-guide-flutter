@@ -5,6 +5,7 @@ import '../helpers/general_helper.dart';
 import '../providers/facility/facility_provider.dart';
 import '../providers/favorite/favorite_provider.dart';
 import '../storage/auth_storage.dart';
+import '../widgets/facility_shimmer_card.dart';
 import '../widgets/facility_widget.dart';
 import '../widgets/view_widget.dart';
 import '../models/facility.dart';
@@ -69,13 +70,13 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
   @override
   Widget build(BuildContext context) {
     final facilitiesState = ref.watch(facilitiesProvider(currentTarget));
-    final favoritesState = ref.watch(favoritesProvider);
+    // final favoritesState = ref.watch(favoritesProvider);
 
-    final favoritesLoaded = favoritesState.meta.status == Status.loaded;
+    // final favoritesLoaded = favoritesState.meta.status == Status.loaded;
 
-    if (!favoritesLoaded) {
-      return const Center(child: CircularProgressIndicator());
-    }
+    // if (!favoritesLoaded) {
+    //   return const Center(child: CircularProgressIndicator());
+    // }
 
     return ViewWidget<List<Facility>>(
       meta: facilitiesState.meta,
@@ -90,7 +91,11 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
           },
         );
       },
-      onLoading: () => const Center(child: CircularProgressIndicator()),
+      onLoading: () => ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemCount: 5,
+        itemBuilder: (_, __) => const FacilityShimmerCard(),
+      ),
       onEmpty: () => Center(
         child: Text(trans().no_data),
       ),

@@ -10,12 +10,12 @@ const _iconBase = "${_base}icons/";
 
 // Lottie (Json) ---------------------------------------------------------------
 const loadingJson = "${_lottieBase}loading_circular.json";
-const warningJson = "${_lottieBase}warning.json";
-const successJson = "${_lottieBase}success.json";
-const errorJson = "${_lottieBase}error.json";
-const infoJson = "${_lottieBase}info.json";
-const emptyJson = "${_lottieBase}empty.json";
-const welcomeJson = "${_lottieBase}welcome.json";
+// const warningJson = "${_lottieBase}warning.json";
+// const successJson = "${_lottieBase}success.json";
+// const errorJson = "${_lottieBase}error.json";
+// const infoJson = "${_lottieBase}info.json";
+// const emptyJson = "${_lottieBase}empty.json";
+// const welcomeJson = "${_lottieBase}welcome.json";
 const unauthorizedJson = "${_lottieBase}unauthorized.json";
 
 // Images ----------------------------------------------------------------------

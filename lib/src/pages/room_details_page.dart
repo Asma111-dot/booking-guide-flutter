@@ -14,6 +14,8 @@ import '../utils/routes.dart';
 import '../utils/theme.dart';
 import '../helpers/general_helper.dart';
 import '../widgets/full_map_widget.dart';
+import '../widgets/room_details_shimmer.dart';
+import '../widgets/shimmer_image_placeholder.dart';
 import '../widgets/view_widget.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/video_widget.dart';
@@ -147,9 +149,8 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                             child: CachedNetworkImage(
                               imageUrl: mediaUrl,
                               fit: BoxFit.cover,
-                              placeholder: (context, url) => const Center(
-                                child: CircularProgressIndicator(),
-                              ),
+                              placeholder: (context, url) => const ShimmerImagePlaceholder(width: 80, height: 80),
+
                               errorWidget: (context, url, error) =>
                                   const Icon(errorIcon),
                             ),
@@ -330,7 +331,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
             ],
           );
         },
-        onLoading: () => const Center(child: CircularProgressIndicator()),
+        onLoading: () => const RoomDetailsShimmer(),
         onEmpty: () => Center(child: Text(trans().no_data)),
         showError: true,
         showEmpty: true,

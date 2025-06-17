@@ -12,6 +12,7 @@ import '../utils/routes.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_calendar_widget.dart';
+import '../widgets/room_price_shimmer_card.dart';
 import '../widgets/room_price_two_widget.dart';
 import '../widgets/view_widget.dart';
 
@@ -280,17 +281,18 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
                       '${selectedPrice?.id}-${DateTime.now().millisecondsSinceEpoch}',
                     ),
                     events: events.map(
-                          (key, value) => MapEntry(
+                      (key, value) => MapEntry(
                         key,
                         value.map((e) => e.toString()).toList(),
                       ),
                     ),
-                    selectionType: useRange ? SelectionType.range : SelectionType.single,
+                    selectionType:
+                        useRange ? SelectionType.range : SelectionType.single,
                     initialSelectedDay: useRange ? null : someDate,
                     initialSelectedRange: useRange
                         ? (rangeStart != null && rangeEnd != null
-                        ? DateTimeRange(start: rangeStart!, end: rangeEnd!)
-                        : null)
+                            ? DateTimeRange(start: rangeStart!, end: rangeEnd!)
+                            : null)
                         : null,
                     onSingleDateSelected: (date) {
                       setState(() {
@@ -312,7 +314,17 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
             ),
           );
         },
-        onLoading: () => const Center(child: CircularProgressIndicator()),
+        onLoading: () => SizedBox(
+          height: 200,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 4,
+            itemBuilder: (context, index) => const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 14.0),
+              child: RoomPriceShimmerCard(),
+            ),
+          ),
+        ),
         onEmpty: () => Center(child: Text(trans().no_data)),
         showError: true,
         showEmpty: true,

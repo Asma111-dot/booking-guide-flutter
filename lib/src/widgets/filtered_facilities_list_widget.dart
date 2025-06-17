@@ -4,6 +4,7 @@ import '../enums/facility_filter_type.dart';
 import '../helpers/general_helper.dart';
 import '../providers/filter/filtered_facilities_provider.dart';
 import '../utils/theme.dart';
+import 'facility_shimmer_card.dart';
 import 'facility_widget.dart';
 
 class FilteredFacilitiesListWidget extends ConsumerWidget {
@@ -31,8 +32,13 @@ class FilteredFacilitiesListWidget extends ConsumerWidget {
     final filtered = ref.watch(provider);
 
     if (filtered.isLoading()) {
-      return const Center(child: CircularProgressIndicator());
+      return ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        itemCount: 5,
+        itemBuilder: (_, __) => const FacilityShimmerCard(),
+      );
     }
+
     if (filtered.isError()) {
       return Center(
         child: Text(

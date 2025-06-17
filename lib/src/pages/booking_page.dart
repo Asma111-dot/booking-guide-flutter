@@ -9,6 +9,8 @@ import '../providers/reservation/reservations_provider.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../utils/theme.dart';
+import '../widgets/facility_shimmer_card.dart';
+import '../widgets/shimmer_image_placeholder.dart';
 
 class BookingPage extends ConsumerStatefulWidget {
   final int userId;
@@ -31,7 +33,9 @@ class _BookingPageState extends ConsumerState<BookingPage>
     super.initState();
     Future.microtask(() async {
       setState(() => _isLoading = true);
-      await ref.read(reservationsProvider.notifier).fetch(userId: widget.userId);
+      await ref
+          .read(reservationsProvider.notifier)
+          .fetch(userId: widget.userId);
       setState(() => _isLoading = false);
     });
   }
@@ -48,14 +52,14 @@ class _BookingPageState extends ConsumerState<BookingPage>
           title: Text(
             trans().booking,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              color: CustomTheme.color2,
-              fontWeight: FontWeight.bold,
-            ),
+                  color: CustomTheme.color2,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           elevation: 0,
           backgroundColor: Colors.transparent,
           iconTheme: const IconThemeData(color: Colors.black),
-          bottom:  TabBar(
+          bottom: TabBar(
             indicatorColor: CustomTheme.color2,
             labelColor: CustomTheme.primaryColor,
             unselectedLabelColor: Colors.grey,
@@ -67,14 +71,18 @@ class _BookingPageState extends ConsumerState<BookingPage>
           ),
         ),
         body: _isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: 5,
+                itemBuilder: (_, __) => const FacilityShimmerCard(),
+              )
             : TabBarView(
-          children: [
-            _buildReservationList(reservationState.data, null),
-            _buildReservationList(reservationState.data, 'confirmed'),
-            _buildReservationList(reservationState.data, 'cancelled'),
-          ],
-        ),
+                children: [
+                  _buildReservationList(reservationState.data, null),
+                  _buildReservationList(reservationState.data, 'confirmed'),
+                  _buildReservationList(reservationState.data, 'cancelled'),
+                ],
+              ),
       ),
     );
   }
@@ -95,7 +103,8 @@ class _BookingPageState extends ConsumerState<BookingPage>
         final reservation = reservations[index];
         final placeName = reservation.roomPrice?.room?.facility?.name ?? '---';
         final logo = reservation.roomPrice?.room?.facility?.logo;
-        final imageUrl = (logo != null && logo.isNotEmpty) ? logo : logoCoverImage;
+        final imageUrl =
+            (logo != null && logo.isNotEmpty) ? logo : logoCoverImage;
 
         final checkIn = reservation.checkInDate;
         final checkOut = reservation.checkOutDate;
@@ -111,7 +120,8 @@ class _BookingPageState extends ConsumerState<BookingPage>
             );
           },
           child: Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             elevation: 1,
             margin: const EdgeInsets.only(bottom: 16),
             child: Padding(
@@ -126,7 +136,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
                       height: 110,
                       fit: BoxFit.cover,
                       placeholder: (context, url) =>
-                      const Center(child: CircularProgressIndicator()),
+                          const ShimmerImagePlaceholder(width: 80, height: 80),
                       errorWidget: (context, url, error) => Image.asset(
                         logoCoverImage,
                         width: 110,
@@ -177,7 +187,6 @@ class _BookingPageState extends ConsumerState<BookingPage>
                             ),
                           ),
                         ),
-          
                         const SizedBox(height: 6),
                         Text(
                           "${trans().created_at} : ${reservation.createdAt?.toDateView()}",
@@ -194,7 +203,9 @@ class _BookingPageState extends ConsumerState<BookingPage>
                     children: [
                       Text(
                         "#${reservation.id}",
-                        style: const TextStyle(color: CustomTheme.color4, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            color: CustomTheme.color4,
+                            fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -207,14 +218,16 @@ class _BookingPageState extends ConsumerState<BookingPage>
                       ),
                       const SizedBox(height: 30),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: _getStatusColor(reservation.status),
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: Text(
                           _getStatusText(reservation.status),
-                          style: const TextStyle(color: Colors.white, fontSize: 10),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 10),
                         ),
                       ),
                     ],

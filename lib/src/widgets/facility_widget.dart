@@ -8,6 +8,7 @@ import '../providers/favorite/favorite_provider.dart';
 import '../storage/auth_storage.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
+import 'shimmer_image_placeholder.dart';
 
 class FacilityWidget extends ConsumerWidget {
   final Facility facility;
@@ -80,7 +81,7 @@ class FacilityWidget extends ConsumerWidget {
                   width: 110,
                   height: 110,
                   fit: BoxFit.cover,
-                  placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                  placeholder: (context, url) => const ShimmerImagePlaceholder(width: 80, height: 80),
                   errorWidget: (context, url, error) => Image.asset(
                     logoCoverImage,
                     width: 110,

@@ -8,6 +8,8 @@ import '../providers/facility_type/facility_type_provider.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../utils/theme.dart';
+import '../widgets/facility_shimmer_card.dart';
+import '../widgets/facility_type_shimmer.dart';
 import 'facility_page.dart';
 
 class FacilityTypesPage extends ConsumerStatefulWidget {
@@ -186,9 +188,15 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: facilityTypesState.data == null || facilityTypesState.data!.isEmpty
-                ? const Center(child: CircularProgressIndicator())
+            child: facilityTypesState.data == null
+                ? const FacilityTypeShimmer()
+                : facilityTypesState.data!.isEmpty
+                ? const SizedBox() // أو عرض رسالة "لا توجد أنواع"
                 : SingleChildScrollView(
+
+            // facilityTypesState.data == null || facilityTypesState.data!.isEmpty
+            //     ? const Center(child: CircularProgressIndicator())
+            //     : SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: facilityTypesState.data!.map((facilityType) {
@@ -220,7 +228,11 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
           const SizedBox(height: 10),
           Expanded(
             child: selectedFacilityType == null
-                ? Center(child: CircularProgressIndicator())//edit ///
+                ? ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              itemCount: 5,
+              itemBuilder: (_, __) => const FacilityShimmerCard(),
+            )
                 : FacilityPage(facilityTypeId: selectedFacilityType!),
           ),
         ],

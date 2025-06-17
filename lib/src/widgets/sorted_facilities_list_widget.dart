@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../enums/facility_sort_type.dart';
 import '../helpers/general_helper.dart';
 import '../providers/sort/sorted_facilities_provider.dart';
+import 'facility_shimmer_card.dart';
 import 'facility_widget.dart';
 
 class SortedFacilitiesListWidget extends ConsumerWidget {
@@ -23,8 +24,13 @@ class SortedFacilitiesListWidget extends ConsumerWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     if (sortedAsyncValue.isLoading()) {
-      return const Center(child: CircularProgressIndicator());
+      return ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        itemCount: 5,
+        itemBuilder: (_, __) => const FacilityShimmerCard(),
+      );
     }
+
     if (sortedAsyncValue.isError()) {
       return Center(
         child: Text(
