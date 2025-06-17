@@ -22,89 +22,125 @@ class NavigationMenu extends StatelessWidget {
       facilityId: facilityId,
     ));
 
-    return Obx(() => Scaffold(
-          body: controller.screens[controller.selectedIndex.value],
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).colorScheme.secondary.withOpacity(0.08),
-              blurRadius: 8,
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: List.generate(controller.screens.length, (index) {
-            final isSelected = controller.selectedIndex.value == index;
-
-            final iconData = [
-              homeIcon,
-              mapIcon,
-              bookingIcon,
-              favoriteIcon,
-              personIcon,
-            ][index];
-
-            final label = [
-              trans().facilityTypes,
-              trans().map,
-              trans().booking,
-              trans().favorite,
-              trans().persons,
-            ][index];
-
-            return Expanded(
-              child: GestureDetector(
-                onTap: () => controller.selectedIndex.value = index,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(30),
+    return Obx(() =>
+        WillPopScope(
+          onWillPop: () async {
+            if (controller.selectedIndex.value != 0) {
+              controller.selectedIndex.value = 0;
+              return false; // لا تخرج
+            }
+            return true; // اخرج
+          },
+          child: Scaffold(
+            body: controller.screens[controller.selectedIndex.value],
+            bottomNavigationBar: Container(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              decoration: BoxDecoration(
+                color: Theme
+                    .of(context)
+                    .cardColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme
+                        .of(context)
+                        .colorScheme
+                        .secondary
+                        .withOpacity(0.08),
+                    blurRadius: 8,
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        iconData,
-                        color: isSelected
-                            ? Theme.of(context).colorScheme.secondary
-                            : Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        label,
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: isSelected ? FontWeight.w400 : FontWeight.w200,
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: List.generate(controller.screens.length, (index) {
+                  final isSelected = controller.selectedIndex.value == index;
+
+                  final iconData = [
+                    homeIcon,
+                    mapIcon,
+                    bookingIcon,
+                    favoriteIcon,
+                    personIcon,
+                  ][index];
+
+                  final label = [
+                    trans().facilityTypes,
+                    trans().map,
+                    trans().booking,
+                    trans().favorite,
+                    trans().persons,
+                  ][index];
+
+                  return Expanded(
+                    child: GestureDetector(
+                      onTap: () => controller.selectedIndex.value = index,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 250),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 8),
+                        decoration: BoxDecoration(
                           color: isSelected
-                              ? Theme.of(context).colorScheme.primary
-                              : Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                              ? Theme
+                              .of(context)
+                              .colorScheme
+                              .secondary
+                              .withOpacity(0.1)
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              iconData,
+                              color: isSelected
+                                  ? Theme
+                                  .of(context)
+                                  .colorScheme
+                                  .secondary
+                                  : Theme
+                                  .of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.6),
+                            ),
+                            const SizedBox(height: 3),
+                            Text(
+                              label,
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: isSelected
+                                    ? FontWeight.w400
+                                    : FontWeight.w200,
+                                color: isSelected
+                                    ? Theme
+                                    .of(context)
+                                    .colorScheme
+                                    .primary
+                                    : Theme
+                                    .of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withOpacity(0.6),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                }),
               ),
-            );
-          }),
-        ),
-      ),
+            ),
+          ),
         ));
   }
 }
-
-class NavigationController extends GetxController {
+  class NavigationController extends GetxController {
   final RxInt selectedIndex = 0.obs;
 
   late final List<Widget> screens;

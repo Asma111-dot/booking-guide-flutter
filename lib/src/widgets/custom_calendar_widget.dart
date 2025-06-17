@@ -141,7 +141,8 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
         },
 
         monthViewSettings: DateRangePickerMonthViewSettings(
-          dayFormat: 'EE', // استخدم 'EE' أو حتى 'E' لتقليل عرض النص
+          dayFormat: 'EEE', // استخدم 'EE' أو حتى 'E' لتقليل عرض النص
+          // dayFormat: Localizations.localeOf(context).languageCode == 'ar' ? 'EE' : 'E',
           blackoutDates: blackoutDates,
           showTrailingAndLeadingDates: false,
           // weekendDays: const [DateTime.tuesday, DateTime.friday],
