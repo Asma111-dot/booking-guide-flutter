@@ -9,24 +9,46 @@ import '../widgets/loading_widget.dart';
 
 export '../enums/alert.dart';
 
+// void showNotify({
+//   Alert? alert,
+//   String? message,
+//   Alignment alignment = Alignment.topCenter,
+// })
+// {
+//   if(message?.isEmpty ?? true) return;
+//
+//   BotToast.showSimpleNotification(
+//     title: message!,
+//     align: alignment,
+//     borderRadius: CustomTheme.radius,
+//     hideCloseButton: _getIcon(alert) == null,
+//     closeIcon: Icon(_getIcon(alert),
+//       color: _getColor(alert),
+//     ),
+//     backgroundColor: Theme.of(navKey.currentContext!).colorScheme.primary,
+//     titleStyle: TextStyle(
+//       color: Theme.of(navKey.currentContext!).colorScheme.primaryFixed,
+//     ),
+//     duration: const Duration(seconds: 5),
+//   );
+// }
 void showNotify({
   Alert? alert,
   String? message,
   Alignment alignment = Alignment.topCenter,
 }) {
-  if(message?.isEmpty ?? true) return;
+  if (message?.isEmpty ?? true) return;
 
   BotToast.showSimpleNotification(
     title: message!,
     align: alignment,
     borderRadius: CustomTheme.radius,
     hideCloseButton: _getIcon(alert) == null,
-    closeIcon: Icon(_getIcon(alert),
-      color: _getColor(alert),
-    ),
-    backgroundColor: Theme.of(navKey.currentContext!).colorScheme.primary,
-    titleStyle: TextStyle(
-      color: Theme.of(navKey.currentContext!).colorScheme.primaryFixed,
+    closeIcon: Icon(_getIcon(alert), color: Colors.white),
+    backgroundColor: _getBackgroundColor(alert),
+    titleStyle: const TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
     ),
     duration: const Duration(seconds: 5),
   );
@@ -71,5 +93,22 @@ IconData? _getIcon(Alert? alert) {
       return Icons.info_rounded;
     default:
       return null;
+  }
+}
+Color _getBackgroundColor(Alert? alert) {
+  final isDark = Theme.of(navKey.currentContext!).isDark();
+  final theme = CustomTheme(isDark: isDark);
+
+  switch (alert) {
+    case Alert.success:
+      return theme.successColor();
+    case Alert.error:
+      return theme.dangerColor();
+    case Alert.warning:
+      return theme.warningColor();
+    case Alert.info:
+      return theme.progressColor();
+    default:
+      return theme.progressColor();
   }
 }

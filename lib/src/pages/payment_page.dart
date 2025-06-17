@@ -24,10 +24,10 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
   int? paymentId;
   bool isLoading = false;
 
-  String getCustomFallbackMessage(pay.Payment payment) {
-    if (payment.amount == 0) return 'المبلغ غير صالح.';
-    return 'حدث خطأ غير متوقع. يرجى المحاولة لاحقًا.';
-  }
+  // String getCustomFallbackMessage(pay.Payment payment) {
+  //   if (payment.amount == 0) return 'المبلغ غير صالح.';
+  //   return 'حدث خطأ غير متوقع. يرجى المحاولة لاحقًا.';
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -249,10 +249,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                     } else {
                       final fallbackPayment = currentState.data ?? payment;
 
-                      final errorMessage =
-                          currentState.meta.message.trim().isEmpty
-                              ? getCustomFallbackMessage(fallbackPayment)
-                              : currentState.meta.message;
+                      final errorMessage = currentState.meta.message.trim();
 
                       debugPrint("❌ Payment creation failed.");
                       debugPrint(

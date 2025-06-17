@@ -75,7 +75,8 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  textDirection: TextDirection.rtl,
+                  // textDirection: TextDirection.rtl,
+                  textDirection: Directionality.of(context),
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CircleAvatar(
@@ -106,7 +107,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                             ),
                           ],
                         ),
-                        textDirection: TextDirection.rtl,
+                        textDirection: Directionality.of(context),
                       ),
                     ),
                     IconButton(

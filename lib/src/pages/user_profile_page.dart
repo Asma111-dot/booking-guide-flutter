@@ -45,7 +45,6 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
 
 
   @override
-  @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider).data;
     final theme = Theme.of(context);
@@ -126,7 +125,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                         child: Text(
                           trans().cancel,
                           style: TextStyle(
-                            color: colorScheme.primary,
+                            color: colorScheme.onSurface,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -136,7 +135,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                         child: Text(
                           trans().verify,
                           style: TextStyle(
-                            color: colorScheme.error,
+                            color: colorScheme.primary,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
@@ -151,18 +150,21 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
               },
               label: Text(
                 trans().delete_account,
-                style: TextStyle(color: colorScheme.error),
+                style: TextStyle(
+                  color: colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+              icon: Icon(deleteIcon, color: colorScheme.onSurface),
               style: ElevatedButton.styleFrom(
-                backgroundColor: colorScheme.background,
-                elevation: 2,
-                side: BorderSide(color: colorScheme.error),
+                backgroundColor: colorScheme.surface, // أو Colors.transparent
+                elevation: 0,
+                side: BorderSide(color: colorScheme.error, width: 1),
                 minimumSize: const Size(double.infinity, 50),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              icon: Icon(deleteIcon, color: colorScheme.error),
             ),
 
             const SizedBox(height: 40),

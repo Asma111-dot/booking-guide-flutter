@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../helpers/general_helper.dart';
@@ -37,28 +36,27 @@ class _AccountPageState extends ConsumerState<AccountPage> {
 
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
+    final toggleButton = buildDisplayModeToggle(ref, context);
+
+    // final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          trans().persons,
-          style: theme.textTheme.headlineMedium?.copyWith(
-            color: colorScheme.primary,
-            fontWeight: FontWeight.bold,
-          ),
+
+    appBar: AppBar(
+      centerTitle: true,
+      title: Text(
+        trans().persons,
+        style: theme.textTheme.headlineMedium?.copyWith(
+          color: colorScheme.primary,
+          fontWeight: FontWeight.bold,
         ),
-        elevation: 0,
-        backgroundColor: theme.scaffoldBackgroundColor,
-        iconTheme: IconThemeData(color: colorScheme.secondary),
-        leading: Directionality.of(context) == TextDirection.rtl
-            ? buildDisplayModeToggle(ref, context).first
-            : null,
-        actions: Directionality.of(context) == TextDirection.ltr
-            ? buildDisplayModeToggle(ref, context)
-            : null,
       ),
+      elevation: 0,
+      backgroundColor: theme.scaffoldBackgroundColor,
+      iconTheme: IconThemeData(color: colorScheme.secondary),
+      leading: Directionality.of(context) == TextDirection.rtl ? toggleButton : null,
+      actions: Directionality.of(context) == TextDirection.ltr ? [toggleButton] : null,
+    ),
       backgroundColor: theme.scaffoldBackgroundColor,
       body: SingleChildScrollView(
         child: Container(
@@ -67,7 +65,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
           child: Column(
             children: [
               Directionality(
-                textDirection: TextDirection.rtl,
+                textDirection: Directionality.of(context),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [

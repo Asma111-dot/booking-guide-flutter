@@ -51,9 +51,9 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
         (route) => false,
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("فشل في حفظ البيانات، حاول مرة أخرى")),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(content: Text("فشل في حفظ البيانات، حاول مرة أخرى")),
+      // );
     }
     // print("✅ isSuccess = $isSuccess");
   }
