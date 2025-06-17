@@ -151,7 +151,7 @@ class NavigationMenu extends StatelessWidget {
   }) {
     screens = [
       const FacilityTypesPage(),
-      MapPage(facilityId: facilityId),
+      MapPage(facilityTypeId: facilityId),
       BookingPage(userId: userId),
       FavoritesPage(userId: userId),
       AccountPage(),

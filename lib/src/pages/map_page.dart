@@ -11,9 +11,9 @@ import '../utils/theme.dart';
 import '../widgets/view_widget.dart';
 
 class MapPage extends ConsumerStatefulWidget {
-  final int facilityId;
+  final int facilityTypeId;
 
-  const MapPage({Key? key, required this.facilityId}) : super(key: key);
+  const MapPage({super.key, required this.facilityTypeId});
 
   @override
   ConsumerState<MapPage> createState() => _MapPageState();
@@ -33,7 +33,7 @@ class _MapPageState extends ConsumerState<MapPage> {
     super.initState();
 
     Future.microtask(() {
-      ref.read(getProvider().notifier).fetch(facilityTypeId: widget.facilityId);
+      ref.read(getProvider().notifier).fetch(facilityTypeId: widget.facilityTypeId);
     });
   }
 
@@ -70,8 +70,17 @@ class _MapPageState extends ConsumerState<MapPage> {
   Widget build(BuildContext context) {
     final facilitiesState = ref.watch(getProvider());
 
-    final double normalHue = hueFromColor(CustomTheme.whiteColor);
-    final double selectedHue = darkerHueFromColor(CustomTheme.primaryColor);
+    // final double normalHue = hueFromColor(CustomTheme.whiteColor);
+    // final double selectedHue = darkerHueFromColor(CustomTheme.primaryColor);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final double normalHue = isDark
+        ? BitmapDescriptor.hueAzure
+        : BitmapDescriptor.hueAzure;
+
+    final double selectedHue = isDark
+        ? BitmapDescriptor.hueViolet
+        : BitmapDescriptor.hueViolet;
 
     return Scaffold(
       appBar: AppBar(
@@ -103,13 +112,17 @@ class _MapPageState extends ConsumerState<MapPage> {
               refresh: () async {
                 await ref
                     .read(getProvider().notifier)
-                    .fetch(facilityTypeId: widget.facilityId);
+                    .fetch(facilityTypeId: widget.facilityTypeId);
                 setState(() {});
               },
               forceShowLoaded: facilitiesState.data != null,
               onLoaded: (data) {
+                final theme = Theme.of(context);
+                final colorScheme = theme.colorScheme;
+                // final isDark = theme.brightness == Brightness.dark;
                 final Set<Marker> markers = data.map((facility) {
                   final bool isSelected = selectedMarkerId == facility.id;
+                  print('${facility.name} => lat: ${facility.latitude}, lng: ${facility.longitude}');
                   return Marker(
                     markerId: MarkerId(facility.id.toString()),
                     position: LatLng(
@@ -131,21 +144,11 @@ class _MapPageState extends ConsumerState<MapPage> {
                               arguments: facility,
                             );
                           },
-                          child: Container(
+                          child: SizedBox(
+                            height: 140,
                             width: 250,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(16),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black26,
-                                  blurRadius: 10,
-                                  offset: Offset(0, 2),
-                                )
-                              ],
-                            ),
                             child: Column(
-                              mainAxisSize: MainAxisSize.min, // ✅ هذا مهم جداً
+                              mainAxisSize: MainAxisSize.max,
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 ClipRRect(
@@ -155,27 +158,38 @@ class _MapPageState extends ConsumerState<MapPage> {
                                   ),
                                   child: Image.network(
                                     facility.logo ?? '',
-                                    height: 100,
+                                    height: 80,
                                     width: double.infinity,
                                     fit: BoxFit.cover,
                                     errorBuilder: (_, __, ___) => Image.asset(
-                                      logoCoverImage,
-                                      height: 100,
+                                      appIcon,
+                                      height: 80,
                                       width: double.infinity,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
                                 ),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8, horizontal: 12),
-                                  color: CustomTheme.primaryColor,
-                                  child: Text(
-                                    facility.name,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      color: CustomTheme.color1,
-                                      fontWeight: FontWeight.bold,
+                                Expanded(
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+                                    decoration: BoxDecoration(
+                                      color: colorScheme.surface,
+                                      borderRadius: const BorderRadius.only(
+                                        bottomLeft: Radius.circular(16),
+                                        bottomRight: Radius.circular(16),
+                                      ),
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      facility.name,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: colorScheme.primary,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -183,8 +197,7 @@ class _MapPageState extends ConsumerState<MapPage> {
                             ),
                           ),
                         ),
-                        LatLng(facility.latitude ?? 0.0,
-                            facility.longitude ?? 0.0),
+                        LatLng(facility.latitude ?? 0.0, facility.longitude ?? 0.0),
                       );
                     },
                   );
@@ -199,7 +212,7 @@ class _MapPageState extends ConsumerState<MapPage> {
                     GoogleMap(
                       initialCameraPosition: const CameraPosition(
                         target: LatLng(15.3520, 44.2075),
-                        zoom: 15,
+                        zoom: 12,
                       ),
                       onMapCreated: (controller) {
                         mapController = controller;

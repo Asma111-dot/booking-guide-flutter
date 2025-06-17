@@ -28,7 +28,7 @@ class RoomDescriptionTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    // final colorScheme = Theme.of(context).colorScheme;
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
       child: Column(
