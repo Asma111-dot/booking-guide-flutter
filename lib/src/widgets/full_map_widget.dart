@@ -24,6 +24,8 @@ class _FullMapWidgetState extends State<FullMapWidget> {
   late LatLng _initialLatLng;
   MapType _mapType = MapType.normal;
 
+  bool _isSelected = false;
+
   @override
   void initState() {
     super.initState();
@@ -64,13 +66,19 @@ class _FullMapWidgetState extends State<FullMapWidget> {
             markerId: const MarkerId("location_marker"),
             position: _initialLatLng,
             infoWindow: InfoWindow(title: title),
+            icon: BitmapDescriptor.defaultMarkerWithHue(
+              _isSelected ? BitmapDescriptor.hueViolet : BitmapDescriptor.hueAzure,
+            ),
+            onTap: () {
+              setState(() {
+                _isSelected = !_isSelected;
+              });
+            },
           ),
         },
         onMapCreated: (controller) {
           _mapController = controller;
         },
-        // myLocationEnabled: true,
-        // myLocationButtonEnabled: false,
         compassEnabled: true,
         zoomControlsEnabled: true,
       ),

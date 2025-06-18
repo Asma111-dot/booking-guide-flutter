@@ -31,7 +31,40 @@ class Meta with _$Meta {
     int? total,
   }) = _Meta;
 
-  factory Meta.fromJson(Map<String, dynamic> json) => _$MetaFromJson(json);
+  // factory Meta.fromJson(Map<String, dynamic> json) => _$MetaFromJson(json);
+
+  factory Meta.fromJson(Map<String, dynamic> json) {
+    String message = '';
+
+    // أولوية 1: message الرئيسي
+    if (json.containsKey('message') && json['message'] is String) {
+      message = json['message'];
+    }
+
+    // أولوية 2: error كسلسلة نصية
+    else if (json.containsKey('error') && json['error'] is String) {
+      message = json['error'];
+    }
+
+    // أولوية 3: error كـ Map بداخله message
+    else if (json.containsKey('error') &&
+        json['error'] is Map &&
+        json['error']['message'] is String) {
+      message = json['error']['message'];
+    }
+
+    // أولوية 4: details.message
+    if (json.containsKey('details') &&
+        json['details'] is Map &&
+        json['details']['message'] is String) {
+      message = json['details']['message'];
+    }
+
+    return Meta(
+      message: message.isNotEmpty ? message : 'حدث خطأ غير متوقع',
+      status: Status.error,
+    );
+  }
 
   // --- Custom methods ---
 

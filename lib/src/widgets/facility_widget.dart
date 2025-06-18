@@ -112,7 +112,7 @@ class FacilityWidget extends ConsumerWidget {
                         color: firstPrice > 0
                             ? colorScheme.tertiary
                             : colorScheme.onSurface.withOpacity(0.4),
-                        fontSize: 12,
+                        fontSize: 10,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -130,10 +130,11 @@ class FacilityWidget extends ConsumerWidget {
                             facility.address ?? trans().address,
                             style: TextStyle(
                               color: colorScheme.secondary,
-                              fontSize: 14,
+                              fontSize: 12,
                               fontWeight: FontWeight.w400,
                             ),
                             overflow: TextOverflow.ellipsis,
+                            maxLines: 5,
                           ),
                         ),
                       ],

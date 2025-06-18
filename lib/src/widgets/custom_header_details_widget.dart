@@ -61,12 +61,12 @@ class CustomHeaderDetailsWidget extends StatelessWidget {
               Text(
                 name ?? trans().not_available,
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: colorScheme.primary,
                 ),
                 overflow: TextOverflow.ellipsis,
-                maxLines: 1,
+                maxLines: 2,
               ),
               const SizedBox(height: 4),
               Row(
@@ -85,7 +85,7 @@ class CustomHeaderDetailsWidget extends StatelessWidget {
                         color: colorScheme.onSurface.withOpacity(0.7),
                       ),
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
+                      maxLines: 3,
                     ),
                   ),
                 ],

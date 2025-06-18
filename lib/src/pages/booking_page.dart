@@ -108,7 +108,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
 
         final checkIn = reservation.checkInDate;
         final checkOut = reservation.checkOutDate;
-        final daysCount = checkOut.difference(checkIn).inDays;
+        final daysCount = checkOut.difference(checkIn).inDays + 1;
         final showDays = daysCount > 0;
 
         return GestureDetector(

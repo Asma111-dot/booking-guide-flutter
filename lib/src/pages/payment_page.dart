@@ -247,22 +247,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                         },
                       );
                     } else {
-                      final fallbackPayment = currentState.data ?? payment;
-
-                      final errorMessage = currentState.meta.message.trim();
-
-                      debugPrint("❌ Payment creation failed.");
-                      debugPrint(
-                          "📄 Payment Fallback Data: ${fallbackPayment.toString()}");
-                      debugPrint("❗ Error Message: $errorMessage");
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(errorMessage),
-                          backgroundColor: Theme.of(context).colorScheme.error,
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
+                      debugPrint("❌ Payment creation failed: ${currentState.meta.message}");
                     }
 
                     setState(() => isLoading = false);

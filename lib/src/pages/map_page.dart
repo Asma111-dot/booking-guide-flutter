@@ -212,7 +212,7 @@ class _MapPageState extends ConsumerState<MapPage> {
                     GoogleMap(
                       initialCameraPosition: const CameraPosition(
                         target: LatLng(15.3520, 44.2075),
-                        zoom: 12,
+                        zoom: 11,
                       ),
                       onMapCreated: (controller) {
                         mapController = controller;

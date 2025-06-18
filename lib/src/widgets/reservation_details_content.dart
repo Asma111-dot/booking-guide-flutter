@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../extensions/string_formatting.dart';
 import '../extensions/date_formatting.dart';
+import '../helpers/general_helper.dart';
 import '../models/reservation.dart' as res;
 import '../utils/assets.dart';
 import 'custom_header_details_widget.dart';
 import 'custom_row_details_widget.dart';
-import '../helpers/general_helper.dart';
 
 class ReservationDetailsContent extends StatelessWidget {
   final res.Reservation data;
