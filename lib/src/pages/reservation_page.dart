@@ -34,6 +34,7 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
   late TextEditingController childrenController;
   final GlobalKey<FormState> reservationKey = GlobalKey<FormState>();
   String? bookingType;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -229,61 +230,77 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
         child: Button(
           width: double.infinity,
           title: trans().completeTheReservation,
-          icon: Icon(arrowForWordIcon,
-              size: 20, color: Theme.of(context).colorScheme.onPrimary),
-          iconAfterText: true,
-          disable: false,
-          onPressed: () async {
-            if (reservationKey.currentState!.validate()) {
-              final adultsCount = int.parse(adultsController.text.trim());
-              final childrenCount = childrenController.text.isNotEmpty
-                  ? int.parse(childrenController.text.trim())
-                  : 0;
-
-              try {
-                final savedReservation = await ref
-                    .read(reservationSaveProvider.notifier)
-                    .saveReservation(
-                      reservation.data!,
-                      adultsCount: adultsCount,
-                      childrenCount: childrenCount,
-                      bookingType: bookingType!,
-                    );
-
-                if (savedReservation != null && savedReservation.id != 0) {
-                  await ref.read(reservationProvider.notifier).fetch(
-                        reservationId: savedReservation.id,
-                      );
-
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    Routes.reservationDetails,
-                    (r) => false,
-                    arguments: savedReservation.id,
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                          "حدثت مشكلة في جلب تفاصيل الحجز، حاول مرة أخرى."),
-                    ),
-                  );
-                }
-              } catch (error) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(trans().error_occurred_during_save),
-                  ),
-                );
-              }
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(trans().please_complete_data_correctly),
+          icon: isLoading
+              ? CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                )
+              : Icon(
+                  arrowForWordIcon,
+                  size: 20,
+                  color: Theme.of(context).colorScheme.onPrimary,
                 ),
-              );
-            }
-          },
+          iconAfterText: true,
+          disable: isLoading,
+          onPressed: isLoading
+              ? null
+              : () async {
+                  if (reservationKey.currentState!.validate()) {
+                    setState(() => isLoading = true);
+
+                    final adultsCount = int.parse(adultsController.text.trim());
+                    final childrenCount = childrenController.text.isNotEmpty
+                        ? int.parse(childrenController.text.trim())
+                        : 0;
+
+                    try {
+                      final savedReservation = await ref
+                          .read(reservationSaveProvider.notifier)
+                          .saveReservation(
+                            reservation.data!,
+                            adultsCount: adultsCount,
+                            childrenCount: childrenCount,
+                            bookingType: bookingType!,
+                          );
+
+                      if (savedReservation != null &&
+                          savedReservation.id != 0) {
+                        await ref.read(reservationProvider.notifier).fetch(
+                              reservationId: savedReservation.id,
+                            );
+
+                        setState(() => isLoading = false);
+
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          Routes.reservationDetails,
+                          (r) => false,
+                          arguments: savedReservation.id,
+                        );
+                      } else {
+                        setState(() => isLoading = false);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                "حدثت مشكلة في جلب تفاصيل الحجز، حاول مرة أخرى."),
+                          ),
+                        );
+                      }
+                    } catch (error) {
+                      setState(() => isLoading = false);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(trans().error_occurred_during_save),
+                        ),
+                      );
+                    }
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(trans().please_complete_data_correctly),
+                      ),
+                    );
+                  }
+                },
         ),
       ),
     );

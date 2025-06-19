@@ -7,6 +7,7 @@ import '../models/payment.dart' as pay;
 import '../providers/payment/payment_confirm_provider.dart';
 import '../providers/payment/payment_save_provider.dart';
 import '../utils/assets.dart';
+import '../utils/dialogs.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar.dart';
 
@@ -204,44 +205,39 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                               ),
                             );
 
-                                  if (confirmationCode != null &&
-                                      paymentId != null) {
-                                    Navigator.of(context).pop();
-                                    debugPrint(
-                                        "➡️ Sending OTP confirmation: $confirmationCode for payment ID: $paymentId");
+                            if (confirmationCode != null && paymentId != null) {
+                              Navigator.of(context).pop(); // Close OTP dialog
+                              showWaitingDialog(context); // Show waiting dialog
 
-                                    await paymentConfirm.confirmPayment(
-                                      paymentId!,
-                                      confirmationCode,
-                                    );
+                              debugPrint("➡️ Sending OTP confirmation: $confirmationCode for payment ID: $paymentId");
 
-                                    final confirmState =
-                                        ref.read(paymentConfirmProvider);
+                              await paymentConfirm.confirmPayment(paymentId!, confirmationCode);
 
-                                    debugPrint(
-                                        "🔄 Confirm Response Meta: ${confirmState.meta}");
-                                    debugPrint(
-                                        "📦 Confirmed Payment: ${confirmState.data}");
+                              Navigator.of(context, rootNavigator: true).pop(); // Close waiting dialog
 
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          confirmState.isLoaded()
-                                              ? trans()
-                                                  .payment_confirmed_successfully
-                                              : confirmState.meta.message,
-                                        ),
-                                        backgroundColor: confirmState.isLoaded()
-                                            ? colorScheme.primary
-                                            : colorScheme.error,
-                                      ),
-                                    );
-                                  } else {
-                                    debugPrint("❌ Invalid or missing OTP.");
-                                  }
-                                },
-                                child: Text(trans().verify),
-                              ),
+                              final confirmState = ref.read(paymentConfirmProvider);
+
+                              debugPrint("🔄 Confirm Response Meta: ${confirmState.meta}");
+                              debugPrint("📦 Confirmed Payment: ${confirmState.data}");
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    confirmState.isLoaded()
+                                        ? trans().payment_confirmed_successfully
+                                        : confirmState.meta.message,
+                                  ),
+                                  backgroundColor: confirmState.isLoaded()
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.error,
+                                ),
+                              );
+                            } else {
+                              debugPrint("❌ Invalid or missing OTP.");
+                            }
+                          },
+                          child: Text(trans().verify),
+                        ),
                             ],
                           );
                         },

@@ -249,5 +249,6 @@
   "go_back": "Back and return",
   "viewFacilityDetails": "View Facility Details",
   "show_less": "Show less",
-  "read_more": "Read more"
+  "read_more": "Read more",
+  "please_wait": "Please wait..."
 }

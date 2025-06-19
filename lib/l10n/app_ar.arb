@@ -249,5 +249,6 @@
   "go_back": "تراجع والعودة",
   "viewFacilityDetails": "استعراض تفاصيل المنشأة",
   "show_less": "عرض أقل",
-  "read_more": "قراءة المزيد"
+  "read_more": "قراءة المزيد",
+  "please_wait": "يرجى الانتظار..."
 }
