@@ -56,6 +56,10 @@ void showPriceRangeBottomSheet({
             TextField(
               controller: maxController,
               keyboardType: TextInputType.number,
+              style: const TextStyle( // 👈 هنا أضفنا هذا السطر
+                fontFamily: 'Roboto',
+                fontSize: 16,
+              ),
               decoration: InputDecoration(
                 labelText: trans().max_price,
                 labelStyle: TextStyle(

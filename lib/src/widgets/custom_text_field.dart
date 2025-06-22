@@ -25,8 +25,7 @@ class CustomTextField extends StatelessWidget {
         ),
         filled: true,
         fillColor: colorScheme.surface,
-        contentPadding:
-        const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
@@ -46,6 +45,7 @@ class CustomTextField extends StatelessWidget {
         fontSize: 14,
         fontWeight: FontWeight.w400,
         color: colorScheme.onSurface,
+        fontFamily: 'Roboto',
       ),
     );
   }

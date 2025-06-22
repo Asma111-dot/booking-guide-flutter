@@ -5,7 +5,7 @@ import '../extensions/theme_extension.dart';
 import '../enums/alert.dart';
 import '../utils/routes.dart';
 import '../utils/theme.dart';
-import '../widgets/loading_widget.dart';
+import '../widgets/waiting_dialog_widget.dart';
 
 export '../enums/alert.dart';
 
@@ -56,7 +56,7 @@ void showNotify({
 
 void showLoading() {
   BotToast.showCustomLoading(
-    toastBuilder: (_) => const LoadingWidget(),
+    toastBuilder: (_) => const WaitingDialogWidget(),
     ignoreContentClick: true,
     backButtonBehavior: BackButtonBehavior.ignore,
   );

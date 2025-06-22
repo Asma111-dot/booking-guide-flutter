@@ -33,6 +33,7 @@ void showCapacityBottomSheet({
             Text(
               trans().select_people_count,
               style: TextStyle(
+                fontFamily: 'Roboto',
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
                 color: colorScheme.onSurface,

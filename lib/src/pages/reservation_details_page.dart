@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../helpers/dialog_helper.dart';
 import '../helpers/general_helper.dart';
 import '../providers/reservation/reservation_provider.dart';
 import '../models/reservation.dart' as res;
@@ -41,83 +42,86 @@ class _ReservationDetailsPageState
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: CustomAppBarClipper(
-        title: trans().reservationDetails,
-      ),
-      resizeToAvoidBottomInset: true,
-      body: ViewWidget<res.Reservation>(
-        meta: reservationState.meta,
-        data: reservationState.data,
-        refresh: () async => await ref
-            .read(reservationProvider.notifier)
-            .fetch(reservationId: widget.reservationId),
-        forceShowLoaded: reservationState.data != null,
-        onLoaded: (data) => ReservationDetailsContent(data: data),
-        onLoading: () => const Center(child: CircularProgressIndicator()),
-        onEmpty: () => Center(child: Text(trans().no_data)),
-        showError: true,
-        showEmpty: true,
-      ),
-      bottomNavigationBar: SafeArea(
-        minimum: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              decoration: BoxDecoration(
-                color: colorScheme.secondaryContainer.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  Icon(errorIcon, color: colorScheme.secondary),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      trans().booking_not_confirmed_warning,
-                      style: TextStyle(color: colorScheme.onSurface),
+    return WillPopScope(
+      onWillPop: () => confirmExitToHome(context),
+      child: Scaffold(
+        backgroundColor: theme.scaffoldBackgroundColor,
+        appBar: CustomAppBarClipper(
+          title: trans().reservationDetails,
+        ),
+        resizeToAvoidBottomInset: true,
+        body: ViewWidget<res.Reservation>(
+          meta: reservationState.meta,
+          data: reservationState.data,
+          refresh: () async => await ref
+              .read(reservationProvider.notifier)
+              .fetch(reservationId: widget.reservationId),
+          forceShowLoaded: reservationState.data != null,
+          onLoaded: (data) => ReservationDetailsContent(data: data),
+          onLoading: () => const Center(child: CircularProgressIndicator()),
+          onEmpty: () => Center(child: Text(trans().no_data)),
+          showError: true,
+          showEmpty: true,
+        ),
+        bottomNavigationBar: SafeArea(
+          minimum: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  color: colorScheme.secondaryContainer.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    Icon(errorIcon, color: colorScheme.secondary),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        trans().booking_not_confirmed_warning,
+                        style: TextStyle(color: colorScheme.onSurface),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            OutlinedButton.icon(
-              onPressed: () async {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  Routes.navigationMenu,
-                      (route) => false,
-                );
-              },
-              icon: const Icon(goBackIcon),
-              label: Text(trans().go_back),
-              style: OutlinedButton.styleFrom(
-                side: BorderSide(color: colorScheme.outline),
-                padding: const EdgeInsets.symmetric(vertical: 12),
+              const SizedBox(height: 12),
+              OutlinedButton.icon(
+                onPressed: () async {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    Routes.navigationMenu,
+                    (route) => false,
+                  );
+                },
+                icon: const Icon(goBackIcon),
+                label: Text(trans().go_back),
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: colorScheme.outline),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            Button(
-              width: double.infinity,
-              title: trans().payment_now,
-              icon: Icon(arrowForWordIcon,
-                  size: 20, color: colorScheme.onPrimary),
-              iconAfterText: true,
-              disable: false,
-              onPressed: () async {
-                Navigator.pushNamed(
-                  context,
-                  Routes.payment,
-                  arguments: reservationState.data?.id,
-                );
-              },
-            ),
-          ],
+              const SizedBox(height: 12),
+              Button(
+                width: double.infinity,
+                title: trans().payment_now,
+                icon: Icon(arrowForWordIcon,
+                    size: 20, color: colorScheme.onPrimary),
+                iconAfterText: true,
+                disable: false,
+                onPressed: () async {
+                  Navigator.pushNamed(
+                    context,
+                    Routes.payment,
+                    arguments: reservationState.data?.id,
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

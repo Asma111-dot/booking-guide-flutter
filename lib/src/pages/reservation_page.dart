@@ -169,24 +169,26 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
-                      controller: adultsController,
-                      keyboardType: TextInputType.number,
-                      decoration:
-                          _inputDecoration(context, trans().adults_count),
-                      validator: (value) => value!.isEmpty
-                          ? trans().please_enter_adults_count
-                          : null,
-                      onChanged: (value) {
-                        final normalized = convertToEnglishNumbers(value);
-                        if (value != normalized) {
-                          adultsController.value = TextEditingValue(
-                            text: normalized,
-                            selection: TextSelection.collapsed(
-                                offset: normalized.length),
-                          );
-                        }
-                        WidgetsBinding.instance.addPostFrameCallback((_) {});
-                      }),
+                    controller: adultsController,
+                    keyboardType: TextInputType.number,
+                    style: const TextStyle( // 👈 هنا أضفنا style
+                      fontFamily: 'Roboto',
+                      fontSize: 16,
+                    ),
+                    decoration: _inputDecoration(context, trans().adults_count),
+                    validator: (value) => value!.isEmpty
+                        ? trans().please_enter_adults_count
+                        : null,
+                    onChanged: (value) {
+                      final normalized = convertToEnglishNumbers(value);
+                      if (value != normalized) {
+                        adultsController.value = TextEditingValue(
+                          text: normalized,
+                          selection: TextSelection.collapsed(offset: normalized.length),
+                        );
+                      }
+                    },
+                  ),
                   const SizedBox(height: 20),
                   Row(
                     children: [
@@ -205,6 +207,10 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                   TextFormField(
                     controller: childrenController,
                     keyboardType: TextInputType.number,
+                    style: const TextStyle( // 👈 هنا أضفنا style
+                      fontFamily: 'Roboto',
+                      fontSize: 16,
+                    ),
                     decoration:
                         _inputDecoration(context, trans().children_count),
                     validator: (value) => null,

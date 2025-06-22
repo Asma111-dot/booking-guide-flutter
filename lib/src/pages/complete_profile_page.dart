@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helpers/general_helper.dart';
 import '../providers/auth/login_provider.dart';
 import '../utils/routes.dart';
-import '../utils/theme.dart';
 import '../widgets/avatar_picker.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_text_field.dart';
@@ -80,8 +79,9 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
           title: Text(
             trans().completeProfile,
             style: theme.textTheme.headlineMedium?.copyWith(
-              color: colorScheme.onBackground,
-              fontWeight: FontWeight.w200,
+              color: colorScheme.onSurface,
+              // fontWeight: FontWeight.w100,
+              fontSize: 20
             ),
           ),
           elevation: 1,

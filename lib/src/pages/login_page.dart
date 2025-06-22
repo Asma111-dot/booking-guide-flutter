@@ -68,12 +68,21 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           TextFormField(
                             keyboardType: TextInputType.phone,
                             readOnly: login.isLoading(),
+                            style: const TextStyle( // 👈 هنا أضفنا هذا السطر
+                              fontFamily: 'Roboto',
+                              fontSize: 16,
+                            ),
                             decoration: InputDecoration(
                               prefixIcon: Icon(callIcon, color: colorScheme.primary),
-                              prefixText: '+967 ',
-                              prefixStyle: theme.textTheme.bodyMedium?.copyWith(
-                                color: colorScheme.onSurface,
-                                fontWeight: FontWeight.w400,
+                              prefix: const Directionality(
+                                textDirection: TextDirection.ltr,
+                                child: Text(
+                                  '+967 ',
+                                  style: TextStyle(
+                                    fontFamily: 'Roboto',
+                                    fontSize: 16,
+                                  ),
+                                ),
                               ),
                               labelText: trans().phone_number,
                               labelStyle: theme.textTheme.bodyMedium?.copyWith(

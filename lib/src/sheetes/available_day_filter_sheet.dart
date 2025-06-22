@@ -53,6 +53,7 @@ void showAvailableDayBottomSheet({
                     labelText: trans().select_date,
                     labelStyle: TextStyle(
                       fontSize: 12,
+                      fontFamily: 'Roboto',
                       fontWeight: FontWeight.bold,
                       color: colorScheme.primary,
                     ),

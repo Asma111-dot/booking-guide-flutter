@@ -138,7 +138,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
                       placeholder: (context, url) =>
                           const ShimmerImagePlaceholder(width: 80, height: 80),
                       errorWidget: (context, url, error) => Image.asset(
-                        logoCoverImage,
+                        appIcon,
                         width: 110,
                         height: 110,
                         fit: BoxFit.cover,

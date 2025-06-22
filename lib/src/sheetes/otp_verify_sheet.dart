@@ -50,6 +50,7 @@ class OtpVerifySheet extends ConsumerWidget {
               maxLength: 6,
               textAlign: TextAlign.center,
               style: TextStyle(
+                fontFamily: 'Roboto',
                 fontSize: 16,
                 letterSpacing: 6,
                 color: colorScheme.onSurface,

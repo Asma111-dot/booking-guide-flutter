@@ -185,6 +185,10 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                       content: TextField(
                         controller: confirmationController,
                         keyboardType: TextInputType.number,
+                        style: const TextStyle(
+                          fontFamily: 'Roboto',
+                          fontSize: 16,
+                        ),
                         decoration: InputDecoration(
                           hintText: trans().enter_confirmation_number,
                         ),

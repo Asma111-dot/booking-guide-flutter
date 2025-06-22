@@ -155,6 +155,10 @@ flutter:
         - asset: assets/fonts/GESS/GE_SS_Two_Bold.otf
           weight: 700
 
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
+
 
 
 l10n:

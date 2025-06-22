@@ -250,5 +250,6 @@
   "viewFacilityDetails": "استعراض تفاصيل المنشأة",
   "show_less": "عرض أقل",
   "read_more": "قراءة المزيد",
-  "please_wait": "يرجى الانتظار..."
+  "please_wait": "يرجى الانتظار...",
+  "no_rooms_available": "لا توجد تفاصيل متوفرة لهذه المنشأة"
 }

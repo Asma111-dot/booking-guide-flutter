@@ -74,7 +74,7 @@ class FavoriteWidget extends StatelessWidget {
                     fit: BoxFit.cover,
                     placeholder: (context, url) => const ShimmerImagePlaceholder(width: 80, height: 80),
                     errorWidget: (context, url, error) => Image.asset(
-                      logoCoverImage,
+                      appIcon,
                       width: 110,
                       height: 110,
                       fit: BoxFit.cover,

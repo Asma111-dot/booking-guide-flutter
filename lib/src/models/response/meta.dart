@@ -61,6 +61,7 @@ class Meta with _$Meta {
     }
 
     return Meta(
+      message: message,
       // message: message.isNotEmpty ? message : 'حدث خطأ غير متوقع',
       status: Status.error,
     );

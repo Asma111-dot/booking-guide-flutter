@@ -250,5 +250,7 @@
   "viewFacilityDetails": "View Facility Details",
   "show_less": "Show less",
   "read_more": "Read more",
-  "please_wait": "Please wait..."
+  "please_wait": "Please wait...",
+  "no_rooms_available": "No details available for this facility"
+
 }

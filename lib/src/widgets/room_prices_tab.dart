@@ -5,6 +5,7 @@ import 'room_price_widget.dart';
 
 class RoomPricesTab extends StatelessWidget {
   final r.Room room;
+
   const RoomPricesTab({super.key, required this.room});
 
   @override
@@ -18,23 +19,25 @@ class RoomPricesTab extends StatelessWidget {
           children: [
             room.roomPrices.isNotEmpty
                 ? ListView(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: room.roomPrices
-                  .map((price) => RoomPriceWidget(price: price))
-                  .toList(),
-            )
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: room.roomPrices
+                        .map((price) => RoomPriceWidget(price: price))
+                        .toList(),
+                  )
                 : Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                "${trans().price}: ${trans().priceNotAvailable}",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: colorScheme.onSurface,
-                ),
-              ),
-            ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Center(
+                      child: Text(
+                        trans().priceNotAvailable,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: colorScheme.onSurface,
+                        ),
+                      ),
+                    ),
+                  ),
           ],
         ),
       ),

@@ -45,7 +45,7 @@ class FacilityWidget extends ConsumerWidget {
       onTap: () {
         if (facility.firstRoomId == null) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('لا توجد غرف متوفرة لهذه المنشأة')),
+            SnackBar(content: Text(trans().no_rooms_available)),
           );
           return;
         }
@@ -83,7 +83,7 @@ class FacilityWidget extends ConsumerWidget {
                   fit: BoxFit.cover,
                   placeholder: (context, url) => const ShimmerImagePlaceholder(width: 80, height: 80),
                   errorWidget: (context, url, error) => Image.asset(
-                    logoCoverImage,
+                    appIcon,
                     width: 110,
                     height: 110,
                     fit: BoxFit.cover,

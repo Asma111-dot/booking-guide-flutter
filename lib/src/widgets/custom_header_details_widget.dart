@@ -46,7 +46,7 @@ class CustomHeaderDetailsWidget extends StatelessWidget {
                   child: CircularProgressIndicator(strokeWidth: 2),
                 ),
                 errorWidget: (context, url, error) => Image.asset(
-                  logoCoverImage,
+                  appIcon,
                   fit: BoxFit.cover,
                 ),
               ),
