@@ -90,7 +90,7 @@ Future<Response<T>> request<T>({
         response = HttpService.instance.dio.get(
           url,
           queryParameters:
-              queryParameters ?? (body is Map<String, dynamic> ? body : null),
+          queryParameters ?? (body is Map<String, dynamic> ? body : null),
           cancelToken: cancelToken,
         );
         break;
@@ -128,14 +128,6 @@ Future<Response<T>> request<T>({
       }
 
       try {
-        // if (parsed is Map && parsed.containsKey(key)) {
-        //   if (parsed[key] is List) {
-        //     data = listModel<T>(parsed[key]);
-        //   } else if (parsed[key] is Map) {
-        //     data = model<T>(parsed[key]);
-        //   } else {
-        //     data = parsed[key];
-        //   }
         if (parsed is Map && parsed.containsKey(key)) {
           if (parsed[key] is List) {
             if (T.toString() == 'List<String>') {
@@ -144,7 +136,7 @@ Future<Response<T>> request<T>({
               data = listModel<T>(parsed[key]);
             }
           } else if (parsed[key] is Map) {
-            if (T.toString() == 'Payment') {
+            if (T == pay.Payment) {
               data = pay.Payment.fromJson(parsed[key]);
             } else {
               data = model<T>(parsed[key]);
@@ -155,25 +147,12 @@ Future<Response<T>> request<T>({
             deleted = parsed['deleted'].cast<String>();
           }
 
-          // if (parsed.containsKey('meta')) {
-          //   meta = Meta.fromJson(Map<String, dynamic>.from(parsed['meta']));
-          //   if (parsed.containsKey('token')) {
-          //     meta = meta.copyWith(accessToken: parsed['token']);
-          //   }
-          // } else {
-          //   meta = Meta.fromJson(Map<String, dynamic>.from(parsed));
-          //   if (parsed.containsKey('token')) {
-          //     meta = meta.copyWith(accessToken: parsed['token']);
-          //   }
-          // }
-
           if (parsed.containsKey('meta') && parsed['meta'] != null) {
             meta = Meta.fromJson(Map<String, dynamic>.from(parsed['meta']));
             if (parsed.containsKey('token')) {
               meta = meta.copyWith(accessToken: parsed['token']);
             }
           } else {
-            // fallback: use entire response if no 'meta' key
             try {
               meta = Meta.fromJson(Map<String, dynamic>.from(parsed));
             } catch (_) {
@@ -187,8 +166,8 @@ Future<Response<T>> request<T>({
 
           meta = meta.copyWith(
             status: (T.toString() != 'dynamic' &&
-                    ((parsed[key] is List && (parsed[key] as List).isEmpty) ||
-                        parsed[key] == null))
+                ((parsed[key] is List && (parsed[key] as List).isEmpty) ||
+                    parsed[key] == null))
                 ? Status.empty
                 : Status.loaded,
           );
@@ -223,8 +202,17 @@ Future<Response<T>> request<T>({
         }
 
         if (e.response!.data != null && e.response!.data is Map) {
-          meta = Meta.fromJson(Map<String, dynamic>.from(e.response!.data));
-          meta = meta.copyWith(status: Status.error);
+          final errorData = Map<String, dynamic>.from(e.response!.data);
+
+          String errorMessage = errorData['message'] ??
+              errorData['error'] ??
+              errorData['exception'] ??
+              _errorMessage;
+
+          meta = Meta(
+            status: Status.error,
+            message: errorMessage,
+          );
         }
       } else {
         meta = Meta(message: _errorMessage, status: Status.error);

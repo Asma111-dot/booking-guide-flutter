@@ -131,128 +131,133 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                 ? CircularProgressIndicator(color: colorScheme.onPrimary)
                 : Icon(arrowForWordIcon, size: 20, color: colorScheme.onPrimary),
             iconAfterText: true,
-            onPressed: selectedPaymentMethod == null || isLoading
-                ? null
-                : () async {
-                    setState(() => isLoading = true);
-                    debugPrint("====== [PAYMENT PROCESS STARTED] ======");
-                    debugPrint(
-                        "🔹 Selected Method: ${selectedPaymentMethod?.name} (ID: ${selectedPaymentMethod?.id})");
-                    debugPrint("🔹 Reservation ID: ${widget.reservationId}");
+          onPressed: selectedPaymentMethod == null || isLoading
+              ? null
+              : () async {
+            setState(() => isLoading = true);
+            debugPrint("====== [PAYMENT PROCESS STARTED] ======");
+            debugPrint("🔹 Selected Method: ${selectedPaymentMethod?.name} (ID: ${selectedPaymentMethod?.id})");
+            debugPrint("🔹 Reservation ID: ${widget.reservationId}");
 
-                    final payment = pay.Payment.basic(
-                      reservationId: widget.reservationId,
-                      paymentMethodId: selectedPaymentMethod!.id,
-                    );
+            final payment = pay.Payment.basic(
+              reservationId: widget.reservationId,
+              paymentMethodId: selectedPaymentMethod!.id,
+            );
 
-                    debugPrint("➡️ Creating payment...");
-                    debugPrint("🧾 Payload: ${payment.toJson()}");
+            debugPrint("➡️ Creating payment...");
+            debugPrint("🧾 Payload: ${payment.toJson()}");
 
-                    await paymentState.savePayment(payment);
-                    final currentState = ref.read(paymentSaveProvider);
+            await paymentState.savePayment(payment);
+            final currentState = ref.read(paymentSaveProvider);
 
-                    debugPrint("🔄 Save Response Meta: ${currentState.meta}");
-                    debugPrint("📦 Saved Payment: ${currentState.data}");
+            debugPrint("🔄 Save Response Meta: ${currentState.meta}");
+            debugPrint("📦 Saved Payment: ${currentState.data}");
 
-                    if (currentState.isLoaded()) {
-                      final savedPayment = currentState.data!;
-                      paymentId = savedPayment.id;
-                      final isSuccess =
-                          savedPayment.response?.isSuccess ?? false;
-                      final netAmount =
-                          savedPayment.response?.purchase?.net ?? 0;
+            // ❌ إذا فشل الحفظ لأي سبب
+            if (!currentState.isLoaded()) {
+              setState(() => isLoading = false);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(currentState.meta.message),
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                ),
+              );
+              return;
+            }
 
-                      debugPrint(
-                          "✅ Payment created successfully! ID: ${savedPayment.id}");
-                      debugPrint("📌 isSuccess = $isSuccess");
-                      debugPrint("📌 netAmount = $netAmount");
+            final savedPayment = currentState.data!;
+            paymentId = savedPayment.id;
+            final isSuccess = savedPayment.response?.isSuccess ?? false;
+            final netAmount = savedPayment.response?.purchase?.net ?? 0;
 
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          final TextEditingController confirmationController =
-                              TextEditingController();
+            debugPrint("✅ Payment created successfully! ID: ${savedPayment.id}");
+            debugPrint("📌 isSuccess = $isSuccess");
+            debugPrint("📌 netAmount = $netAmount");
 
-                    return AlertDialog(
-                      backgroundColor: colorScheme.background,
-                      title: Text(
-                        trans().confirm_payment,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          color: colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                final TextEditingController confirmationController =
+                TextEditingController();
+
+                return AlertDialog(
+                  backgroundColor: colorScheme.background,
+                  title: Text(
+                    trans().confirm_payment,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  content: TextField(
+                    controller: confirmationController,
+                    keyboardType: TextInputType.number,
+                    style: const TextStyle(
+                      fontFamily: 'Roboto',
+                      fontSize: 16,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: trans().enter_confirmation_number,
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text(
+                        trans().cancel,
+                        style: TextStyle(color: colorScheme.secondary),
                       ),
-                      content: TextField(
-                        controller: confirmationController,
-                        keyboardType: TextInputType.number,
-                        style: const TextStyle(
-                          fontFamily: 'Roboto',
-                          fontSize: 16,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: trans().enter_confirmation_number,
-                        ),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: Text(
-                            trans().cancel,
-                            style: TextStyle(color: colorScheme.secondary),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        final confirmationCode = int.tryParse(
+                          convertToEnglishNumbers(
+                            confirmationController.text.trim(),
                           ),
-                        ),
-                        TextButton(
-                          onPressed: () async {
-                            final confirmationCode = int.tryParse(
-                              convertToEnglishNumbers(
-                                confirmationController.text.trim(),
+                        );
+
+                        if (confirmationCode != null && paymentId != null) {
+                          Navigator.of(context).pop(); // Close OTP dialog
+                          showWaitingDialog(context); // Show waiting dialog
+
+                          debugPrint("➡️ Sending OTP confirmation: $confirmationCode for payment ID: $paymentId");
+
+                          await paymentConfirm.confirmPayment(paymentId!, confirmationCode);
+
+                          Navigator.of(context, rootNavigator: true).pop(); // Close waiting dialog
+
+                          final confirmState = ref.read(paymentConfirmProvider);
+
+                          debugPrint("🔄 Confirm Response Meta: ${confirmState.meta}");
+                          debugPrint("📦 Confirmed Payment: ${confirmState.data}");
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                confirmState.isLoaded()
+                                    ? trans().payment_confirmed_successfully
+                                    : confirmState.meta.message,
                               ),
-                            );
-
-                            if (confirmationCode != null && paymentId != null) {
-                              Navigator.of(context).pop(); // Close OTP dialog
-                              showWaitingDialog(context); // Show waiting dialog
-
-                              debugPrint("➡️ Sending OTP confirmation: $confirmationCode for payment ID: $paymentId");
-
-                              await paymentConfirm.confirmPayment(paymentId!, confirmationCode);
-
-                              Navigator.of(context, rootNavigator: true).pop(); // Close waiting dialog
-
-                              final confirmState = ref.read(paymentConfirmProvider);
-
-                              debugPrint("🔄 Confirm Response Meta: ${confirmState.meta}");
-                              debugPrint("📦 Confirmed Payment: ${confirmState.data}");
-
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    confirmState.isLoaded()
-                                        ? trans().payment_confirmed_successfully
-                                        : confirmState.meta.message,
-                                  ),
-                                  backgroundColor: confirmState.isLoaded()
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.error,
-                                ),
-                              );
-                            } else {
-                              debugPrint("❌ Invalid or missing OTP.");
-                            }
-                          },
-                          child: Text(trans().verify),
-                        ),
-                            ],
+                              backgroundColor: confirmState.isLoaded()
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.error,
+                            ),
                           );
-                        },
-                      );
-                    } else {
-                      debugPrint("❌ Payment creation failed: ${currentState.meta.message}");
-                    }
+                        } else {
+                          debugPrint("❌ Invalid or missing OTP.");
+                        }
+                      },
+                      child: Text(trans().verify),
+                    ),
+                  ],
+                );
+              },
+            );
 
-                    setState(() => isLoading = false);
-                    debugPrint("====== [PAYMENT PROCESS ENDED] ======");
-                  }),
+            setState(() => isLoading = false);
+            debugPrint("====== [PAYMENT PROCESS ENDED] ======");
+          },
+        ),
       ),
     );
   }

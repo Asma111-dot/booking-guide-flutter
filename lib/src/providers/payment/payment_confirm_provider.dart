@@ -17,6 +17,7 @@ class PaymentConfirm extends _$PaymentConfirm {
 
   Future<void> confirmPayment(int paymentId, int otp) async {
     state = state.setLoading();
+
     try {
       final response = await request<Payment>(
         url: confirmPaymentUrl(paymentId),
@@ -24,14 +25,15 @@ class PaymentConfirm extends _$PaymentConfirm {
         body: {'otp': otp},
       );
 
-      debugPrint(
-          "📤 Sending confirmation request to: ${confirmPaymentUrl(paymentId)}");
+      debugPrint("📤 Sending confirmation request to: ${confirmPaymentUrl(paymentId)}");
       debugPrint("📦 Payload: {otp: $otp}");
 
       if (response.isLoaded()) {
         debugPrint("✅ Payment confirmed successfully for ID: $paymentId");
 
-        // ✅ عرض إشعار بالرسالة القادمة من الباك
+        // ✅ حفظ الحالة بنجاح
+        state = response;
+
         if (response.meta.message.trim().isNotEmpty) {
           showNotify(
             message: response.meta.message,
@@ -39,18 +41,21 @@ class PaymentConfirm extends _$PaymentConfirm {
           );
         }
 
-        // الانتقال إلى صفحة تفاصيل الدفع
         navKey.currentState?.pushNamedAndRemoveUntil(
           Routes.paymentDetails,
-          (r) => false,
+              (r) => false,
           arguments: paymentId,
         );
       } else {
-        debugPrint(
-            "❌ Failed to confirm payment. Message: ${response.meta.message}");
+        debugPrint("❌ Failed to confirm payment. Message: ${response.meta.message}");
+
+        // ✅ إيقاف اللودينغ في حال الفشل
+        state = state.copyWith(meta: response.meta);
       }
     } catch (error) {
       debugPrint("❌ Exception during confirmation: $error");
+
+      // ✅ إيقاف اللودينغ في حال الخطأ
       state = state.setError("Error while confirming payment: $error");
     }
   }

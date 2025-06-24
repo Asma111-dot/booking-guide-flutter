@@ -1,6 +1,6 @@
 class PurchaseData {
   final String name;
-  final int balance;
+  final double balance;
   final String phone;
   final String statusAr;
   final String statusEn;
@@ -31,7 +31,7 @@ class PurchaseData {
     final status = json['status'] ?? {};
     return PurchaseData(
       name: json['name'] ?? '',
-      balance: json['balance'] ?? 0,
+      balance: (json['balance'] ?? 0).toDouble(),
       phone: json['phone'] ?? '',
       statusAr: status['ar'] ?? '',
       statusEn: status['en'] ?? '',
@@ -40,7 +40,7 @@ class PurchaseData {
       rate: (json['rate'] ?? 0).toDouble(),
       gross: (json['gross'] ?? 0).toDouble(),
       referenceId: json['reference_id'] ?? '',
-      id: json['id'] ?? 0,
+      id: (json['id'] as num).toInt(),
       createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
     );
   }
