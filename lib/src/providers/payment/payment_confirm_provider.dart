@@ -5,7 +5,6 @@ import '../../helpers/notify_helper.dart';
 import '../../models/payment.dart';
 import '../../models/response/response.dart';
 import '../../services/request_service.dart';
-import '../../utils/routes.dart';
 import '../../utils/urls.dart';
 
 part 'payment_confirm_provider.g.dart';
@@ -16,7 +15,7 @@ class PaymentConfirm extends _$PaymentConfirm {
   Response<Payment> build() => const Response<Payment>();
 
   Future<void> confirmPayment(int paymentId, int otp) async {
-    state = state.setLoading();
+    state = state.setLoading(); // 🔄 تغيير الحالة إلى Loading
 
     try {
       final response = await request<Payment>(
@@ -28,11 +27,10 @@ class PaymentConfirm extends _$PaymentConfirm {
       debugPrint("📤 Sending confirmation request to: ${confirmPaymentUrl(paymentId)}");
       debugPrint("📦 Payload: {otp: $otp}");
 
+      state = response; // ✅ تحديث الحالة مهما كانت
+
       if (response.isLoaded()) {
         debugPrint("✅ Payment confirmed successfully for ID: $paymentId");
-
-        // ✅ حفظ الحالة بنجاح
-        state = response;
 
         if (response.meta.message.trim().isNotEmpty) {
           showNotify(
@@ -41,21 +39,13 @@ class PaymentConfirm extends _$PaymentConfirm {
           );
         }
 
-        navKey.currentState?.pushNamedAndRemoveUntil(
-          Routes.paymentDetails,
-              (r) => false,
-          arguments: paymentId,
-        );
+        // ✅ التنقل مسؤولية الـ UI فقط، وهذا ممتاز
+        // navKey.currentState?.pushNamedAndRemoveUntil(...)
       } else {
         debugPrint("❌ Failed to confirm payment. Message: ${response.meta.message}");
-
-        // ✅ إيقاف اللودينغ في حال الفشل
-        state = state.copyWith(meta: response.meta);
       }
     } catch (error) {
       debugPrint("❌ Exception during confirmation: $error");
-
-      // ✅ إيقاف اللودينغ في حال الخطأ
       state = state.setError("Error while confirming payment: $error");
     }
   }
