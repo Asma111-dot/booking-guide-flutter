@@ -4,7 +4,6 @@ import '../helpers/general_helper.dart';
 import '../providers/auth/login_provider.dart';
 import '../providers/auth/otp_state_provider.dart';
 import '../utils/assets.dart';
-import '../utils/theme.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar_clipper.dart';
 import '../sheetes/otp_verify_sheet.dart';

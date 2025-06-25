@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-import '../extensions/theme_extension.dart'; // Ensure you have this extension
 
-import '../utils/assets.dart';
 import '../utils/theme.dart';
 
 class IconTextWidget extends StatelessWidget {

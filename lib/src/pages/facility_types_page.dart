@@ -10,6 +10,7 @@ import '../utils/routes.dart';
 import '../utils/theme.dart';
 import '../widgets/facility_shimmer_card.dart';
 import '../widgets/facility_type_shimmer.dart';
+import '../widgets/facility_type_widget.dart';
 import 'facility_page.dart';
 
 class FacilityTypesPage extends ConsumerStatefulWidget {
@@ -40,7 +41,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
   @override
   Widget build(BuildContext context) {
     final facilityTypesState = ref.watch(facilityTypesProvider);
-    final user = ref.watch(userProvider).data;
+    final userState = ref.watch(userProvider).data;
 
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
@@ -58,73 +59,67 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
 
     return Scaffold(
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 15),
           Center(
             child: Image.asset(
-              booking,
+                booking,
               width: 150,
               height: 50,
-              fit: BoxFit.contain,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  // textDirection: TextDirection.rtl,
-                  textDirection: Directionality.of(context),
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 22,
-                      backgroundColor: colorScheme.surfaceVariant,
-                      backgroundImage: (user?.media.isNotEmpty ?? false)
-                          ? NetworkImage(user!.media.first.original_url)
-                          : AssetImage(defaultAvatar) as ImageProvider,
-                    ),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: Text.rich(
-                        TextSpan(
-                          text: trans().hello_user,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: colorScheme.secondary,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: user?.name ?? "User",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: colorScheme.primary,
-                              ),
-                            ),
-                          ],
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 22,
+                    backgroundColor: colorScheme.onPrimary,
+                    backgroundImage: (userState != null && userState.media.isNotEmpty)
+                        ? NetworkImage(userState.media.first.original_url)
+                        : AssetImage(defaultAvatar),
+                  ),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text.rich(
+                      TextSpan(
+                        text: trans().hello_user,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: colorScheme.tertiary,
                         ),
-                        textDirection: Directionality.of(context),
+                        children: [
+                          TextSpan(
+                            text: userState?.name ?? "User",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: colorScheme.secondary,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    IconButton(
-                      icon: (whatsappIcon),
-                      color: Colors.green,
-                      onPressed: () => launchUrl(Uri.parse("https://wa.me/775421110")),
-                    ),
-                    IconButton(
-                      icon: const Icon(notificationIcon),
-                      color: colorScheme.onSurface.withOpacity(0.6),
-                      onPressed: () {},
-                    ),
-                    const SizedBox(width: 10),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                  IconButton(
+                    icon: (whatsappIcon),
+                    color: Colors.green,
+                    onPressed: () => launchUrl(Uri.parse("https://wa.me/775421110")),
+                  ),
+                  const SizedBox(width: 6),
+                  IconButton(
+                    icon: const Icon(notificationIcon),
+                    color: colorScheme.onSurface.withOpacity(0.6),
+                    onPressed: () {},
+                  ),
+                ]
+              )
+            ],
+          ),
           ),
           const SizedBox(height: 10),
           Padding(
@@ -192,12 +187,8 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
             child: facilityTypesState.data == null
                 ? const FacilityTypeShimmer()
                 : facilityTypesState.data!.isEmpty
-                ? const SizedBox() // أو عرض رسالة "لا توجد أنواع"
+                ? const SizedBox()
                 : SingleChildScrollView(
-
-            // facilityTypesState.data == null || facilityTypesState.data!.isEmpty
-            //     ? const Center(child: CircularProgressIndicator())
-            //     : SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: facilityTypesState.data!.map((facilityType) {
@@ -215,11 +206,12 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
 
                   return Padding(
                     padding: const EdgeInsets.only(right: 5),
-                    child: _buildTypeButtonWithIcon(
-                      context,
-                      facilityType.name,
-                      facilityType.id,
-                      icon,
+                    child: FacilityTypeWidget(
+                      title: facilityType.name,
+                      typeId: facilityType.id,
+                      selectedFacilityType: selectedFacilityType,
+                      icon: icon,
+                      onTap: _onFacilityTypeChange,
                     ),
                   );
                 }).toList(),
@@ -237,44 +229,6 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                 : FacilityPage(facilityTypeId: selectedFacilityType!),
           ),
         ],
-      ),
-    );
-  }
-  Widget _buildTypeButtonWithIcon(
-      BuildContext context,
-      String title,
-      int typeId,
-      IconData icon,
-      ) {
-    final isSelected = selectedFacilityType == typeId;
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return GestureDetector(
-      onTap: () => _onFacilityTypeChange(typeId),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-        decoration: BoxDecoration(
-          color: isSelected ? colorScheme.secondary.withOpacity(0.1) : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              color: isSelected ? colorScheme.secondary : colorScheme.onSurface.withOpacity(0.6),
-              size: 24,
-            ),
-            const SizedBox(width: 10),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: isSelected ? colorScheme.primary : colorScheme.onSurface.withOpacity(0.5),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

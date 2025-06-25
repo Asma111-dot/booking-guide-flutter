@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../enums/facility_filter_type.dart';
 import '../helpers/general_helper.dart';
 import '../providers/filter/filtered_facilities_provider.dart';
-import '../utils/theme.dart';
 import 'facility_shimmer_card.dart';
 import 'facility_widget.dart';
 

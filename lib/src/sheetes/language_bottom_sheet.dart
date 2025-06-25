@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helpers/general_helper.dart';
 import '../providers/public/settings_provider.dart';
 import '../utils/assets.dart';
-import '../utils/theme.dart';
 
 class LanguageBottomSheet extends ConsumerWidget {
   const LanguageBottomSheet({super.key});

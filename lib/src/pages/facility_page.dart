@@ -9,7 +9,6 @@ import '../widgets/facility_shimmer_card.dart';
 import '../widgets/facility_widget.dart';
 import '../widgets/view_widget.dart';
 import '../models/facility.dart';
-import '../models/response/meta.dart';
 
 class FacilityPage extends ConsumerStatefulWidget {
   final int facilityTypeId;
