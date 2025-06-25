@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter/foundation.dart'; // for debugPrint
 
+import '../../helpers/notify_helper.dart';
 import '../../models/payment.dart' as pay;
 import '../../models/response/response.dart';
 import '../../services/request_service.dart';
@@ -39,11 +40,29 @@ class PaymentSave extends _$PaymentSave {
 
       if (response.isLoaded()) {
         state = state.copyWith(data: response.data, meta: response.meta);
-        debugPrint("✅ [PaymentSave] Payment saved successfully. ID: ${response.data?.id}");
+
+        if (response.meta.message.trim().isNotEmpty) {
+          debugPrint("📢 Showing notify: '${response.meta.message}'");
+
+          Future.delayed(const Duration(milliseconds: 100), () {
+            showNotify(message: response.meta.message);
+          });
+        }
+
+        debugPrint("✅ [PaymentSave] Payment saved successfully.");
       } else {
-        debugPrint("⚠️ [PaymentSave] Server responded with error: ${response.meta.message}");
+        debugPrint("📢 Triggering showNotify with message: ${response.meta.message}");
+
+        Future.delayed(const Duration(milliseconds: 100), () {
+          showNotify(
+            message: response.meta.message,
+            alert: Alert.error,
+          );
+        });
+
         state = state.copyWith(meta: response.meta);
       }
+
     } catch (error, stack) {
       debugPrint("❌ [PaymentSave] Exception while saving payment: $error");
       debugPrint("🪵 Stack Trace:\n$stack");

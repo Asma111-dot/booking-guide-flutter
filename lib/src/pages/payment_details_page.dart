@@ -15,7 +15,6 @@ import '../models/payment.dart' as p;
 import '../providers/payment/payment_provider.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
-import '../utils/theme.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar_clipper.dart';
 import '../widgets/custom_header_details_widget.dart';

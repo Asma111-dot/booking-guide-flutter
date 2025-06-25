@@ -30,6 +30,7 @@ const hotelImage = "${_imageBase}hotel.jpg";
 const floosakImage = "${_imageBase}floosak.png";
 const jibImage = "${_imageBase}Jib.png";
 const jawalyImage = "${_imageBase}Jawaly.png";
+const oneCashImage = "${_imageBase}ONE_Cash.png";
 
 
 // Icons -----------------------------------------------------------------------
@@ -85,6 +86,7 @@ const goBackIcon =Icons.arrow_back;
 const cameraIcon = Icons.camera_alt_outlined;
 const cameraSourceIcon = Icons.camera_alt;
 const gallerySourceIcon = Icons.photo;
+const NotImageIcon = Icons.image_not_supported;
 
 const hotelIcon = Icons.hotel;
 const poolIcon = Icons.pool;

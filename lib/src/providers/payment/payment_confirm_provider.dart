@@ -1,7 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter/foundation.dart'; // for debugPrint
 
-import '../../helpers/notify_helper.dart';
 import '../../models/payment.dart';
 import '../../models/response/response.dart';
 import '../../services/request_service.dart';
@@ -15,7 +14,7 @@ class PaymentConfirm extends _$PaymentConfirm {
   Response<Payment> build() => const Response<Payment>();
 
   Future<void> confirmPayment(int paymentId, int otp) async {
-    state = state.setLoading(); // 🔄 تغيير الحالة إلى Loading
+    state = state.setLoading();
 
     try {
       final response = await request<Payment>(
@@ -30,17 +29,15 @@ class PaymentConfirm extends _$PaymentConfirm {
       state = response; // ✅ تحديث الحالة مهما كانت
 
       if (response.isLoaded()) {
-        debugPrint("✅ Payment confirmed successfully for ID: $paymentId");
+        // debugPrint("✅ Payment confirmed successfully for ID: $paymentId");
+        //
+        // if (response.meta.message.trim().isNotEmpty) {
+        //   showNotify(
+        //     message: response.meta.message,
+        //       alert: response.data?.status == 'paid' ? Alert.success : Alert.info
+        //   );
+        // }
 
-        if (response.meta.message.trim().isNotEmpty) {
-          showNotify(
-            message: response.meta.message,
-            alert: Alert.success,
-          );
-        }
-
-        // ✅ التنقل مسؤولية الـ UI فقط، وهذا ممتاز
-        // navKey.currentState?.pushNamedAndRemoveUntil(...)
       } else {
         debugPrint("❌ Failed to confirm payment. Message: ${response.meta.message}");
       }

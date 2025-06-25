@@ -9,11 +9,14 @@ import '../helpers/notify_helper.dart';
 import '../models/payment.dart' as pay;
 import '../providers/payment/payment_confirm_provider.dart';
 import '../providers/payment/payment_save_provider.dart';
+import '../providers/reservation/reservation_provider.dart';
 import '../utils/assets.dart';
 import '../utils/dialogs.dart';
 import '../utils/routes.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar.dart';
+import '../widgets/custom_row_details_widget.dart';
+import '../widgets/payment_method_tile.dart';
 
 class PaymentPage extends ConsumerStatefulWidget {
   final int reservationId;
@@ -30,10 +33,24 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
   bool isLoading = false;
 
   @override
+  void initState() {
+    super.initState();
+    // fetch reservation once
+    Future.microtask(() {
+      ref
+          .read(reservationProvider.notifier)
+          .fetch(reservationId: widget.reservationId);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final paymentState = ref.watch(paymentSaveProvider.notifier);
+    final reservationState = ref.watch(reservationProvider);
+    final reservation = reservationState.data; // may be null while loading
+
+    final paymentSave = ref.watch(paymentSaveProvider.notifier);
     final paymentConfirm = ref.watch(paymentConfirmProvider.notifier);
     late final scaffoldContext = context;
 
@@ -48,6 +65,23 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // ───────── مبلغ المستحق ─────────
+            if (reservation != null) ...[
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: CustomRowDetailsWidget(
+                  icon: depositIcon,
+                  label: "${trans().amount_to_be_paid} (${trans().deposit})",
+                  value: reservation.totalDeposit != null
+                      ? '${reservation.totalDeposit!.toInt()} ${trans().riyalY}'
+                      : trans().not_available,
+                ),
+              ),
+              const SizedBox(height: 12),
+            ],
+
+            // ───────── عنوان وسائل الدفع ─────────
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
@@ -57,70 +91,36 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                 ),
               ),
             ),
+
+            // ───────── قائمة وسائل الدفع ─────────
             ...PaymentMethod.values.map((method) {
+              final isDisabled = method != PaymentMethod.floosak;
+
               return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedPaymentMethod = method;
-                  });
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: colorScheme.surfaceVariant.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: selectedPaymentMethod == method
-                          ? colorScheme.primary
-                          : colorScheme.outline,
-                      width: 1,
-                    ),
-                  ),
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  child: Row(
-                    children: [
-                      ClipOval(
-                        child: Image.asset(
-                          method.image,
-                          width: 40,
-                          height: 40,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => Icon(
-                            Icons.image_not_supported,
-                            color: colorScheme.error,
-                            size: 40,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Text(
-                          method.name,
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Icon(
-                        selectedPaymentMethod == method
-                            ? radioCheckIcon
-                            : radioOutIcon,
-                        color: selectedPaymentMethod == method
-                            ? colorScheme.primary
-                            : colorScheme.outline,
-                        size: 24,
-                      ),
-                    ],
-                  ),
+                onTap: isDisabled
+                    ? () {
+                        showNotify(
+                          message:  "وسيلة الدفع تحت الإنشاء حالياً",
+                          alert: Alert.info,
+                        );
+                      }
+                    : () {
+                        setState(() {
+                          selectedPaymentMethod = method;
+                        });
+                      },
+                child: PaymentMethodTile(
+                  method: method,
+                  selected: selectedPaymentMethod == method,
+                  disabled: isDisabled,
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),
+
+      // ───────── زر إكمال الحجز ─────────
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Button(
@@ -147,11 +147,10 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                     paymentMethodId: selectedPaymentMethod!.id,
                   );
 
-                  await paymentState.savePayment(payment);
+                  await paymentSave.savePayment(payment);
                   final currentState = ref.read(paymentSaveProvider);
 
                   if (!currentState.isLoaded()) {
-                    // setState(() => isLoading = false);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(currentState.meta.message),
@@ -198,70 +197,63 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                           TextButton(
                             onPressed: () async {
                               final confirmationCode = int.tryParse(
-                                convertToEnglishNumbers(confirmationController.text.trim()),
+                                convertToEnglishNumbers(
+                                    confirmationController.text.trim()),
                               );
 
-                              if (confirmationCode != null && paymentId != null) {
-                                Navigator.of(context).pop(); // أغلق الـ dialog الحالي
-                                final waitingDialogCompleter = Completer<BuildContext>();
+                              if (confirmationCode != null &&
+                                  paymentId != null) {
+                                Navigator.of(context)
+                                    .pop(); // أغلق الـ dialog الحالي
+                                final waitingDialogCompleter =
+                                    Completer<BuildContext>();
 
                                 showWaitingDialog(scaffoldContext, (dialogCtx) {
                                   waitingDialogCompleter.complete(dialogCtx);
                                 });
 
                                 try {
-                                  await paymentConfirm.confirmPayment(paymentId!, confirmationCode);
+                                  await paymentConfirm.confirmPayment(
+                                      paymentId!, confirmationCode);
                                 } finally {
                                   if (mounted) {
-                                    final dialogCtx = await waitingDialogCompleter.future;
-                                    Navigator.of(dialogCtx, rootNavigator: true).pop();
+                                    final dialogCtx =
+                                        await waitingDialogCompleter.future;
+                                    Navigator.of(dialogCtx, rootNavigator: true)
+                                        .pop();
                                   }
                                 }
 
-                                final confirmState = ref.read(paymentConfirmProvider.notifier).state;
-                              //   if (mounted) {
-                              //     ScaffoldMessenger.of(scaffoldContext).showSnackBar(
-                              //       SnackBar(
-                              //         content: Text(confirmState.meta.message),
-                              //         backgroundColor: Theme.of(scaffoldContext).colorScheme.error,
-                              //       ),
-                              //     );
-                              //   }
-                              //   return;
-                              // }
-                              //
-                              // if (mounted) {
-                              //   ScaffoldMessenger.of(scaffoldContext).showSnackBar(
-                              //     SnackBar(
-                              //       content: Text(trans().payment_confirmed_successfully),
-                              //       backgroundColor: Theme.of(scaffoldContext).colorScheme.primary,
-                              //     ),
-                              //   );
+                                final confirmState = ref
+                                    .read(paymentConfirmProvider.notifier).state;
+
                                 if (!confirmState.isLoaded()) {
                                   if (mounted) {
                                     showNotify(
                                       message: confirmState.meta.message,
-                                      alert: Alert.error,
+                                      alert: Alert.info,
                                     );
                                   }
                                   return;
                                 }
-
                                 if (mounted) {
                                   showNotify(
-                                    message: trans().payment_confirmed_successfully,
+                                    message:
+                                        trans().payment_confirmed_successfully,
                                     alert: Alert.success,
                                   );
-                                  Navigator.of(scaffoldContext).pushNamedAndRemoveUntil(
+
+                                  await Future.delayed(const Duration(milliseconds: 300));
+
+                                  Navigator.of(scaffoldContext)
+                                      .pushNamedAndRemoveUntil(
                                     Routes.paymentDetails,
-                                        (r) => false,
+                                    (r) => false,
                                     arguments: paymentId,
                                   );
                                 }
-                              }
-                              else {
+                              } else {
                                 debugPrint("❌ Invalid or missing OTP.");
-                                // if (mounted) setState(() => isLoading = false);
                               }
                             },
                             child: Text(trans().verify),
