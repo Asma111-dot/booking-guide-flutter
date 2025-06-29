@@ -31,9 +31,9 @@ class Meta with _$Meta {
     int? total,
   }) = _Meta;
 
-  // factory Meta.fromJson(Map<String, dynamic> json) => _$MetaFromJson(json);
+  factory Meta.fromJson(Map<String, dynamic> json) => _$MetaFromJson(json);
 
-  factory Meta.fromJson(Map<String, dynamic> json) {
+  factory Meta.fromCustomJson(Map<String, dynamic> json) {
     String message = '';
 
     // أولوية 1: message الرئيسي

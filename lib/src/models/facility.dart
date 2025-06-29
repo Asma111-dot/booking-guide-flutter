@@ -1,3 +1,4 @@
+import 'discount.dart';
 import 'room.dart';
 
 class Facility {
@@ -16,6 +17,8 @@ class Facility {
   int? firstRoomId;
 
   List<Room> rooms;
+  List<Discount> discounts;
+  Discount? activeDiscount;
 
   Facility({
     required this.id,
@@ -32,6 +35,8 @@ class Facility {
     this.price,
     this.rooms = const [],
     this.firstRoomId,
+    this.discounts = const [],
+    this.activeDiscount,
   });
 
   Facility.init()
@@ -48,7 +53,9 @@ class Facility {
         isFavorite = false,
         price = null,
         firstRoomId = null,
-        rooms = [];
+        rooms = [],
+        discounts = [];
+
 
   Facility copyWith({
     int? id,
@@ -65,6 +72,8 @@ class Facility {
     double? price,
     int? firstRoomId,
     List<Room>? rooms,
+    List<Discount>? discounts,
+    Discount? activeDiscount,
   }) {
     return Facility(
       id: id ?? this.id,
@@ -81,6 +90,8 @@ class Facility {
       price: price ?? this.price,
       firstRoomId: firstRoomId ?? this.firstRoomId,
       rooms: rooms ?? this.rooms,
+      discounts: discounts ?? this.discounts,
+      activeDiscount: activeDiscount ?? this.activeDiscount,
     );
   }
 
@@ -104,6 +115,12 @@ class Facility {
       isFavorite: (jsonMap['is_favorite'] is int)
           ? jsonMap['is_favorite'] == 1
           : (jsonMap['is_favorite'] ?? false),
+      discounts: jsonMap['discounts'] != null
+          ? List<Discount>.from(jsonMap['discounts'].map((d) => Discount.fromJson(d)))
+          : [],
+      activeDiscount: jsonMap['active_discount'] != null
+          ? Discount.fromJson(jsonMap['active_discount'])
+          : null,
     );
   }
 
@@ -123,6 +140,8 @@ class Facility {
       'price': price,
       'first_room_id': firstRoomId,
       'rooms': rooms.map((room) => room.toJson()).toList(),
+      'discounts': discounts.map((d) => d.toJson()).toList(),
+      'active_discount': activeDiscount?.toJson(),
     };
   }
 

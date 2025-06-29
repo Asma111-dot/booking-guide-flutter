@@ -6,7 +6,7 @@ part of 'payment_confirm_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$paymentConfirmHash() => r'640b52d1ec3ede9489974cfc87c2d168bf7b714f';
+String _$paymentConfirmHash() => r'6c273959041411e842d045b9ffb230ba317dba92';
 
 /// See also [PaymentConfirm].
 @ProviderFor(PaymentConfirm)

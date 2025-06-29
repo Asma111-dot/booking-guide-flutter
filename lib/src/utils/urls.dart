@@ -161,3 +161,15 @@ String addFavoriteUrl(int userId, int facilityId) => '${apiUrl}users/$userId/fav
 String clearFavoritesUrl(int userId) => '${apiUrl}users/$userId/favorites/clear';
 String removeFavoriteUrl(int userId, int facilityId) => '${apiUrl}users/$userId/favorites/$facilityId';
 
+// URLs Discounts
+String getDiscountUrl(int discountId) => "${apiUrl}discounts/$discountId";
+
+String addDiscountUrl() => "${apiUrl}discounts";
+
+String updateDiscountUrl(int discountId) => "${apiUrl}discounts/$discountId";
+
+String deleteDiscountUrl(int discountId) => "${apiUrl}discounts/$discountId";
+
+String getDiscountsUrl() => "${apiUrl}discounts";
+
+

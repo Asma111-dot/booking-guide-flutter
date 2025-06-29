@@ -11,7 +11,7 @@ model<T>(dynamic map) {
   try{  if (map is Map<String, dynamic>) {
     switch (T.toString()) {
       case 'Meta':
-        return Meta.fromJson(map);
+        return Meta.fromCustomJson(map);
       case 'User':
         return User.fromJson(map);
       case 'FacilityType':

@@ -148,13 +148,13 @@ Future<Response<T>> request<T>({
           }
 
           if (parsed.containsKey('meta') && parsed['meta'] != null) {
-            meta = Meta.fromJson(Map<String, dynamic>.from(parsed['meta']));
+            meta = Meta.fromCustomJson(Map<String, dynamic>.from(parsed['meta']));
             if (parsed.containsKey('token')) {
               meta = meta.copyWith(accessToken: parsed['token']);
             }
           } else {
             try {
-              meta = Meta.fromJson(Map<String, dynamic>.from(parsed));
+              meta = Meta.fromCustomJson(Map<String, dynamic>.from(parsed));
             } catch (_) {
               meta = const Meta(status: Status.loaded, message: '');
             }
@@ -172,7 +172,7 @@ Future<Response<T>> request<T>({
                 : Status.loaded,
           );
         } else {
-          meta = Meta.fromJson(Map<String, dynamic>.from(parsed));
+          meta = Meta.fromCustomJson(Map<String, dynamic>.from(parsed));
           meta = meta.copyWith(status: Status.loaded);
         }
 
