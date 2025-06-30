@@ -14,11 +14,13 @@ class Facility {
   String? logo;
   bool isFavorite;
   double? price;
+  double? finalPrice;
   int? firstRoomId;
 
   List<Room> rooms;
   List<Discount> discounts;
   Discount? activeDiscount;
+  List<dynamic> appliedDiscounts; // ✅ جديد
 
   Facility({
     required this.id,
@@ -33,10 +35,12 @@ class Facility {
     this.logo,
     this.isFavorite = false,
     this.price,
+    this.finalPrice,
     this.rooms = const [],
     this.firstRoomId,
     this.discounts = const [],
     this.activeDiscount,
+    this.appliedDiscounts = const [], // ✅ جديد
   });
 
   Facility.init()
@@ -52,10 +56,11 @@ class Facility {
         logo = null,
         isFavorite = false,
         price = null,
+        finalPrice = null,
         firstRoomId = null,
         rooms = [],
-        discounts = [];
-
+        discounts = [],
+        appliedDiscounts = []; // ✅ جديد
 
   Facility copyWith({
     int? id,
@@ -70,10 +75,12 @@ class Facility {
     String? logo,
     bool? isFavorite,
     double? price,
+    double? finalPrice,
     int? firstRoomId,
     List<Room>? rooms,
     List<Discount>? discounts,
     Discount? activeDiscount,
+    List<dynamic>? appliedDiscounts, // ✅ جديد
   }) {
     return Facility(
       id: id ?? this.id,
@@ -88,10 +95,12 @@ class Facility {
       logo: logo ?? this.logo,
       isFavorite: isFavorite ?? this.isFavorite,
       price: price ?? this.price,
+      finalPrice: finalPrice ?? this.finalPrice,
       firstRoomId: firstRoomId ?? this.firstRoomId,
       rooms: rooms ?? this.rooms,
       discounts: discounts ?? this.discounts,
       activeDiscount: activeDiscount ?? this.activeDiscount,
+      appliedDiscounts: appliedDiscounts ?? this.appliedDiscounts, // ✅ جديد
     );
   }
 
@@ -108,6 +117,7 @@ class Facility {
       geojson: jsonMap['geojson'],
       logo: jsonMap['logo'],
       price: jsonMap['price'] != null ? double.tryParse(jsonMap['price'].toString()) : null,
+      finalPrice: jsonMap['final_price'] != null ? double.tryParse(jsonMap['final_price'].toString()) : null,
       firstRoomId: jsonMap['first_room_id'],
       rooms: (jsonMap['rooms'] is List)
           ? List<Room>.from((jsonMap['rooms'] as List).map((item) => Room.fromJson(item)))
@@ -121,6 +131,7 @@ class Facility {
       activeDiscount: jsonMap['active_discount'] != null
           ? Discount.fromJson(jsonMap['active_discount'])
           : null,
+      appliedDiscounts: jsonMap['applied_discounts'] ?? [], // ✅ جديد
     );
   }
 
@@ -138,10 +149,12 @@ class Facility {
       'logo': logo,
       'is_favorite': isFavorite,
       'price': price,
+      'final_price': finalPrice,
       'first_room_id': firstRoomId,
       'rooms': rooms.map((room) => room.toJson()).toList(),
       'discounts': discounts.map((d) => d.toJson()).toList(),
       'active_discount': activeDiscount?.toJson(),
+      'applied_discounts': appliedDiscounts, // ✅ جديد
     };
   }
 
@@ -158,7 +171,8 @@ class Facility {
   String toString() {
     return 'Facility(id: $id, facilityTypeId: $facilityTypeId, name: "$name", desc: "$desc", status: "$status", '
         'address: "$address", latitude: $latitude, longitude: $longitude, geojson: "$geojson", logo: "$logo", '
-        'isFavorite: $isFavorite, price: $price, rooms: $rooms, firstRoomId: $firstRoomId)';
+        'isFavorite: $isFavorite, price: $price, finalPrice: $finalPrice, rooms: $rooms, firstRoomId: $firstRoomId, '
+        'appliedDiscounts: $appliedDiscounts)'; // ✅ عرض
   }
 
   @override
@@ -178,8 +192,10 @@ class Facility {
             logo == other.logo &&
             isFavorite == other.isFavorite &&
             price == other.price &&
+            finalPrice == other.finalPrice &&
             firstRoomId == other.firstRoomId &&
-            rooms == other.rooms;
+            rooms == other.rooms &&
+            appliedDiscounts == other.appliedDiscounts; // ✅ جديد
   }
 
   @override
@@ -196,6 +212,8 @@ class Facility {
       logo.hashCode ^
       isFavorite.hashCode ^
       price.hashCode ^
+      finalPrice.hashCode ^
       firstRoomId.hashCode ^
-      rooms.hashCode;
+      rooms.hashCode ^
+      appliedDiscounts.hashCode; // ✅ جديد
 }

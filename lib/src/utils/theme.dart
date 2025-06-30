@@ -88,6 +88,7 @@ class CustomTheme {
           error: primaryColor,
           tertiary: color4,
           onError: CustomTheme.color3,
+            onTertiary:color1
         ),
         scaffoldBackgroundColor: scaffoldColor(),
         cardColor: cardColor(),

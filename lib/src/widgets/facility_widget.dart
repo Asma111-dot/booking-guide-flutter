@@ -36,6 +36,8 @@ class FacilityWidget extends ConsumerWidget {
         : (facility.facilityTypeId == 1 ? hotelImage : chaletImage);
 
     final firstPrice = facility.price ?? 0.0;
+    final finalPrice = facility.finalPrice ?? firstPrice;
+    final hasDiscount = finalPrice < firstPrice;
 
     if (!_isWithinPriceRange(firstPrice)) {
       return const SizedBox();
@@ -104,18 +106,54 @@ class FacilityWidget extends ConsumerWidget {
                       ),
                     ),
                     const SizedBox(height: 6),
-                    Text(
-                      firstPrice > 0
-                          ? '${trans().priceStartFrom} ${firstPrice.toStringAsFixed(0)}${trans().riyalY}'
-                          : trans().priceNotAvailable,
+                      (finalPrice > 0)
+                        ? Row(
+                      children: [
+                        Text(
+                          '${trans().priceStartFrom} ${finalPrice.toStringAsFixed(0)}${trans().riyalY}',
+                          style: TextStyle(
+                            color: hasDiscount ? colorScheme.onTertiary : colorScheme.tertiary,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        if (hasDiscount) ...[
+                          const SizedBox(width: 6),
+                          Text(
+                            '${firstPrice.toStringAsFixed(0)}${trans().riyalY}',
+                            style: TextStyle(
+                              color: colorScheme.onSurface.withOpacity(0.4),
+                              fontSize: 10,
+                              fontWeight: FontWeight.w400,
+                              decoration: TextDecoration.lineThrough,
+                            ),
+                          ),
+                        ],
+                      ],
+                    )
+                        : Text(
+                      trans().priceNotAvailable,
                       style: TextStyle(
-                        color: firstPrice > 0
-                            ? colorScheme.tertiary
-                            : colorScheme.onSurface.withOpacity(0.4),
+                        color: colorScheme.onSurface.withOpacity(0.4),
                         fontSize: 10,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
+                    const SizedBox(height: 4),
+                    if (facility.appliedDiscounts.isNotEmpty)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: facility.appliedDiscounts.map((discount) {
+                          return Text(
+                            '- ${discount.name} (${discount.type == "percentage" ? "%" : ""}${discount.value})',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.red[700],
+                              fontWeight: FontWeight.w400,
+                            ),
+                          );
+                        }).toList(),
+                      ),
                     const SizedBox(height: 6),
                     Row(
                       children: [
@@ -141,6 +179,56 @@ class FacilityWidget extends ConsumerWidget {
                     ),
                   ],
                 ),
+
+                // child: Column(
+                //   crossAxisAlignment: CrossAxisAlignment.start,
+                //   children: [
+                //     Text(
+                //       facility.name,
+                //       style: TextStyle(
+                //         color: colorScheme.primary,
+                //         fontSize: 16,
+                //         fontWeight: FontWeight.w900,
+                //       ),
+                //     ),
+                //     const SizedBox(height: 6),
+                //     Text(
+                //       firstPrice > 0
+                //           ? '${trans().priceStartFrom} ${firstPrice.toStringAsFixed(0)}${trans().riyalY}'
+                //           : trans().priceNotAvailable,
+                //       style: TextStyle(
+                //         color: firstPrice > 0
+                //             ? colorScheme.tertiary
+                //             : colorScheme.onSurface.withOpacity(0.4),
+                //         fontSize: 10,
+                //         fontWeight: FontWeight.w500,
+                //       ),
+                //     ),
+                //     const SizedBox(height: 6),
+                //     Row(
+                //       children: [
+                //         Icon(
+                //           mapIcon,
+                //           color: colorScheme.secondary,
+                //           size: 16,
+                //         ),
+                //         const SizedBox(width: 4),
+                //         Expanded(
+                //           child: Text(
+                //             facility.address ?? trans().address,
+                //             style: TextStyle(
+                //               color: colorScheme.secondary,
+                //               fontSize: 12,
+                //               fontWeight: FontWeight.w400,
+                //             ),
+                //             overflow: TextOverflow.ellipsis,
+                //             maxLines: 5,
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ],
+                // ),
               ),
               IconButton(
                 icon: Icon(
