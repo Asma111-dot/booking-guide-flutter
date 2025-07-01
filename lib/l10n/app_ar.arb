@@ -251,5 +251,6 @@
   "show_less": "عرض أقل",
   "read_more": "قراءة المزيد",
   "please_wait": "يرجى الانتظار...",
-  "no_rooms_available": "لا توجد تفاصيل متوفرة لهذه المنشأة"
+  "no_rooms_available": "لا توجد تفاصيل متوفرة لهذه المنشأة",
+  "show_discount_details": "عرض تفاصيل الخصومات المطبقة"
 }

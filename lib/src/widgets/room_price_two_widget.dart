@@ -24,6 +24,9 @@ class RoomPriceWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
+    final double finalPrice = roomPrice.finalPrice ?? roomPrice.price;
+    final double finalDeposit = roomPrice.finalDeposit ?? (roomPrice.deposit ?? 0);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -46,16 +49,19 @@ class RoomPriceWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildRow(context, priceIcon, "${roomPrice.price.toInt()} ${trans().riyalY}"),
+            _buildPriceRow(context, priceIcon, roomPrice.price, finalPrice, trans().riyalY),
             const SizedBox(height: 5),
             _buildRow(context, periodIcon, roomPrice.period),
             const SizedBox(height: 5),
             _buildRow(context, groupsIcon, "${roomPrice.capacity} ${trans().person}"),
             const SizedBox(height: 5),
-            _buildRow(
+            _buildPriceRow(
               context,
               depositIcon,
-              "${trans().deposit}: ${roomPrice.deposit?.toInt() ?? 0} ${trans().riyalY}",
+              roomPrice.deposit?.toDouble() ?? 0,
+              finalDeposit,
+              trans().riyalY,
+              prefix: "${trans().deposit}: ",
             ),
             const SizedBox(height: 5),
             _buildRow(
@@ -87,6 +93,62 @@ class RoomPriceWidget extends StatelessWidget {
             ),
             overflow: TextOverflow.ellipsis,
             textDirection: TextDirection.rtl,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPriceRow(BuildContext context, IconData icon, double original, double discounted, String unit, {String prefix = ""}) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textColor = isSelected ? Colors.white : colorScheme.onSurface;
+    final iconColor = isSelected ? Colors.white : colorScheme.primary;
+
+    final bool hasDiscount = discounted < original;
+
+    return Row(
+      children: [
+        Icon(icon, size: 20, color: iconColor),
+        const SizedBox(width: 10),
+        Flexible(
+          child: RichText(
+            textDirection: TextDirection.rtl,
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: prefix,
+                  style: TextStyle(
+                    color: textColor,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w800,
+                  ),
+                ),
+                if (hasDiscount) ...[
+                  TextSpan(
+                    text: "${original.toInt()} $unit",
+                    style: TextStyle(
+                      color: textColor.withOpacity(0.5),
+                      fontSize: 13,
+                      decoration: TextDecoration.lineThrough,
+                    ),
+                  ),
+                  TextSpan(
+                    text: "  ${discounted.toInt()} $unit",
+                    style: TextStyle(
+                      color: isSelected ? Colors.white : colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ] else ...[
+                  TextSpan(
+                    text: "${original.toInt()} $unit",
+                    style: TextStyle(
+                      color: textColor,
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ],
+            ),
           ),
         ),
       ],

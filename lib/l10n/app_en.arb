@@ -251,6 +251,6 @@
   "show_less": "Show less",
   "read_more": "Read more",
   "please_wait": "Please wait...",
-  "no_rooms_available": "No details available for this facility"
-
+  "no_rooms_available": "No details available for this facility",
+  "show_discount_details": "View applied discount details"
 }

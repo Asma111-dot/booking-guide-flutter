@@ -37,7 +37,7 @@ class Discount {
       name: json['name'] ?? '',
       code: json['code'],
       type: json['type'] ?? 'fixed',
-      value: (json['value'] as num?)?.toDouble() ?? 0,
+      value: json['value'] != null ? double.tryParse(json['value'].toString()) ?? 0 : 0,
       appliesOn: json['applies_on'] ?? 'facility',
       facilityId: json['facility_id'],
       season: json['season'],

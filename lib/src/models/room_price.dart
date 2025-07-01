@@ -12,6 +12,11 @@ class RoomPrice {
   String? timeFrom;
   String? timeTo;
 
+  double? finalPrice;
+  double? finalDeposit;
+  double? discount;
+  List<dynamic> appliedDiscounts;
+
   List<Reservation> reservations;
   Room? room;
 
@@ -25,6 +30,10 @@ class RoomPrice {
     required this.period,
     this.timeFrom,
     this.timeTo,
+    this.finalPrice,
+    this.finalDeposit,
+    this.discount,
+    this.appliedDiscounts = const [],
     this.reservations = const [],
     this.room,
   });
@@ -39,6 +48,10 @@ class RoomPrice {
         period = '',
         timeFrom = null,
         timeTo = null,
+        finalPrice = null,
+        finalDeposit = null,
+      discount = null,
+        appliedDiscounts = [],
         reservations = [],
         room = null;
 
@@ -47,12 +60,22 @@ class RoomPrice {
       id: int.tryParse(jsonMap['id']?.toString() ?? '') ?? 0,
       roomId: int.tryParse(jsonMap['room_id']?.toString() ?? '') ?? 0,
       capacity: int.tryParse(jsonMap['capacity']?.toString() ?? '') ?? 0,
-      price: double.tryParse(jsonMap['price']?.toString() ?? '0.0') ?? 0.0, // تم تعديل المفتاح هنا
+      price: double.tryParse(jsonMap['price']?.toString() ?? '0.0') ?? 0.0,
       deposit: double.tryParse(jsonMap['deposit']?.toString() ?? ''),
       currency: jsonMap['currency'] ?? '',
       period: jsonMap['period'] ?? '',
       timeFrom: jsonMap['time_from'],
       timeTo: jsonMap['time_to'],
+      finalPrice: jsonMap['final_price'] != null
+          ? double.tryParse(jsonMap['final_price'].toString())
+          : null,
+      finalDeposit: jsonMap['final_deposit'] != null
+          ? double.tryParse(jsonMap['final_deposit'].toString())
+          : null,
+      discount: jsonMap['discount'] != null
+          ? double.tryParse(jsonMap['discount'].toString())
+          : null,
+      appliedDiscounts: jsonMap['applied_discounts'] ?? [],
       reservations: (jsonMap['reservations'] is List)
           ? List<Reservation>.from((jsonMap['reservations'] as List).map((item) => Reservation.fromJson(item)))
           : [],
@@ -66,12 +89,16 @@ class RoomPrice {
     'id': id,
     'room_id': roomId,
     'capacity': capacity,
-    'price': price, // تم تعديل المفتاح هنا
+    'price': price,
     'deposit': deposit,
     'currency': currency,
     'period': period,
     'time_from': timeFrom,
     'time_to': timeTo,
+    'final_price': finalPrice,
+    'final_deposit': finalDeposit,
+    'discount': discount,
+    'applied_discounts': appliedDiscounts,
     'reservations': reservations.map((r) => r.toJson()).toList(),
     'room': room?.toJson(),
   };
@@ -91,6 +118,8 @@ class RoomPrice {
 
   @override
   String toString() {
-    return 'RoomPrice(id: $id, roomId: $roomId, capacity: $capacity, price: $price, deposit: $deposit, currency: $currency, period: $period, timeFrom: $timeFrom, timeTo: $timeTo)';
+    return 'RoomPrice(id: $id, roomId: $roomId, capacity: $capacity, price: $price, deposit: $deposit, '
+        'currency: $currency, period: $period, timeFrom: $timeFrom, timeTo: $timeTo, '
+        'finalPrice: $finalPrice,finalDeposit: $finalDeposit, discount: $discount, appliedDiscounts: $appliedDiscounts)';
   }
 }

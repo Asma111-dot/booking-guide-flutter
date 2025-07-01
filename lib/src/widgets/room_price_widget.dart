@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 import '../helpers/general_helper.dart';
+import '../models/room_price.dart';
 import '../utils/assets.dart';
 
 class RoomPriceWidget extends StatelessWidget {
-  final dynamic price;
+  final RoomPrice price;
 
-  const RoomPriceWidget({super.key, required this.price});
+  const RoomPriceWidget({
+    super.key,
+    required this.price,
+  });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+
+    double finalPrice = price.finalPrice ?? price.price;
+    bool hasDiscount = (price.discount ?? 0) > 0;
+    bool hasAppliedDiscounts = price.appliedDiscounts.isNotEmpty;
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
@@ -31,7 +39,7 @@ class RoomPriceWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // period
+          /// 📍 Period
           Row(
             children: [
               Icon(
@@ -52,7 +60,7 @@ class RoomPriceWidget extends StatelessWidget {
 
           const SizedBox(height: 8),
 
-          // price
+          /// 📍 Price display
           Row(
             children: [
               Icon(
@@ -61,71 +69,82 @@ class RoomPriceWidget extends StatelessWidget {
                 size: 16,
               ),
               const SizedBox(width: 8),
-              Text(
-                "${price.price?.toInt() ?? 0} ${trans().riyalY}",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: colorScheme.primary,
+              if (hasDiscount) ...[
+                Text(
+                  "${price.price.toInt()} ${trans().riyalY}",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: colorScheme.onSurface.withOpacity(0.4),
+                    decoration: TextDecoration.lineThrough,
+                  ),
                 ),
-              ),
+                const SizedBox(width: 6),
+                Text(
+                  "${finalPrice.toInt()} ${trans().riyalY}",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
+                ),
+              ] else ...[
+                Text(
+                  "${price.price.toInt()} ${trans().riyalY}",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.primary,
+                  ),
+                ),
+              ],
             ],
           ),
 
-          const SizedBox(height: 8),
-          // capacity
-          // Row(
-          //   children: [
-          //     const Icon(
-          //       Icons.groups_2_outlined,
-          //       color: CustomTheme.primaryColor,
-          //       size: 16,
-          //     ),
-          //     const SizedBox(width: 8),
-          //     Text(
-          //       "${price.capacity} ${trans().person}",
-          //       style: const TextStyle(
-          //         fontSize: 16,
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          const SizedBox(height: 8),
-          // deposit
-          // Row(
-          //   children: [
-          //     const Icon(
-          //       Icons.money_off_sharp,
-          //       color: CustomTheme.primaryColor,
-          //       size: 16,
-          //     ),
-          //     const SizedBox(width: 8),
-          //     Text(
-          //       "${trans().deposit} ${price.deposit} ${trans().riyalY}",
-          //       style: const TextStyle(
-          //         fontSize: 14,
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          const SizedBox(height: 8),
-          // time
-          // Row(
-          //   children: [
-          //     Icon(
-          //       Icons.access_time,
-          //       size: 16,
-          //       color: CustomTheme.primaryColor,
-          //     ),
-          //     const SizedBox(width: 4),
-          //     Text(
-          //       '${price.timeFrom ?? '--:--'} - ${price.timeTo ?? '--:--'}',
-          //       style: const TextStyle(
-          //         fontSize: 14,
-          //       ),
-          //     ),
-          //   ],
-          // ),
+          /// 📍 Discounts details with ExpansionTile
+          if (hasAppliedDiscounts) ...[
+            const SizedBox(height: 6),
+            ExpansionTile(
+              tilePadding: EdgeInsets.zero,
+              title: Row(
+                children: [
+                  Icon(Icons.local_offer, color: Colors.green, size: 16),
+                  const SizedBox(width: 6),
+                  Text(
+                    trans().show_discount_details,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: colorScheme.primary,
+                    ),
+                  ),
+                ],
+              ),
+              children: price.appliedDiscounts.map((discount) {
+                String type = discount['type'] == 'percentage' ? 'نسبة مئوية' : 'مبلغ ثابت' ;
+                String value = discount['value'].toString();
+
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 6),
+                      const Icon(Icons.arrow_right, size: 16, color: Colors.grey),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          "${discount['name']} ($type: $value)",
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: colorScheme.onSurface.withOpacity(0.7),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
         ],
       ),
     );
