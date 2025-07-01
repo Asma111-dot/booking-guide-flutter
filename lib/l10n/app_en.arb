@@ -252,5 +252,7 @@
   "read_more": "Read more",
   "please_wait": "Please wait...",
   "no_rooms_available": "No details available for this facility",
-  "show_discount_details": "View applied discount details"
+  "show_discount_details": "View applied discount details",
+  "discounts_and_offers": "Discounts & Offers",
+  "discount_value": "Discount Value"
 }

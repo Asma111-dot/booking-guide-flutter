@@ -69,13 +69,6 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
   @override
   Widget build(BuildContext context) {
     final facilitiesState = ref.watch(facilitiesProvider(currentTarget));
-    // final favoritesState = ref.watch(favoritesProvider);
-
-    // final favoritesLoaded = favoritesState.meta.status == Status.loaded;
-
-    // if (!favoritesLoaded) {
-    //   return const Center(child: CircularProgressIndicator());
-    // }
 
     return ViewWidget<List<Facility>>(
       meta: facilitiesState.meta,

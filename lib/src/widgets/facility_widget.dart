@@ -179,56 +179,6 @@ class FacilityWidget extends ConsumerWidget {
                     ),
                   ],
                 ),
-
-                // child: Column(
-                //   crossAxisAlignment: CrossAxisAlignment.start,
-                //   children: [
-                //     Text(
-                //       facility.name,
-                //       style: TextStyle(
-                //         color: colorScheme.primary,
-                //         fontSize: 16,
-                //         fontWeight: FontWeight.w900,
-                //       ),
-                //     ),
-                //     const SizedBox(height: 6),
-                //     Text(
-                //       firstPrice > 0
-                //           ? '${trans().priceStartFrom} ${firstPrice.toStringAsFixed(0)}${trans().riyalY}'
-                //           : trans().priceNotAvailable,
-                //       style: TextStyle(
-                //         color: firstPrice > 0
-                //             ? colorScheme.tertiary
-                //             : colorScheme.onSurface.withOpacity(0.4),
-                //         fontSize: 10,
-                //         fontWeight: FontWeight.w500,
-                //       ),
-                //     ),
-                //     const SizedBox(height: 6),
-                //     Row(
-                //       children: [
-                //         Icon(
-                //           mapIcon,
-                //           color: colorScheme.secondary,
-                //           size: 16,
-                //         ),
-                //         const SizedBox(width: 4),
-                //         Expanded(
-                //           child: Text(
-                //             facility.address ?? trans().address,
-                //             style: TextStyle(
-                //               color: colorScheme.secondary,
-                //               fontSize: 12,
-                //               fontWeight: FontWeight.w400,
-                //             ),
-                //             overflow: TextOverflow.ellipsis,
-                //             maxLines: 5,
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ],
-                // ),
               ),
               IconButton(
                 icon: Icon(
