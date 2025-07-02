@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -15,8 +16,15 @@ import 'src/utils/global.dart';
 import 'src/utils/routes.dart';
 import 'src/utils/theme.dart';
 
+// معالج استقبال الإشعارات في الخلفية
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('🔔 رسالة واردة في الخلفية: ${message.notification?.title}');
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(); // ✅ تهيئة Firebase
 
   // const secureStorage = FlutterSecureStorage();
   // await secureStorage.deleteAll(); // 🧹 امسح المفاتيح القديمة من التخزين الآمن
@@ -25,6 +33,7 @@ Future<void> main() async {
 
   // await Hive.deleteBoxFromDisk('auth');
   // await Hive.deleteBoxFromDisk('settings');
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler); // ✅ استقبال في الخلفية
 
   await hive_service.init();
   ConnectivityService.init();
