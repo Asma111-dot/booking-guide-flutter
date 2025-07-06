@@ -172,4 +172,6 @@ String deleteDiscountUrl(int discountId) => "${apiUrl}discounts/$discountId";
 
 String getDiscountsUrl() => "${apiUrl}discounts";
 
+// URLs Notifications
+String getNotificationsUrl() => "${apiUrl}notifications";
 

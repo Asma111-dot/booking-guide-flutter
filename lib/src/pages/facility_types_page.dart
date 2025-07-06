@@ -6,6 +6,7 @@ import '../helpers/general_helper.dart';
 import '../providers/auth/user_provider.dart';
 import '../providers/facility_type/facility_type_provider.dart';
 import '../providers/discount/discount_provider.dart';
+import '../providers/notification/notification_provider.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../utils/theme.dart';
@@ -32,6 +33,8 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
       ref.read(facilityTypesProvider.notifier).fetch();
       ref.read(userProvider.notifier).fetch();
       ref.read(discountsProvider.notifier).fetch();
+      ref.read(notificationsProvider.notifier).fetch();
+
     });
   }
 
@@ -45,6 +48,8 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
   Widget build(BuildContext context) {
     final facilityTypesState = ref.watch(facilityTypesProvider);
     final userState = ref.watch(userProvider).data;
+    final notificationsState = ref.watch(notificationsProvider);
+    final unreadCount = notificationsState.data?.where((n) => n.readAt == null).length ?? 0;
 
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
@@ -117,10 +122,36 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                           onPressed: () => launchUrl(Uri.parse("https://wa.me/775421110")),
                         ),
                         const SizedBox(width: 6),
-                        IconButton(
-                          icon: const Icon(notificationIcon),
-                          color: colorScheme.onSurface.withOpacity(0.6),
-                          onPressed: () {},
+                        Stack(
+                          children: [
+                            IconButton(
+                              icon: const Icon(notificationIcon),
+                              color: colorScheme.onSurface.withOpacity(0.6),
+                              onPressed: () {
+                                Navigator.pushNamed(context, Routes.notifications);
+                              },
+                            ),
+                            if (unreadCount > 0)
+                              Positioned(
+                                right: 4,
+                                top: 4,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Text(
+                                    '$unreadCount',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              )
+                          ],
                         ),
                       ],
                     )

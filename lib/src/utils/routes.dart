@@ -6,6 +6,7 @@ import '../pages/booking_details_page.dart';
 import '../pages/facility_filter_page.dart';
 import '../pages/facility_page.dart';
 import '../pages/navigation_menu.dart';
+import '../pages/notifications_page.dart';
 import '../pages/payment_details_page.dart';
 import '../pages/payment_page.dart';
 import '../pages/price_calendar_page.dart';
@@ -35,6 +36,7 @@ class Routes {
   static const String paymentDetails = '/payment_details';
   static const String filter = '/filters';
   static const String navigationMenu = '/menu';
+  static const String notifications = '/notifications';
 
 
   static Route? generate(RouteSettings settings) {
@@ -120,6 +122,12 @@ class Routes {
       case navigationMenu:
         return MaterialPageRoute(
           builder: (_) => const NavigationMenu(),
+          settings: settings,
+        );
+
+      case notifications:
+        return MaterialPageRoute(
+          builder: (_) => const NotificationsPage(),
           settings: settings,
         );
 
