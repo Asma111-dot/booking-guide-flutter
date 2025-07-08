@@ -23,6 +23,7 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final addressController = TextEditingController();
+  final passwordController = TextEditingController();
   bool isLoading = false;
   File? _avatarFile;
 
@@ -37,7 +38,8 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
           email: emailController.text.trim(),
           address: addressController.text.trim(),
           avatarFile: _avatarFile,
-        );
+      password: passwordController.text.trim(),
+    );
 
     if (!mounted) return;
 
@@ -116,7 +118,14 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
                   controller: addressController,
                   label: trans().address,
                 ),
+                const SizedBox(height: 20),
+                CustomTextField(
+                  controller: passwordController,
+                  label: 'كلمة المرور',
+                  obscureText: true,
+                ),
                 const SizedBox(height: 40),
+
                 Button(
                   width: double.infinity,
                   title: trans().save,

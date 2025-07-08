@@ -40,33 +40,6 @@ class Login extends _$Login {
     return response.isLoaded();
   }
 
-  // Future loginWithOtp() async {
-  //   state = state.setLoading();
-  //
-  //   final phone = ref.read(phoneProvider);
-  //   final code = ref.read(otpCodeProvider);
-  //   final englishCode = convertToEnglishNumbers(code);
-  //
-  //   final body = {
-  //     'phone': phone,
-  //     'code': englishCode,
-  //   };
-  //
-  //   print("🚀 إرسال التحقق بـ: $body");
-  //
-  //   await request<model.User>(
-  //     url: otpVerifyUrl(),
-  //     method: Method.post,
-  //     body: body,
-  //   ).then((value) async {
-  //     state = state.copyWith(meta: value.meta);
-  //
-  //     if (value.isLoaded()) {
-  //       await onSuccessLogin(value);
-  //     }
-  //   });
-  // }
-
   Future loginWithOtp() async {
     state = state.setLoading();
 
@@ -107,6 +80,7 @@ class Login extends _$Login {
     required String name,
     required String email,
     String? address,
+    String? password,
     File? avatarFile,
   }) async {
     showLoading();
@@ -121,6 +95,7 @@ class Login extends _$Login {
         'name': name,
         'email': email,
         'address': address ?? '',
+        if (password != null && password.isNotEmpty) 'password': password,
       },
       showSuccessMessage: false,
       showErrorMessage: true,
@@ -135,32 +110,6 @@ class Login extends _$Login {
 
     return false;
   }
-
-  // Future<void> onSuccessLogin(Response<model.User> value) async {
-  //   final user = value.data!;
-  //   setToken(value.meta.accessToken ?? ""); // ✅ بدون await
-  //
-  //   await open(); // فتح الصندوق
-  //   await ref.read(userProvider.notifier).saveUserLocally(user);
-  //
-  //   final name = user.name.trim().toLowerCase();
-  //   final email = user.email.trim().toLowerCase();
-  //
-  //   final isTemporaryProfile =
-  //       name == 'temporary name' || email.startsWith('phone_');
-  //
-  //   await setLoggedIn(true);
-  //   await setFirstTimeFalse();
-  //
-  //   navKey.currentState?.pushAndRemoveUntil(
-  //     MaterialPageRoute(
-  //       builder: (context) => isTemporaryProfile
-  //           ? const CompleteProfilePage()
-  //           : const NavigationMenu(),
-  //     ),
-  //         (r) => false,
-  //   );
-  // }
 
   Future<void> onSuccessLogin(Response<model.User> value) async {
     final user = value.data;
