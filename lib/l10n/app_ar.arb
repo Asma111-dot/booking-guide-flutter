@@ -255,4 +255,6 @@
   "show_discount_details": "عرض تفاصيل الخصومات المطبقة",
   "discounts_and_offers": "الخصومات والعروض",
   "discount_value": "قيمة الخصم",
+  "enter_payment_code": "إدخال كود الدفع",
+  "enter_code_from_wallet": "أدخل الكود المستلم من محفظة جيب"
 }

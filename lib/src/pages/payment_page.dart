@@ -8,6 +8,7 @@ import '../helpers/general_helper.dart';
 import '../helpers/notify_helper.dart';
 import '../models/payment.dart' as pay;
 import '../providers/payment/payment_confirm_provider.dart';
+import '../providers/payment/payment_jaib_provider.dart';
 import '../providers/payment/payment_save_provider.dart';
 import '../providers/reservation/reservation_provider.dart';
 import '../utils/assets.dart';
@@ -49,6 +50,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
     final colorScheme = theme.colorScheme;
     final reservationState = ref.watch(reservationProvider);
     final reservation = reservationState.data; // may be null while loading
+    final jaibPayment = ref.watch(paymentJaibProvider.notifier);
 
     final paymentSave = ref.watch(paymentSaveProvider.notifier);
     final paymentConfirm = ref.watch(paymentConfirmProvider.notifier);
@@ -94,7 +96,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
 
             // ───────── قائمة وسائل الدفع ─────────
             ...PaymentMethod.values.map((method) {
-              final isDisabled = method != PaymentMethod.floosak;
+              final isDisabled = !(method == PaymentMethod.floosak || method == PaymentMethod.jib);
 
               return GestureDetector(
                 onTap: isDisabled
@@ -136,11 +138,107 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                 )
               : Icon(arrowForWordIcon, size: 20, color: colorScheme.onPrimary),
           iconAfterText: true,
-          onPressed: selectedPaymentMethod == null || isLoading
-              ? null
-              : () async {
-                  setState(() => isLoading = true);
-                  debugPrint("====== [PAYMENT PROCESS STARTED] ======");
+            onPressed: selectedPaymentMethod == null || isLoading
+                ? null
+                : () async {
+              if (selectedPaymentMethod == PaymentMethod.jib) {
+                // 1️⃣ Show info notify
+                showNotify(
+                  message: "يرجى دفع العربون يدويًا عبر جيب ثم إدخال الكود المستلم.",
+                  alert: Alert.info,
+                );
+
+                // 2️⃣ Open dialog for code entry
+                final TextEditingController confirmationController =
+                TextEditingController();
+
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      backgroundColor: colorScheme.background,
+                      title: Text(
+                        (trans().enter_payment_code),
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      content: TextField(
+                        controller: confirmationController,
+                        keyboardType: TextInputType.number,
+                        style: const TextStyle(
+                          fontFamily: 'Roboto',
+                          fontSize: 16,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: trans().enter_code_from_wallet,
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: Text(trans().cancel),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            final code = confirmationController.text.trim();
+                            Navigator.of(context).pop();
+
+                            final waitingDialogCompleter = Completer<BuildContext>();
+                            showWaitingDialog(scaffoldContext, (dialogCtx) {
+                              waitingDialogCompleter.complete(dialogCtx);
+                            });
+
+                            try {
+                              await jaibPayment.confirmJaibPayment(
+                                reservationId: widget.reservationId,
+                                paymentMethodId: selectedPaymentMethod!.id,
+                                code: code,
+                              );
+                            } finally {
+                              if (mounted) {
+                                final dialogCtx = await waitingDialogCompleter.future;
+                                Navigator.of(dialogCtx, rootNavigator: true).pop();
+                              }
+                            }
+
+                            final state = ref.read(paymentJaibProvider);
+
+                            if (state.isLoaded()) {
+                              showNotify(
+                                // message: "✅ تم تأكيد الدفع عبر محفظة جيب بنجاح",
+                                message: state.meta.message,
+                                alert: Alert.success,
+                              );
+
+                              await Future.delayed(
+                                  const Duration(milliseconds: 300));
+
+                              Navigator.of(scaffoldContext).pushNamedAndRemoveUntil(
+                                Routes.paymentDetails,
+                                    (r) => false,
+                                arguments: state.data?.id,
+                              );
+                            } else {
+                              showNotify(
+                                message: state.meta.message,
+                                alert: Alert.info,
+                              );
+                            }
+                          },
+                          child: Text(trans().verify),
+                        ),
+                      ],
+                    );
+                  },
+                );
+                return;
+              }
+
+              // فلوسك
+            setState(() => isLoading = true);
+                  debugPrint("====== [FLOOSAK PAYMENT PROCESS STARTED] ======");
 
                   final payment = pay.Payment.basic(
                     reservationId: widget.reservationId,

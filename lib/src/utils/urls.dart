@@ -155,6 +155,14 @@ String confirmPaymentUrl(int paymentId) =>
 String refundPaymentUrl(int paymentId) =>
     "${apiUrl}payments/$paymentId/refund";
 
+// =================== Jaib Payment URLs ===================
+
+// Initiate Jaib Payment (Step 1)
+String jaibInitiatePaymentUrl() => "${apiUrl}jaib-payment/initiate";
+
+// Confirm Jaib Payment with Code (Step 2)
+String jaibConfirmPaymentUrl() => "${apiUrl}jaib-payment/confirm";
+
 // URLs Favorite
 String getFavoritesUrl({int? userId}) => '${apiUrl}users/$userId/favorites';
 String addFavoriteUrl(int userId, int facilityId) => '${apiUrl}users/$userId/favorites/$facilityId';

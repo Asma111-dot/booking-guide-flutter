@@ -1,24 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'login_provider.dart';
+part of 'payment_jaib_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$loginHash() => r'36b85e809d4d100cc429d434aedf836b9211e282';
+String _$paymentJaibHash() => r'95ad182d0ad1b3ff70d4ecdf54703eb253dcead5';
 
-/// See also [Login].
-@ProviderFor(Login)
-final loginProvider = NotifierProvider<Login, Response<model.User>>.internal(
-  Login.new,
-  name: r'loginProvider',
+/// See also [PaymentJaib].
+@ProviderFor(PaymentJaib)
+final paymentJaibProvider =
+    AutoDisposeNotifierProvider<PaymentJaib, Response<Payment>>.internal(
+  PaymentJaib.new,
+  name: r'paymentJaibProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$loginHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$paymentJaibHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$Login = Notifier<Response<model.User>>;
+typedef _$PaymentJaib = AutoDisposeNotifier<Response<Payment>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
