@@ -28,9 +28,9 @@ const booking = "${_imageBase}booking1.png";
 const chaletImage = "${_imageBase}chalet.jpg";
 const hotelImage = "${_imageBase}hotel.jpg";
 const floosakImage = "${_imageBase}floosak.png";
-const jibImage = "${_imageBase}Jib.png";
+const jaibImage = "${_imageBase}Jib.png";
 const jawalyImage = "${_imageBase}Jawaly.png";
-const oneCashImage = "${_imageBase}ONE_Cash.png";
+const cashImage = "${_imageBase}Cash.png";
 
 
 // Icons -----------------------------------------------------------------------

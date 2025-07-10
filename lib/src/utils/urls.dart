@@ -163,6 +163,16 @@ String jaibInitiatePaymentUrl() => "${apiUrl}jaib-payment/initiate";
 // Confirm Jaib Payment with Code (Step 2)
 String jaibConfirmPaymentUrl() => "${apiUrl}jaib-payment/confirm";
 
+// =================== Jawali Payment URLs ===================
+
+// Pay via Jawali (one step)
+String jawaliPayPaymentUrl() => "${apiUrl}jawali-payment/pay";
+
+// =================== CashPay Payment URLs ===================
+
+// Pay via CashPay (one step)
+String cashPayPaymentUrl() => "${apiUrl}cash-payment/pay";
+
 // URLs Favorite
 String getFavoritesUrl({int? userId}) => '${apiUrl}users/$userId/favorites';
 String addFavoriteUrl(int userId, int facilityId) => '${apiUrl}users/$userId/favorites/$facilityId';
