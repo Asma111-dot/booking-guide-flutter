@@ -211,7 +211,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                           gradient: CustomTheme.primaryGradient,
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        child: const Icon(trueIcon, color: Colors.white),
+                        child: const Icon(searchIcon, color: Colors.white),
                       ),
                     ),
                   ],

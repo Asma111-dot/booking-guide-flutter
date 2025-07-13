@@ -169,7 +169,7 @@ class FacilityGridWidget extends ConsumerWidget {
                       Expanded(
                         child: Text(
                           facility.address ?? trans().address,
-                          maxLines: 4,
+                          maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 12,
