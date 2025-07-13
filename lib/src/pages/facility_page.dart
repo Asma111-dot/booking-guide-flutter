@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helpers/general_helper.dart';
 import '../providers/facility/facility_provider.dart';
 import '../providers/favorite/favorite_provider.dart';
+import '../providers/view_mode_provider.dart';
 import '../storage/auth_storage.dart';
+import '../widgets/facility_grid_widget.dart';
 import '../widgets/facility_shimmer_card.dart';
 import '../widgets/facility_widget.dart';
 import '../widgets/view_widget.dart';
@@ -69,30 +71,49 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
   @override
   Widget build(BuildContext context) {
     final facilitiesState = ref.watch(facilitiesProvider(currentTarget));
+    final isGrid = ref.watch(isGridProvider);
 
-    return ViewWidget<List<Facility>>(
-      meta: facilitiesState.meta,
-      data: facilitiesState.data,
-      onLoaded: (data) {
-        return ListView.builder(
+    return Scaffold(
+
+      body: ViewWidget<List<Facility>>(
+        meta: facilitiesState.meta,
+        data: facilitiesState.data,
+        onLoaded: (data) {
+          return isGrid
+              ? ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              final facility = data[index];
+              return FacilityWidget(facility: facility);
+            },
+          )
+              : GridView.builder(
+            itemCount: data.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 5,
+              mainAxisSpacing: 5,
+              childAspectRatio: 0.80,
+            ),
+            itemBuilder: (context, index) {
+              final facility = data[index];
+              return FacilityGridWidget(facility: facility);
+            },
+          );
+        },
+        onLoading: () => ListView.builder(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          itemCount: data.length,
-          itemBuilder: (context, index) {
-            final facility = data[index];
-            return FacilityWidget(facility: facility);
-          },
-        );
-      },
-      onLoading: () => ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: 5,
-        itemBuilder: (_, __) => const FacilityShimmerCard(),
+          itemCount: 5,
+          itemBuilder: (_, __) => const FacilityShimmerCard(),
+        ),
+        onEmpty: () => Center(
+          child: Text(trans().no_data),
+        ),
+        showError: true,
+        showEmpty: true,
       ),
-      onEmpty: () => Center(
-        child: Text(trans().no_data),
-      ),
-      showError: true,
-      showEmpty: true,
     );
   }
+
 }

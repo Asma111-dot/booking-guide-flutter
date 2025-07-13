@@ -7,6 +7,7 @@ import '../providers/auth/user_provider.dart';
 import '../providers/facility_type/facility_type_provider.dart';
 import '../providers/discount/discount_provider.dart';
 import '../providers/notification/notification_provider.dart';
+import '../providers/view_mode_provider.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../utils/theme.dart';
@@ -50,6 +51,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
     final userState = ref.watch(userProvider).data;
     final notificationsState = ref.watch(notificationsProvider);
     final unreadCount = notificationsState.data?.where((n) => n.readAt == null).length ?? 0;
+    final isGrid = ref.watch(isGridProvider);
 
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
@@ -158,53 +160,49 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                   ],
                 ),
               ),
-              const DiscountInlineWidget(),
-              const SizedBox(height: 10),
+
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   children: [
                     Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          if (selectedFacilityType == null) return;
-                          Navigator.pushNamed(context, Routes.filter, arguments: selectedFacilityType!);
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-                          decoration: BoxDecoration(
-                            color: colorScheme.surface,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                color: isDark ? Colors.black26 : Colors.grey.withOpacity(0.2),
-                                blurRadius: 5,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              Icons.list_alt_outlined,
+                              color: ref.watch(isGridProvider)
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.grey.withOpacity(0.4),
+                            ),
+                            onPressed: () {
+                              ref.read(isGridProvider.notifier).state = true;
+                            },
                           ),
-                          child: Row(
-                            children: [
-                              Icon(searchIcon, color: colorScheme.secondary),
-                              const SizedBox(width: 10),
-                              Text(
-                                trans().search_in_facilities,
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w400,
-                                  color: colorScheme.onSurface.withOpacity(0.6),
-                                ),
-                              ),
-                            ],
+                          IconButton(
+                            icon: Icon(
+                              Icons.grid_view_outlined,
+                              color: !ref.watch(isGridProvider)
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.grey.withOpacity(0.4),
+                            ),
+                            onPressed: () {
+                              ref.read(isGridProvider.notifier).state = false;
+                            },
                           ),
-                        ),
+                        ],
                       ),
                     ),
-                    const SizedBox(width: 10),
+
+                    // Pushes filter button to the far right
                     GestureDetector(
                       onTap: () {
                         if (selectedFacilityType == null) return;
-                        Navigator.pushNamed(context, Routes.filter, arguments: selectedFacilityType!);
+                        Navigator.pushNamed(
+                          context,
+                          Routes.filter,
+                          arguments: selectedFacilityType!,
+                        );
                       },
                       child: Container(
                         height: 50,
@@ -219,6 +217,8 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                   ],
                 ),
               ),
+              const SizedBox(height: 10),
+              const DiscountInlineWidget(),
               const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
