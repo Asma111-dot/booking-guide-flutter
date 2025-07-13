@@ -4,7 +4,7 @@ enum PaymentMethod {
   floosak(1, 'فلوسك', floosakImage),
   jib(2, 'جيب', jaibImage),
   jawaly(3, 'جوالي', jawalyImage),
-  oneCach(4, 'كاش', cashImage);
+  cash(4, 'كاش', cashImage);
 
   final int id;
   final String name;

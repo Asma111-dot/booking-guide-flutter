@@ -7,8 +7,10 @@ import '../enums/payment_method.dart';
 import '../helpers/general_helper.dart';
 import '../helpers/notify_helper.dart';
 import '../models/payment.dart' as pay;
+import '../providers/payment/payment_cash_provider.dart';
 import '../providers/payment/payment_confirm_provider.dart';
 import '../providers/payment/payment_jaib_provider.dart';
+import '../providers/payment/payment_jawali_provider.dart';
 import '../providers/payment/payment_save_provider.dart';
 import '../providers/reservation/reservation_provider.dart';
 import '../utils/assets.dart';
@@ -51,7 +53,8 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
     final reservationState = ref.watch(reservationProvider);
     final reservation = reservationState.data; // may be null while loading
     final jaibPayment = ref.watch(paymentJaibProvider.notifier);
-
+    final jawaliPayment = ref.watch(paymentJawaliProvider.notifier);
+    final cashPayment = ref.watch(paymentCashProvider.notifier);
     final paymentSave = ref.watch(paymentSaveProvider.notifier);
     final paymentConfirm = ref.watch(paymentConfirmProvider.notifier);
     late final scaffoldContext = context;
@@ -96,7 +99,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
 
             // ───────── قائمة وسائل الدفع ─────────
             ...PaymentMethod.values.map((method) {
-              final isDisabled = !(method == PaymentMethod.floosak || method == PaymentMethod.jib);
+              final isDisabled = !(method == PaymentMethod.floosak || method == PaymentMethod.jib || method == PaymentMethod.jawaly || method == PaymentMethod.cash);
 
               return GestureDetector(
                 onTap: isDisabled
@@ -141,6 +144,8 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
             onPressed: selectedPaymentMethod == null || isLoading
                 ? null
                 : () async {
+
+              // [جيب]
               if (selectedPaymentMethod == PaymentMethod.jib) {
                 // 1️⃣ Show info notify
                 showNotify(
@@ -233,6 +238,95 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                     );
                   },
                 );
+                return;
+              }
+
+              // [جوالي]
+              if (selectedPaymentMethod == PaymentMethod.jawaly) {
+                final waitingDialogCompleter = Completer<BuildContext>();
+                showWaitingDialog(scaffoldContext, (dialogCtx) {
+                  waitingDialogCompleter.complete(dialogCtx);
+                });
+
+                try {
+                  await jawaliPayment.payJawali(
+                    reservationId: widget.reservationId,
+                    paymentMethodId: selectedPaymentMethod!.id,
+                    voucher: "VOUCHER_CODE_FROM_UI", // احصل عليه من TextField إذا أردت
+                    purpose: "الغرض من الحجز",
+                  );
+                } finally {
+                  if (mounted) {
+                    final dialogCtx = await waitingDialogCompleter.future;
+                    Navigator.of(dialogCtx, rootNavigator: true).pop();
+                  }
+                }
+
+                final state = ref.read(paymentJawaliProvider);
+
+                if (state.isLoaded()) {
+                  showNotify(
+                    message: state.meta.message,
+                    alert: Alert.success,
+                  );
+
+                  await Future.delayed(const Duration(milliseconds: 300));
+
+                  Navigator.of(scaffoldContext).pushNamedAndRemoveUntil(
+                    Routes.paymentDetails,
+                        (r) => false,
+                    arguments: state.data?.id,
+                  );
+                } else {
+                  showNotify(
+                    message: state.meta.message,
+                    alert: Alert.info,
+                  );
+                }
+                return;
+              }
+
+              // [كاش]
+              if (selectedPaymentMethod == PaymentMethod.cash) {
+                final waitingDialogCompleter = Completer<BuildContext>();
+                showWaitingDialog(scaffoldContext, (dialogCtx) {
+                  waitingDialogCompleter.complete(dialogCtx);
+                });
+
+                try {
+                  await cashPayment.payCash(
+                    reservationId: widget.reservationId,
+                    paymentMethodId: selectedPaymentMethod!.id,
+                    purpose: "حجز غرفة",
+                  );
+                } finally {
+                  if (mounted) {
+                    final dialogCtx = await waitingDialogCompleter.future;
+                    Navigator.of(dialogCtx, rootNavigator: true).pop();
+                  }
+                }
+
+                final state = ref.read(paymentCashProvider);
+
+                if (state.isLoaded()) {
+                  showNotify(
+                    message: state.meta.message,
+                    alert: Alert.success,
+                  );
+
+                  await Future.delayed(const Duration(milliseconds: 300));
+
+                  Navigator.of(scaffoldContext).pushNamedAndRemoveUntil(
+                    Routes.paymentDetails,
+                        (r) => false,
+                    arguments: state.data?.id,
+                  );
+                } else {
+                  showNotify(
+                    message: state.meta.message,
+                    alert: Alert.info,
+                  );
+                }
                 return;
               }
 
