@@ -29,9 +29,10 @@ const chaletImage = "${_imageBase}chalet.jpg";
 const hotelImage = "${_imageBase}hotel.jpg";
 const floosakImage = "${_imageBase}floosak.png";
 const jaibImage = "${_imageBase}Jib.png";
-const jawalyImage = "${_imageBase}Jawaly.png";
+const jawaliImage = "${_imageBase}Jawaly.png";
 const cashImage = "${_imageBase}Cash.png";
-
+const pyesImage = "${_imageBase}pyas.png";
+const sabaCashImage = "${_imageBase}Sabacash.png";
 
 // Icons -----------------------------------------------------------------------
 const externalLinkIcon = Feather.external_link;

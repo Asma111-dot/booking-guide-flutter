@@ -165,13 +165,29 @@ String jaibConfirmPaymentUrl() => "${apiUrl}jaib-payment/confirm";
 
 // =================== Jawali Payment URLs ===================
 
-// Pay via Jawali (one step)
-String jawaliPayPaymentUrl() => "${apiUrl}jawali-payment/pay";
+
+// Initiate jawali Payment (Step 1)
+String jawaliInitiatePaymentUrl() => "${apiUrl}jawali-payment/initiate";
+
+// Confirm Jaib Payment with Code (Step 2)
+String jawaliConfirmPaymentUrl() => "${apiUrl}jawali-payment/confirm";
 
 // =================== CashPay Payment URLs ===================
 
 // Pay via CashPay (one step)
 String cashPayPaymentUrl() => "${apiUrl}cash-payment/pay";
+
+// =================== Pyes Payment URLs ===================
+
+String pyesPurchasePaymentUrl() => "${apiUrl}pyes-payment/purchase";
+
+String pyesConfirmPaymentUrl() => "${apiUrl}pyes-payment/confirm";
+
+ // =================== SabaCash Payment URLs ===================
+
+String sabaCashInitiatePaymentUrl() => "${apiUrl}saba-cash-payment/initiate";
+
+String sabaCashConfirmPaymentUrl() => "${apiUrl}saba-cash-payment/confirm";
 
 // URLs Favorite
 String getFavoritesUrl({int? userId}) => '${apiUrl}users/$userId/favorites';

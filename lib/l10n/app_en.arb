@@ -256,5 +256,7 @@
   "discounts_and_offers": "Discounts & Offers",
   "discount_value": "Discount Value",
   "enter_payment_code": "Enter payment code",
-  "enter_code_from_wallet": "Enter the code received from Jeeb Wallet"
+  "enter_code_from_wallet": "Enter the code received from Jaib Wallet",
+  "enter_code2_from_wallet": "Enter the code received from Jawali Wallet"
+
 }

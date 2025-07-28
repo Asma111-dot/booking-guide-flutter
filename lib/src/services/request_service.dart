@@ -182,7 +182,7 @@ Future<Response<T>> request<T>({
             "✅ Dio Response:\nT is ${T.toString()}\nData: ${data.runtimeType}\nMeta: $meta\nDeleted: $deleted");
 
         return Response<T>(
-            data: data == null ? null as T : data as T,
+            data: data is T ? data : null,
             deleted: deleted,
             meta: meta);
       } catch (e, stack) {

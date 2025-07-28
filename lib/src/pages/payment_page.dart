@@ -99,7 +99,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
 
             // ───────── قائمة وسائل الدفع ─────────
             ...PaymentMethod.values.map((method) {
-              final isDisabled = !(method == PaymentMethod.floosak || method == PaymentMethod.jib || method == PaymentMethod.jawaly || method == PaymentMethod.cash);
+              final isDisabled = !(method == PaymentMethod.floosak || method == PaymentMethod.jib || method == PaymentMethod.jawali || method == PaymentMethod.cash || method == PaymentMethod.pyes || method == PaymentMethod.sabaCash);
 
               return GestureDetector(
                 onTap: isDisabled
@@ -241,50 +241,108 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                 return;
               }
 
-              // [جوالي]
-              if (selectedPaymentMethod == PaymentMethod.jawaly) {
+              // 🟡 [جوالي]
+              if (selectedPaymentMethod == PaymentMethod.jawali) {
+                final reservationId = widget.reservationId;
+
+                // ✅ 1. نفذ initiate أولاً
                 final waitingDialogCompleter = Completer<BuildContext>();
                 showWaitingDialog(scaffoldContext, (dialogCtx) {
                   waitingDialogCompleter.complete(dialogCtx);
                 });
 
                 try {
-                  await jawaliPayment.payJawali(
-                    reservationId: widget.reservationId,
-                    paymentMethodId: selectedPaymentMethod!.id,
-                    voucher: "VOUCHER_CODE_FROM_UI", // احصل عليه من TextField إذا أردت
-                    purpose: "الغرض من الحجز",
-                  );
+                  await ref.read(paymentJawaliProvider.notifier).initiateJawaliPayment(reservationId);
                 } finally {
-                  if (mounted) {
-                    final dialogCtx = await waitingDialogCompleter.future;
-                    Navigator.of(dialogCtx, rootNavigator: true).pop();
-                  }
+                  final dialogCtx = await waitingDialogCompleter.future;
+                  if (mounted) Navigator.of(dialogCtx, rootNavigator: true).pop();
                 }
 
-                final state = ref.read(paymentJawaliProvider);
-
-                if (state.isLoaded()) {
+                final initiateState = ref.read(paymentJawaliProvider);
+                if (!initiateState.isLoaded()) {
                   showNotify(
-                    message: state.meta.message,
-                    alert: Alert.success,
+                    message: initiateState.meta.message ?? "فشل بدء عملية الدفع.",
+                    alert: Alert.error,
                   );
-
-                  await Future.delayed(const Duration(milliseconds: 300));
-
-                  Navigator.of(scaffoldContext).pushNamedAndRemoveUntil(
-                    Routes.paymentDetails,
-                        (r) => false,
-                    arguments: state.data?.id,
-                  );
-                } else {
-                  showNotify(
-                    message: state.meta.message,
-                    alert: Alert.info,
-                  );
+                  return;
                 }
+
+                // ✅ 2. عرض نافذة إدخال الكود بعد نجاح initiate
+                final TextEditingController confirmationController = TextEditingController();
+
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      backgroundColor: colorScheme.background,
+                      title: Text(
+                        trans().enter_payment_code,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      content: TextField(
+                        controller: confirmationController,
+                        keyboardType: TextInputType.number,
+                        style: const TextStyle(
+                          fontFamily: 'Roboto',
+                          fontSize: 16,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: trans().enter_code2_from_wallet,
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: Text(trans().cancel),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            final code = confirmationController.text.trim();
+                            Navigator.of(context).pop();
+
+                            final waitingDialogCompleter = Completer<BuildContext>();
+                            showWaitingDialog(scaffoldContext, (dialogCtx) {
+                              waitingDialogCompleter.complete(dialogCtx);
+                            });
+
+                            try {
+                              await ref.read(paymentJawaliProvider.notifier).confirmJawaliPayment(
+                                reservationId: widget.reservationId,
+                                paymentMethodId: selectedPaymentMethod!.id,
+                                code: code,
+                              );
+                            } finally {
+                              if (mounted) {
+                                final dialogCtx = await waitingDialogCompleter.future;
+                                Navigator.of(dialogCtx, rootNavigator: true).pop();
+                              }
+                            }
+
+                            final state = ref.read(paymentJawaliProvider);
+                            if (state.isLoaded()) {
+                              showNotify(message: state.meta.message, alert: Alert.success);
+                              await Future.delayed(Duration(milliseconds: 300));
+                              Navigator.of(scaffoldContext).pushNamedAndRemoveUntil(
+                                Routes.paymentDetails,
+                                    (r) => false,
+                                arguments: state.data?.id,
+                              );
+                            } else {
+                              showNotify(message: state.meta.message, alert: Alert.info);
+                            }
+                          },
+                          child: Text(trans().verify),
+                        ),
+                      ],
+                    );
+                  },
+                );
                 return;
               }
+
 
               // [كاش]
               if (selectedPaymentMethod == PaymentMethod.cash) {
