@@ -1,15 +1,17 @@
+import 'status.dart';
+
 class PaymentMethod {
   int id;
   String name;
   String desc;
-  String status;
   String? image;
+Status? status;
 
   PaymentMethod({
     required this.id,
     required this.name,
     required this.desc,
-    required this.status,
+    this.status,
     this.image,
   });
 
@@ -17,7 +19,7 @@ class PaymentMethod {
       : id = 0,
         name = '',
         desc = '',
-        status = '',
+        status = null,
         image = '';
 
   factory PaymentMethod.fromJson(Map<String, dynamic> jsonMap) {
@@ -25,8 +27,9 @@ class PaymentMethod {
       id: jsonMap['id'] ?? 0,
       name: jsonMap['name'] ?? '',
       desc: jsonMap['desc'] ?? '',
-      status: jsonMap['status'] ?? '',
       image: jsonMap['image'] ?? '',
+      status: jsonMap['status'] != null ? Status.fromJson(jsonMap['status']) : null,
+
     );
   }
 
@@ -35,8 +38,8 @@ class PaymentMethod {
       'id': id,
       'name': name,
       'desc': desc,
-      'status': status,
       'image': image,
+      'status': status?.toJson(),
     };
   }
 
@@ -51,7 +54,7 @@ class PaymentMethod {
 
   @override
   String toString() {
-    return 'PaymentMethod(id: $id, name: "$name", desc: "$desc", status: "$status", image: "$image")';
+    return 'PaymentMethod(id: $id, name: "$name", desc: "$desc", image: "$image")';
   }
 
   @override
@@ -62,7 +65,6 @@ class PaymentMethod {
             id == other.id &&
             name == other.name &&
             desc == other.desc &&
-            status == other.status &&
             image == other.image;
 
   }
@@ -72,6 +74,5 @@ class PaymentMethod {
       id.hashCode ^
       name.hashCode ^
       desc.hashCode ^
-      status.hashCode ^
       image.hashCode ;
 }

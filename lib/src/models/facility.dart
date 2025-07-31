@@ -1,12 +1,12 @@
 import 'discount.dart';
 import 'room.dart';
+import 'status.dart';
 
 class Facility {
   int id;
   int facilityTypeId;
   String name;
   String desc;
-  String status;
   String? address;
   double? latitude;
   double? longitude;
@@ -17,17 +17,17 @@ class Facility {
   double? finalPrice;
   int? firstRoomId;
 
+  Status? status;
   List<Room> rooms;
   List<Discount> discounts;
   Discount? activeDiscount;
-  List<dynamic> appliedDiscounts; // ✅ جديد
+  List<dynamic> appliedDiscounts;
 
   Facility({
     required this.id,
     required this.facilityTypeId,
     required this.name,
     required this.desc,
-    required this.status,
     this.address,
     this.latitude,
     this.longitude,
@@ -40,7 +40,8 @@ class Facility {
     this.firstRoomId,
     this.discounts = const [],
     this.activeDiscount,
-    this.appliedDiscounts = const [], // ✅ جديد
+    this.appliedDiscounts = const [],
+    this.status,
   });
 
   Facility.init()
@@ -48,7 +49,6 @@ class Facility {
         facilityTypeId = 0,
         name = '',
         desc = '',
-        status = '',
         address = null,
         latitude = null,
         longitude = null,
@@ -58,16 +58,16 @@ class Facility {
         price = null,
         finalPrice = null,
         firstRoomId = null,
+        status = null,
         rooms = [],
         discounts = [],
-        appliedDiscounts = []; // ✅ جديد
+        appliedDiscounts = [];
 
   Facility copyWith({
     int? id,
     int? facilityTypeId,
     String? name,
     String? desc,
-    String? status,
     String? address,
     double? latitude,
     double? longitude,
@@ -80,14 +80,13 @@ class Facility {
     List<Room>? rooms,
     List<Discount>? discounts,
     Discount? activeDiscount,
-    List<dynamic>? appliedDiscounts, // ✅ جديد
+    List<dynamic>? appliedDiscounts,
   }) {
     return Facility(
       id: id ?? this.id,
       facilityTypeId: facilityTypeId ?? this.facilityTypeId,
       name: name ?? this.name,
       desc: desc ?? this.desc,
-      status: status ?? this.status,
       address: address ?? this.address,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
@@ -100,7 +99,7 @@ class Facility {
       rooms: rooms ?? this.rooms,
       discounts: discounts ?? this.discounts,
       activeDiscount: activeDiscount ?? this.activeDiscount,
-      appliedDiscounts: appliedDiscounts ?? this.appliedDiscounts, // ✅ جديد
+      appliedDiscounts: appliedDiscounts ?? this.appliedDiscounts,
     );
   }
 
@@ -110,28 +109,34 @@ class Facility {
       facilityTypeId: jsonMap['facility_type_id'] ?? 0,
       name: jsonMap['name'] ?? '',
       desc: jsonMap['desc'] ?? '',
-      status: jsonMap['status'] ?? '',
       address: jsonMap['address'],
       latitude: double.tryParse(jsonMap['latitude']?.toString() ?? ''),
       longitude: double.tryParse(jsonMap['longitude']?.toString() ?? ''),
       geojson: jsonMap['geojson'],
       logo: jsonMap['logo'],
-      price: jsonMap['price'] != null ? double.tryParse(jsonMap['price'].toString()) : null,
-      finalPrice: jsonMap['final_price'] != null ? double.tryParse(jsonMap['final_price'].toString()) : null,
+      price: jsonMap['price'] != null
+          ? double.tryParse(jsonMap['price'].toString())
+          : null,
+      finalPrice: jsonMap['final_price'] != null
+          ? double.tryParse(jsonMap['final_price'].toString())
+          : null,
       firstRoomId: jsonMap['first_room_id'],
       rooms: (jsonMap['rooms'] is List)
-          ? List<Room>.from((jsonMap['rooms'] as List).map((item) => Room.fromJson(item)))
+          ? List<Room>.from(
+              (jsonMap['rooms'] as List).map((item) => Room.fromJson(item)))
           : [],
       isFavorite: (jsonMap['is_favorite'] is int)
           ? jsonMap['is_favorite'] == 1
           : (jsonMap['is_favorite'] ?? false),
       discounts: jsonMap['discounts'] != null
-          ? List<Discount>.from(jsonMap['discounts'].map((d) => Discount.fromJson(d)))
+          ? List<Discount>.from(
+              jsonMap['discounts'].map((d) => Discount.fromJson(d)))
           : [],
       activeDiscount: jsonMap['active_discount'] != null
           ? Discount.fromJson(jsonMap['active_discount'])
           : null,
-      appliedDiscounts: jsonMap['applied_discounts'] ?? [], // ✅ جديد
+      appliedDiscounts: jsonMap['applied_discounts'] ?? [],
+      status: jsonMap['status'] != null ? Status.fromJson(jsonMap['status']) : null,
     );
   }
 
@@ -141,7 +146,6 @@ class Facility {
       'facility_type_id': facilityTypeId,
       'name': name,
       'desc': desc,
-      'status': status,
       'address': address,
       'latitude': latitude,
       'longitude': longitude,
@@ -154,7 +158,8 @@ class Facility {
       'rooms': rooms.map((room) => room.toJson()).toList(),
       'discounts': discounts.map((d) => d.toJson()).toList(),
       'active_discount': activeDiscount?.toJson(),
-      'applied_discounts': appliedDiscounts, // ✅ جديد
+      'applied_discounts': appliedDiscounts,
+      'status': status?.toJson(),
     };
   }
 
@@ -169,10 +174,10 @@ class Facility {
 
   @override
   String toString() {
-    return 'Facility(id: $id, facilityTypeId: $facilityTypeId, name: "$name", desc: "$desc", status: "$status", '
+    return 'Facility(id: $id, facilityTypeId: $facilityTypeId, name: "$name", desc: "$desc",'
         'address: "$address", latitude: $latitude, longitude: $longitude, geojson: "$geojson", logo: "$logo", '
         'isFavorite: $isFavorite, price: $price, finalPrice: $finalPrice, rooms: $rooms, firstRoomId: $firstRoomId, '
-        'appliedDiscounts: $appliedDiscounts)'; // ✅ عرض
+        'appliedDiscounts: $appliedDiscounts)';
   }
 
   @override
@@ -184,7 +189,6 @@ class Facility {
             facilityTypeId == other.facilityTypeId &&
             name == other.name &&
             desc == other.desc &&
-            status == other.status &&
             address == other.address &&
             latitude == other.latitude &&
             longitude == other.longitude &&
@@ -195,7 +199,7 @@ class Facility {
             finalPrice == other.finalPrice &&
             firstRoomId == other.firstRoomId &&
             rooms == other.rooms &&
-            appliedDiscounts == other.appliedDiscounts; // ✅ جديد
+            appliedDiscounts == other.appliedDiscounts;
   }
 
   @override
@@ -204,7 +208,6 @@ class Facility {
       facilityTypeId.hashCode ^
       name.hashCode ^
       desc.hashCode ^
-      status.hashCode ^
       address.hashCode ^
       latitude.hashCode ^
       longitude.hashCode ^
@@ -215,5 +218,5 @@ class Facility {
       finalPrice.hashCode ^
       firstRoomId.hashCode ^
       rooms.hashCode ^
-      appliedDiscounts.hashCode; // ✅ جديد
+      appliedDiscounts.hashCode;
 }

@@ -2,6 +2,7 @@ import '../extensions/date_formatting.dart';
 import '../storage/auth_storage.dart';
 import 'payment.dart';
 import 'room_price.dart';
+import 'status.dart';
 
 class Reservation {
   int id;
@@ -9,7 +10,7 @@ class Reservation {
   int? roomPriceId;
   DateTime checkInDate;
   DateTime checkOutDate;
-  String? status;
+  Status? status;
   double? totalPrice;
   double? totalDeposit;
   String bookingType;
@@ -44,7 +45,7 @@ class Reservation {
         roomPriceId = 0,
         checkInDate = DateTime.now(),
         checkOutDate = DateTime.now(),
-        status = '',
+        status = null,
         totalPrice = 0.0,
         totalDeposit = 0.0,
         bookingType = '',
@@ -65,7 +66,7 @@ class Reservation {
       checkOutDate:
           DateTime.tryParse(jsonMap['check_out_date']?.toString() ?? '') ??
               DateTime.now(),
-      status: jsonMap['status'],
+      status: jsonMap['status'] != null ? Status.fromJson(jsonMap['status']) : null,
       totalPrice: (jsonMap['total_price'] != null)
           ? double.tryParse(jsonMap['total_price'].toString()) ?? 0.0
           : 0.0,
@@ -93,13 +94,13 @@ class Reservation {
       'room_price_id': roomPriceId,
       'check_in_date': checkInDate.toSqlDateOnly(),
       'check_out_date': checkOutDate.toSqlDateOnly(),
-      'status': status,
       'total_price': totalPrice,
       'total_deposit': totalDeposit,
       'booking_type': bookingType,
       'adults_count': adultsCount,
       'children_count': childrenCount,
       'room_price': roomPrice?.toJson(),
+      'status': status?.toJson(),
       // 'created_at': createdAt?.toIso8601String(),
     };
   }
@@ -115,12 +116,12 @@ class Reservation {
 
   bool get isPaid {
     return payments.isNotEmpty &&
-        payments.every((payment) => payment.status == 'paid');
+        payments.every((payment) => payment.status?.name == 'paid');
   }
 
   @override
   String toString() {
-    return 'Reservation(id: $id, userId: $userId, roomPriceId: $roomPriceId, checkInDate: "$checkInDate", checkOutDate: "$checkOutDate", status: "$status", totalPrice: $totalPrice,totalDeposit: $totalDeposit,bookingType: "$bookingType", adultsCount: $adultsCount, childrenCount: $childrenCount)';
+    return 'Reservation(id: $id, userId: $userId, roomPriceId: $roomPriceId, checkInDate: "$checkInDate", checkOutDate: "$checkOutDate", totalPrice: $totalPrice,totalDeposit: $totalDeposit,bookingType: "$bookingType", adultsCount: $adultsCount, childrenCount: $childrenCount)';
   }
 
   @override
@@ -133,7 +134,6 @@ class Reservation {
             roomPriceId == other.roomPriceId &&
             checkInDate == other.checkInDate &&
             checkOutDate == other.checkOutDate &&
-            status == other.status &&
             totalPrice == other.totalPrice &&
             totalDeposit == other.totalDeposit &&
             bookingType == other.bookingType &&
@@ -148,7 +148,6 @@ class Reservation {
       roomPriceId.hashCode ^
       checkInDate.hashCode ^
       checkOutDate.hashCode ^
-      status.hashCode ^
       totalPrice.hashCode ^
       totalDeposit.hashCode ^
       bookingType.hashCode ^

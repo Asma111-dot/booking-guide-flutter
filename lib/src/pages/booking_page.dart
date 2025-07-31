@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../extensions/date_formatting.dart';
 import '../helpers/general_helper.dart';
 import '../models/reservation.dart' as r;
+import '../models/status.dart';
 import '../providers/reservation/reservations_provider.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
@@ -90,7 +91,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
   Widget _buildReservationList(List<r.Reservation>? all, String? status) {
     final reservations = status == null
         ? (all ?? [])
-        : (all ?? []).where((r) => r.status == status).toList();
+        : (all ?? []).where((r) => r.status?.name == status).toList();
 
     if (reservations.isEmpty) {
       return Center(child: Text(trans().no_data));
@@ -217,6 +218,19 @@ class _BookingPageState extends ConsumerState<BookingPage>
                         ),
                       ),
                       const SizedBox(height: 30),
+                      // Container(
+                      //   padding: const EdgeInsets.symmetric(
+                      //       horizontal: 12, vertical: 6),
+                      //   decoration: BoxDecoration(
+                      //     color: _getStatusColor(reservation.status),
+                      //     borderRadius: BorderRadius.circular(15),
+                      //   ),
+                      //   child: Text(
+                      //     _getStatusText(reservation.status),
+                      //     style: const TextStyle(
+                      //         color: Colors.white, fontSize: 10),
+                      //   ),
+                      // ),
                       Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 6),
@@ -241,23 +255,18 @@ class _BookingPageState extends ConsumerState<BookingPage>
     );
   }
 
-  String _getStatusText(String? status) {
-    switch (status) {
-      case 'confirmed':
-        return 'مؤكد';
-      case 'cancelled':
-        return 'ملغي';
-      default:
-        return 'غير معروف';
-    }
+  String _getStatusText(Status? status) {
+    return status?.label ?? status?.name ?? 'غير معروف';
   }
 
-  Color _getStatusColor(String? status) {
-    switch (status) {
+  Color _getStatusColor(Status? status) {
+    switch (status?.name) {
       case 'confirmed':
         return Colors.green;
       case 'cancelled':
         return Colors.red;
+      case 'pending':
+        return Colors.orange;
       default:
         return Colors.grey;
     }

@@ -1,18 +1,18 @@
+import 'status.dart';
+
 class Amenity {
   int id;
   String name;
   String desc;
   num price;
-  String status;
-  String? icon;
+  Status? status;
 
   Amenity({
     required this.id,
     required this.name,
     required this.desc,
     required this.price,
-    required this.status,
-    required this.icon,
+    this.status,
   });
 
   Amenity.init()
@@ -20,24 +20,21 @@ class Amenity {
         name = '',
         desc = '',
         price = 0.0,
-        status = '',
-        icon = '';
+        status = null;
 
   Amenity.fromJson(Map<String, dynamic> jsonMap)
       : id = int.tryParse(jsonMap['id'].toString()) ?? 0,
         name = jsonMap['name'] ?? '',
         desc = jsonMap['desc'] ?? '',
         price = num.tryParse(jsonMap['price'].toString()) ?? 0.0,
-        status = jsonMap['status'] ?? '',
-        icon = jsonMap['icon'] ?? '';
+        status = jsonMap['status'] != null
+            ? Status.fromJson(jsonMap['status'])
+            : null;
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "desc": desc,
-        "price": price,
-        "status": status,
-        "icon": icon
+  Map<String, dynamic> toJson() =>
+      {
+        "id": id, "name": name, "desc": desc, "price": price,
+        if (status != null) "status": status!.toJson(),
       };
 
   bool isCreate() => id == 0;

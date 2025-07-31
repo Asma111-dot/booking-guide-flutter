@@ -2,12 +2,13 @@ import 'facility.dart';
 import 'media.dart';
 import 'amenity.dart';
 import 'room_price.dart';
+import 'status.dart';
 
 class Room {
   int id;
   int facilityId;
   String type;
-  String status;
+  Status? status;
   String desc;
 
   List<Map<String, dynamic>> availableSpaces;
@@ -21,7 +22,7 @@ class Room {
     required this.id,
     required this.facilityId,
     required this.type,
-    required this.status,
+    this.status,
     required this.desc,
     this.availableSpaces = const [],
     this.media = const [],
@@ -34,7 +35,7 @@ class Room {
       : id = 0,
         facilityId = 0,
         type = '',
-        status = '',
+        status = null,
         desc = '',
         availableSpaces = [],
         media = [],
@@ -47,7 +48,6 @@ class Room {
       id: jsonMap['id'] ?? 0,
       facilityId: jsonMap['facility_id'] ?? 0,
       type: jsonMap['type'] ?? '',
-      status: jsonMap['status'] ?? '',
       desc: jsonMap['desc'] ?? '',
       availableSpaces: (jsonMap['available_spaces'] != null)
           ? List<Map<String, dynamic>>.from(
@@ -65,6 +65,7 @@ class Room {
       facility: (jsonMap['facility'] is Map)
           ? Facility.fromJson(jsonMap['facility'])
           : null,
+      status: jsonMap['status'] != null ? Status.fromJson(jsonMap['status']) : null,
     );
   }
 
@@ -72,13 +73,14 @@ class Room {
     'id': id,
     'facility_id': facilityId,
     'type': type,
-    'status': status,
     'desc': desc,
     'available_spaces': availableSpaces,
     'media': media.map((m) => m.toJson()).toList(),
     'amenities': amenities.map((a) => a.toJson()).toList(),
     'room_prices': roomPrices.map((r) => r.toJson()).toList(),
     'facility': facility?.toJson(),
+    'status': status?.toJson(),
+
   };
 
   static List<Room> fromJsonList(List<dynamic> items) =>
@@ -88,7 +90,7 @@ class Room {
 
   @override
   String toString() {
-    return 'Room(id: $id, facilityId: $facilityId, type: "$type", status: "$status", desc: "$desc", availableSpaces: $availableSpaces, roomPrices: $roomPrices)';
+    return 'Room(id: $id, facilityId: $facilityId, type: "$type",desc: "$desc", availableSpaces: $availableSpaces, roomPrices: $roomPrices)';
   }
 
   @override
@@ -99,7 +101,6 @@ class Room {
             id == other.id &&
             facilityId == other.facilityId &&
             type == other.type &&
-            status == other.status &&
             desc == other.desc &&
             availableSpaces == other.availableSpaces &&
             roomPrices == other.roomPrices;
@@ -110,7 +111,6 @@ class Room {
       id.hashCode ^
       facilityId.hashCode ^
       type.hashCode ^
-      status.hashCode ^
       desc.hashCode ^
       availableSpaces.hashCode ^
       roomPrices.hashCode;

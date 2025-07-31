@@ -2,6 +2,7 @@ import '../enums/payment_method.dart';
 import '../extensions/date_formatting.dart';
 import 'reservation.dart';
 import 'payment_response.dart';
+import 'status.dart';
 
 class Payment {
   int id;
@@ -10,9 +11,10 @@ class Payment {
   int paymentMethodId;
   double amount;
   DateTime date;
-  String status;
   PaymentResponse? response;
   Reservation? reservation;
+  Status? status;
+
 
   Payment({
     required this.id,
@@ -21,9 +23,9 @@ class Payment {
     required this.paymentMethodId,
     required this.amount,
     required this.date,
-    required this.status,
     required this.response,
     this.reservation,
+    this.status,
   });
 
   Payment.init()
@@ -33,7 +35,7 @@ class Payment {
         paymentMethodId = 0,
         amount = 0.0,
         date = DateTime.now(),
-        status = '',
+        status = null,
         response = null,
         reservation = null;
 
@@ -44,7 +46,7 @@ class Payment {
   })  : id = 0,
         amount = 0.0,
         date = DateTime.now(),
-        status = '',
+        status = null,
         response = null,
         reservation = null;
 
@@ -56,13 +58,14 @@ class Payment {
       paymentMethodId: jsonMap['payment_method_id'] ?? 0,
       amount: double.tryParse(jsonMap['amount'].toString()) ?? 0.0,
       date: DateTime.tryParse(jsonMap['date'] ?? '') ?? DateTime.now(),
-      status: jsonMap['status'] ?? '',
       response: jsonMap['response'] != null
           ? PaymentResponse.fromJson(jsonMap['response'])
           : null,
       reservation: jsonMap['reservation'] != null
           ? Reservation.fromJson(jsonMap['reservation'])
           : null,
+      status: jsonMap['status'] != null ? Status.fromJson(jsonMap['status']) : null,
+
     );
   }
 
@@ -82,9 +85,9 @@ class Payment {
       'payment_method_id': paymentMethodId,
       'amount': amount.toString(),
       'date': date.toSqlDateOnly(),
-      'status': status,
       'response': null, // لا نرسل `response` في POST/PUT
       'reservation': null,
+      'status': status?.toJson(),
     };
   }
 
@@ -101,7 +104,7 @@ class Payment {
 
   @override
   String toString() {
-    return 'Payment(id: $id, reservationId: $reservationId, transactionTypeId: $transactionTypeId, paymentMethodId: $paymentMethodId, amount: $amount, date: "$date", status: "$status", response: $response)';
+    return 'Payment(id: $id, reservationId: $reservationId, transactionTypeId: $transactionTypeId, paymentMethodId: $paymentMethodId, amount: $amount, date: "$date", response: $response)';
   }
 
   @override
@@ -114,8 +117,7 @@ class Payment {
             transactionTypeId == other.transactionTypeId &&
             paymentMethodId == other.paymentMethodId &&
             amount == other.amount &&
-            date == other.date &&
-            status == other.status;
+            date == other.date ;
   }
 
   @override
@@ -125,6 +127,5 @@ class Payment {
       transactionTypeId.hashCode ^
       paymentMethodId.hashCode ^
       amount.hashCode ^
-      date.hashCode ^
-      status.hashCode;
+      date.hashCode ;
 }
