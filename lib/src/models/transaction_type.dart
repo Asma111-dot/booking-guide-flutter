@@ -2,23 +2,27 @@ class TransactionType {
   int id;
   String name;
   String desc;
+  bool isRefundable;
 
   TransactionType({
     required this.id,
     required this.name,
     required this.desc,
+    required this.isRefundable,
   });
 
   TransactionType.init()
       : id = 0,
         name = '',
-        desc = '';
+        desc = '',
+        isRefundable = true;
 
   factory TransactionType.fromJson(Map<String, dynamic> jsonMap) {
     return TransactionType(
       id: jsonMap['id'] ?? 0,
       name: jsonMap['name'] ?? '',
       desc: jsonMap['desc'] ?? '',
+      isRefundable: jsonMap['is_refundable'] ?? true,
     );
   }
 
@@ -27,6 +31,7 @@ class TransactionType {
       'id': id,
       'name': name,
       'desc': desc,
+      'is_refundable': isRefundable,
     };
   }
 
@@ -41,7 +46,7 @@ class TransactionType {
 
   @override
   String toString() {
-    return 'TransactionType(id: $id, name: "$name", desc: "$desc")';
+    return 'TransactionType(id: $id, name: "$name", desc: "$desc", isRefundable: $isRefundable)';
   }
 
   @override
@@ -51,9 +56,11 @@ class TransactionType {
             runtimeType == other.runtimeType &&
             id == other.id &&
             name == other.name &&
-            desc == other.desc;
+            desc == other.desc &&
+            isRefundable == other.isRefundable;
   }
 
   @override
-  int get hashCode => id.hashCode ^ name.hashCode ^ desc.hashCode;
+  int get hashCode =>
+      id.hashCode ^ name.hashCode ^ desc.hashCode ^ isRefundable.hashCode;
 }

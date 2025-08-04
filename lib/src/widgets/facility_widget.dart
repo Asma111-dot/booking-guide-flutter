@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import '../helpers/general_helper.dart';
 import '../models/facility.dart';
+import '../models/discount.dart';
 import '../providers/favorite/favorite_provider.dart';
 import '../storage/auth_storage.dart';
 import '../utils/assets.dart';
@@ -73,21 +74,22 @@ class FacilityWidget extends ConsumerWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Row(
+          child:
+          Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: CachedNetworkImage(
                   imageUrl: defaultImage,
-                  width: 110,
-                  height: 110,
+                  width: 100,
+                  height: 100,
                   fit: BoxFit.cover,
                   placeholder: (context, url) => const ShimmerImagePlaceholder(width: 80, height: 80),
                   errorWidget: (context, url, error) => Image.asset(
                     appIcon,
-                    width: 110,
-                    height: 110,
+                    width: 100,
+                    height: 100,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -141,19 +143,21 @@ class FacilityWidget extends ConsumerWidget {
                     ),
                     const SizedBox(height: 4),
                     if (facility.appliedDiscounts.isNotEmpty)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: facility.appliedDiscounts.map((discount) {
-                          return Text(
-                            '- ${discount.name} (${discount.type == "percentage" ? "%" : ""}${discount.value})',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.red[700],
-                              fontWeight: FontWeight.w400,
-                            ),
-                          );
-                        }).toList(),
-                      ),
+                      // Column(
+                      //   crossAxisAlignment: CrossAxisAlignment.start,
+                      //   // children: facility.appliedDiscounts.map((discountMap) {
+                      //   //   final discount = Discount.fromJson(discountMap as Map<String, dynamic>);
+                      //   //   return Text(
+                      //   //     '- ${discount.name} (${discount.type == "percentage" ? "%" : ""}${discount.value})',
+                      //   //     style: TextStyle(
+                      //   //       fontSize: 10,
+                      //   //       color: Colors.red[700],
+                      //   //       fontWeight: FontWeight.w400,
+                      //   //     ),
+                      //   //   );
+                      //   // }).toList(),
+                      //
+                      // ),
                     const SizedBox(height: 6),
                     Row(
                       children: [

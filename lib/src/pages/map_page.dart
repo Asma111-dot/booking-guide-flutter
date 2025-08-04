@@ -1,7 +1,9 @@
+import 'package:permission_handler/permission_handler.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../helpers/general_helper.dart';
 import '../models/facility.dart' as f;
 import '../providers/facility/facility_provider.dart';
@@ -21,9 +23,7 @@ class MapPage extends ConsumerStatefulWidget {
 
 class _MapPageState extends ConsumerState<MapPage> {
   GoogleMapController? mapController;
-  final CustomInfoWindowController _customInfoWindowController =
-      CustomInfoWindowController();
-
+  final CustomInfoWindowController _customInfoWindowController = CustomInfoWindowController();
   int? selectedMarkerId;
 
   getProvider() => facilitiesProvider(FacilityTarget.maps);
@@ -32,9 +32,23 @@ class _MapPageState extends ConsumerState<MapPage> {
   void initState() {
     super.initState();
 
+    // ✅ أطلب صلاحية الموقع
+    requestLocationPermission();
+
+    // تحميل البيانات من المزود
     Future.microtask(() {
       ref.read(getProvider().notifier).fetch(facilityTypeId: widget.facilityTypeId);
     });
+  }
+
+  // ✅ دالة طلب الصلاحية
+  Future<void> requestLocationPermission() async {
+    var status = await Permission.location.request();
+    if (status.isGranted) {
+      print('✅ Location permission granted');
+    } else {
+      print('❌ Location permission denied');
+    }
   }
 
   @override
