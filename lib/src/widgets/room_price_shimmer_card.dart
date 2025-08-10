@@ -13,10 +13,10 @@ class RoomPriceShimmerCard extends StatelessWidget {
     return Shimmer.fromColors(
       baseColor: baseColor,
       highlightColor: highlightColor,
-      child: Container(                // أزل SizedBox كلّيـاً
+      child: Container(
         width: MediaQuery.of(context).size.width * 0.5,
         margin: const EdgeInsets.symmetric(horizontal: 8),
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: baseColor,
           borderRadius: BorderRadius.circular(8),

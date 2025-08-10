@@ -1,7 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mybooking.mybooking"
-    >
-    android:targetSandboxVersion="1">
+    package="com.mybooking.mybooking">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -19,7 +17,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCdHPqc2qAyGgMvGXxHoXolVm-wt_lIJ8I" />
+            android:value="AIzaSyDYwqCwtsYmOmgkQmtwFUgxaIxBPUI9lok" />
 
         <activity
             android:name=".MainActivity"

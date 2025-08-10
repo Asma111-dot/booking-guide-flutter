@@ -32,7 +32,7 @@ class RoomPriceWidget extends StatelessWidget {
       child: Container(
         width: MediaQuery.of(context).size.width * 0.5,
         margin: const EdgeInsets.symmetric(horizontal: 8),
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           gradient: isSelected ? CustomTheme.primaryGradient : null,
           color: isSelected ? null : colorScheme.surface,
@@ -50,11 +50,11 @@ class RoomPriceWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildPriceRow(context, priceIcon, roomPrice.price, finalPrice, trans().riyalY),
-            const SizedBox(height: 5),
+            const SizedBox(height: 6),
             _buildRow(context, periodIcon, roomPrice.period),
-            const SizedBox(height: 5),
+            const SizedBox(height: 6),
             _buildRow(context, groupsIcon, "${roomPrice.capacity} ${trans().person}"),
-            const SizedBox(height: 5),
+            const SizedBox(height: 6),
             _buildPriceRow(
               context,
               depositIcon,
@@ -63,12 +63,12 @@ class RoomPriceWidget extends StatelessWidget {
               trans().riyalY,
               prefix: "${trans().deposit}: ",
             ),
-            const SizedBox(height: 5),
-            _buildRow(
-              context,
-              accessTimeIcon,
-              '${roomPrice.timeFrom?.fromTimeToDateTime()?.toTimeView() ?? '--:--'} - ${roomPrice.timeTo?.fromTimeToDateTime()?.toTimeView() ?? '--:--'}',
-            ),
+            // const SizedBox(height: 5),
+            // _buildRow(
+            //   context,
+            //   accessTimeIcon,
+            //   '${roomPrice.timeFrom?.fromTimeToDateTime()?.toTimeView() ?? '--:--'} - ${roomPrice.timeTo?.fromTimeToDateTime()?.toTimeView() ?? '--:--'}',
+            // ),
           ],
         ),
       ),

@@ -16,7 +16,7 @@ class Discount {
   bool isStackable;
   bool isActive;
 
-  Facility? facility; // ✅ جديد
+  Facility? facility;
 
   Discount({
     required this.id,
@@ -33,7 +33,7 @@ class Discount {
     this.endsAt,
     this.isStackable = false,
     this.isActive = true,
-    this.facility, // ✅ جديد
+    this.facility,
   });
 
   factory Discount.fromJson(Map<String, dynamic> json) {
@@ -52,7 +52,7 @@ class Discount {
       endsAt: json['ends_at'] != null ? DateTime.tryParse(json['ends_at']) : null,
       isStackable: json['is_stackable'] == true || json['is_stackable'] == 1,
       isActive: json['is_active'] == true || json['is_active'] == 1,
-      facility: json['facility'] != null ? Facility.fromJson(json['facility']) : null, // ✅ جديد
+      facility: json['facility'] != null ? Facility.fromJson(json['facility']) : null,
     );
   }
 
@@ -72,7 +72,7 @@ class Discount {
       'ends_at': endsAt?.toIso8601String(),
       'is_stackable': isStackable,
       'is_active': isActive,
-      'facility': facility?.toJson(), // ✅ جديد
+      'facility': facility?.toJson(),
     };
   }
 }

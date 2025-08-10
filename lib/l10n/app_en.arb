@@ -245,7 +245,7 @@
   "booking_type_hint": "Please select the appropriate booking type (Family / Women / Men / Company)",
   "adults_hint": "Specify the number of adults attending.",
   "children_hint": "Specify the number of children (optional – only if applicable)",
-  "booking_not_confirmed_warning": "Note: The reservation is not confirmed until payment is completed.",
+  "booking_not_confirmed_warning": "Note: The reservation is not confirmed until payment is completed. The deposit amount is non-refundable.",
   "go_back": "Back and return",
   "viewFacilityDetails": "View Facility Details",
   "show_less": "Show less",

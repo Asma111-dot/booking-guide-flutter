@@ -82,14 +82,14 @@ class FacilityWidget extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(15),
                 child: CachedNetworkImage(
                   imageUrl: defaultImage,
-                  width: 100,
-                  height: 100,
+                  width: 110,
+                  height: 110,
                   fit: BoxFit.cover,
                   placeholder: (context, url) => const ShimmerImagePlaceholder(width: 80, height: 80),
                   errorWidget: (context, url, error) => Image.asset(
                     appIcon,
-                    width: 100,
-                    height: 100,
+                    width: 110,
+                    height: 110,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -106,21 +106,25 @@ class FacilityWidget extends ConsumerWidget {
                         fontSize: 16,
                         fontWeight: FontWeight.w900,
                       ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 6),
-                      (finalPrice > 0)
-                        ? Row(
+                    (finalPrice > 0)
+                        ? Wrap(
+                      spacing: 6,
                       children: [
                         Text(
                           '${trans().priceStartFrom} ${finalPrice.toStringAsFixed(0)}${trans().riyalY}',
                           style: TextStyle(
-                            color: hasDiscount ? colorScheme.onTertiary : colorScheme.tertiary,
+                            color: hasDiscount
+                                ? colorScheme.onTertiary
+                                : colorScheme.tertiary,
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        if (hasDiscount) ...[
-                          const SizedBox(width: 6),
+                        if (hasDiscount)
                           Text(
                             '${firstPrice.toStringAsFixed(0)}${trans().riyalY}',
                             style: TextStyle(
@@ -130,7 +134,6 @@ class FacilityWidget extends ConsumerWidget {
                               decoration: TextDecoration.lineThrough,
                             ),
                           ),
-                        ],
                       ],
                     )
                         : Text(
@@ -140,25 +143,12 @@ class FacilityWidget extends ConsumerWidget {
                         fontSize: 10,
                         fontWeight: FontWeight.w500,
                       ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                     ),
                     const SizedBox(height: 4),
                     if (facility.appliedDiscounts.isNotEmpty)
-                      // Column(
-                      //   crossAxisAlignment: CrossAxisAlignment.start,
-                      //   // children: facility.appliedDiscounts.map((discountMap) {
-                      //   //   final discount = Discount.fromJson(discountMap as Map<String, dynamic>);
-                      //   //   return Text(
-                      //   //     '- ${discount.name} (${discount.type == "percentage" ? "%" : ""}${discount.value})',
-                      //   //     style: TextStyle(
-                      //   //       fontSize: 10,
-                      //   //       color: Colors.red[700],
-                      //   //       fontWeight: FontWeight.w400,
-                      //   //     ),
-                      //   //   );
-                      //   // }).toList(),
-                      //
-                      // ),
-                    const SizedBox(height: 6),
+                      const SizedBox(height: 6),
                     Row(
                       children: [
                         Icon(
@@ -176,7 +166,7 @@ class FacilityWidget extends ConsumerWidget {
                               fontWeight: FontWeight.w400,
                             ),
                             overflow: TextOverflow.ellipsis,
-                            maxLines: 5,
+                            maxLines: 4,
                           ),
                         ),
                       ],
@@ -194,13 +184,14 @@ class FacilityWidget extends ConsumerWidget {
                 onPressed: () async {
                   final userId = currentUser()?.id;
                   if (userId != null) {
-                    await ref.read(favoritesProvider.notifier)
+                    await ref
+                        .read(favoritesProvider.notifier)
                         .toggleFavorite(ref, userId, facility);
                   }
                 },
               ),
             ],
-          ),
+          )
         ),
       ),
     );

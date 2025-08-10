@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../extensions/date_formatting.dart';
+import '../extensions/string_formatting.dart';
 import '../helpers/general_helper.dart';
 import '../models/room_price.dart';
 import '../utils/assets.dart';
@@ -39,7 +41,7 @@ class RoomPriceWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// 📍 Period
+          /// 📍 Period + Time
           Row(
             children: [
               Icon(
@@ -48,11 +50,15 @@ class RoomPriceWidget extends StatelessWidget {
                 size: 16,
               ),
               const SizedBox(width: 8),
-              Text(
-                price.period,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: colorScheme.primary,
+              Expanded(
+                child: Text(
+                  "${price.period} | ${price.timeFrom?.fromTimeToDateTime()?.toTimeView() ?? '--:--'} - ${price.timeTo?.fromTimeToDateTime()?.toTimeView() ?? '--:--'}",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: colorScheme.primary,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
               ),
             ],
@@ -105,10 +111,11 @@ class RoomPriceWidget extends StatelessWidget {
             const SizedBox(height: 6),
             ExpansionTile(
               tilePadding: EdgeInsets.zero,
-              title: Row(
+              title: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 6,
                 children: [
-                  Icon(Icons.local_offer, color: Colors.green, size: 16),
-                  const SizedBox(width: 6),
+                  const Icon(Icons.local_offer, color: Colors.green, size: 16),
                   Text(
                     trans().show_discount_details,
                     style: TextStyle(
@@ -131,12 +138,16 @@ class RoomPriceWidget extends StatelessWidget {
                       const Icon(Icons.arrow_right, size: 16, color: Colors.grey),
                       const SizedBox(width: 6),
                       Expanded(
-                        child: Text(
+                        child:
+                        Text(
                           "${discount['name']} ($type: $value)",
                           style: TextStyle(
                             fontSize: 13,
                             color: colorScheme.onSurface.withOpacity(0.7),
                           ),
+                          overflow: TextOverflow.clip,
+                          maxLines: 2,
+                          softWrap: true,
                         ),
                       ),
                     ],
