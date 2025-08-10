@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../enums/reservation_status.dart';
 import '../extensions/date_formatting.dart';
 import '../helpers/general_helper.dart';
 import '../models/reservation.dart' as r;
@@ -44,7 +45,6 @@ class _BookingPageState extends ConsumerState<BookingPage>
   @override
   Widget build(BuildContext context) {
     final reservationState = ref.watch(reservationsProvider);
-
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -78,20 +78,20 @@ class _BookingPageState extends ConsumerState<BookingPage>
                 itemBuilder: (_, __) => const FacilityShimmerCard(),
               )
             : TabBarView(
-                children: [
-                  _buildReservationList(reservationState.data, null),
-                  _buildReservationList(reservationState.data, 'confirmed'),
-                  _buildReservationList(reservationState.data, 'cancelled'),
-                ],
-              ),
+          children: [
+            _buildReservationList(reservationState.data, null),
+            _buildReservationList(reservationState.data, ReservationStatus.confirmed),
+            _buildReservationList(reservationState.data, ReservationStatus.cancelled),
+          ],
+        )
       ),
     );
   }
 
-  Widget _buildReservationList(List<r.Reservation>? all, String? status) {
-    final reservations = status == null
-        ? (all ?? [])
-        : (all ?? []).where((r) => r.status?.name == status).toList();
+    Widget _buildReservationList(List<r.Reservation>? all, ReservationStatus? status) {
+      final reservations = status == null
+          ? (all ?? [])
+          : (all ?? []).where((r) => parseStatus(r.status) == status).toList();
 
     if (reservations.isEmpty) {
       return Center(child: Text(trans().no_data));
@@ -121,6 +121,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
             );
           },
           child: Card(
+
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             elevation: 1,
@@ -202,6 +203,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
+
                       Text(
                         "#${reservation.id}",
                         style: const TextStyle(
@@ -218,19 +220,6 @@ class _BookingPageState extends ConsumerState<BookingPage>
                         ),
                       ),
                       const SizedBox(height: 30),
-                      // Container(
-                      //   padding: const EdgeInsets.symmetric(
-                      //       horizontal: 12, vertical: 6),
-                      //   decoration: BoxDecoration(
-                      //     color: _getStatusColor(reservation.status),
-                      //     borderRadius: BorderRadius.circular(15),
-                      //   ),
-                      //   child: Text(
-                      //     _getStatusText(reservation.status),
-                      //     style: const TextStyle(
-                      //         color: Colors.white, fontSize: 10),
-                      //   ),
-                      // ),
                       Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 6),
@@ -255,20 +244,14 @@ class _BookingPageState extends ConsumerState<BookingPage>
     );
   }
 
-  String _getStatusText(Status? status) {
-    return status?.label ?? status?.name ?? 'غير معروف';
-  }
+  String _getStatusText(Status? status) =>
+      status?.name ?? 'غير معروف';
 
   Color _getStatusColor(Status? status) {
-    switch (status?.name) {
-      case 'confirmed':
-        return Colors.green;
-      case 'cancelled':
-        return Colors.red;
-      case 'pending':
-        return Colors.orange;
-      default:
-        return Colors.grey;
+    switch (parseStatus(status)) {
+      case ReservationStatus.confirmed: return Colors.green;
+      case ReservationStatus.cancelled: return Colors.red;
+      case ReservationStatus.unknown:   return Colors.grey;
     }
   }
 }

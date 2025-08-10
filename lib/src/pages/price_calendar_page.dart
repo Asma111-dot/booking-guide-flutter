@@ -36,6 +36,14 @@ class _PriceAndCalendarPageState
   bool useRange = true;
   DateTime? someDate = DateTime.now();
 
+  String norm(String s) {
+    final t = s.trim().toLowerCase();
+    if (t.contains('صباح')) return 'صباحية';
+    if (t.contains('مسائ') || t.contains('مساء')) return 'مسائية';
+    if (t.contains('كامل')) return 'كامل';
+    return 'غير محددة';
+  }
+
   @override
   void initState() {
     super.initState();
@@ -54,50 +62,105 @@ class _PriceAndCalendarPageState
     });
   }
 
+  // void _populateEvents({
+  //   required RoomPrice selectedPrice,
+  //   required List<Map<String, dynamic>> bookedDates,
+  // }) {
+  //   final Map<DateTime, List<dynamic>> tempEvents = {};
+  //
+  //   for (var reservation in selectedPrice.reservations) {
+  //     if (reservation.status != 'confirmed') continue;
+  //
+  //     final checkInDate = DateTime.parse(reservation.checkInDate.toString());
+  //     final checkOutDate = DateTime.parse(reservation.checkOutDate.toString());
+  //
+  //     DateTime currentDate = checkInDate;
+  //     while (currentDate.isBefore(checkOutDate) ||
+  //         currentDate.isAtSameMomentAs(checkOutDate)) {
+  //       final normalized = DateTime(
+  //           currentDate.year, currentDate.month, currentDate.day);
+  //       tempEvents[normalized] = [
+  //         ...(tempEvents[normalized] ?? []),
+  //         reservation
+  //       ];
+  //       currentDate = currentDate.add(const Duration(days: 1));
+  //     }
+  //   }
+  //
+  //   for (final item in bookedDates) {
+  //     if (!item.containsKey('date') || !item.containsKey('period')) continue;
+  //
+  //     final rawDate = item['date'];
+  //     final rawPeriod = item['period'];
+  //     final selectedRawPeriod = selectedPrice.period;
+  //
+  //     if (rawDate == null || rawDate.toString().trim().isEmpty) continue;
+  //
+  //     final period = rawPeriod.toString().trim().toLowerCase();
+  //     final selectedPeriod = selectedRawPeriod.toString().trim().toLowerCase();
+  //
+  //     final parsed = DateTime.parse(rawDate);
+  //     final date = DateTime(parsed.year, parsed.month, parsed.day);
+  //
+  //     if (period == selectedPeriod) {
+  //       tempEvents[date] = [
+  //         ...(tempEvents[date] ?? []),
+  //         {'type': 'google', 'label': 'محجوز: $rawPeriod'}
+  //       ];
+  //     }
+  //   }
+  //
+  //   events = tempEvents;
+  //   setState(() {});
+  // }
+
   void _populateEvents({
     required RoomPrice selectedPrice,
     required List<Map<String, dynamic>> bookedDates,
   }) {
     final Map<DateTime, List<dynamic>> tempEvents = {};
 
+    // حجوزات الداتابيز اللي جاية مع الـ RoomPrice نفسه
     for (var reservation in selectedPrice.reservations) {
       if (reservation.status != 'confirmed') continue;
 
-      final checkInDate = DateTime.parse(reservation.checkInDate.toString());
+      final checkInDate  = DateTime.parse(reservation.checkInDate.toString());
       final checkOutDate = DateTime.parse(reservation.checkOutDate.toString());
 
       DateTime currentDate = checkInDate;
       while (currentDate.isBefore(checkOutDate) ||
           currentDate.isAtSameMomentAs(checkOutDate)) {
-        final normalized = DateTime(
-            currentDate.year, currentDate.month, currentDate.day);
+        final normalized = DateTime(currentDate.year, currentDate.month, currentDate.day);
         tempEvents[normalized] = [
           ...(tempEvents[normalized] ?? []),
-          reservation
+          reservation,
         ];
         currentDate = currentDate.add(const Duration(days: 1));
       }
     }
 
+    // التواريخ القادمة من API (الآن دمجنا Google + DB في السيرفر)
+    final selectedPeriod = norm(selectedPrice.period?.toString() ?? '');
+
     for (final item in bookedDates) {
-      if (!item.containsKey('date') || !item.containsKey('period')) continue;
-
-      final rawDate = item['date'];
+      final rawDate   = item['date'];
       final rawPeriod = item['period'];
-      final selectedRawPeriod = selectedPrice.period;
+      if (rawDate == null) continue;
 
-      if (rawDate == null || rawDate.toString().trim().isEmpty) continue;
+      final parsed = DateTime.parse(rawDate.toString());
+      final date   = DateTime(parsed.year, parsed.month, parsed.day);
 
-      final period = rawPeriod.toString().trim().toLowerCase();
-      final selectedPeriod = selectedRawPeriod.toString().trim().toLowerCase();
-
-      final parsed = DateTime.parse(rawDate);
-      final date = DateTime(parsed.year, parsed.month, parsed.day);
-
+      // 👇 طابق الفترات بعد التطبيع
+      final period = norm(rawPeriod?.toString() ?? '');
       if (period == selectedPeriod) {
+        // منع التكرار
+        final list = tempEvents[date] ?? [];
+        final already = list.any((e) =>
+        e is Map && e['type'] == 'google' && (e['label']?.toString().contains(period) ?? false));
+
         tempEvents[date] = [
-          ...(tempEvents[date] ?? []),
-          {'type': 'google', 'label': 'محجوز: $rawPeriod'}
+          ...list,
+          if (!already) {'type': 'google', 'label': 'محجوز: $period'},
         ];
       }
     }

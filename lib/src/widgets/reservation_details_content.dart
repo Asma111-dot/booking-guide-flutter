@@ -4,6 +4,7 @@ import '../extensions/string_formatting.dart';
 import '../extensions/date_formatting.dart';
 import '../helpers/general_helper.dart';
 import '../models/reservation.dart' as res;
+import '../enums/reservation_status.dart';
 import '../utils/assets.dart';
 import 'custom_header_details_widget.dart';
 import 'custom_row_details_widget.dart';
@@ -111,15 +112,34 @@ class ReservationDetailsContent extends StatelessWidget {
                 ? '${data.totalPrice?.toInt()} ${trans().riyalY}'
                 : trans().not_available,
           ),
-
           const SizedBox(height: 12),
-          CustomRowDetailsWidget(
-            icon: depositIcon,
-            label: "${trans().amount_to_be_paid} (${trans().deposit})",
-            value: data.totalDeposit != null
-                ? '${data.totalDeposit?.toInt()} ${trans().riyalY}'
-                : trans().not_available,
-          ),
+
+          if (parseStatus(data.status) == ReservationStatus.confirmed) ...[
+            CustomRowDetailsWidget(
+              icon: priceIcon,
+              label: trans().paid_amount,
+              value: data.totalDeposit != null
+                  ? '${data.totalDeposit?.toInt()} ${trans().riyalY}'
+                  : trans().not_available,
+            ),
+            const SizedBox(height: 12),
+            CustomRowDetailsWidget(
+              icon: priceCheckIcon,
+              label: trans().remaining_amount,
+              value: data.totalPrice != null && data.totalDeposit != null
+                  ? '${((data.totalPrice ?? 0) - (data.totalDeposit ?? 0)).toInt()} ${trans().riyalY}'
+                  : trans().not_available,
+            ),
+          ] else ...[
+            CustomRowDetailsWidget(
+              icon: depositIcon,
+              label: "${trans().amount_to_be_paid} (${trans().deposit})",
+              value: data.totalDeposit != null
+                  ? '${data.totalDeposit?.toInt()} ${trans().riyalY}'
+                  : trans().not_available,
+            ),
+          ],
+
         ],
       ),
     );

@@ -11,21 +11,20 @@ class Status {
     this.statusableId,
   });
 
-  factory Status.fromJson(Map<String, dynamic> json) {
-    return Status(
-      name: json['name'] ?? '',
-      label: json['label'],
-      statusableType: json['statusable_type'],
-      statusableId: json['statusable_id'],
-    );
-  }
+  factory Status.fromJson(Map<String, dynamic> json) => Status(
+    name: (json['name'] ?? '').toString(),
+    label: json['label']?.toString(),
+    statusableType: json['statusable_type']?.toString(),
+    statusableId: json['statusable_id'] as int?,
+  );
 
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      if (label != null) 'label': label,
-      if (statusableType != null) 'statusable_type': statusableType,
-      if (statusableId != null) 'statusable_id': statusableId,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    if (label != null) 'label': label,
+    if (statusableType != null) 'statusable_type': statusableType,
+    if (statusableId != null) 'statusable_id': statusableId,
+  };
+
+  /// حترجع confirmed / cancelled / pending ... بحروف صغيرة ومطبع
+  String get normalized => name.trim().toLowerCase();
 }
