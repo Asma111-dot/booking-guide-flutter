@@ -42,13 +42,12 @@ class CustomHeaderDetailsWidget extends StatelessWidget {
               child: CachedNetworkImage(
                 imageUrl: logo!,
                 fit: BoxFit.cover,
-                placeholder: (context, url) => const Center(
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                ),
+                placeholder: (context, url) => const SizedBox.shrink(),
                 errorWidget: (context, url, error) => Image.asset(
                   appIcon,
                   fit: BoxFit.cover,
                 ),
+                fadeInDuration: const Duration(milliseconds: 200),
               ),
             ),
           ),
