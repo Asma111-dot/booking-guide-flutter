@@ -262,5 +262,8 @@
   "welcomeToBooking": "مرحبا بك في ",
   "women": "نساء فقط",
   "yes": "نعم",
-  "youAreNotConnectedToTheInternet": "أنت غير متصل بالإنترنت."
+  "youAreNotConnectedToTheInternet": "أنت غير متصل بالإنترنت.",
+  "searchFieldLabel": "ابحث باسم المنشأة",
+  "no_matching_facilities_title": "لا توجد منشآت مطابقة",
+  "no_matching_facilities_subtitle": "لم نعثر على أي منشأة في نتائج البحث الحالية. جرّب كتابة اسم مختلف أو استكشف الخريطة في منطقة أخرى."
 }

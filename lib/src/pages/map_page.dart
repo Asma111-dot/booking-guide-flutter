@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helpers/general_helper.dart';
 import '../models/facility.dart' as f;
 import '../providers/facility/facility_provider.dart';
+import '../sheetes/facility_search_delegate.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../utils/theme.dart';
@@ -24,6 +25,7 @@ class _MapPageState extends ConsumerState<MapPage> {
   GoogleMapController? mapController;
   final CustomInfoWindowController _customInfoWindowController = CustomInfoWindowController();
   int? selectedMarkerId;
+  List<f.Facility> _lastFacilities = const [];
 
   getProvider() => facilitiesProvider(FacilityTarget.maps);
 
@@ -66,6 +68,53 @@ class _MapPageState extends ConsumerState<MapPage> {
     return darker.hue;
   }
 
+  Future<void> _openFacilitySearch() async {
+    if (_lastFacilities.isEmpty) return;
+
+    final result = await showSearch<f.Facility?>(
+      context: context,
+      delegate: FacilitySearchDelegate(_lastFacilities),
+    );
+
+    if (result == null) return;
+
+    _flyToFacility(result);
+  }
+
+  void _flyToFacility(f.Facility facility) async {
+    final lat = facility.latitude ?? 0.0;
+    final lng = facility.longitude ?? 0.0;
+
+    setState(() => selectedMarkerId = facility.id);
+
+    await mapController?.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(target: LatLng(lat, lng), zoom: 16),
+      ),
+    );
+
+    // افتح الـ info window عند نفس الإحداثيات
+    _customInfoWindowController.addInfoWindow!(
+      GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, Routes.roomDetails, arguments: facility);
+        },
+        child: SizedBox(
+          height: 140,
+          width: 250,
+          child: Center(
+            child: Text(
+              facility.name,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+      ),
+      LatLng(lat, lng),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final facilitiesState = ref.watch(getProvider());
@@ -88,14 +137,35 @@ class _MapPageState extends ConsumerState<MapPage> {
         title: Text(
           trans().map,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: CustomTheme.color2,
-                fontWeight: FontWeight.bold,
-              ),
+            color: CustomTheme.color2,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        elevation: 0,
+          elevation: 0,
         backgroundColor: Colors.transparent,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: CustomTheme.color3),
+        actions: [
+          IconButton(
+            icon: const Icon(searchIcon),
+            tooltip: 'بحث في المنشآت',
+            onPressed: _openFacilitySearch,
+          ),
+        ],
       ),
+
+      // appBar: AppBar(
+      //   centerTitle: true,
+      //   title: Text(
+      //     trans().map,
+      //     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+      //           color: CustomTheme.color2,
+      //           fontWeight: FontWeight.bold,
+      //         ),
+      //   ),
+      //   elevation: 0,
+      //   backgroundColor: Colors.transparent,
+      //   iconTheme: const IconThemeData(color: Colors.black),
+      // ),
       body: Column(
         children: [
           Padding(
@@ -117,6 +187,7 @@ class _MapPageState extends ConsumerState<MapPage> {
               },
               forceShowLoaded: facilitiesState.data != null,
               onLoaded: (data) {
+                _lastFacilities = data;
                 final theme = Theme.of(context);
                 final colorScheme = theme.colorScheme;
                 // final isDark = theme.brightness == Brightness.dark;
@@ -210,6 +281,8 @@ class _MapPageState extends ConsumerState<MapPage> {
                 return Stack(
                   children: [
                     GoogleMap(
+                      // myLocationEnabled: true,
+                      // myLocationButtonEnabled: true,
                       initialCameraPosition: const CameraPosition(
                         target: LatLng(15.3520, 44.2075),
                         zoom: 11,
@@ -244,3 +317,4 @@ class _MapPageState extends ConsumerState<MapPage> {
     );
   }
 }
+
