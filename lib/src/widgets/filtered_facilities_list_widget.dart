@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import '../enums/facility_filter_type.dart';
 import '../helpers/general_helper.dart';
 import '../providers/filter/filtered_facilities_provider.dart';
+import '../utils/assets.dart';
 import 'facility_shimmer_card.dart';
 import 'facility_widget.dart';
 
@@ -54,14 +56,25 @@ class FilteredFacilitiesListWidget extends ConsumerWidget {
 
     if (facilities.isEmpty) {
       return Center(
-        child: Text(
-          trans().no_matching_facilities,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: colorScheme.onSurface.withOpacity(0.6),
-          ),
-          textAlign: TextAlign.center,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SvgPicture.asset(
+              inboxIconSvg,
+              width: 140,
+              height: 140,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              trans().no_matching_facilities,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey.shade700,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
         ),
       );
     }

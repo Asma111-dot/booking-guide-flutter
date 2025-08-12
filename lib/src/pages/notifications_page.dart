@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../helpers/general_helper.dart';
 import '../providers/notification/notification_provider.dart';
@@ -42,16 +43,49 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
         child: ViewWidget<List<NotificationModel>>(
           meta: notificationsState.meta,
           data: notificationsState.data,
-          showEmpty: true,
-          showError: true,
-          onEmpty: () => Center(
-            child: Text(
-              'لا توجد إشعارات حالية',
-              style: TextStyle(color: colorScheme.onSurface),
-            ),
-          ),
           onLoading: () => const Center(child: CircularProgressIndicator()),
           onLoaded: (data) {
+            if (data.isEmpty) {
+              return ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                children: [
+                  const SizedBox(height: 200),
+                  Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset(
+                          notificationsIconSvg,
+                          width: 140,
+                          height: 140,
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          trans().noNotifications,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey.shade700,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          trans().noNotificationsHint,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey.shade500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 60),
+                ],
+              );
+            }
+
             return ListView.builder(
               padding: const EdgeInsets.symmetric(vertical: 8),
               itemCount: data.length,
@@ -60,15 +94,22 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
                 final title = notification.title ?? 'بدون عنوان';
                 final body = notification.body ?? '';
                 final createdAt = notification.createdAt != null
-                    ? notification.createdAt!.toLocal().toString().substring(0, 16)
+                    ? notification.createdAt
+                        .toLocal()
+                        .toString()
+                        .substring(0, 16)
                     : '';
 
                 return Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
                   child: ListTile(
-                    leading: const Icon(Icons.notifications, color: CustomTheme.color1),
-                    title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+                    leading: const Icon(Icons.notifications,
+                        color: CustomTheme.color1),
+                    title: Text(title,
+                        style: const TextStyle(fontWeight: FontWeight.w600)),
                     subtitle: Text(body),
                     trailing: Text(
                       createdAt,

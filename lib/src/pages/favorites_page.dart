@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../helpers/general_helper.dart';
 import '../models/facility.dart';
 import '../providers/favorite/favorite_provider.dart';
 import '../storage/auth_storage.dart';
+import '../utils/assets.dart';
 import '../utils/theme.dart';
 import '../widgets/facility_shimmer_card.dart';
 import '../widgets/view_widget.dart';
@@ -80,9 +82,27 @@ class _FavoritesScreenState extends ConsumerState<FavoritesPage> {
           onLoaded: (data) {
             if (data.isEmpty) {
               return Center(
-                child: Text(
-                  trans().noFavorites,
-                  style: const TextStyle(fontSize: 18, color: Colors.grey),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SvgPicture.asset(
+                      emptyFavoriteIcon,
+                      width: 140,
+                      height: 140,
+                      // // احذف اللون لو الأيقونة ملوّنة
+                      // colorFilter: ColorFilter.mode(Colors.grey.shade400, BlendMode.srcIn),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      trans().noFavorites,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.grey.shade600,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
               );
             }

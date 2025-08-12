@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../helpers/general_helper.dart';
 import '../providers/sort/sorted_facilities_provider.dart';
+import '../utils/assets.dart';
 import 'facility_shimmer_card.dart';
 import 'facility_widget.dart';
 
@@ -49,14 +51,25 @@ class TabFilteredFacilitiesListWidget extends ConsumerWidget {
 
     if (filteredFacilities.isEmpty) {
       return Center(
-        child: Text(
-          trans().no_facilities_available,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: colorScheme.onSurface.withOpacity(0.6),
-          ),
-          textAlign: TextAlign.center,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SvgPicture.asset(
+              linkIconSvg,
+              width: 140,
+              height: 140,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              trans().no_facilities,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey.shade700,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
         ),
       );
     }

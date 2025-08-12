@@ -237,12 +237,6 @@ class _MapPageState extends ConsumerState<MapPage> {
                   ],
                 );
               },
-              onLoading: () => const Center(child: CircularProgressIndicator()),
-              onEmpty: () =>  Center(
-                child: Text(trans().no_data),
-              ),
-              showError: true,
-              showEmpty: true,
             ),
           ),
         ],

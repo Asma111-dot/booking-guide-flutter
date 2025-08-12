@@ -33,6 +33,14 @@ Future<Response<T>> request<T>({
   Map<String, dynamic>? fields,
   bool isMultipart = false,
 }) async {
+  if (await ConnectivityService.isDisconnected()) {
+    return Response<T>(
+      meta: Meta(
+        status: Status.error,
+        message: trans().checkYourInternetConnectionOrTryAgain,
+      ),
+    );
+  }
   Future<d.Response<dynamic>> response;
 
   if (isMultipart) {
@@ -90,7 +98,7 @@ Future<Response<T>> request<T>({
         response = HttpService.instance.dio.get(
           url,
           queryParameters:
-          queryParameters ?? (body is Map<String, dynamic> ? body : null),
+              queryParameters ?? (body is Map<String, dynamic> ? body : null),
           cancelToken: cancelToken,
         );
         break;
@@ -102,16 +110,6 @@ Future<Response<T>> request<T>({
   Meta meta = const Meta(message: '');
 
   try {
-    if (await ConnectivityService.isDisconnected() &&
-        (!Platform.isIOS && kDebugMode)) {
-      return Response<T>(
-        meta: Meta(
-          status: Status.error,
-          message: trans().youAreNotConnectedToTheInternet,
-        ),
-      );
-    }
-
     return await response.then((value) {
       if (kDebugMode) log("📥 Response raw: ${value.data.toString()}");
 
@@ -148,7 +146,8 @@ Future<Response<T>> request<T>({
           }
 
           if (parsed.containsKey('meta') && parsed['meta'] != null) {
-            meta = Meta.fromCustomJson(Map<String, dynamic>.from(parsed['meta']));
+            meta =
+                Meta.fromCustomJson(Map<String, dynamic>.from(parsed['meta']));
             if (parsed.containsKey('token')) {
               meta = meta.copyWith(accessToken: parsed['token']);
             }
@@ -166,8 +165,8 @@ Future<Response<T>> request<T>({
 
           meta = meta.copyWith(
             status: (T.toString() != 'dynamic' &&
-                ((parsed[key] is List && (parsed[key] as List).isEmpty) ||
-                    parsed[key] == null))
+                    ((parsed[key] is List && (parsed[key] as List).isEmpty) ||
+                        parsed[key] == null))
                 ? Status.empty
                 : Status.loaded,
           );
@@ -182,9 +181,7 @@ Future<Response<T>> request<T>({
             "✅ Dio Response:\nT is ${T.toString()}\nData: ${data.runtimeType}\nMeta: $meta\nDeleted: $deleted");
 
         return Response<T>(
-            data: data is T ? data : null,
-            deleted: deleted,
-            meta: meta);
+            data: data is T ? data : null, deleted: deleted, meta: meta);
       } catch (e, stack) {
         debugPrint('❌ Response Handling Error:\n$e\n$stack\n$url');
         return Response<T>(
@@ -196,6 +193,16 @@ Future<Response<T>> request<T>({
     try {
       if (d.CancelToken.isCancel(e)) {
         meta = meta.copyWith(status: Status.cancelled);
+      } else if (e.type == d.DioExceptionType.connectionError ||
+          e.type == d.DioExceptionType.connectionTimeout ||
+          e.type == d.DioExceptionType.sendTimeout ||
+          e.type == d.DioExceptionType.receiveTimeout ||
+          (e.type == d.DioExceptionType.unknown &&
+              e.error is SocketException)) {
+        meta = Meta(
+          status: Status.error,
+          message: trans().checkYourInternetConnectionOrTryAgain,
+        );
       } else if (e.response != null) {
         if (redirectOnPermissionDenied && e.response!.statusCode == 401) {
           await clearAllLocalDataAndNavigate();

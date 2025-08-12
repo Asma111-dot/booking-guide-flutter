@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../helpers/general_helper.dart';
 import '../providers/auth/user_provider.dart';
+import '../providers/connectivity_provider.dart';
 import '../providers/facility_type/facility_type_provider.dart';
 import '../providers/discount/discount_provider.dart';
 import '../providers/notification/notification_provider.dart';
@@ -12,6 +14,7 @@ import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../utils/theme.dart';
 import '../widgets/discount_inline_widget.dart';
+import '../widgets/error_message_widget.dart';
 import '../widgets/facility_shimmer_card.dart';
 import '../widgets/facility_type_shimmer.dart';
 import '../widgets/facility_type_widget.dart';
@@ -27,6 +30,18 @@ class FacilityTypesPage extends ConsumerStatefulWidget {
 class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
   int? selectedFacilityType;
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   Future.microtask(() {
+  //     ref.read(facilityTypesProvider.notifier).fetch();
+  //     ref.read(userProvider.notifier).fetch();
+  //     ref.read(discountsProvider.notifier).fetch();
+  //     ref.read(notificationsProvider.notifier).fetch();
+  //
+  //   });
+  // }
+
   @override
   void initState() {
     super.initState();
@@ -36,6 +51,11 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
       ref.read(discountsProvider.notifier).fetch();
       ref.read(notificationsProvider.notifier).fetch();
 
+      ref.listen(connectivityProvider, (prev, next) {
+        next.whenData((list) {
+          debugPrint('🔌 Connectivity changed: $list');
+        });
+      });
     });
   }
 
@@ -48,6 +68,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
   @override
   Widget build(BuildContext context) {
     final facilityTypesState = ref.watch(facilityTypesProvider);
+    final isOffline = ref.watch(isOfflineProvider);
     final userState = ref.watch(userProvider).data;
     final notificationsState = ref.watch(notificationsProvider);
     final unreadCount = notificationsState.data?.where((n) => n.readAt == null).length ?? 0;
@@ -267,6 +288,31 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
             ],
           ),
         ),
+
+        if (isOffline)
+          Positioned.fill(
+            child: Container(
+              color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.95),
+              child: Center(
+                child: ErrorMessageWidget(
+                  headerWidget: SvgPicture.asset(
+                    internetIconSvg,
+                    width: 140,
+                    height: 140,
+                  ),
+                  textOnly: true,
+                  isEmpty: true,
+                  message: trans().checkYourInternetConnectionOrTryAgain,
+                  onTap: () async {
+                    await ref.read(facilityTypesProvider.notifier).fetch();
+                    await ref.read(userProvider.notifier).fetch();
+                    await ref.read(discountsProvider.notifier).fetch();
+                    await ref.read(notificationsProvider.notifier).fetch();
+                  },
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }

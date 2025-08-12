@@ -125,7 +125,10 @@
   "please_enter_children_count": "Please enter the number of children",
   "not_available": "Not Available",
   "next": "Next",
+  "no_facilities": "No facilities available right now.",
   "no_data": "No Data Available",
+  "noNotifications": "No notifications at the moment.",
+  "noNotificationsHint":"We'll let you know here as soon as anything new arrives.",
   "please_complete_data_correctly": "Please complete the data correctly",
   "error_occurred_during_save": "An error occurred during saving",
   "reservation_date": "Reservation Date",
@@ -143,7 +146,7 @@
   "payment_date": "Payment Date",
   "confirm_payment": "Confirm Payment",
   "enter_confirmation_number": "Enter confirmation number",
-  "payment_confirmed_successfully": "تم تأكيد الدفع بنجاح!",
+  "payment_confirmed_successfully": "Payment confirmed successfully!",
   "chalet_name": "Chalet Name",
   "check_in_date": "Check-in Date",
   "check_out_date": "Check-out Date",
@@ -163,6 +166,8 @@
   "mapHint": "View all facilities on the map and pick your destination easily.",
   "created_at": "Booking Date",
   "noFavorites": "No favorite facilities yet",
+  "noReservations": "No reservations at the moment",
+  "noReservationsHint": "Explore venues and make a reservation now.",
   "please_login_first": "Please log in first",
   "all": "All",
   "confirmed": "Confirmed",
@@ -258,5 +263,4 @@
   "enter_payment_code": "Enter payment code",
   "enter_code_from_wallet": "Enter the code received from Jaib Wallet",
   "enter_code2_from_wallet": "Enter the code received from Jawali Wallet"
-
 }

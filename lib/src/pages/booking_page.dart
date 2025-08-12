@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../enums/reservation_status.dart';
 import '../extensions/date_formatting.dart';
@@ -48,53 +49,85 @@ class _BookingPageState extends ConsumerState<BookingPage>
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            trans().booking,
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: CustomTheme.color2,
-                  fontWeight: FontWeight.bold,
-                ),
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(
+              trans().booking,
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    color: CustomTheme.color2,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            iconTheme: const IconThemeData(color: Colors.black),
+            bottom: TabBar(
+              indicatorColor: CustomTheme.color2,
+              labelColor: CustomTheme.primaryColor,
+              unselectedLabelColor: Colors.grey,
+              tabs: [
+                Tab(text: trans().all),
+                Tab(text: trans().confirmed),
+                Tab(text: trans().cancelled)
+              ],
+            ),
           ),
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          iconTheme: const IconThemeData(color: Colors.black),
-          bottom: TabBar(
-            indicatorColor: CustomTheme.color2,
-            labelColor: CustomTheme.primaryColor,
-            unselectedLabelColor: Colors.grey,
-            tabs: [
-              Tab(text: trans().all),
-              Tab(text: trans().confirmed),
-              Tab(text: trans().cancelled)
-            ],
-          ),
-        ),
-        body: _isLoading
-            ? ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: 5,
-                itemBuilder: (_, __) => const FacilityShimmerCard(),
-              )
-            : TabBarView(
-          children: [
-            _buildReservationList(reservationState.data, null),
-            _buildReservationList(reservationState.data, ReservationStatus.confirmed),
-            _buildReservationList(reservationState.data, ReservationStatus.cancelled),
-          ],
-        )
-      ),
+          body: _isLoading
+              ? ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: 5,
+                  itemBuilder: (_, __) => const FacilityShimmerCard(),
+                )
+              : TabBarView(
+                  children: [
+                    _buildReservationList(reservationState.data, null),
+                    _buildReservationList(
+                        reservationState.data, ReservationStatus.confirmed),
+                    _buildReservationList(
+                        reservationState.data, ReservationStatus.cancelled),
+                  ],
+                )),
     );
   }
 
-    Widget _buildReservationList(List<r.Reservation>? all, ReservationStatus? status) {
-      final reservations = status == null
-          ? (all ?? [])
-          : (all ?? []).where((r) => parseStatus(r.status) == status).toList();
+  Widget _buildReservationList(
+      List<r.Reservation>? all, ReservationStatus? status) {
+    final reservations = status == null
+        ? (all ?? [])
+        : (all ?? []).where((r) => parseStatus(r.status) == status).toList();
 
     if (reservations.isEmpty) {
-      return Center(child: Text(trans().no_data));
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SvgPicture.asset(
+              linkIconSvg,
+              width: 140,
+              height: 140,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              trans().noReservations,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey.shade600,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              trans().noReservationsHint ,
+            textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 10,
+                color: Colors.grey.shade500,
+              ),
+            ),
+          ],
+        ),
+      );
     }
 
     return ListView.builder(
@@ -121,7 +154,6 @@ class _BookingPageState extends ConsumerState<BookingPage>
             );
           },
           child: Card(
-
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             elevation: 1,
@@ -203,7 +235,6 @@ class _BookingPageState extends ConsumerState<BookingPage>
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-
                       Text(
                         "#${reservation.id}",
                         style: const TextStyle(
@@ -244,14 +275,16 @@ class _BookingPageState extends ConsumerState<BookingPage>
     );
   }
 
-  String _getStatusText(Status? status) =>
-      status?.name ?? 'غير معروف';
+  String _getStatusText(Status? status) => status?.name ?? 'غير معروف';
 
   Color _getStatusColor(Status? status) {
     switch (parseStatus(status)) {
-      case ReservationStatus.confirmed: return Colors.green;
-      case ReservationStatus.cancelled: return Colors.red;
-      case ReservationStatus.unknown:   return Colors.grey;
+      case ReservationStatus.confirmed:
+        return Colors.green;
+      case ReservationStatus.cancelled:
+        return Colors.red;
+      case ReservationStatus.unknown:
+        return Colors.grey;
     }
   }
 }
