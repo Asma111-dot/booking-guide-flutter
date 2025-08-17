@@ -33,7 +33,9 @@ const jawaliImage = "${_imageBase}Jawaly.png";
 const cashImage = "${_imageBase}Cash.png";
 const pyesImage = "${_imageBase}pyas.png";
 const sabaCashImage = "${_imageBase}Sabacash.png";
-
+const onboard1Png = "${_imageBase}onboard_1.png";
+const onboard2Png = "${_imageBase}onboard_2.png";
+const onboard3Png = "${_imageBase}onboard_3.png";
 // Icons svg -------------------------------------------------------------------
 const emptyFavoriteIcon = "${_iconBase}empty_favorites.svg";
 const notificationsIconSvg = "${_iconBase}ic_notifications.svg";

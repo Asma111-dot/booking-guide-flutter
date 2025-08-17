@@ -28,19 +28,38 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
     });
   }
 
+  // Future<void> _navigateToNextScreen() async {
+  //   final firstTime = await isFirstTime();
+  //   final loggedIn = isUserLoggedIn();
+  //
+  //   if (firstTime || !loggedIn) {
+  //     await setFirstTimeFalse();
+  //     Navigator.pushReplacementNamed(context, Routes.login);
+  //   } else {
+  //     Navigator.pushNamedAndRemoveUntil(
+  //       context,
+  //       Routes.navigationMenu,
+  //           (route) => false,
+  //     );
+  //   }
+  // }
   Future<void> _navigateToNextScreen() async {
     final firstTime = await isFirstTime();
     final loggedIn = isUserLoggedIn();
 
-    if (firstTime || !loggedIn) {
-      await setFirstTimeFalse();
+    if (firstTime) {
+      // لا تغيّر الفلاغ هنا؛ نخليه يتغيّر بعد إكمال المقدّمة
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, Routes.onboarding);
+      return;
+    }
+
+    if (!loggedIn) {
+      if (!mounted) return;
       Navigator.pushReplacementNamed(context, Routes.login);
     } else {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        Routes.navigationMenu,
-            (route) => false,
-      );
+      if (!mounted) return;
+      Navigator.pushNamedAndRemoveUntil(context, Routes.navigationMenu, (r) => false);
     }
   }
 

@@ -265,5 +265,8 @@
   "enter_code2_from_wallet": "Enter the code received from Jawali Wallet",
   "searchFieldLabel": "Search by facility name",
   "no_matching_facilities_title": "No matching facilities",
-  "no_matching_facilities_subtitle": "We couldn't find any facilities in the current search results. Try entering a different name or explore the map in another area."
+  "no_matching_facilities_subtitle": "We couldn't find any facilities in the current search results. Try entering a different name or explore the map in another area.",
+  "onboarding1_subtitle":"Start your journey with us by searching for the perfect chalet, hotel, or wedding hall, complete with photos and detailed information.",
+  "onboarding2_subtitle":"Choose what you like and set the date that suits you, so your place will be ready to welcome you at the perfect moment.",
+  "onboarding3_subtitle":"Complete your booking from anywhere with easy and secure payment options, and get ready for an unforgettable experience."
 }

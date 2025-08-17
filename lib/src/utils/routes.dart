@@ -7,6 +7,7 @@ import '../pages/facility_filter_page.dart';
 import '../pages/facility_page.dart';
 import '../pages/navigation_menu.dart';
 import '../pages/notifications_page.dart';
+import '../pages/onboarding_page.dart';
 import '../pages/payment_details_page.dart';
 import '../pages/payment_page.dart';
 import '../pages/price_calendar_page.dart';
@@ -21,6 +22,7 @@ final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 
 class Routes {
   static const String welcome = '/welcome';
+  static const String onboarding = '/onboarding';
   static const String login = '/login';
   static const String facilityTypes = '/facility_types';
   static const String facilities = '/facilities';
@@ -28,7 +30,7 @@ class Routes {
   static const String hotelDetails = '/hotel_details';
   static const String reservation = '/reservation';
   static const String myAccount = '/account';
-  static const String mybookings = '/my_reservations';
+  static const String myBookings = '/my_reservations';
   static const String priceAndCalendar = '/price_calendar';
   static const String reservationDetails = '/reservation_details';
   static const String bookingDetails = '/booking-details';
@@ -45,6 +47,12 @@ class Routes {
       case welcome:
         return MaterialPageRoute(
           builder: (_) => const WelcomePage(),
+          settings: settings,
+        );
+
+      case onboarding:
+        return MaterialPageRoute(
+          builder: (_) => const OnboardingPage(),
           settings: settings,
         );
 
