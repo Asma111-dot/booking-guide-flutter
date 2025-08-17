@@ -36,7 +36,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
         widget.appTitle ?? '',
         style: TextStyle(
           fontSize: 20,
-          color: colorScheme.primary, // ✅ dynamic text color
+          color: colorScheme.primary,
         ),
       ),
       leading: widget.icon != null
@@ -55,8 +55,11 @@ class _CustomAppBarState extends State<CustomAppBar> {
             }
           },
           icon: widget.icon!,
-          iconSize: 16,
+          iconSize: 18,
           color: Colors.white,
+          alignment: Alignment.center,
+          padding: EdgeInsets.zero,
+          constraints: const BoxConstraints(),
         ),
       )
           : null,

@@ -121,7 +121,7 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
                 const SizedBox(height: 20),
                 CustomTextField(
                   controller: passwordController,
-                  label: 'كلمة المرور',
+                  label: trans().password,
                   obscureText: true,
                 ),
                 const SizedBox(height: 40),

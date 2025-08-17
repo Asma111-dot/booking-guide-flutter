@@ -95,9 +95,11 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
     final roomState = ref.watch(roomProvider);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final topPad = MediaQuery.of(context).padding.top;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
+      //if you went add SafeArea
       body: ViewWidget<r.Room>(
         meta: roomState.meta,
         data: roomState.data,
@@ -161,38 +163,31 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                   ),
                 ),
               ),
-              Positioned(
-                top: 20,
-                left: Directionality.of(context) == TextDirection.ltr ? 10 : null,
-                right: Directionality.of(context) == TextDirection.rtl ? 10 : null,
+              PositionedDirectional(
+                top: topPad + 10,
+                start: 10, // يعادل left في LTR و right في RTL تلقائياً
                 child: Container(
                   decoration: BoxDecoration(
                     color: colorScheme.surface.withOpacity(0.8),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: IconButton(
-                    icon: Icon(
-                      arrowBacksIcon,
-                      color: colorScheme.onSurface,
-                    ),
+                    icon: Icon(arrowBacksIcon, color: colorScheme.onSurface),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ),
               ),
-              Positioned(
-                top: 20,
-                right: Directionality.of(context) == TextDirection.ltr ? 10 : null,
-                left: Directionality.of(context) == TextDirection.rtl ? 10 : null,
+
+              PositionedDirectional(
+                top: topPad + 10,
+                end: 10,
                 child: Container(
                   decoration: BoxDecoration(
                     color: colorScheme.surface.withOpacity(0.8),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: IconButton(
-                    icon: Icon(
-                      shareIcon,
-                      color: colorScheme.onSurface,
-                    ),
+                    icon: Icon(shareIcon, color: colorScheme.onSurface),
                     onPressed: () async {
                       final room = ref.read(roomProvider).data;
                       final text =

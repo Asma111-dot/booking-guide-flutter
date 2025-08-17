@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String label;
-  final bool obscureText; // <-- إضافة دعم كلمة السر (افتراضي false)
+  final bool obscureText;
 
   const CustomTextField({
     super.key,
     required this.controller,
     required this.label,
-    this.obscureText = false, // <-- هنا
+    this.obscureText = false,
   });
 
   @override
@@ -28,20 +28,28 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
 
     return TextFormField(
       controller: widget.controller,
       obscureText: _obscure,
       decoration: InputDecoration(
+        floatingLabelBehavior: FloatingLabelBehavior.always,
         labelText: widget.label,
         labelStyle: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.bold,
           color: colorScheme.primary,
         ),
+        floatingLabelStyle: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: colorScheme.primary,
+        ),
+
         filled: true,
         fillColor: colorScheme.surface,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
@@ -56,26 +64,22 @@ class _CustomTextFieldState extends State<CustomTextField> {
             width: 1.5,
           ),
         ),
-        // 🔹 إضافة أيقونة إظهار/إخفاء عند كونه حقل كلمة سر
+
         suffixIcon: widget.obscureText
             ? IconButton(
           icon: Icon(
             _obscure ? Icons.visibility_off : Icons.visibility,
             color: colorScheme.primary,
           ),
-          onPressed: () {
-            setState(() {
-              _obscure = !_obscure;
-            });
-          },
+          onPressed: () => setState(() => _obscure = !_obscure),
         )
             : null,
       ),
-      style: TextStyle(
+
+      style: theme.textTheme.bodyMedium?.copyWith(
         fontSize: 14,
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w500,
         color: colorScheme.onSurface,
-        fontFamily: 'Roboto',
       ),
     );
   }

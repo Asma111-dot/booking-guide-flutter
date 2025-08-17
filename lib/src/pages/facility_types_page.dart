@@ -302,7 +302,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                   ),
                   textOnly: true,
                   isEmpty: true,
-                  message: trans().checkYourInternetConnectionOrTryAgain,
+                  message: trans().youAreNotConnectedToTheInternet,
                   onTap: () async {
                     await ref.read(facilityTypesProvider.notifier).fetch();
                     await ref.read(userProvider.notifier).fetch();
