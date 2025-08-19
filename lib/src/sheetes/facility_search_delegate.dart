@@ -10,17 +10,14 @@ class FacilitySearchDelegate extends SearchDelegate<f.Facility?> {
 
   FacilitySearchDelegate(this.all)
       : super(
-    searchFieldLabel: trans().searchFieldLabel,
-    searchFieldDecorationTheme: const InputDecorationTheme(
-      isDense: true,
-      contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      filled: true,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(14)),
-        borderSide: BorderSide.none,
-      ),
-    ),
-  );
+          searchFieldLabel: trans().searchFieldLabel,
+// ↓ هنا تضبط حجم الخط الفعلي في مربع البحث
+          searchFieldStyle: const TextStyle(
+            fontSize: 12, // جرّب 13–14
+            height: 1.2, // يخفّض الارتفاع قليلاً
+            fontWeight: FontWeight.w500,
+          ),
+        );
 
   // توحيد ألوان شريط البحث مع الثيم
   @override
@@ -36,7 +33,7 @@ class FacilitySearchDelegate extends SearchDelegate<f.Facility?> {
       ),
       inputDecorationTheme: theme.inputDecorationTheme.copyWith(
         fillColor: cs.surfaceVariant.withOpacity(.5),
-        hintStyle: TextStyle(color: cs.onSurface.withOpacity(.6), fontSize: 14),
+        hintStyle: TextStyle(color: cs.onSurface.withOpacity(.6), fontSize: 12),
       ),
       textSelectionTheme: TextSelectionThemeData(
         cursorColor: cs.primary,
@@ -72,10 +69,13 @@ class FacilitySearchDelegate extends SearchDelegate<f.Facility?> {
 
   @override
   Widget? buildLeading(BuildContext context) => IconButton(
-    tooltip: 'رجوع',
-    icon: Icon(goBackIcon,color: CustomTheme.color2,),
-    onPressed: () => close(context, null),
-  );
+        tooltip: 'رجوع',
+        icon: Icon(
+          goBackIcon,
+          color: CustomTheme.color2,
+        ),
+        onPressed: () => close(context, null),
+      );
 
   @override
   Widget buildResults(BuildContext context) => _buildList(context);
@@ -126,7 +126,11 @@ class FacilitySearchDelegate extends SearchDelegate<f.Facility?> {
                     borderRadius: BorderRadius.circular(12),
                     color: CustomTheme.color1.withOpacity(.08),
                   ),
-                  child:  Icon(mapIcon, size: 22,color:CustomTheme.color3 ,),
+                  child: Icon(
+                    mapIcon,
+                    size: 22,
+                    color: CustomTheme.color3,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 // الاسم + العنوان

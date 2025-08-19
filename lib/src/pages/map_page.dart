@@ -68,6 +68,62 @@ class _MapPageState extends ConsumerState<MapPage> {
     return darker.hue;
   }
 
+  Widget _buildInfoCard(BuildContext context, f.Facility facility) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return SizedBox(
+      height: 140,
+      width: 140, // ← خليه يطابق عرض الـ CustomInfoWindow
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+            ),
+            child: Image.network(
+              facility.logo ?? '',
+              height: 80,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => Image.asset(
+                appIcon,
+                height: 80,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+              decoration: BoxDecoration(
+                color: colorScheme.surface,
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(16),
+                  bottomRight: Radius.circular(16),
+                ),
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                facility.name,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: colorScheme.primary,
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> _openFacilitySearch() async {
     if (_lastFacilities.isEmpty) return;
 
@@ -85,7 +141,7 @@ class _MapPageState extends ConsumerState<MapPage> {
     final lat = facility.latitude ?? 0.0;
     final lng = facility.longitude ?? 0.0;
 
-    setState(() => selectedMarkerId = facility.id);
+    setState(() => selectedMarkerId = facility.id); // ← يغير لون الماركر المحدد
 
     await mapController?.animateCamera(
       CameraUpdate.newCameraPosition(
@@ -93,23 +149,12 @@ class _MapPageState extends ConsumerState<MapPage> {
       ),
     );
 
-    // افتح الـ info window عند نفس الإحداثيات
+    _customInfoWindowController.hideInfoWindow!(); // تنظيف أي نافذة سابقة
+
     _customInfoWindowController.addInfoWindow!(
       GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, Routes.roomDetails, arguments: facility);
-        },
-        child: SizedBox(
-          height: 140,
-          width: 250,
-          child: Center(
-            child: Text(
-              facility.name,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-        ),
+        onTap: () => Navigator.pushNamed(context, Routes.roomDetails, arguments: facility),
+        child: _buildInfoCard(context, facility), // ← نفس الكرت
       ),
       LatLng(lat, lng),
     );
@@ -152,20 +197,6 @@ class _MapPageState extends ConsumerState<MapPage> {
           ),
         ],
       ),
-
-      // appBar: AppBar(
-      //   centerTitle: true,
-      //   title: Text(
-      //     trans().map,
-      //     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-      //           color: CustomTheme.color2,
-      //           fontWeight: FontWeight.bold,
-      //         ),
-      //   ),
-      //   elevation: 0,
-      //   backgroundColor: Colors.transparent,
-      //   iconTheme: const IconThemeData(color: Colors.black),
-      // ),
       body: Column(
         children: [
           Padding(
@@ -201,72 +232,15 @@ class _MapPageState extends ConsumerState<MapPage> {
                     icon: BitmapDescriptor.defaultMarkerWithHue(
                       isSelected ? selectedHue : normalHue,
                     ),
+                    // zIndex: isSelected ? 1000 : 0, // ← هنا
                     onTap: () {
-                      setState(() {
-                        selectedMarkerId = facility.id;
-                      });
+                      setState(() => selectedMarkerId = facility.id);
 
+                      _customInfoWindowController.hideInfoWindow!(); // تنظيف
                       _customInfoWindowController.addInfoWindow!(
                         GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              Routes.roomDetails,
-                              arguments: facility,
-                            );
-                          },
-                          child: SizedBox(
-                            height: 140,
-                            width: 250,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(16),
-                                    topRight: Radius.circular(16),
-                                  ),
-                                  child: Image.network(
-                                    facility.logo ?? '',
-                                    height: 80,
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (_, __, ___) => Image.asset(
-                                      appIcon,
-                                      height: 80,
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
-                                    decoration: BoxDecoration(
-                                      color: colorScheme.surface,
-                                      borderRadius: const BorderRadius.only(
-                                        bottomLeft: Radius.circular(16),
-                                        bottomRight: Radius.circular(16),
-                                      ),
-                                    ),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      facility.name,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: colorScheme.primary,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          onTap: () => Navigator.pushNamed(context, Routes.roomDetails, arguments: facility),
+                          child: _buildInfoCard(context, facility), // ← نفس الكرت
                         ),
                         LatLng(facility.latitude ?? 0.0, facility.longitude ?? 0.0),
                       );
