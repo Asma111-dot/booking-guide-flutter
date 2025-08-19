@@ -46,30 +46,4 @@ class Reservation extends _$Reservation {
      // state = state.setLoaded();
   }
 
-  Future save(res.Reservation reservation) async {
-    state = state.setLoading();
-    await request<res.Reservation>(
-      url: reservation.isCreate()
-          ? addReservationUrl()
-          : updateReservationUrl(reservation.id),
-      method: reservation.isCreate() ? Method.post : Method.put,
-      body: reservation.toJson(),
-    ).then((value) async {
-      state = state.copyWith(meta: value.meta);
-      if (value.isLoaded()) {
-        state = state.copyWith(data: value.data);
-
-        ref
-            .read(reservationsProvider.notifier)
-            .addOrUpdateReservation(value.data!);
-      }
-    });
-  }
-  void updateStateWithNewData(res.Reservation reservation) {
-    state = state.copyWith(
-      data: reservation,
-      meta: state.meta.copyWith(status: Status.loaded),
-    );
-  }
-
 }

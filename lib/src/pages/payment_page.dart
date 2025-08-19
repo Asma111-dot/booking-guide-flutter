@@ -7,11 +7,10 @@ import '../enums/payment_method.dart';
 import '../helpers/general_helper.dart';
 import '../helpers/notify_helper.dart';
 import '../models/payment.dart' as pay;
+import '../providers/payment/payment_floosak_provider.dart';
 import '../providers/payment/payment_cash_provider.dart';
-import '../providers/payment/payment_confirm_provider.dart';
 import '../providers/payment/payment_jaib_provider.dart';
 import '../providers/payment/payment_jawali_provider.dart';
-import '../providers/payment/payment_save_provider.dart';
 import '../providers/reservation/reservation_provider.dart';
 import '../utils/assets.dart';
 import '../utils/dialogs.dart';
@@ -55,8 +54,8 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
     final jaibPayment = ref.watch(paymentJaibProvider.notifier);
     final jawaliPayment = ref.watch(paymentJawaliProvider.notifier);
     final cashPayment = ref.watch(paymentCashProvider.notifier);
-    final paymentSave = ref.watch(paymentSaveProvider.notifier);
-    final paymentConfirm = ref.watch(paymentConfirmProvider.notifier);
+    // final paymentSave = ref.watch(paymentSaveProvider.notifier);
+    final floosakPayment = ref.watch(paymentFloosakProvider.notifier);
     late final scaffoldContext = context;
 
     return Scaffold(
@@ -144,7 +143,6 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
             onPressed: selectedPaymentMethod == null || isLoading
                 ? null
                 : () async {
-
               // [جيب]
               if (selectedPaymentMethod == PaymentMethod.jib) {
                 // 1️⃣ Show info notify
@@ -190,7 +188,8 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                             final code = confirmationController.text.trim();
                             Navigator.of(context).pop();
 
-                            final waitingDialogCompleter = Completer<BuildContext>();
+                            final waitingDialogCompleter = Completer<
+                                BuildContext>();
                             showWaitingDialog(scaffoldContext, (dialogCtx) {
                               waitingDialogCompleter.complete(dialogCtx);
                             });
@@ -203,8 +202,11 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                               );
                             } finally {
                               if (mounted) {
-                                final dialogCtx = await waitingDialogCompleter.future;
-                                Navigator.of(dialogCtx, rootNavigator: true).pop();
+                                final dialogCtx = await waitingDialogCompleter
+                                    .future;
+                                Navigator
+                                    .of(dialogCtx, rootNavigator: true)
+                                    .pop();
                               }
                             }
 
@@ -220,7 +222,9 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                               await Future.delayed(
                                   const Duration(milliseconds: 300));
 
-                              Navigator.of(scaffoldContext).pushNamedAndRemoveUntil(
+                              Navigator
+                                  .of(scaffoldContext)
+                                  .pushNamedAndRemoveUntil(
                                 Routes.paymentDetails,
                                     (r) => false,
                                 arguments: state.data?.id,
@@ -252,16 +256,21 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                 });
 
                 try {
-                  await ref.read(paymentJawaliProvider.notifier).initiateJawaliPayment(reservationId);
+                  await ref
+                      .read(paymentJawaliProvider.notifier)
+                      .initiateJawaliPayment(reservationId);
                 } finally {
                   final dialogCtx = await waitingDialogCompleter.future;
-                  if (mounted) Navigator.of(dialogCtx, rootNavigator: true).pop();
+                  if (mounted) Navigator
+                      .of(dialogCtx, rootNavigator: true)
+                      .pop();
                 }
 
                 final initiateState = ref.read(paymentJawaliProvider);
                 if (!initiateState.isLoaded()) {
                   showNotify(
-                    message: initiateState.meta.message ?? "فشل بدء عملية الدفع.",
+                    message: initiateState.meta.message ??
+                        "فشل بدء عملية الدفع.",
                     alert: Alert.error,
                   );
                   return;
@@ -303,35 +312,45 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                             final code = confirmationController.text.trim();
                             Navigator.of(context).pop();
 
-                            final waitingDialogCompleter = Completer<BuildContext>();
+                            final waitingDialogCompleter = Completer<
+                                BuildContext>();
                             showWaitingDialog(scaffoldContext, (dialogCtx) {
                               waitingDialogCompleter.complete(dialogCtx);
                             });
 
                             try {
-                              await ref.read(paymentJawaliProvider.notifier).confirmJawaliPayment(
+                              await ref
+                                  .read(paymentJawaliProvider.notifier)
+                                  .confirmJawaliPayment(
                                 reservationId: widget.reservationId,
                                 paymentMethodId: selectedPaymentMethod!.id,
                                 code: code,
                               );
                             } finally {
                               if (mounted) {
-                                final dialogCtx = await waitingDialogCompleter.future;
-                                Navigator.of(dialogCtx, rootNavigator: true).pop();
+                                final dialogCtx = await waitingDialogCompleter
+                                    .future;
+                                Navigator
+                                    .of(dialogCtx, rootNavigator: true)
+                                    .pop();
                               }
                             }
 
                             final state = ref.read(paymentJawaliProvider);
                             if (state.isLoaded()) {
-                              showNotify(message: state.meta.message, alert: Alert.success);
+                              showNotify(message: state.meta.message,
+                                  alert: Alert.success);
                               await Future.delayed(Duration(milliseconds: 300));
-                              Navigator.of(scaffoldContext).pushNamedAndRemoveUntil(
+                              Navigator
+                                  .of(scaffoldContext)
+                                  .pushNamedAndRemoveUntil(
                                 Routes.paymentDetails,
                                     (r) => false,
                                 arguments: state.data?.id,
                               );
                             } else {
-                              showNotify(message: state.meta.message, alert: Alert.info);
+                              showNotify(message: state.meta.message,
+                                  alert: Alert.info);
                             }
                           },
                           child: Text(trans().verify),
@@ -388,134 +407,143 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                 return;
               }
 
-              // فلوسك
-            setState(() => isLoading = true);
-                  debugPrint("====== [FLOOSAK PAYMENT PROCESS STARTED] ======");
+              // ───────── فلوسك ─────────
+              if (selectedPaymentMethod == PaymentMethod.floosak) {
+                setState(() => isLoading = true);
+                debugPrint("====== [FLOOSAK PAYMENT PROCESS STARTED] ======");
 
-                  final payment = pay.Payment.basic(
+                // 1) initiate
+                final waitingDialogCompleter = Completer<BuildContext>();
+                showWaitingDialog(scaffoldContext, (dialogCtx) {
+                  waitingDialogCompleter.complete(dialogCtx);
+                });
+
+                try {
+                  await ref
+                      .read(paymentFloosakProvider.notifier)
+                      .initiateFloosakPayment(
                     reservationId: widget.reservationId,
                     paymentMethodId: selectedPaymentMethod!.id,
                   );
-
-                  await paymentSave.savePayment(payment);
-                  final currentState = ref.read(paymentSaveProvider);
-
-                  if (!currentState.isLoaded()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(currentState.meta.message),
-                        backgroundColor: Theme.of(context).colorScheme.error,
-                      ),
-                    );
-                    return;
+                } finally {
+                  if (mounted) {
+                    final dialogCtx = await waitingDialogCompleter.future;
+                    Navigator.of(dialogCtx, rootNavigator: true).pop();
                   }
+                }
 
-                  final savedPayment = currentState.data!;
-                  paymentId = savedPayment.id;
-
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      final TextEditingController confirmationController =
-                          TextEditingController();
-
-                      return AlertDialog(
-                        backgroundColor: colorScheme.background,
-                        title: Text(
-                          trans().confirm_payment,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            color: colorScheme.primary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        content: TextField(
-                          controller: confirmationController,
-                          keyboardType: TextInputType.number,
-                          style: const TextStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 16,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: trans().enter_confirmation_number,
-                          ),
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: Text(trans().cancel),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              final confirmationCode = int.tryParse(
-                                convertToEnglishNumbers(
-                                    confirmationController.text.trim()),
-                              );
-
-                              if (confirmationCode != null &&
-                                  paymentId != null) {
-                                Navigator.of(context)
-                                    .pop(); // أغلق الـ dialog الحالي
-                                final waitingDialogCompleter =
-                                    Completer<BuildContext>();
-
-                                showWaitingDialog(scaffoldContext, (dialogCtx) {
-                                  waitingDialogCompleter.complete(dialogCtx);
-                                });
-
-                                try {
-                                  await paymentConfirm.confirmPayment(
-                                      paymentId!, confirmationCode);
-                                } finally {
-                                  if (mounted) {
-                                    final dialogCtx =
-                                        await waitingDialogCompleter.future;
-                                    Navigator.of(dialogCtx, rootNavigator: true)
-                                        .pop();
-                                  }
-                                }
-
-                                final confirmState = ref
-                                    .read(paymentConfirmProvider.notifier).state;
-
-                                if (!confirmState.isLoaded()) {
-                                  if (mounted) {
-                                    showNotify(
-                                      message: confirmState.meta.message,
-                                      alert: Alert.info,
-                                    );
-                                  }
-                                  return;
-                                }
-                                if (mounted) {
-                                  showNotify(
-                                    message:
-                                        trans().payment_confirmed_successfully,
-                                    alert: Alert.success,
-                                  );
-
-                                  await Future.delayed(const Duration(milliseconds: 300));
-
-                                  Navigator.of(scaffoldContext)
-                                      .pushNamedAndRemoveUntil(
-                                    Routes.paymentDetails,
-                                    (r) => false,
-                                    arguments: paymentId,
-                                  );
-                                }
-                              } else {
-                                debugPrint("❌ Invalid or missing OTP.");
-                              }
-                            },
-                            child: Text(trans().verify),
-                          ),
-                        ],
-                      );
-                    },
+                final initiateState = ref.read(paymentFloosakProvider);
+                if (!initiateState.isLoaded()) {
+                  showNotify(
+                    message: initiateState.meta.message,
+                    alert: Alert.error,
                   );
                   setState(() => isLoading = false);
-                  debugPrint("====== [PAYMENT PROCESS ENDED] ======");
-                },
-        ),
+                  return;
+                }
+
+                // خذ الـ paymentId من الاستجابة
+                paymentId = initiateState.data!.id;
+
+                // 2) اطلب OTP ثم أكّد
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    final TextEditingController confirmationController = TextEditingController();
+
+                    return AlertDialog(
+                      backgroundColor: colorScheme.background,
+                      title: Text(
+                        trans().confirm_payment,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      content: TextField(
+                        controller: confirmationController,
+                        keyboardType: TextInputType.number,
+                        style: const TextStyle(
+                            fontFamily: 'Roboto', fontSize: 16),
+                        decoration: InputDecoration(
+                            hintText: trans().enter_confirmation_number),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: Text(trans().cancel),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            final code = int.tryParse(
+                              convertToEnglishNumbers(
+                                  confirmationController.text.trim()),
+                            );
+                            if (code == null || paymentId == null) {
+                              debugPrint("❌ Invalid or missing OTP/paymentId.");
+                              return;
+                            }
+
+                            Navigator
+                                .of(context)
+                                .pop(); // أغلق حوار إدخال الكود
+
+                            final wait2 = Completer<BuildContext>();
+                            showWaitingDialog(
+                                scaffoldContext, (ctx) => wait2.complete(ctx));
+
+                            try {
+                              await ref
+                                  .read(paymentFloosakProvider.notifier)
+                                  .confirmFloosakPayment(
+                                paymentId: paymentId!,
+                                otp: code,
+                              );
+                            } finally {
+                              if (mounted) {
+                                final ctx = await wait2.future;
+                                Navigator.of(ctx, rootNavigator: true).pop();
+                              }
+                            }
+
+                            final confirmState = ref.read(
+                                paymentFloosakProvider);
+                            if (!confirmState.isLoaded()) {
+                              showNotify(message: confirmState.meta.message,
+                                  alert: Alert.info);
+                              return;
+                            }
+
+                            showNotify(
+                              message: trans().payment_confirmed_successfully,
+                              alert: Alert.success,
+                            );
+
+                            await Future.delayed(
+                                const Duration(milliseconds: 300));
+                            if (mounted) {
+                              Navigator
+                                  .of(scaffoldContext)
+                                  .pushNamedAndRemoveUntil(
+                                Routes.paymentDetails,
+                                    (r) => false,
+                                arguments: paymentId,
+                              );
+                            }
+                          },
+                          child: Text(trans().verify),
+                        ),
+                      ],
+                    );
+                  },
+                );
+
+                setState(() => isLoading = false);
+                debugPrint("====== [FLOOSAK PAYMENT PROCESS ENDED] ======");
+                return;
+              }
+            }
+            ),
       ),
     );
   }

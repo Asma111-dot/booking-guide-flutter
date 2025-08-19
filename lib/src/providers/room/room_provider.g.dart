@@ -6,7 +6,7 @@ part of 'room_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$roomHash() => r'f82c3346ed0152df348f76a48a73515e82be85fc';
+String _$roomHash() => r'f97ca2aba89e9533509d7474f38f27c1b9e2472f';
 
 /// See also [Room].
 @ProviderFor(Room)

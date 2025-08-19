@@ -127,7 +127,7 @@ class RoomPriceWidget extends StatelessWidget {
                     text: "${original.toInt()} $unit",
                     style: TextStyle(
                       color: textColor.withOpacity(0.5),
-                      fontSize: 13,
+                      fontSize: 10,
                       decoration: TextDecoration.lineThrough,
                     ),
                   ),

@@ -33,21 +33,4 @@ class Payment extends _$Payment {
     });
   }
 
-  Future save(p.Payment payment) async {
-    state = state.setLoading();
-    try {
-      final value = await request<p.Payment>(
-        url: payment.isCreate() ? addPaymentUrl() : updatePaymentUrl(payment.id),
-        method: payment.isCreate() ? Method.post : Method.put,
-        body: payment.toJson(),
-      );
-      state = state.copyWith(meta: value.meta);
-      if (value.isLoaded()) {
-        state = state.copyWith(data: value.data);
-      }
-    } catch (e) {
-      state = state.setError();
-      print("Error saving room: $e");
-    }
-  }
 }

@@ -28,7 +28,7 @@ class RoomPrices extends _$RoomPrices {
         method: Method.get,
       ).then((value) async {
         List<RoomPrice> roomPrices = RoomPrice.fromJsonList(value.data ?? [])
-            .where((room_price) => room_price.roomId == roomId)
+            .where((roomPrice) => roomPrice.roomId == roomId)
             .toList();
 
         state = state.copyWith(data: roomPrices, meta: value.meta);
@@ -41,34 +41,5 @@ class RoomPrices extends _$RoomPrices {
       print("error test $e");
       print(s);
     }
-  }
-
-  Future save(RoomPrice room_price) async {
-    state = state.setLoading();
-    await request<RoomPrice>(
-      url: room_price.isCreate()
-          ? addRoomPriceUrl()
-          : updateRoomPriceUrl(roomPriceId: room_price.id),
-
-      method: room_price.isCreate() ? Method.post : Method.put,
-      body: room_price.toJson(),
-    ).then((value) async {
-      state = state.copyWith(meta: value.meta);
-      if (value.isLoaded()) {
-        addOrUpdateRoomPrice(value.data!);
-      }
-    }).catchError((error) {
-      state = state.setError(error.toString());
-    });
-  }
-
-  void addOrUpdateRoomPrice(RoomPrice price) {
-    if (state.data!.any((e) => e.id == price.id)) {
-      var index = state.data!.indexWhere((e) => e.id == price.id);
-      state.data![index] = price;
-    } else {
-      state.data!.add(price);
-    }
-    state = state.copyWith(data: state.data);
   }
 }

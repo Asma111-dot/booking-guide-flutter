@@ -65,35 +65,4 @@ class Facilities extends _$Facilities {
       print("⚠️ استثناء أثناء الجلب: $e\n$s");
     }
   }
-
-  Future save(Facility facility) async {
-    state = state.setLoading();
-    await request<Facility>(
-      url: facility.isCreate()
-          ? addFacilityUrl()
-          : updateFacilityUrl(facility.id),
-      method: facility.isCreate() ? Method.post : Method.put,
-      body: facility.toJson(),
-    ).then((value) async {
-      state = state.copyWith(meta: value.meta);
-      if (value.isLoaded()) {
-        addOrUpdateFacility(value.data!);
-      }
-    }).catchError((error) {
-      state = state.setError(error.toString());
-    });
-  }
-
-  void addOrUpdateFacility(Facility facility) {
-    final updatedList = <Facility>[...(state.data ?? [])];
-    final index = updatedList.indexWhere((e) => e.id == facility.id);
-
-    if (index != -1) {
-      updatedList[index] = facility;
-    } else {
-      updatedList.add(facility);
-    }
-
-    state = state.copyWith(data: updatedList);
-  }
 }

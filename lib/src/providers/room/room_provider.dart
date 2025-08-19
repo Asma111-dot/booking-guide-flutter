@@ -4,7 +4,6 @@ import '../../models/room.dart' as r;
 import '../../models/response/response.dart';
 import '../../services/request_service.dart';
 import '../../utils/urls.dart';
-import 'rooms_provider.dart';
 
 part 'room_provider.g.dart';
 
@@ -38,25 +37,6 @@ class Room extends _$Room {
     } catch (e) {
       state = state.setError();
       print("Error fetching room: $e");
-    }
-  }
-
-  Future save(r.Room room) async {
-    state = state.setLoading();
-    try {
-      final value = await request<r.Room>(
-        url: room.isCreate() ? addRoomUrl() : updateRoomUrl(roomId: room.id),
-        method: room.isCreate() ? Method.post : Method.put,
-        body: room.toJson(),
-      );
-      state = state.copyWith(meta: value.meta);
-      if (value.isLoaded()) {
-        state = state.copyWith(data: value.data);
-        ref.read(roomsProvider.notifier).addOrUpdateRoom(value.data!);
-      }
-    } catch (e) {
-      state = state.setError();
-      print("Error saving room: $e");
     }
   }
 }

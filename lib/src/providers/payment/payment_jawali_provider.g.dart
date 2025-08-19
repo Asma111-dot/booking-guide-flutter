@@ -6,7 +6,7 @@ part of 'payment_jawali_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$paymentJawaliHash() => r'1e7ae58e874ba4d4317367ab05db1f3e8826d695';
+String _$paymentJawaliHash() => r'ce51ab571e3e46e0aafd648dc9d6c2ae1f449024';
 
 /// See also [PaymentJawali].
 @ProviderFor(PaymentJawali)

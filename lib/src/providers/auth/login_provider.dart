@@ -67,10 +67,9 @@ class Login extends _$Login {
     if (value.isLoaded()) {
       await onSuccessLogin(value);
     } else {
-      // عرض الخطأ للمستخدم
       showNotify(
         alert: Alert.error,
-        message: value.meta.message ?? 'فشل تسجيل الدخول',
+        message: value.meta.message ,
       );
     }
   }
@@ -132,9 +131,9 @@ class Login extends _$Login {
     }
 
     print("🔐 Token: $token");
-    await setToken(token); // تأكد من أنها async وتنتظر
+    await setToken(token);
 
-    await open(); // فتح الصندوق
+    await open();
     await ref.read(userProvider.notifier).saveUserLocally(user);
 
     final name = user.name.trim().toLowerCase();

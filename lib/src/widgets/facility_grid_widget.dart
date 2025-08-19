@@ -64,24 +64,21 @@ class FacilityGridWidget extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // صورة المنشأة
+            // الصورة بنسبة ثابتة بدل height ثابت
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  // borderRadius: const BorderRadius.only(
-                  //   topLeft: Radius.circular(15),
-                  //   topRight: Radius.circular(15),
-                  // ),
-                  child: CachedNetworkImage(
-                    imageUrl: defaultImage,
-                    height: 130,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) =>
-                    const ShimmerImagePlaceholder(width: double.infinity, height: 130),
-                    errorWidget: (context, url, error) =>
-                        Image.asset(appIcon, fit: BoxFit.cover),
+                  borderRadius: BorderRadius.circular(20),
+                  child: AspectRatio(
+                    aspectRatio:  3/2 , // جرّب 4/3 أو 16/9 بحسب التصميم
+                    child: CachedNetworkImage(
+                      imageUrl: defaultImage,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                      const ShimmerImagePlaceholder(width: double.infinity, height: double.infinity),
+                      errorWidget: (context, url, error) =>
+                          Image.asset(appIcon, fit: BoxFit.cover),
+                    ),
                   ),
                 ),
                 Positioned(
@@ -111,75 +108,89 @@ class FacilityGridWidget extends ConsumerWidget {
                       onPressed: () async {
                         final userId = currentUser()?.id;
                         if (userId != null) {
-                          await ref
-                              .read(favoritesProvider.notifier)
+                          await ref.read(favoritesProvider.notifier)
                               .toggleFavorite(ref, userId, facility);
                         }
                       },
-                      padding: EdgeInsets.zero, // لتقليل المساحة الداخلية
-                      constraints: const BoxConstraints(), // لتجنب الحجم الزائد
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
                     ),
                   ),
-                )
+                ),
               ],
             ),
-            // معلومات المنشأة
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    facility.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    finalPrice > 0
-                        ? '${trans().priceStartFrom} ${finalPrice.toStringAsFixed(0)}${trans().riyalY}'
-                        : trans().priceNotAvailable,
-                    style: TextStyle(
-                      color: hasDiscount
-                          ? colorScheme.onTertiary
-                          : colorScheme.tertiary,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  if (hasDiscount)
+
+            // اجعل منطقة النص مرنة
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
-                      '${firstPrice.toStringAsFixed(0)}${trans().riyalY}',
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: colorScheme.onSurface.withOpacity(0.4),
-                        decoration: TextDecoration.lineThrough,
+                      facility.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
                       ),
                     ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Icon(Icons.location_on,
-                          color: colorScheme.secondary, size: 14),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          facility.address ?? trans().address,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: colorScheme.onSurface.withOpacity(0.6),
-                          ),
+                    const SizedBox(height: 4),
+
+                    // سطر السعر
+                    Text(
+                      finalPrice > 0
+                          ? '${trans().priceStartFrom} ${finalPrice.toStringAsFixed(0)}${trans().riyalY}'
+                          : trans().priceNotAvailable,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: hasDiscount ? colorScheme.onTertiary : colorScheme.tertiary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    // السعر قبل الخصم (يختفي إن لم يكن خصمًا)
+                    if (hasDiscount)
+                      Text(
+                        '${firstPrice.toStringAsFixed(0)}${trans().riyalY}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: colorScheme.onSurface.withOpacity(0.4),
+                          decoration: TextDecoration.lineThrough,
                         ),
                       ),
-                    ],
-                  ),
-                ],
+
+                    const SizedBox(height: 4),
+
+                    // العنوان
+                    Row(
+                      children: [
+                        Icon(Icons.location_on, color: colorScheme.secondary, size: 14),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            facility.address ?? trans().address,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: colorScheme.onSurface.withOpacity(0.6),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    // لو احتجت مساحة لتفادي الضغط:
+                    const Spacer(), // يدفع المحتوى للأعلى عند الحاجة
+                  ],
+                ),
               ),
             ),
           ],
