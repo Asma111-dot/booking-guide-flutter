@@ -171,7 +171,7 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                   TextFormField(
                     controller: adultsController,
                     keyboardType: TextInputType.number,
-                    style: const TextStyle( // 👈 هنا أضفنا style
+                    style: const TextStyle(
                       fontFamily: 'Roboto',
                       fontSize: 16,
                     ),

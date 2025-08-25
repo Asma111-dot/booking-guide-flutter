@@ -1,5 +1,7 @@
+import 'amenity.dart';
 import 'reservation.dart';
 import 'room.dart';
+import 'media.dart';
 
 class RoomPrice {
   int id;
@@ -11,6 +13,9 @@ class RoomPrice {
   String period;
   String? timeFrom;
   String? timeTo;
+  String? title;
+  String? description;
+  int? size;
 
   double? finalPrice;
   double? finalDeposit;
@@ -18,6 +23,8 @@ class RoomPrice {
   List<dynamic> appliedDiscounts;
 
   List<Reservation> reservations;
+  List<Media> media;
+  List<Amenity> amenities;
   Room? room;
 
   RoomPrice({
@@ -35,7 +42,12 @@ class RoomPrice {
     this.discount,
     this.appliedDiscounts = const [],
     this.reservations = const [],
+    this.media = const [],
+    this.amenities = const [],
     this.room,
+    this.title,
+    this.description,
+    this.size,
   });
 
   RoomPrice.init()
@@ -53,7 +65,12 @@ class RoomPrice {
       discount = null,
         appliedDiscounts = [],
         reservations = [],
-        room = null;
+        media = [],
+        amenities = [],
+        room = null,
+        title = null,
+        description = null,
+        size = null;
 
   factory RoomPrice.fromJson(Map<String, dynamic> jsonMap) {
     return RoomPrice(
@@ -79,9 +96,18 @@ class RoomPrice {
       reservations: (jsonMap['reservations'] is List)
           ? List<Reservation>.from((jsonMap['reservations'] as List).map((item) => Reservation.fromJson(item)))
           : [],
+      media: (jsonMap['media'] is List)
+          ? List<Media>.from((jsonMap['media'] as List).map((item) => Media.fromJson(item)))
+          : [],
+      amenities: (jsonMap['amenities'] is List)
+          ? List<Amenity>.from((jsonMap['amenities'] as List).map((item) => Amenity.fromJson(item)))
+          : [],
       room: (jsonMap['room'] is Map)
           ? Room.fromJson(jsonMap['room'])
           : null,
+      title: jsonMap['title'],
+      description: jsonMap['description'],
+      size: int.tryParse(jsonMap['size']?.toString() ?? ''),
     );
   }
 
@@ -100,7 +126,12 @@ class RoomPrice {
     'discount': discount,
     'applied_discounts': appliedDiscounts,
     'reservations': reservations.map((r) => r.toJson()).toList(),
+    'media': media.map((m) => m.toJson()).toList(),
+    'amenities': amenities.map((a) => a.toJson()).toList(),
     'room': room?.toJson(),
+    'title': title,
+    'description': description,
+    'size': size,
   };
 
   bool isCreate() => id == 0;

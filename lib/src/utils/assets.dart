@@ -135,3 +135,5 @@ const closeIcon = Icons.close;
 const radioCheckIcon = Icons.radio_button_checked;
 const radioOutIcon = Icons.radio_button_off;
 const truesIcon = Icons.check;
+const verifiedIcon = Icons.verified;
+
