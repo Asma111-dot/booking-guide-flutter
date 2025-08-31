@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/sizes.dart';
 import '../utils/theme.dart';
 
 class CustomRowDetailsWidget extends StatelessWidget {
@@ -20,21 +21,21 @@ class CustomRowDetailsWidget extends StatelessWidget {
         Icon(
           icon,
           color: CustomTheme.color2,
-          size: 16,
+          size: Sizes.iconS16,
         ),
-        const SizedBox(width: 8),
+        Gaps.w8,
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 14,
+          style: TextStyle(
+            fontSize: TFont.m14,
             fontWeight: FontWeight.w400,
           ),
         ),
         const Spacer(),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 14,
+          style: TextStyle(
+            fontSize: TFont.m14,
             fontWeight: FontWeight.w300,
           ),
         ),

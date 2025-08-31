@@ -12,6 +12,7 @@ import '../providers/notification/notification_provider.dart';
 import '../providers/view_mode_provider.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
+import '../utils/sizes.dart';
 import '../utils/theme.dart';
 import '../widgets/discount_inline_widget.dart';
 import '../widgets/error_message_widget.dart';
@@ -71,7 +72,8 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
     final isOffline = ref.watch(isOfflineProvider);
     final userState = ref.watch(userProvider).data;
     final notificationsState = ref.watch(notificationsProvider);
-    final unreadCount = notificationsState.data?.where((n) => n.readAt == null).length ?? 0;
+    final unreadCount =
+        notificationsState.data?.where((n) => n.readAt == null).length ?? 0;
     final isGrid = ref.watch(isGridProvider);
 
     final theme = Theme.of(context);
@@ -93,16 +95,19 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
         Scaffold(
           body: Column(
             children: [
-              const SizedBox(height: 15),
+              Gaps.h20,
               Center(
                 child: Image.asset(
                   booking,
-                  width: 150,
-                  height: 50,
+                  width: S.w(140),
+                  height: S.h(40),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: EdgeInsets.symmetric(
+                  horizontal: Insets.l20,
+                  vertical: S.h(10),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -110,19 +115,20 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CircleAvatar(
-                          radius: 22,
+                          radius: S.r(24),
                           backgroundColor: colorScheme.onPrimary,
-                          backgroundImage: (userState != null && userState.media.isNotEmpty)
+                          backgroundImage: (userState != null &&
+                                  userState.media.isNotEmpty)
                               ? NetworkImage(userState.media.first.original_url)
                               : AssetImage(defaultAvatar) as ImageProvider,
                         ),
-                        const SizedBox(width: 6),
+                        Gaps.w8,
                         Expanded(
                           child: Text.rich(
                             TextSpan(
                               text: trans().hello_user,
                               style: TextStyle(
-                                fontSize: 18,
+                                fontSize: TFont.l16,
                                 fontWeight: FontWeight.w600,
                                 color: colorScheme.tertiary,
                               ),
@@ -130,7 +136,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                                 TextSpan(
                                   text: userState?.name ?? "User",
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: TFont.m14,
                                     fontWeight: FontWeight.w400,
                                     color: colorScheme.secondary,
                                   ),
@@ -142,33 +148,35 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                         IconButton(
                           icon: (whatsappIcon),
                           color: Colors.green,
-                          onPressed: () => launchUrl(Uri.parse("https://wa.me/775421110")),
+                          onPressed: () =>
+                              launchUrl(Uri.parse("https://wa.me/775421110")),
                         ),
-                        const SizedBox(width: 6),
+                        Gaps.w8,
                         Stack(
                           children: [
                             IconButton(
                               icon: const Icon(notificationIcon),
                               color: colorScheme.onSurface.withOpacity(0.6),
                               onPressed: () {
-                                Navigator.pushNamed(context, Routes.notifications);
+                                Navigator.pushNamed(
+                                    context, Routes.notifications);
                               },
                             ),
                             if (unreadCount > 0)
                               Positioned(
-                                right: 4,
-                                top: 4,
+                                right: S.w(4),
+                                top: S.h(4),
                                 child: Container(
-                                  padding: const EdgeInsets.all(4),
+                                  padding: EdgeInsets.all(Insets.s3_4),
                                   decoration: const BoxDecoration(
                                     color: Colors.red,
                                     shape: BoxShape.circle,
                                   ),
                                   child: Text(
                                     '$unreadCount',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 10,
+                                      fontSize: TFont.xxs10,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -181,9 +189,8 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                   ],
                 ),
               ),
-
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: Insets.l20),
                 child: Row(
                   children: [
                     Expanded(
@@ -191,7 +198,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                         children: [
                           IconButton(
                             icon: Icon(
-                              Icons.list_alt_outlined,
+                              listAltIcon,
                               color: ref.watch(isGridProvider)
                                   ? Theme.of(context).primaryColor
                                   : Colors.grey.withOpacity(0.4),
@@ -202,7 +209,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                           ),
                           IconButton(
                             icon: Icon(
-                              Icons.grid_view_outlined,
+                              gridIcon,
                               color: !ref.watch(isGridProvider)
                                   ? Theme.of(context).primaryColor
                                   : Colors.grey.withOpacity(0.4),
@@ -226,11 +233,11 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                         );
                       },
                       child: Container(
-                        height: 50,
-                        width: 50,
+                        height: S.h(50),
+                        width: S.w(50),
                         decoration: BoxDecoration(
                           gradient: CustomTheme.primaryGradient,
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: Corners.md15,
                         ),
                         child: const Icon(searchIcon, color: Colors.white),
                       ),
@@ -238,67 +245,71 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
+              Gaps.h12,
               const DiscountInlineWidget(),
-              const SizedBox(height: 20),
+              Gaps.h20,
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: EdgeInsets.symmetric(horizontal: S.w(12)),
                 child: facilityTypesState.data == null
                     ? const FacilityTypeShimmer()
                     : facilityTypesState.data!.isEmpty
-                    ? const SizedBox()
-                    : SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: facilityTypesState.data!.map((facilityType) {
-                      IconData icon;
-                      if (facilityType.id == 1) {
-                        icon = hotelIcon;
-                      } else if (facilityType.id == 2) {
-                        icon = poolIcon;
-                      } else if (facilityType.id == 3) {
-                        icon = doveIcon;
-                      } else {
-                        icon = defaultFacilityIcon;
-                      }
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 5),
-                        child: FacilityTypeWidget(
-                          title: facilityType.name,
-                          typeId: facilityType.id,
-                          selectedFacilityType: selectedFacilityType,
-                          icon: icon,
-                          onTap: _onFacilityTypeChange,
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
+                        ? const SizedBox()
+                        : SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children:
+                                  facilityTypesState.data!.map((facilityType) {
+                                IconData icon;
+                                if (facilityType.id == 1) {
+                                  icon = hotelIcon;
+                                } else if (facilityType.id == 2) {
+                                  icon = poolIcon;
+                                } else if (facilityType.id == 3) {
+                                  icon = doveIcon;
+                                } else {
+                                  icon = defaultFacilityIcon;
+                                }
+                                return Padding(
+                                  padding: EdgeInsets.only(right: S.w(6)),
+                                  child: FacilityTypeWidget(
+                                    title: facilityType.name,
+                                    typeId: facilityType.id,
+                                    selectedFacilityType: selectedFacilityType,
+                                    icon: icon,
+                                    onTap: _onFacilityTypeChange,
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
               ),
-              const SizedBox(height: 10),
+              Gaps.h12,
               Expanded(
                 child: selectedFacilityType == null
                     ? ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  itemCount: 5,
-                  itemBuilder: (_, __) => const FacilityShimmerCard(),
-                )
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Insets.m16,
+                          vertical: S.h(12),
+                        ),
+                        itemCount: 5,
+                        itemBuilder: (_, __) => const FacilityShimmerCard(),
+                      )
                     : FacilityPage(facilityTypeId: selectedFacilityType!),
               ),
             ],
           ),
         ),
-
         if (isOffline)
           Positioned.fill(
             child: Container(
-              color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.95),
+              color:
+                  Theme.of(context).scaffoldBackgroundColor.withOpacity(0.95),
               child: Center(
                 child: ErrorMessageWidget(
                   headerWidget: SvgPicture.asset(
                     internetIconSvg,
-                    width: 140,
-                    height: 140,
+                    width: S.w(150),
+                    height: S.h(150),
                   ),
                   textOnly: true,
                   isEmpty: true,

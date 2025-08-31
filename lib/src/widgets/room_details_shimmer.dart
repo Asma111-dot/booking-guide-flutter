@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../utils/sizes.dart';
+
 class RoomDetailsShimmer extends StatelessWidget {
   const RoomDetailsShimmer({super.key});
 
@@ -17,32 +19,32 @@ class RoomDetailsShimmer extends StatelessWidget {
           baseColor: color,
           highlightColor: color.withOpacity(0.3),
           child: Container(
-            height: 300,
+            height: S.h(300),
             width: double.infinity,
             color: color,
           ),
         ),
-        const SizedBox(height: 16),
+        Gaps.h15,
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: S.h(16)),
           child: Shimmer.fromColors(
             baseColor: color,
             highlightColor: color.withOpacity(0.3),
             child: Container(
-              height: 24,
-              width: 150,
+              width: S.w(150),
+              height: S.h(24),
               color: color,
             ),
           ),
         ),
-        const SizedBox(height: 8),
+        Gaps.h8,
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: S.h(16)),
           child: Shimmer.fromColors(
             baseColor: color,
             highlightColor: color.withOpacity(0.3),
             child: Container(
-              height: 14,
+              height: S.h(16),
               width: double.infinity,
               color: color,
             ),

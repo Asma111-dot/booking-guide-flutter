@@ -1,3 +1,4 @@
+import 'package:booking_guide/src/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import '../enums/payment_method.dart';
 import '../utils/assets.dart';
@@ -27,27 +28,33 @@ class PaymentMethodTile extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: cs.surfaceVariant.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: Corners.sm8,
           border: Border.all(
             color: selected ? cs.primary : cs.outline,
             width: 1,
           ),
         ),
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        margin: EdgeInsets.symmetric(
+          horizontal: S.w(16),
+          vertical: S.h(8),
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: S.w(16),
+          vertical: S.h(12),
+        ),
         child: Row(
           children: [
             ClipOval(
               child: Image.asset(
                 method.image,
-                width: 40,
-                height: 40,
+                width: S.w(40),
+                height: S.h(40),
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) =>
-                    Icon(NotImageIcon, color: cs.error, size: 40),
+                    Icon(NotImageIcon, color: cs.error, size: Sizes.iconM20),
               ),
             ),
-            const SizedBox(width: 16),
+            Gaps.w16,
             Expanded(
               child: Text(
                 method.name,
@@ -55,11 +62,8 @@ class PaymentMethodTile extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            Icon(
-              selected ? radioCheckIcon : radioOutIcon,
-              color: selected ? cs.primary : cs.outline,
-              size: 24,
-            ),
+            Icon(selected ? radioCheckIcon : radioOutIcon,
+                color: selected ? cs.primary : cs.outline, size: Sizes.iconL24),
           ],
         ),
       ),

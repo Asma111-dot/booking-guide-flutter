@@ -129,6 +129,7 @@ const cogIcon = LineAwesomeIcons.cog_solid;
 const bookOpenIcon = LineAwesomeIcons.book_open_solid;
 const headSetIcon = LineAwesomeIcons.headset_solid;
 const singInIcon = LineAwesomeIcons.sign_in_alt_solid;
+const showIcon = LineAwesomeIcons.home_solid;
 const deleteIcon = Icons.delete_forever;
 const checkIcon = Icons.check_circle;
 const closeIcon = Icons.close;
@@ -136,4 +137,13 @@ const radioCheckIcon = Icons.radio_button_checked;
 const radioOutIcon = Icons.radio_button_off;
 const truesIcon = Icons.check;
 const verifiedIcon = Icons.verified;
+const gridIcon = Icons.grid_view_outlined;
+const listAltIcon = Icons.list_alt_outlined;
+const titleIcon = Icons.title;
+const localOfferIcon = Icons.local_offer;
+const myLocationIcon = Icons.my_location;
+const layerIcon = Icons.layers;
+const videoIcon = Icons.videocam;
+const playCircleIcon = Icons.play_circle_fill;
+
 

@@ -3,6 +3,7 @@ import 'package:lottie/lottie.dart';
 
 import '../extensions/theme_extension.dart';
 import '../utils/theme.dart';
+import '../utils/sizes.dart';
 
 class ChipWidget extends StatelessWidget {
   final Widget child;
@@ -27,19 +28,24 @@ class ChipWidget extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: theme.lightBackgroundColor(),
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: Corners.sm8,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+        padding: EdgeInsets.symmetric(
+          horizontal: Insets.xs8,
+          vertical: Insets.xxs6,
+        ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (lottieAsset != null)
               Lottie.asset(
                 lottieAsset!,
-                height: lottieHeight ?? 24.0,
+                height: lottieHeight ?? S.h(24),
+
                 repeat: true,
               ),
-            if (lottieAsset != null) const SizedBox(width: 4.0),
+            if (lottieAsset != null) Gaps.w4,
+
             child,
           ],
         ),

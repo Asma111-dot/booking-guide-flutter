@@ -1,3 +1,4 @@
+import 'package:booking_guide/src/utils/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -20,7 +21,7 @@ class FullImageWidget extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.black,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(goBackIcon, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -37,7 +38,7 @@ class FullImageWidget extends StatelessWidget {
                 placeholder: (context, url) =>
                 const Center(child: CircularProgressIndicator()),
                 errorWidget: (context, url, error) =>
-                const Icon(Icons.error, color: Colors.white),
+                 Icon(errorIcon, color: Colors.white),
               ),
             ),
           );

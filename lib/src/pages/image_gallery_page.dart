@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../helpers/general_helper.dart';
 import '../models/media.dart';
 import '../utils/assets.dart';
+import '../utils/sizes.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/full_image_widget.dart';
 import '../widgets/video_full_widget.dart';
@@ -70,16 +71,16 @@ class ImageGalleryPage extends StatelessWidget {
               children: [
                 Container(
                   color: Colors.black26,
-                  child: const Icon(Icons.videocam, size: 48, color: Colors.white),
+                  child:Icon(videoIcon, size: Sizes.avatarM48, color: Colors.white),
                 ),
-                const Icon(Icons.play_circle_fill, color: Colors.white, size: 48),
+                 Icon(playCircleIcon, color: Colors.white, size: Sizes.avatarM48),
               ],
             )
                 : CachedNetworkImage(
               imageUrl: media.original_url,
               fit: BoxFit.cover,
               placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-              errorWidget: (context, url, error) => const Icon(Icons.error, color: Colors.red),
+              errorWidget: (context, url, error) =>  Icon(errorIcon, color: Colors.red),
             ),
           );
         },

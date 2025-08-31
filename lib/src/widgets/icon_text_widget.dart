@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 
+import '../utils/sizes.dart';
 import '../utils/theme.dart';
 
 class IconTextWidget extends StatelessWidget {
@@ -31,22 +32,23 @@ class IconTextWidget extends StatelessWidget {
         if (useLottie && lottieAsset != null)
           Lottie.asset(
             lottieAsset!,
-            width: 24.0,
-            height: 24.0,
+            width: S.w(24),
+            height: S.h(24),
+
             repeat: false,
           )
         else if (icon != null)
           Icon(
             icon,
             color: color ?? theme.borderColor(), // Use color from CustomTheme
-            size: 24.0,
+            size: Sizes.iconL24,
           ),
-        SizedBox(width: 8.0),
+        Gaps.w8,
         Text(
           text,
           style: TextStyle(
             color: color ?? theme.lightBackgroundColor(), // Use color from CustomTheme
-            fontSize: textSize ?? 14.0,
+            fontSize: textSize ?? TFont.m14,
           ),
         ),
       ],

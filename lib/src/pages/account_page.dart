@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../helpers/general_helper.dart';
 import '../providers/auth/user_provider.dart';
 import '../sheetes/language_bottom_sheet.dart';
 import '../sheetes/logout_bottom_sheet.dart';
 import '../utils/assets.dart';
+import '../utils/sizes.dart';
+import '../utils/theme.dart';
 import '../widgets/display_mode_toggle.dart';
 import '../widgets/mune_item_widget.dart';
 import '../widgets/social_links_widget.dart';
@@ -41,26 +44,29 @@ class _AccountPageState extends ConsumerState<AccountPage> {
     // final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-
-    appBar: AppBar(
-      centerTitle: true,
-      title: Text(
-        trans().persons,
-        style: theme.textTheme.headlineMedium?.copyWith(
-          color: colorScheme.primary,
-          fontWeight: FontWeight.bold,
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          trans().persons,
+          style: theme.textTheme.headlineMedium?.copyWith(
+            color: colorScheme.primary,
+            fontWeight: FontWeight.bold,
+          ),
         ),
+        elevation: 0,
+        backgroundColor: theme.scaffoldBackgroundColor,
+        iconTheme: IconThemeData(color: colorScheme.secondary),
+        leading: Directionality.of(context) == TextDirection.rtl
+            ? toggleButton
+            : null,
+        actions: Directionality.of(context) == TextDirection.ltr
+            ? [toggleButton]
+            : null,
       ),
-      elevation: 0,
-      backgroundColor: theme.scaffoldBackgroundColor,
-      iconTheme: IconThemeData(color: colorScheme.secondary),
-      leading: Directionality.of(context) == TextDirection.rtl ? toggleButton : null,
-      actions: Directionality.of(context) == TextDirection.ltr ? [toggleButton] : null,
-    ),
       backgroundColor: theme.scaffoldBackgroundColor,
       body: SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.all(10),
+          padding: EdgeInsets.all(Insets.s12),
           color: theme.scaffoldBackgroundColor,
           child: Column(
             children: [
@@ -70,28 +76,28 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CircleAvatar(
-                      radius: 40,
+                      radius: S.r(40),
                       backgroundColor: colorScheme.surfaceVariant,
                       backgroundImage: (user?.media.isNotEmpty ?? false)
                           ? NetworkImage(user!.media.first.original_url)
                           : AssetImage(defaultAvatar) as ImageProvider,
                     ),
-                    const SizedBox(width: 15),
+                    Gaps.w12,
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           user?.name ?? "User",
                           style: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.bold,
                             color: colorScheme.primary,
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        Gaps.h8,
                         Text(
                           user?.email ?? "user@mybooking.com",
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: TFont.s12,
                             color: colorScheme.secondary,
                           ),
                         ),
@@ -100,9 +106,9 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              Gaps.h15,
               const Divider(),
-              const SizedBox(height: 10),
+              Gaps.h6,
               ListView(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -132,9 +138,10 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       onPressed: () {
                         showModalBottomSheet(
                           context: context,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(20)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(S.r(20)),
+                        ),
                           ),
                           backgroundColor: colorScheme.surface,
                           isScrollControlled: true,
@@ -167,10 +174,10 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       onPressed: () {
                         showModalBottomSheet(
                           context: context,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(20)),
-                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(S.r(20)),
+                            ),                          ),
                           backgroundColor: colorScheme.surface,
                           isScrollControlled: true,
                           builder: (context) => const SupportBottomSheet(),
@@ -182,6 +189,21 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   _buildMenuCard(
                     theme,
                     MenuItem(
+                      title: trans().list_your_facility,
+                      subtitle: trans().promote_your_facility,
+                      onPressed: () async {
+                        const url = 'https://bookings-guide.com';
+                        if (await canLaunchUrl(Uri.parse(url))) {
+                          await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+                        } else {
+                          throw 'Could not launch $url';
+                        }
+                      },
+                      icon: showIcon,
+                    ),                  ),
+                  _buildMenuCard(
+                    theme,
+                    MenuItem(
                       title: trans().logout,
                       subtitle: trans().logout_desc,
                       onPressed: () => showLogoutBottomSheet(context, ref),
@@ -190,22 +212,23 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              Gaps.h20,
               _buildMenuCard(
                 theme,
                 Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(Insets.m16),
                   child: Column(
                     children: [
                       Image.asset(
                         mybooking,
-                        width: 150,
-                        height: 40,
+                        width: S.w(150),
+                        height: S.h(40),
+                        
                         fit: BoxFit.contain,
                       ),
-                      const SizedBox(height: 16),
+                      Gaps.h15,
                       const SocialLinksWidget(),
-                      const SizedBox(height: 16),
+                      Gaps.h15,
                       TextButton.icon(
                         onPressed: () async {
                           final shareText =
@@ -215,24 +238,38 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                             subject: trans().share_subject,
                           );
                         },
-                        icon: Icon(shareIcon, color: colorScheme.secondary),
-                        label: Text(
-                          trans().share_app,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: colorScheme.primary,
+                        icon: ShaderMask(
+                          shaderCallback: (bounds) => const LinearGradient(
+                            colors: [CustomTheme.color1, CustomTheme.color4],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ).createShader(bounds),
+                          child: Icon(shareIcon, color: Colors.white),
+                        ),
+                        label: ShaderMask(
+                          shaderCallback: (bounds) => const LinearGradient(
+                            colors: [CustomTheme.color1, CustomTheme.color4],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ).createShader(bounds),
+                          child: Text(
+                            trans().share_app,
+                            style: TextStyle(
+                              fontSize: TFont.m14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                         style: TextButton.styleFrom(
-                          foregroundColor: colorScheme.secondary,
+                          foregroundColor: Colors.transparent,
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              Gaps.h20,
             ],
           ),
         ),
@@ -246,9 +283,12 @@ Widget _buildMenuCard(ThemeData theme, Widget child) {
     color: theme.colorScheme.surface,
     elevation: 0,
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: Corners.md15,
     ),
-    margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+    margin: EdgeInsets.symmetric(
+      vertical: Insets.xs8,
+      horizontal: Insets.xs8,
+    ),
     child: child,
   );
 }

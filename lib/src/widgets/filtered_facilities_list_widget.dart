@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+
 import '../enums/facility_filter_type.dart';
 import '../helpers/general_helper.dart';
 import '../providers/filter/filtered_facilities_provider.dart';
 import '../utils/assets.dart';
+import '../utils/sizes.dart';
 import 'facility_shimmer_card.dart';
 import 'facility_widget.dart';
 
@@ -34,7 +36,10 @@ class FilteredFacilitiesListWidget extends ConsumerWidget {
 
     if (filtered.isLoading()) {
       return ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: EdgeInsets.symmetric(
+          horizontal: Insets.m16,
+          vertical: S.h(12),
+        ),
         itemCount: 5,
         itemBuilder: (_, __) => const FacilityShimmerCard(),
       );
@@ -46,7 +51,7 @@ class FilteredFacilitiesListWidget extends ConsumerWidget {
           filtered.message(),
           style: TextStyle(
             color: colorScheme.error,
-            fontSize: 14,
+            fontSize: TFont.s12,
           ),
         ),
       );
@@ -61,15 +66,15 @@ class FilteredFacilitiesListWidget extends ConsumerWidget {
           children: [
             SvgPicture.asset(
               inboxIconSvg,
-              width: 140,
-              height: 140,
+              width: S.w(140),
+              height: S.h(140),
             ),
-            const SizedBox(height: 12),
+            Gaps.h12,
             Text(
               trans().no_matching_facilities,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: TFont.xxs10,
                 color: Colors.grey.shade700,
                 fontWeight: FontWeight.w700,
               ),
@@ -80,32 +85,38 @@ class FilteredFacilitiesListWidget extends ConsumerWidget {
     }
 
     return ListView(
-      padding: const EdgeInsets.only(top: 8, bottom: 8),
+      padding: EdgeInsets.only(
+        top: Insets.xs8,
+        bottom: Insets.xs8,
+      ),
       children: [
         if (selectedFilter != null && values[selectedFilter] != null)
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+            padding: EdgeInsets.symmetric(
+              vertical: Insets.s3_4,
+              horizontal: Insets.s12,
+            ),
             child: Text(
               buildFilterDescription(
                 selectedFilter!,
                 values[selectedFilter],
               ),
               style: TextStyle(
-                fontSize: 10,
+                fontSize: TFont.xxs8,
                 fontWeight: FontWeight.bold,
                 color: colorScheme.primary,
               ),
             ),
           ),
-        const SizedBox(height: 10),
+        Gaps.h12,
         ...facilities.map(
-              (facility) {
+          (facility) {
             return FacilityWidget(
               facility: facility,
               minPriceFilter:
-              minPrice != null ? double.tryParse(minPrice!) : null,
+                  minPrice != null ? double.tryParse(minPrice!) : null,
               maxPriceFilter:
-              maxPrice != null ? double.tryParse(maxPrice!) : null,
+                  maxPrice != null ? double.tryParse(maxPrice!) : null,
             );
           },
         ),

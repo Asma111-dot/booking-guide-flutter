@@ -6,6 +6,7 @@ import '../helpers/general_helper.dart';
 import '../models/room_price.dart';
 import '../utils/amenity_icon_helper.dart';
 import '../utils/assets.dart';
+import '../utils/sizes.dart';
 import '../utils/theme.dart';
 import 'room_price_media_carousel.dart';
 
@@ -30,19 +31,19 @@ class RoomPriceWidget extends StatelessWidget {
     bool hasAppliedDiscounts = price.appliedDiscounts.isNotEmpty;
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      padding: const EdgeInsets.all(16.0),
+      margin: EdgeInsets.symmetric(vertical: Insets.xs8),
+      padding: EdgeInsets.all(Insets.m16),
       decoration: BoxDecoration(
         color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(S.r(12)),
         border: Border.all(
           color: colorScheme.outline.withOpacity(0.1),
         ),
         boxShadow: [
           BoxShadow(
             color: colorScheme.shadow.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            blurRadius: S.r(12),
+            offset: Offset(0, S.h(5)),
           ),
         ],
       ),
@@ -55,14 +56,14 @@ class RoomPriceWidget extends StatelessWidget {
               Icon(
                 periodIcon,
                 color: colorScheme.secondary,
-                size: 16,
+                size: Sizes.iconM20,
               ),
-              const SizedBox(width: 8),
+              Gaps.w8,
               Expanded(
                 child: Text(
                   "${price.period} | ${price.timeFrom?.fromTimeToDateTime()?.toTimeView() ?? '--:--'} - ${price.timeTo?.fromTimeToDateTime()?.toTimeView() ?? '--:--'}",
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: TFont.m14,
                     color: colorScheme.primary,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -72,7 +73,7 @@ class RoomPriceWidget extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 8),
+          Gaps.h8,
 
           /// 📍 Price display
           Row(
@@ -80,24 +81,24 @@ class RoomPriceWidget extends StatelessWidget {
               Icon(
                 priceIcon,
                 color: colorScheme.secondary,
-                size: 16,
+                size: Sizes.iconS18,
               ),
-              const SizedBox(width: 8),
+              Gaps.w8,
               if (hasDiscount) ...[
                 Text(
                   "${price.price.toInt()} ${trans().riyalY}",
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: TFont.m14,
                     fontFamily: 'Roboto',
                     color: colorScheme.onSurface.withOpacity(0.4),
                     decoration: TextDecoration.lineThrough,
                   ),
                 ),
-                const SizedBox(width: 6),
+                Gaps.w4,
                 Text(
                   "${finalPrice.toInt()} ${trans().riyalY}",
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: TFont.m14,
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.bold,
                     color: Colors.red,
@@ -107,7 +108,7 @@ class RoomPriceWidget extends StatelessWidget {
                 Text(
                   "${price.price.toInt()} ${trans().riyalY}",
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: TFont.m14,
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.bold,
                     color: colorScheme.primary,
@@ -119,18 +120,19 @@ class RoomPriceWidget extends StatelessWidget {
 
           /// 📍 Period details (title / description / size / media /amenities)
           if (hasDetails) ...[
-            const SizedBox(height: 6),
+            Gaps.h6,
             ExpansionTile(
               tilePadding: EdgeInsets.zero,
               title: Wrap(
                 crossAxisAlignment: WrapCrossAlignment.center,
-                spacing: 6,
+                spacing: S.r(8),
                 children: [
-                  Icon(verifiedIcon, color: colorScheme.secondary, size: 18),
+                  Icon(verifiedIcon,
+                      color: colorScheme.secondary, size: Sizes.iconM20),
                   Text(
                     trans().package_features_detailed,
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: TFont.m14,
                       fontWeight: FontWeight.w500,
                       color: colorScheme.primary,
                     ),
@@ -143,13 +145,13 @@ class RoomPriceWidget extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.title, size: 16),
-                      const SizedBox(width: 8),
+                      Icon(titleIcon, size: Sizes.iconS16),
+                      Gaps.w8,
                       Expanded(
                         child: Text(
                           price.title!.trim(),
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: TFont.m14,
                             fontWeight: FontWeight.w600,
                             color: colorScheme.onSurface,
                           ),
@@ -157,7 +159,7 @@ class RoomPriceWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  Gaps.w8,
                 ],
 
                 // الوصف
@@ -169,7 +171,7 @@ class RoomPriceWidget extends StatelessWidget {
                         child: Text(
                           price.description!.trim(),
                           style: TextStyle(
-                            fontSize: 13.5,
+                            fontSize: TFont.m14,
                             height: 1.4,
                             color: colorScheme.onSurface.withOpacity(0.8),
                           ),
@@ -177,7 +179,7 @@ class RoomPriceWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  Gaps.h12
                 ],
 
                 // الحجم + السعة (كل واحد في سطر)
@@ -188,15 +190,16 @@ class RoomPriceWidget extends StatelessWidget {
                     children: [
                       if (price.size != null && price.size! > 0)
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 6),
+                          padding: EdgeInsets.only(bottom: S.h(6)),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const SizedBox(width: 6),
+                              Gaps.w4,
                               Text(
                                 '${trans().size} : ${price.size} ${trans().meter2}',
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: TFont.l16,
+                                  fontWeight: FontWeight.bold,
                                   fontFamily: 'Roboto',
                                   color:
                                       Theme.of(context).colorScheme.onSurface,
@@ -205,53 +208,54 @@ class RoomPriceWidget extends StatelessWidget {
                             ],
                           ),
                         ),
-                      const SizedBox(height: 8),
+                      Gaps.h8,
                       if (price.capacity > 0)
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const SizedBox(width: 6),
+                            Gaps.w4,
                             Text(
                               '${trans().capacity}: ${price.capacity} ${trans().person}',
                               style: TextStyle(
-                                fontSize:18,
+                                fontSize: TFont.l16,
+                                fontWeight: FontWeight.bold,
                                 fontFamily: 'Roboto',
                                 color: Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
                           ],
                         ),
-
-                      const SizedBox(height: 8),
+                      Gaps.h8,
                       if (price.deposit! > 0)
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const SizedBox(width: 6),
+                            Gaps.w4,
                             Text(
                               '${trans().deposit}: ${price.deposit} ${trans().riyalY}',
                               style: TextStyle(
-                                fontSize:18,
+                                fontSize: TFont.l16,
+                                fontWeight: FontWeight.bold,
                                 fontFamily: 'Roboto',
                                 color: Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
                           ],
                         ),
-                      const SizedBox(height: 12),
+                      Gaps.h12
                     ],
                   ),
                 ),
 
                 // amenities
                 if (price.amenities.isNotEmpty) ...[
-                  const SizedBox(height: 12),
+                  Gaps.h12,
                   Align(
                     alignment: AlignmentDirectional.centerStart,
                     child: Text(
                       ('${trans().amenities} :'),
-                      style: const TextStyle(
-                        fontSize: 12,
+                      style: TextStyle(
+                        fontSize: TFont.l16,
                         fontWeight: FontWeight.bold,
                         color: CustomTheme.color3,
                       ),
@@ -264,28 +268,32 @@ class RoomPriceWidget extends StatelessWidget {
                       alignment: WrapAlignment.start,
                       runAlignment: WrapAlignment.start,
                       crossAxisAlignment: WrapCrossAlignment.start,
-                      spacing: 12,
-                      runSpacing: 12,
+                      spacing: S.r(8),
+                      runSpacing: S.r(8),
                       children: price.amenities.map((a) {
                         final icon = AmenityIconHelper.getAmenityIcon(a.name);
                         return Tooltip(
                           message: (a.desc).trim().isEmpty ? a.name : a.desc,
                           child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 8),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Insets.s12,
+                              vertical: S.h(8),
+                            ),
                             decoration: BoxDecoration(
                               color: CustomTheme.color3.withOpacity(0.03),
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: Corners.md15,
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(icon, size: 16, color: CustomTheme.color3),
-                                const SizedBox(width: 6),
+                                Icon(icon,
+                                    size: Sizes.iconS16,
+                                    color: CustomTheme.color3),
+                                Gaps.w4,
                                 Text(
                                   a.name,
                                   style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: TFont.m14,
                                     color:
                                         Theme.of(context).colorScheme.onSurface,
                                   ),
@@ -298,36 +306,37 @@ class RoomPriceWidget extends StatelessWidget {
                     ),
                   ),
                 ],
-                const SizedBox(height: 12),
-
+                Gaps.h15,
                 // معرض الوسائط (صور + فيديو)
                 if (price.media.isNotEmpty) ...[
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child:
-                        RoomPriceMediaCarousel(media: price.media, height: 150),
+                    borderRadius: Corners.md15,
+                    child: RoomPriceMediaCarousel(
+                      media: price.media,
+                      height: S.h(150),
+                    ),
                   ),
-                  const SizedBox(height: 10),
+                  Gaps.h8,
                 ],
-                const SizedBox(height: 8),
+                Gaps.h8
               ],
             ),
           ],
 
           /// 📍 Discounts details with ExpansionTile
           if (hasAppliedDiscounts) ...[
-            const SizedBox(height: 6),
+            Gaps.h6,
             ExpansionTile(
               tilePadding: EdgeInsets.zero,
               title: Wrap(
                 crossAxisAlignment: WrapCrossAlignment.center,
-                spacing: 6,
+                spacing: S.w(6),
                 children: [
-                  const Icon(Icons.local_offer, color: Colors.green, size: 16),
+                  Icon(Icons.local_offer, color: Colors.green, size: Sizes.iconS16),
                   Text(
                     trans().show_discount_details,
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: TFont.m14,
                       fontWeight: FontWeight.w500,
                       color: colorScheme.primary,
                     ),
@@ -341,18 +350,17 @@ class RoomPriceWidget extends StatelessWidget {
                 String value = discount['value'].toString();
 
                 return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  padding: EdgeInsets.symmetric(vertical: S.h(4)),
                   child: Row(
                     children: [
-                      const SizedBox(width: 6),
-                      const Icon(Icons.arrow_right,
-                          size: 16, color: Colors.grey),
-                      const SizedBox(width: 6),
+                      Gaps.w4,
+                      Icon(Icons.arrow_right, size: Sizes.iconS16, color: Colors.grey),
+                      Gaps.w4,
                       Expanded(
                         child: Text(
                           "${discount['name']} ($type: $value)",
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: TFont.s12,
                             color: colorScheme.onSurface.withOpacity(0.7),
                           ),
                           overflow: TextOverflow.clip,

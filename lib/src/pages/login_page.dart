@@ -4,6 +4,7 @@ import '../helpers/general_helper.dart';
 import '../providers/auth/login_provider.dart';
 import '../providers/auth/otp_state_provider.dart';
 import '../utils/assets.dart';
+import '../utils/sizes.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar_clipper.dart';
 import '../sheetes/otp_verify_sheet.dart';
@@ -47,13 +48,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           : AutovalidateMode.disabled,
                       child: Column(
                         children: [
-                          const SizedBox(height: 100),
+                          S.gapH(100),
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 40),
-                            child: Image.asset(mybooking, height: 50),
+                            padding: EdgeInsets.only(bottom: S.h(40)),
+                            child: Image.asset(mybooking, height: S.h(50)),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            padding: EdgeInsets.symmetric(vertical: S.h(8)),
                             child: Text(
                               trans().login_subtitle,
                               style: theme.textTheme.bodySmall?.copyWith(
@@ -63,23 +64,23 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               textAlign: TextAlign.start,
                             ),
                           ),
-                          const SizedBox(height: 20),
+                          Gaps.h20,
                           TextFormField(
                             keyboardType: TextInputType.phone,
                             readOnly: login.isLoading(),
-                            style: const TextStyle( // 👈 هنا أضفنا هذا السطر
+                            style:  TextStyle(
                               fontFamily: 'Roboto',
-                              fontSize: 16,
+                              fontSize: TFont.m14,
                             ),
                             decoration: InputDecoration(
                               prefixIcon: Icon(callIcon, color: colorScheme.primary),
-                              prefix: const Directionality(
+                              prefix:  Directionality(
                                 textDirection: TextDirection.ltr,
                                 child: Text(
                                   '+967 ',
                                   style: TextStyle(
                                     fontFamily: 'Roboto',
-                                    fontSize: 16,
+                                    fontSize: TFont.m14,
                                   ),
                                 ),
                               ),
@@ -88,20 +89,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 color: colorScheme.onSurface.withOpacity(0.7),
                               ),
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: Corners.sm8,
                               ),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: Corners.sm8,
                                 borderSide: BorderSide(
                                   color: colorScheme.outline.withOpacity(0.3),
-                                  width: 1.5,
+                                  width: S.w(1.5),
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide: BorderSide(
                                   color: colorScheme.primary,
-                                  width: 1.5,
+                                  width: S.w(1.5),
                                 ),
                               ),
                             ),

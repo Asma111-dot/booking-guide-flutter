@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../utils/assets.dart';
+import '../utils/sizes.dart';
 
 class MenuItem extends StatelessWidget {
   final String title;
@@ -19,44 +20,44 @@ class MenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+    final colors = theme.colorScheme;
 
     return ListTile(
       onTap: onPressed,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+      contentPadding: EdgeInsets.symmetric(horizontal: Insets.xs8),
       leading: Container(
-        width: 40,
-        height: 40,
+        width: S.w(40),
+        height: S.h(40),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          color: colorScheme.secondary.withOpacity(0.1),
+          color: colors.secondary.withOpacity(0.1),
+          borderRadius: Corners.pill100,
         ),
-        child: Icon(icon, color: colorScheme.primary),
+        alignment: Alignment.center,
+        child: Icon(icon, color: colors.primary, size: Sizes.iconM20),
       ),
       title: Text(
         title,
-        style: theme.textTheme.bodyMedium?.copyWith(
+        style: theme.textTheme.titleSmall?.copyWith(
           fontWeight: FontWeight.w700,
-          fontSize: 15,
-          color: colorScheme.primary,
+          fontSize: TFont.m14,
+          color: colors.primary,
         ),
       ),
-      subtitle: subtitle != null
-          ? Text(
-              subtitle!,
-              style: theme.textTheme.bodySmall?.copyWith(
-                fontSize: 12,
-                color: colorScheme.onSurface.withOpacity(0.6),
-              ),
-            )
-          : null,
+      subtitle: subtitle == null
+          ? null
+          : Text(
+        subtitle!,
+        style: theme.textTheme.bodySmall?.copyWith(
+          fontSize: TFont.s12,
+          color: colors.onSurface.withOpacity(0.6),
+        ),
+      ),
       trailing: Icon(
         Directionality.of(context) == TextDirection.rtl
             ? angleLeftIcon
             : angleRightIcon,
-        color: colorScheme.primary,
-        size: 20,
-        weight: 10,
+        color: colors.primary,
+        size: Sizes.iconM20,
       ),
     );
   }

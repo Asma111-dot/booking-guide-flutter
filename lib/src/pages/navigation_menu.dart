@@ -1,3 +1,4 @@
+import 'package:booking_guide/src/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../helpers/general_helper.dart';
@@ -22,31 +23,28 @@ class NavigationMenu extends StatelessWidget {
       facilityId: facilityId,
     ));
 
-    return Obx(() =>
-        WillPopScope(
+    return Obx(() => WillPopScope(
           onWillPop: () async {
             if (controller.selectedIndex.value != 0) {
               controller.selectedIndex.value = 0;
-              return false; // لا تخرج
+              return false;
             }
-            return true; // اخرج
+            return true;
           },
           child: Scaffold(
             body: controller.screens[controller.selectedIndex.value],
             bottomNavigationBar: Container(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              padding:
+                  EdgeInsets.symmetric(vertical: S.h(8), horizontal: S.w(16)),
               decoration: BoxDecoration(
-                color: Theme
-                    .of(context)
-                    .cardColor,
+                color: Theme.of(context).cardColor,
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(30),
                   topRight: Radius.circular(30),
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Theme
-                        .of(context)
+                    color: Theme.of(context)
                         .colorScheme
                         .secondary
                         .withOpacity(0.08),
@@ -80,17 +78,16 @@ class NavigationMenu extends StatelessWidget {
                       onTap: () => controller.selectedIndex.value = index,
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 250),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 8),
+                        padding: EdgeInsets.symmetric(
+                            vertical: S.h(8), horizontal: S.w(8)),
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? Theme
-                              .of(context)
-                              .colorScheme
-                              .secondary
-                              .withOpacity(0.1)
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .secondary
+                                  .withOpacity(0.1)
                               : Colors.transparent,
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: Corners.lg30,
                         ),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -98,34 +95,26 @@ class NavigationMenu extends StatelessWidget {
                             Icon(
                               iconData,
                               color: isSelected
-                                  ? Theme
-                                  .of(context)
-                                  .colorScheme
-                                  .secondary
-                                  : Theme
-                                  .of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withOpacity(0.6),
+                                  ? Theme.of(context).colorScheme.secondary
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withOpacity(0.6),
                             ),
-                            const SizedBox(height: 3),
+                            Gaps.h4,
                             Text(
                               label,
                               style: TextStyle(
-                                fontSize: 10,
+                                fontSize: TFont.xxs10,
                                 fontWeight: isSelected
                                     ? FontWeight.w400
                                     : FontWeight.w200,
                                 color: isSelected
-                                    ? Theme
-                                    .of(context)
-                                    .colorScheme
-                                    .primary
-                                    : Theme
-                                    .of(context)
-                                    .colorScheme
-                                    .onSurface
-                                    .withOpacity(0.6),
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withOpacity(0.6),
                               ),
                             ),
                           ],
@@ -140,7 +129,8 @@ class NavigationMenu extends StatelessWidget {
         ));
   }
 }
-  class NavigationController extends GetxController {
+
+class NavigationController extends GetxController {
   final RxInt selectedIndex = 0.obs;
 
   late final List<Widget> screens;

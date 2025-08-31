@@ -9,6 +9,7 @@ import '../providers/facility/facility_provider.dart';
 import '../sheetes/facility_search_delegate.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
+import '../utils/sizes.dart';
 import '../utils/theme.dart';
 import '../widgets/view_widget.dart';
 
@@ -71,8 +72,8 @@ class _MapPageState extends ConsumerState<MapPage> {
   Widget _buildInfoCard(BuildContext context, f.Facility facility) {
     final colorScheme = Theme.of(context).colorScheme;
     return SizedBox(
-      height: 140,
-      width: 140, // ← خليه يطابق عرض الـ CustomInfoWindow
+      height: S.h(140),
+      width: S.w(140),
       child: Column(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -84,12 +85,12 @@ class _MapPageState extends ConsumerState<MapPage> {
             ),
             child: Image.network(
               facility.logo ?? '',
-              height: 80,
+              height: S.h(80),
               width: double.infinity,
               fit: BoxFit.cover,
               errorBuilder: (_, __, ___) => Image.asset(
                 appIcon,
-                height: 80,
+                height: S.h(80),
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
@@ -97,7 +98,7 @@ class _MapPageState extends ConsumerState<MapPage> {
           ),
           Expanded(
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+              padding: EdgeInsets.symmetric(vertical: S.h(6), horizontal: S.w(10)),
               decoration: BoxDecoration(
                 color: colorScheme.surface,
                 borderRadius: const BorderRadius.only(
@@ -113,7 +114,7 @@ class _MapPageState extends ConsumerState<MapPage> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: colorScheme.primary,
-                  fontSize: 13,
+                  fontSize: TFont.s12,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -200,7 +201,7 @@ class _MapPageState extends ConsumerState<MapPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(Insets.m16),
             child: Text(
               trans().mapHint,
               style: Theme.of(context).textTheme.bodyLarge,
@@ -277,9 +278,9 @@ class _MapPageState extends ConsumerState<MapPage> {
                     ),
                     CustomInfoWindow(
                       controller: _customInfoWindowController,
-                      height: 140,
-                      width: 140,
-                      offset: 40,
+                      height: S.h(140),
+                      width: S.w(140),
+                      offset: S.r(40),
                     ),
                   ],
                 );

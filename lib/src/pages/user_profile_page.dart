@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helpers/general_helper.dart';
 import '../providers/auth/user_provider.dart';
 import '../utils/assets.dart';
+import '../utils/sizes.dart';
 import '../utils/theme.dart';
 import '../widgets/avatar_picker.dart';
 import '../widgets/custom_app_bar.dart';
@@ -43,7 +44,6 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider).data;
@@ -63,10 +63,10 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
         icon: arrowBackIcon,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(Insets.m16),
         child: Column(
           children: [
-            const SizedBox(height: 20),
+            Gaps.h20,
             AvatarPicker(
               initialImageUrl: user.getAvatarUrl(),
               onImageSelected: (file) {
@@ -76,25 +76,25 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
               },
             ),
 
-            const SizedBox(height: 30),
+            Gaps.h30,
             CustomTextField(
               controller: nameController,
               label: trans().fullName,
             ),
-            const SizedBox(height: 20),
+            Gaps.h20,
 
             CustomTextField(
               controller: emailController,
               label: trans().email,
             ),
-            const SizedBox(height: 20),
+            Gaps.h20,
 
             CustomTextField(
               controller: addressController,
               label: trans().address,
             ),
 
-            const SizedBox(height: 30),
+            Gaps.h30,
 
             /// زر حذف الحساب
             ElevatedButton.icon(
@@ -106,7 +106,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                     title: Text(
                       trans().are_you_sure,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: TFont.m14,
                         fontWeight: FontWeight.bold,
                         color: colorScheme.primary,
                       ),
@@ -114,7 +114,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                     content: Text(
                       trans().delete_account_confirmation,
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: TFont.s12,
                         fontWeight: FontWeight.bold,
                         color: colorScheme.onSurface.withOpacity(0.7),
                       ),
@@ -157,17 +157,18 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
               ),
               icon: Icon(deleteIcon, color: colorScheme.onSurface),
               style: ElevatedButton.styleFrom(
-                backgroundColor: colorScheme.surface, // أو Colors.transparent
+                backgroundColor: colorScheme.surface,
+                // أو Colors.transparent
                 elevation: 0,
                 side: BorderSide(color: colorScheme.error, width: 1),
-                minimumSize: const Size(double.infinity, 50),
+                minimumSize: Size(double.infinity, S.h(50)),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: Corners.md15,
                 ),
               ),
             ),
 
-            const SizedBox(height: 40),
+            S.gapH(40),
 
             /// أزرار الحفظ والإلغاء
             Row(
@@ -176,7 +177,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                   child: Container(
                     decoration: BoxDecoration(
                       gradient: CustomTheme.primaryGradient,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: Corners.sm8,
                     ),
                     child: ElevatedButton(
                       onPressed: () async {
@@ -186,16 +187,16 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                           address: addressController.text.trim(),
                         );
                         await ref.read(userProvider.notifier).updateUser(
-                          updatedUser,
-                          selectedImage,
-                        );
+                              updatedUser,
+                              selectedImage,
+                            );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,
                         shadowColor: Colors.transparent,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: Corners.sm8,
                         ),
                       ),
                       child: Text(
@@ -210,7 +211,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                   child: Container(
                     decoration: BoxDecoration(
                       gradient: CustomTheme.primaryGradient,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: Corners.sm8,
                     ),
                     child: ElevatedButton(
                       onPressed: () => Navigator.pop(context),
@@ -219,7 +220,7 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
                         shadowColor: Colors.transparent,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: Corners.sm8,
                         ),
                       ),
                       child: Text(

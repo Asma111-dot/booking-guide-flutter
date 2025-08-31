@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/facility.dart';
 import '../models/room.dart' as r;
+import '../utils/sizes.dart';
 import '../utils/theme.dart';
 import '../helpers/general_helper.dart';
 
@@ -30,25 +31,30 @@ class RoomDescriptionTab extends StatelessWidget {
   Widget build(BuildContext context) {
     // final colorScheme = Theme.of(context).colorScheme;
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
+      padding: EdgeInsets.symmetric(
+        vertical: S.h(8),
+        horizontal: 0,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // عن المنشأة
           Text(
             trans().about_facility,
-            style: const TextStyle(
-              fontSize: 14,
+            style: TextStyle(
+              fontSize: TFont.m14,
               fontWeight: FontWeight.bold,
               color: CustomTheme.color2,
             ),
           ),
-          const SizedBox(height: 4),
+          Gaps.h4,
           AnimatedSize(
             duration: const Duration(milliseconds: 300),
             child: Text(
               facility.desc,
-              style: const TextStyle(fontSize: 12),
+              style: TextStyle(
+                fontSize: TFont.s12,
+              ),
               maxLines: showAboutFull ? null : 2,
               overflow:
                   showAboutFull ? TextOverflow.visible : TextOverflow.ellipsis,
@@ -61,30 +67,32 @@ class RoomDescriptionTab extends StatelessWidget {
                 showAboutFull ? trans().show_less : trans().read_more,
                 style: TextStyle(
                   color: CustomTheme.color3,
-                  fontSize: 12,
+                  fontSize: TFont.s12,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
 
           const Divider(thickness: 2),
-          const SizedBox(height: 8),
+          Gaps.h8,
 
           // السياسات
           Text(
             trans().read_terms_before_booking,
-            style: const TextStyle(
-              fontSize: 14,
+            style: TextStyle(
+              fontSize: TFont.m14,
               fontWeight: FontWeight.bold,
               color: CustomTheme.color2,
             ),
           ),
-          const SizedBox(height: 4),
+          Gaps.h4,
           AnimatedSize(
             duration: const Duration(milliseconds: 300),
             child: Text(
               room.type,
-              style: const TextStyle(fontSize: 12),
+              style: TextStyle(
+                fontSize: TFont.s12,
+              ),
               maxLines: showTypeFull ? null : 2,
               overflow:
                   showTypeFull ? TextOverflow.visible : TextOverflow.ellipsis,
@@ -97,30 +105,32 @@ class RoomDescriptionTab extends StatelessWidget {
                 showTypeFull ? trans().show_less : trans().read_more,
                 style: TextStyle(
                   color: CustomTheme.color3,
-                  fontSize: 12,
+                  fontSize: TFont.s12,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
 
           const Divider(thickness: 2),
-          const SizedBox(height: 8),
+          Gaps.h8,
 
           // التأمين
           Text(
             trans().insurance_coverage_question,
-            style: const TextStyle(
-              fontSize: 14,
+            style: TextStyle(
+              fontSize: TFont.m14,
               fontWeight: FontWeight.bold,
               color: CustomTheme.color2,
             ),
           ),
-          const SizedBox(height: 4),
+          Gaps.h4,
           AnimatedSize(
             duration: const Duration(milliseconds: 300),
             child: Text(
               room.desc,
-              style: const TextStyle(fontSize: 12),
+              style:  TextStyle(
+                fontSize: TFont.s12,
+              ),
               maxLines: showDescFull ? null : 2,
               overflow:
                   showDescFull ? TextOverflow.visible : TextOverflow.ellipsis,
@@ -133,7 +143,7 @@ class RoomDescriptionTab extends StatelessWidget {
                 showDescFull ? trans().show_less : trans().read_more,
                 style: TextStyle(
                   color: CustomTheme.color3,
-                  fontSize: 12,
+                  fontSize: TFont.s12,
                   fontWeight: FontWeight.bold,
                 ),
               ),

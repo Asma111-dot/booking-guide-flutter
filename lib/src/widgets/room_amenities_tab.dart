@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/room.dart' as r;
+import '../utils/sizes.dart';
 import '../utils/theme.dart';
 import '../helpers/general_helper.dart';
 import '../utils/amenity_icon_helper.dart';
@@ -12,20 +13,23 @@ class RoomAmenitiesTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
+      padding: EdgeInsets.symmetric(
+        vertical: S.h(8),
+        horizontal: 0,
+      ),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               trans().available_spaces,
-              style: const TextStyle(
-                fontSize: 16,
+              style: TextStyle(
+                fontSize: TFont.m14,
                 fontWeight: FontWeight.bold,
                 color: CustomTheme.color2,
               ),
             ),
-            const SizedBox(height: 6),
+            Gaps.h8,
             Wrap(
               spacing: 12,
               runSpacing: 5,
@@ -35,20 +39,23 @@ class RoomAmenitiesTab extends StatelessWidget {
                 final icon = AmenityIconHelper.getAmenityIcon(type);
 
                 return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: S.w(12),
+                    vertical: S.h(8),
+                  ),
                   decoration: BoxDecoration(
                     color: CustomTheme.color3.withOpacity(0.03),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: Corners.sm8,
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(icon, size: 16, color: CustomTheme.color3),
-                      const SizedBox(width: 6),
+                      Icon(icon, size: Sizes.iconM20, color: CustomTheme.color3),
+                      Gaps.w8,
                       Text(
                         count > 1 ? '$count $type' : type,
                         style:  TextStyle(
-                          fontSize: 12,
+                          fontSize: TFont.s12,
                           color: colorScheme.onSurface,
                         ),
                       ),
@@ -58,16 +65,16 @@ class RoomAmenitiesTab extends StatelessWidget {
               }).toList(),
             ),
             const Divider(thickness: 2,),
-            const SizedBox(height: 12),
+            Gaps.h12,
             Text(
               trans().amenities_and_facilities,
-              style: const TextStyle(
-                fontSize: 16,
+              style:  TextStyle(
+                fontSize: TFont.m14,
                 fontWeight: FontWeight.bold,
                 color: CustomTheme.color2,
               ),
             ),
-            const SizedBox(height: 8),
+            Gaps.h8,
             room.amenities.isNotEmpty
                 ? Wrap(
               spacing: 12,
@@ -75,20 +82,23 @@ class RoomAmenitiesTab extends StatelessWidget {
               children: room.amenities.map((a) {
                 final icon = AmenityIconHelper.getAmenityIcon(a.name);
                 return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: S.w(12),
+                    vertical: S.h(8),
+                  ),
                   decoration: BoxDecoration(
                     color: CustomTheme.color3.withOpacity(0.03),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: Corners.sm8,
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(icon, size: 16, color: CustomTheme.color3),
-                      const SizedBox(width: 6),
+                      Icon(icon, size: Sizes.iconM20, color: CustomTheme.color3),
+                      Gaps.w8,
                       Text(
                         a.name,
                         style:  TextStyle(
-                          fontSize: 12,
+                          fontSize: TFont.s12,
                           color: colorScheme.onSurface,
                         ),
                       ),
@@ -100,7 +110,7 @@ class RoomAmenitiesTab extends StatelessWidget {
                 : Text(
               "${trans().amenity}: ${trans().noAmenities}",
               style: TextStyle(
-                fontSize: 16,
+                fontSize: TFont.m14,
                 fontWeight: FontWeight.bold,
                 color: colorScheme.onSurface,
               ),

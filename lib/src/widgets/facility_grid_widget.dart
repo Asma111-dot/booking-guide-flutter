@@ -8,6 +8,7 @@ import '../providers/favorite/favorite_provider.dart';
 import '../storage/auth_storage.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
+import '../utils/sizes.dart';
 import 'shimmer_image_placeholder.dart';
 
 class FacilityGridWidget extends ConsumerWidget {
@@ -23,7 +24,7 @@ class FacilityGridWidget extends ConsumerWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     final isFavorite = ref.watch(favoritesProvider.select(
-          (state) => state.data?.any((f) => f.id == facility.id) ?? false,
+      (state) => state.data?.any((f) => f.id == facility.id) ?? false,
     ));
 
     final defaultImage = facility.logo?.isNotEmpty == true
@@ -52,48 +53,50 @@ class FacilityGridWidget extends ConsumerWidget {
       child: Container(
         decoration: BoxDecoration(
           color: colorScheme.surface,
-          borderRadius: BorderRadius.circular(20),
+          // borderRadius: BorderRadius.circular(20),
+          borderRadius: Corners.md15,
           boxShadow: [
             BoxShadow(
-              color: colorScheme.shadow.withOpacity(0.05),
-              blurRadius: 6,
-              offset: const Offset(0, 3),
+              color: Theme.of(context).shadowColor.withOpacity(0.05),
+              blurRadius: S.r(6),
+              offset: Offset(0, S.h(3)),
             ),
           ],
+
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // الصورة بنسبة ثابتة بدل height ثابت
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: Corners.md15,
                   child: AspectRatio(
-                    aspectRatio:  3/2 , // جرّب 4/3 أو 16/9 بحسب التصميم
+                    aspectRatio: 3 / 2, // جرّب 4/3 أو 16/9 بحسب التصميم
                     child: CachedNetworkImage(
                       imageUrl: defaultImage,
                       fit: BoxFit.cover,
                       placeholder: (context, url) =>
-                      const ShimmerImagePlaceholder(width: double.infinity, height: double.infinity),
+                          const ShimmerImagePlaceholder(
+                              width: double.infinity, height: double.infinity),
                       errorWidget: (context, url, error) =>
                           Image.asset(appIcon, fit: BoxFit.cover),
                     ),
                   ),
                 ),
                 Positioned(
-                  top: 8,
-                  left: 8,
+                  top: Insets.xs8,
+                  left: Insets.xs8,
                   child: Container(
-                    padding: const EdgeInsets.all(1),
+                    padding: EdgeInsets.all(S.r(1)),
                     decoration: BoxDecoration(
                       color: colorScheme.surface.withOpacity(0.4),
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: colorScheme.shadow.withOpacity(0.4),
-                          blurRadius: 4,
-                          offset: const Offset(0, 4),
+                          color: Theme.of(context).shadowColor.withOpacity(0.05),
+                          blurRadius: S.r(4),
+                          offset: Offset(0, S.h(4)),
                         ),
                       ],
                     ),
@@ -103,12 +106,13 @@ class FacilityGridWidget extends ConsumerWidget {
                         color: isFavorite
                             ? colorScheme.primary
                             : colorScheme.onSurface.withOpacity(0.4),
-                        size: 22,
+                        size: Sizes.iconM20,
                       ),
                       onPressed: () async {
                         final userId = currentUser()?.id;
                         if (userId != null) {
-                          await ref.read(favoritesProvider.notifier)
+                          await ref
+                              .read(favoritesProvider.notifier)
                               .toggleFavorite(ref, userId, facility);
                         }
                       },
@@ -119,11 +123,11 @@ class FacilityGridWidget extends ConsumerWidget {
                 ),
               ],
             ),
-
-            // اجعل منطقة النص مرنة
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                // padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                padding: EdgeInsets.symmetric(
+                    horizontal: Insets.xs8, vertical: Insets.xxs6),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,12 +136,12 @@ class FacilityGridWidget extends ConsumerWidget {
                       facility.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                        fontSize: TFont.m14,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    Gaps.h4,
 
                     // سطر السعر
                     Text(
@@ -147,8 +151,10 @@ class FacilityGridWidget extends ConsumerWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: hasDiscount ? colorScheme.onTertiary : colorScheme.tertiary,
-                        fontSize: 12,
+                        color: hasDiscount
+                            ? colorScheme.onTertiary
+                            : colorScheme.tertiary,
+                        fontSize: TFont.s12,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -160,26 +166,27 @@ class FacilityGridWidget extends ConsumerWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: TFont.xxs10,
                           color: colorScheme.onSurface.withOpacity(0.4),
                           decoration: TextDecoration.lineThrough,
                         ),
                       ),
 
-                    const SizedBox(height: 4),
+                    Gaps.h4,
 
                     // العنوان
                     Row(
                       children: [
-                        Icon(Icons.location_on, color: colorScheme.secondary, size: 14),
-                        const SizedBox(width: 4),
+                        Icon(Icons.location_on,
+                            color: colorScheme.secondary, size: Sizes.iconS16),
+                        Gaps.w4,
                         Expanded(
                           child: Text(
                             facility.address ?? trans().address,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: TFont.s12,
                               color: colorScheme.onSurface.withOpacity(0.6),
                             ),
                           ),
@@ -187,7 +194,6 @@ class FacilityGridWidget extends ConsumerWidget {
                       ],
                     ),
 
-                    // لو احتجت مساحة لتفادي الضغط:
                     const Spacer(), // يدفع المحتوى للأعلى عند الحاجة
                   ],
                 ),

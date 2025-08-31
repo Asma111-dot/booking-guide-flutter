@@ -15,6 +15,7 @@ import '../models/payment.dart' as p;
 import '../providers/payment/payment_provider.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
+import '../utils/sizes.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar_clipper.dart';
 import '../widgets/custom_header_details_widget.dart';
@@ -92,12 +93,12 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                 : 0;
 
             return SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(Insets.m16),
               child: RepaintBoundary(
                 key: _shareKey,
                 child: Container(
                   color: colorScheme.surface,
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(Insets.m16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -107,9 +108,9 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                         address:
                             reservation?.roomPrice?.room?.facility?.address,
                       ),
-                      const SizedBox(height: 20),
+                      Gaps.h12,
                       Divider(color: colorScheme.outline.withOpacity(0.3)),
-                      const SizedBox(height: 10),
+                      Gaps.h6,
                       Text(
                         trans().payment_details,
                         style: theme.textTheme.titleMedium?.copyWith(
@@ -117,7 +118,7 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                           color: colorScheme.primary,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      Gaps.h8,
                       CustomRowDetailsWidget(
                         icon: priceChangeIcon,
                         label: trans().paid_amount,
@@ -130,7 +131,7 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                         value: data.date.toDateView(),
                       ),
                       Divider(
-                          height: 30,
+                          height: S.h(30),
                           color: colorScheme.outline.withOpacity(0.3)),
                       Text(
                         trans().reservationDetails,
@@ -139,7 +140,7 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                           color: colorScheme.primary,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      Gaps.h8,
                       if (reservation != null) ...[
                         CustomRowDetailsWidget(
                           icon: periodIcon,
@@ -174,7 +175,7 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                               "${reservation.childrenCount} ${trans().person}",
                         ),
                         Divider(
-                            height: 30,
+                            height: S.h(30),
                             color: colorScheme.outline.withOpacity(0.3)),
                         Text(
                           trans().other_details,
@@ -214,13 +215,14 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
           showEmpty: true,
         ),
         bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(Insets.m16),
           child: Row(
             children: [
               Expanded(
                 child: Button(
                   title: trans().close_and_go_back,
-                  icon: Icon(closeIcon, size: 20, color: colorScheme.onPrimary),
+                  icon: Icon(closeIcon,
+                      size: Sizes.iconM20, color: colorScheme.onPrimary),
                   iconAfterText: true,
                   disable: false,
                   onPressed: () async {
@@ -232,11 +234,12 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                   },
                 ),
               ),
-              const SizedBox(width: 12),
+              Gaps.w8,
               Expanded(
                 child: Button(
                   title: trans().share,
-                  icon: Icon(shareIcon, size: 20, color: colorScheme.onPrimary),
+                  icon: Icon(shareIcon,
+                      size: Sizes.iconM20, color: colorScheme.onPrimary),
                   iconAfterText: true,
                   disable: false,
                   onPressed: _shareScreenshot,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 import '../utils/assets.dart';
+import '../utils/sizes.dart';
 
 class VideoWidget extends StatefulWidget {
   final String videoUrl;
@@ -49,11 +50,11 @@ class _VideoWidgetState extends State<VideoWidget> {
         ),
         VideoProgressIndicator(_controller, allowScrubbing: true),
         Positioned(
-          bottom: 20,
+          bottom: S.r(40),
           child: IconButton(
             icon: Icon(
               _controller.value.isPlaying ? pauseIcon : playArrowIcon,
-              size: 48,
+              size: Sizes.avatarM48,
               color: Colors.white,
             ),
             onPressed: () {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../utils/sizes.dart';
+
 class FacilityShimmerCard extends StatelessWidget {
   const FacilityShimmerCard({super.key});
 
@@ -15,16 +17,16 @@ class FacilityShimmerCard extends StatelessWidget {
       baseColor: baseColor,
       highlightColor: highlightColor,
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8),
-        padding: const EdgeInsets.all(8),
+        margin: EdgeInsets.symmetric(vertical: Insets.xs8),
+        padding: EdgeInsets.all(S.h(8)),
         decoration: BoxDecoration(
           color: baseColor,
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: Corners.md15,
           boxShadow: [
             BoxShadow(
               color: isDark ? Colors.black12 : Colors.grey.withOpacity(0.1),
-              blurRadius: 6,
-              offset: const Offset(0, 2),
+              blurRadius: S.r(6),
+              offset: Offset(0, S.h(2)),
             ),
           ],
         ),
@@ -33,14 +35,14 @@ class FacilityShimmerCard extends StatelessWidget {
           children: [
             // صورة المنشأة
             Container(
-              width: 110,
-              height: 110,
+              width: S.w(110),
+              height: S.h(110),
               decoration: BoxDecoration(
                 color: highlightColor,
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: Corners.md15,
               ),
             ),
-            const SizedBox(width: 12),
+            Gaps.w12,
             // تفاصيل المنشأة
             Expanded(
               child: Column(
@@ -48,33 +50,34 @@ class FacilityShimmerCard extends StatelessWidget {
                 children: [
                   // اسم المنشأة
                   Container(
-                    height: 16,
+                    height: S.h(16),
                     width: double.infinity,
                     color: highlightColor,
                   ),
-                  const SizedBox(height: 6),
+                  Gaps.h6,
                   // السعر
                   Container(
-                    height: 14,
-                    width: 120,
+                    width: S.w(120),
+                    height: S.h(14),
                     color: highlightColor,
                   ),
-                  const SizedBox(height: 6),
+                  Gaps.h6,
                   // الموقع
                   Row(
                     children: [
                       Container(
-                        height: 14,
-                        width: 14,
+                        width: S.w(14),
+                        height: S.h(14),
                         decoration: BoxDecoration(
                           color: highlightColor,
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: Corners.sm8,
+
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      Gaps.w4,
                       Expanded(
                         child: Container(
-                          height: 14,
+                          height: S.h(14),
                           color: highlightColor,
                         ),
                       ),

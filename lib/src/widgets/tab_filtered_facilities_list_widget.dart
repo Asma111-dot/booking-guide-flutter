@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import '../helpers/general_helper.dart';
 import '../providers/sort/sorted_facilities_provider.dart';
 import '../utils/assets.dart';
+import '../utils/sizes.dart';
 import 'facility_shimmer_card.dart';
 import 'facility_widget.dart';
 
@@ -23,7 +24,8 @@ class TabFilteredFacilitiesListWidget extends ConsumerWidget {
 
     if (allFacilitiesAsync.isLoading()) {
       return ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding:
+            EdgeInsets.symmetric(horizontal: Insets.m16, vertical: S.h(12)),
         itemCount: 5,
         itemBuilder: (_, __) => const FacilityShimmerCard(),
       );
@@ -40,31 +42,26 @@ class TabFilteredFacilitiesListWidget extends ConsumerWidget {
 
     final allFacilities = allFacilitiesAsync.data ?? [];
     final filteredFacilities =
-    allFacilities.where((f) => f.facilityTypeId == facilityTypeId).toList();
+        allFacilities.where((f) => f.facilityTypeId == facilityTypeId).toList();
 
     final title = facilityTypeId == 1
         ? trans().all_available_hotels
         : facilityTypeId == 2
-        ? trans().all_available_chalets
-        : trans().all_available_halls;
-
+            ? trans().all_available_chalets
+            : trans().all_available_halls;
 
     if (filteredFacilities.isEmpty) {
       return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgPicture.asset(
-              linkIconSvg,
-              width: 140,
-              height: 140,
-            ),
-            const SizedBox(height: 12),
+            SvgPicture.asset(linkIconSvg, width: S.w(140), height: S.h(140)),
+            Gaps.h12,
             Text(
               trans().no_facilities,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: TFont.s12,
                 color: Colors.grey.shade700,
                 fontWeight: FontWeight.w700,
               ),
@@ -78,11 +75,12 @@ class TabFilteredFacilitiesListWidget extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(bottom: 10, left: 12, right: 12),
+          padding: EdgeInsets.only(
+              bottom: S.h(10), left: Insets.s12, right: Insets.s12),
           child: Text(
             title,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: TFont.s12,
               fontWeight: FontWeight.bold,
               color: colorScheme.primary,
             ),

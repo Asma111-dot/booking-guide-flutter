@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../helpers/general_helper.dart';
 import '../utils/assets.dart';
+import '../utils/sizes.dart';
 import '../utils/theme.dart';
 
 class AvatarPicker extends StatefulWidget {
@@ -91,12 +92,12 @@ class _AvatarPickerState extends State<AvatarPicker> {
                 backgroundImage: _avatarImage,
                 backgroundColor: CustomTheme.whiteColor,
               ),
-              const CircleAvatar(
+               CircleAvatar(
                 radius: 15,
                 backgroundColor: CustomTheme.whiteColor,
                 child: Icon(
                   cameraIcon,
-                  size: 16,
+                  size: Sizes.iconS16,
                   color: Colors.grey,
                 ),
               ),

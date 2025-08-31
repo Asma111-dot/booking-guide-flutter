@@ -7,6 +7,7 @@ import '../models/discount.dart';
 import '../providers/discount/discount_provider.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
+import '../utils/sizes.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/facility_shimmer_card.dart';
 import '../widgets/view_widget.dart';
@@ -42,9 +43,9 @@ class _DiscountPageState extends ConsumerState<DiscountPage> {
         data: discountState.data,
         onLoaded: (data) {
           return ListView.separated(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(Insets.l20),
             itemCount: data.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
+            separatorBuilder: (_, __) => SizedBox(height: S.h(12)),
             itemBuilder: (context, index) {
               final discount = data[index];
 
@@ -67,34 +68,40 @@ class _DiscountPageState extends ConsumerState<DiscountPage> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: colorScheme.surface,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: Corners.md15,
                     border: Border.all(color: Colors.grey[300]!),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.05),
-                        blurRadius: 5,
-                        offset: const Offset(0, 2),
+                        blurRadius: S.r(5),
+                        offset: Offset(0, S.h(2)),
                       ),
                     ],
                   ),
-                  padding: const EdgeInsets.all(10),
+                  padding: EdgeInsets.all(Insets.s12),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: Corners.sm8,
                         child: CachedNetworkImage(
                           imageUrl: discount.facility?.logo ?? appIcon,
-                          width: 60,
-                          height: 60,
+                          width: S.w(60),
+                          height: S.h(60),
                           fit: BoxFit.cover,
-                          placeholder: (context, url) =>
-                              Image.asset(appIcon, width: 60, height: 60),
-                          errorWidget: (context, url, error) =>
-                              Image.asset(appIcon, width: 60, height: 60),
+                          placeholder: (context, url) => Image.asset(
+                            appIcon,
+                            width: S.w(60),
+                            height: S.h(60),
+                          ),
+                          errorWidget: (context, url, error) => Image.asset(
+                            appIcon,
+                            width: S.w(60),
+                            height: S.h(60),
+                          ),
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      Gaps.h12,
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,32 +110,32 @@ class _DiscountPageState extends ConsumerState<DiscountPage> {
                               discount.name ?? '',
                               style: TextStyle(
                                 color: colorScheme.primary,
-                                fontSize: 16,
+                                fontSize: TFont.m14,
                                 fontWeight: FontWeight.bold,
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            const SizedBox(height: 2),
+                            Gaps.h4,
                             Text(
                               '${trans().discount_value}: ${discount.value ?? '-'}',
                               style: TextStyle(
                                 color: colorScheme.secondary,
-                                fontSize: 12,
+                                fontSize: TFont.s12,
                               ),
                             ),
-                            const SizedBox(height: 2),
+                            Gaps.h4,
                             Text(
                               ' ${discount.facility?.name ?? '-'}',
                               style: TextStyle(
                                 color: colorScheme.secondary,
-                                fontSize: 12,
+                                fontSize: TFont.xxs10,
                               ),
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      Gaps.w8,
                       // const Icon(Icons.chevron_right, color: Colors.grey),
                     ],
                   ),
@@ -139,7 +146,7 @@ class _DiscountPageState extends ConsumerState<DiscountPage> {
         },
         onLoading: () => ListView.builder(
           padding: const EdgeInsets.all(16),
-          itemCount: 6, // عدد البطاقات الوهمية أثناء التحميل
+          itemCount: 6,
           itemBuilder: (context, index) => const FacilityShimmerCard(),
         ),
         onEmpty: () => const Center(child: Text('لا يوجد خصومات متاحة حالياً')),

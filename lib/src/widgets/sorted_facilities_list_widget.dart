@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+
 import '../enums/facility_sort_type.dart';
 import '../helpers/general_helper.dart';
 import '../providers/sort/sorted_facilities_provider.dart';
 import '../utils/assets.dart';
+import '../utils/sizes.dart';
 import 'facility_shimmer_card.dart';
 import 'facility_widget.dart';
 
@@ -25,14 +27,16 @@ class SortedFacilitiesListWidget extends ConsumerWidget {
     final sortedAsyncValue = ref.watch(sortedFacilitiesProvider(sortKey));
     final colorScheme = Theme.of(context).colorScheme;
 
+    // Loading
     if (sortedAsyncValue.isLoading()) {
       return ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: EdgeInsets.symmetric(horizontal: Insets.m16, vertical: S.h(12)),
         itemCount: 5,
         itemBuilder: (_, __) => const FacilityShimmerCard(),
       );
     }
 
+    // Error
     if (sortedAsyncValue.isError()) {
       return Center(
         child: Text(
@@ -43,8 +47,9 @@ class SortedFacilitiesListWidget extends ConsumerWidget {
     }
 
     final allFacilities = sortedAsyncValue.data ?? [];
-    final facilities =
-    allFacilities.where((f) => f.facilityTypeId == facilityTypeId).toList();
+    final facilities = allFacilities
+        .where((f) => f.facilityTypeId == facilityTypeId)
+        .toList();
 
     final title = facilityTypeId == 1
         ? (currentSort == FacilitySortType.lowestPrice
@@ -58,23 +63,19 @@ class SortedFacilitiesListWidget extends ConsumerWidget {
         ? trans().hall_sorted_by_lowest_price
         : trans().hall_sorted_by_highest_price);
 
-
+    // Empty
     if (facilities.isEmpty) {
       return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgPicture.asset(
-              inboxIconSvg,
-              width: 140,
-              height: 140,
-            ),
-            const SizedBox(height: 12),
+            SvgPicture.asset(inboxIconSvg, width: S.w(140), height: S.h(140)),
+            Gaps.h12,
             Text(
               trans().no_matching_facilities,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: TFont.l16,
                 color: Colors.grey.shade700,
                 fontWeight: FontWeight.w700,
               ),
@@ -84,15 +85,17 @@ class SortedFacilitiesListWidget extends ConsumerWidget {
       );
     }
 
+    // Content
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(bottom: 10, left: 12, right: 12),
+          padding:
+          EdgeInsets.only(bottom: S.h(10), left: Insets.m16, right: Insets.m16),
           child: Text(
             title,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: TFont.s12,
               fontWeight: FontWeight.bold,
               color: colorScheme.primary,
             ),
@@ -100,11 +103,9 @@ class SortedFacilitiesListWidget extends ConsumerWidget {
         ),
         Expanded(
           child: ListView.builder(
+            padding: EdgeInsets.symmetric(horizontal: Insets.m16),
             itemCount: facilities.length,
-            itemBuilder: (_, index) {
-              final facility = facilities[index];
-              return FacilityWidget(facility: facility);
-            },
+            itemBuilder: (_, index) => FacilityWidget(facility: facilities[index]),
           ),
         ),
       ],

@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import '../helpers/general_helper.dart';
 import '../providers/notification/notification_provider.dart';
 import '../utils/assets.dart';
+import '../utils/sizes.dart';
 import '../utils/theme.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/view_widget.dart';
@@ -56,25 +57,25 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
                       children: [
                         SvgPicture.asset(
                           notificationsIconSvg,
-                          width: 140,
-                          height: 140,
+                          width: S.w(150),
+                          height: S.h(150),
                         ),
-                        const SizedBox(height: 12),
+                        Gaps.h12,
                         Text(
                           trans().noNotifications,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: TFont.l16,
                             color: Colors.grey.shade700,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        Gaps.h8,
                         Text(
                           trans().noNotificationsHint,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: TFont.s12,
                             color: Colors.grey.shade500,
                           ),
                         ),
@@ -87,7 +88,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
             }
 
             return ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 8),
+              padding: EdgeInsets.symmetric(vertical: S.h(8)),
               itemCount: data.length,
               itemBuilder: (context, index) {
                 final notification = data[index];
@@ -101,20 +102,28 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
                     : '';
 
                 return Card(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  margin: EdgeInsets.symmetric(
+                      horizontal: S.w(12), vertical: S.h(6)),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                    borderRadius: Corners.md15,
+                  ),
                   child: ListTile(
                     leading: const Icon(Icons.notifications,
                         color: CustomTheme.color1),
-                    title: Text(title,
-                        style: const TextStyle(fontWeight: FontWeight.w600)),
-                    subtitle: Text(body),
+                    title: Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    subtitle: Text(
+                      body,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                     trailing: Text(
                       createdAt,
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: TFont.s12,
                         color: colorScheme.onSurface.withOpacity(0.6),
                       ),
                     ),

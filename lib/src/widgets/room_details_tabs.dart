@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/facility.dart';
 import '../models/room.dart' as r;
+import '../utils/sizes.dart';
 import '../utils/theme.dart';
 import '../helpers/general_helper.dart';
 import 'room_description_tab.dart';
@@ -50,7 +51,7 @@ class RoomDetailsTabs extends StatelessWidget {
           ],
         ),
         SizedBox(
-          height: 400,
+          height: S.h(400),
           child: TabBarView(
             controller: tabController,
             children: [

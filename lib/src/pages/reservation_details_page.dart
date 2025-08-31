@@ -6,6 +6,7 @@ import '../providers/reservation/reservation_provider.dart';
 import '../models/reservation.dart' as res;
 import '../utils/assets.dart';
 import '../utils/routes.dart';
+import '../utils/sizes.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar_clipper.dart';
 import '../widgets/reservation_details_content.dart';
@@ -64,21 +65,21 @@ class _ReservationDetailsPageState
           showEmpty: true,
         ),
         bottomNavigationBar: SafeArea(
-          minimum: const EdgeInsets.all(16),
+          minimum: EdgeInsets.all(Insets.m16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 8),
+                padding: EdgeInsets.symmetric(vertical: S.h(8)),
                 decoration: BoxDecoration(
                   color: colorScheme.secondaryContainer.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: Corners.sm8,
                 ),
                 child: Row(
                   children: [
                     Icon(errorIcon, color: colorScheme.secondary),
-                    const SizedBox(width: 8),
+                    Gaps.w8,
                     Expanded(
                       child: Text(
                         trans().booking_not_confirmed_warning,
@@ -88,28 +89,31 @@ class _ReservationDetailsPageState
                   ],
                 ),
               ),
-              const SizedBox(height: 12),
+              Gaps.h12,
               OutlinedButton.icon(
                 onPressed: () async {
                   Navigator.pushNamedAndRemoveUntil(
                     context,
                     Routes.navigationMenu,
-                    (route) => false,
+                        (route) => false,
                   );
                 },
                 icon: const Icon(goBackIcon),
                 label: Text(trans().go_back),
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: colorScheme.outline),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: EdgeInsets.symmetric(vertical: S.h(12)),
                 ),
               ),
-              const SizedBox(height: 12),
+              Gaps.h12,
               Button(
                 width: double.infinity,
                 title: trans().payment_now,
-                icon: Icon(arrowForWordIcon,
-                    size: 20, color: colorScheme.onPrimary),
+                icon: Icon(
+                  arrowForWordIcon,
+                  size: Sizes.iconM20,
+                  color: colorScheme.onPrimary,
+                ),
                 iconAfterText: true,
                 disable: false,
                 onPressed: () async {

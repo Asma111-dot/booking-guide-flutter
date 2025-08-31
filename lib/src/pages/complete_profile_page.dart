@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:booking_guide/src/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -51,10 +52,6 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
         Routes.navigationMenu,
         (route) => false,
       );
-    } else {
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   const SnackBar(content: Text("فشل في حفظ البيانات، حاول مرة أخرى")),
-      // );
     }
     // print("✅ isSuccess = $isSuccess");
   }
@@ -82,8 +79,7 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
             trans().completeProfile,
             style: theme.textTheme.headlineMedium?.copyWith(
               color: colorScheme.onSurface,
-              // fontWeight: FontWeight.w100,
-              fontSize: 20
+              fontSize: TFont.x2_20
             ),
           ),
           elevation: 1,
@@ -91,7 +87,7 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
           iconTheme: IconThemeData(color: colorScheme.onBackground),
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(Insets.l20),
           child: Form(
             key: _formKey,
             child: Column(
@@ -103,28 +99,28 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
                     });
                   },
                 ),
-                const SizedBox(height: 40),
+                Gaps.h30,
                 CustomTextField(
                   controller: nameController,
                   label: trans().fullName,
                 ),
-                const SizedBox(height: 20),
+                Gaps.h20,
                 CustomTextField(
                   controller: emailController,
                   label: trans().email,
                 ),
-                const SizedBox(height: 20),
+                Gaps.h20,
                 CustomTextField(
                   controller: addressController,
                   label: trans().address,
                 ),
-                const SizedBox(height: 20),
+                Gaps.h20,
                 CustomTextField(
                   controller: passwordController,
                   label: trans().password,
                   obscureText: true,
                 ),
-                const SizedBox(height: 40),
+                Gaps.h30,
 
                 Button(
                   width: double.infinity,

@@ -12,6 +12,7 @@ import '../providers/reservation/reservations_provider.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../utils/theme.dart';
+import '../utils/sizes.dart';
 import '../widgets/facility_shimmer_card.dart';
 import '../widgets/shimmer_image_placeholder.dart';
 
@@ -36,9 +37,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
     super.initState();
     Future.microtask(() async {
       setState(() => _isLoading = true);
-      await ref
-          .read(reservationsProvider.notifier)
-          .fetch(userId: widget.userId);
+      await ref.read(reservationsProvider.notifier).fetch(userId: widget.userId);
       setState(() => _isLoading = false);
     });
   }
@@ -46,47 +45,48 @@ class _BookingPageState extends ConsumerState<BookingPage>
   @override
   Widget build(BuildContext context) {
     final reservationState = ref.watch(reservationsProvider);
+    final textTheme = Theme.of(context).textTheme;
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(
-              trans().booking,
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    color: CustomTheme.color2,
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            iconTheme: const IconThemeData(color: Colors.black),
-            bottom: TabBar(
-              indicatorColor: CustomTheme.color2,
-              labelColor: CustomTheme.primaryColor,
-              unselectedLabelColor: Colors.grey,
-              tabs: [
-                Tab(text: trans().all),
-                Tab(text: trans().confirmed),
-                Tab(text: trans().cancelled)
-              ],
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            trans().booking,
+            style: textTheme.headlineMedium?.copyWith(
+              color: CustomTheme.color2,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          body: _isLoading
-              ? ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: 5,
-                  itemBuilder: (_, __) => const FacilityShimmerCard(),
-                )
-              : TabBarView(
-                  children: [
-                    _buildReservationList(reservationState.data, null),
-                    _buildReservationList(
-                        reservationState.data, ReservationStatus.confirmed),
-                    _buildReservationList(
-                        reservationState.data, ReservationStatus.cancelled),
-                  ],
-                )),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          iconTheme: IconThemeData(color: Theme.of(context).colorScheme.onSurface),
+          bottom: TabBar(
+            indicatorColor: CustomTheme.color2,
+            labelColor: CustomTheme.primaryColor,
+            unselectedLabelColor: Colors.grey,
+            tabs: [
+              Tab(text: trans().all),
+              Tab(text: trans().confirmed),
+              Tab(text: trans().cancelled),
+            ],
+          ),
+        ),
+        body: _isLoading
+            ? ListView.builder(
+          padding: EdgeInsets.all(Insets.m16),
+          itemCount: 5,
+          itemBuilder: (_, __) => const FacilityShimmerCard(),
+        )
+            : TabBarView(
+          children: [
+            _buildReservationList(reservationState.data, null),
+            _buildReservationList(reservationState.data, ReservationStatus.confirmed),
+            _buildReservationList(reservationState.data, ReservationStatus.cancelled),
+          ],
+        ),
+      ),
     );
   }
 
@@ -96,49 +96,51 @@ class _BookingPageState extends ConsumerState<BookingPage>
         ? (all ?? [])
         : (all ?? []).where((r) => parseStatus(r.status) == status).toList();
 
+    final textTheme = Theme.of(context).textTheme;
+
     if (reservations.isEmpty) {
       return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SvgPicture.asset(
-              linkIconSvg,
-              width: 140,
-              height: 140,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              trans().noReservations,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey.shade600,
-                fontWeight: FontWeight.w600,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: Insets.m16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SvgPicture.asset(
+                linkIconSvg,
+                width: S.w(140),
+                height: S.w(140),
               ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              trans().noReservationsHint ,
-            textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 10,
-                color: Colors.grey.shade500,
+              Gaps.h12,
+              Text(
+                trans().noReservations,
+                textAlign: TextAlign.center,
+                style: textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey.shade600,
+                ),
               ),
-            ),
-          ],
+              Gaps.h12,
+              Text(
+                trans().noReservationsHint,
+                textAlign: TextAlign.center,
+                style: textTheme.bodySmall?.copyWith(
+                  color: Colors.grey.shade500,
+                ),
+              ),
+            ],
+          ),
         ),
       );
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(Insets.m16),
       itemCount: reservations.length,
       itemBuilder: (context, index) {
         final reservation = reservations[index];
         final placeName = reservation.roomPrice?.room?.facility?.name ?? '---';
         final logo = reservation.roomPrice?.room?.facility?.logo;
-        final imageUrl =
-            (logo != null && logo.isNotEmpty) ? logo : logoCoverImage;
+        final imageUrl = (logo != null && logo.isNotEmpty) ? logo : logoCoverImage;
 
         final checkIn = reservation.checkInDate;
         final checkOut = reservation.checkOutDate;
@@ -154,114 +156,120 @@ class _BookingPageState extends ConsumerState<BookingPage>
             );
           },
           child: Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            shape: RoundedRectangleBorder(borderRadius: Corners.md15),
             elevation: 1,
-            margin: const EdgeInsets.only(bottom: 16),
+            margin: EdgeInsets.only(bottom: Insets.m16),
             child: Padding(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(Insets.s12),
               child: Row(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: Corners.md15,
                     child: CachedNetworkImage(
                       imageUrl: imageUrl,
-                      width: 110,
-                      height: 110,
+                      width: S.w(110),
+                      height: S.w(110),
                       fit: BoxFit.cover,
                       placeholder: (context, url) =>
-                          const ShimmerImagePlaceholder(width: 80, height: 80),
+                          ShimmerImagePlaceholder(width: S.w(80), height: S.w(80)),
                       errorWidget: (context, url, error) => Image.asset(
                         appIcon,
-                        width: 110,
-                        height: 110,
+                        width: S.w(110),
+                        height: S.w(110),
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  Gaps.w12,
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // اسم المكان
                         Text(
                           placeName,
-                          style: TextStyle(
+                          style: textTheme.titleSmall?.copyWith(
                             color: CustomTheme.primaryColor,
-                            fontSize: 12,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        Gaps.h6,
+                        // تاريخ الحجز (الدخول)
                         Text(
                           "${trans().reservation_date} : ${reservation.checkInDate.toDateView()}",
-                          style: TextStyle(
+                          style: textTheme.bodySmall?.copyWith(
                             color: CustomTheme.color1,
-                            fontSize: 10,
                           ),
                         ),
+
+                        // عدد الأيام
                         if (showDays)
                           Padding(
-                            padding: const EdgeInsets.only(top: 6),
+                            padding: EdgeInsets.only(top: S.h(6)),
                             child: Text(
                               "${trans().number_of_days} : ${formatDaysAr(daysCount)}",
-                              style: TextStyle(
+                              style: textTheme.bodySmall?.copyWith(
                                 color: CustomTheme.color1,
-                                fontSize: 10,
                               ),
                             ),
                           ),
+
+                        // تاريخ الخروج
                         Padding(
-                          padding: const EdgeInsets.only(top: 6),
+                          padding: EdgeInsets.only(top: S.h(6)),
                           child: Text(
                             "${trans().check_out_date} : ${reservation.checkOutDate.toDateView()}",
-                            style: TextStyle(
+                            style: textTheme.bodySmall?.copyWith(
                               color: CustomTheme.color1,
-                              fontSize: 10,
                             ),
                           ),
                         ),
-                        const SizedBox(height: 6),
+
+                        Gaps.h6,
+                        // تاريخ الإنشاء
                         Text(
                           "${trans().created_at} : ${reservation.createdAt?.toDateView()}",
-                          style: TextStyle(
+                          style: textTheme.bodySmall?.copyWith(
                             color: CustomTheme.color2,
-                            fontSize: 10,
                           ),
                         ),
                       ],
                     ),
                   ),
+
+                  // العمود الأيمن (id/price/status)
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
                         "#${reservation.id}",
-                        style: const TextStyle(
-                            color: CustomTheme.color4,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        "${reservation.totalPrice?.toStringAsFixed(0) ?? trans().priceNotAvailable} ${trans().riyalY}",
-                        style: TextStyle(
-                          color: CustomTheme.color3,
-                          fontSize: 12,
+                        style: textTheme.labelLarge?.copyWith(
+                          color: CustomTheme.color4,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 30),
+                      Gaps.h4,
+                      Text(
+                        "${reservation.totalPrice?.toStringAsFixed(0) ?? trans().priceNotAvailable} ${trans().riyalY}",
+                        style: textTheme.titleSmall?.copyWith(
+                          color: CustomTheme.color3,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Gaps.h30,
+
+                      // شارة الحالة
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
+                        padding: EdgeInsets.symmetric(horizontal: S.w(12), vertical: S.h(6)),
                         decoration: BoxDecoration(
                           color: _getStatusColor(reservation.status),
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: Corners.md15,
                         ),
                         child: Text(
                           _getStatusText(reservation.status),
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 10),
+                          style: textTheme.labelSmall?.copyWith(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],

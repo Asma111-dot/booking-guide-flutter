@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/room.dart' as r;
 import '../helpers/general_helper.dart';
+import '../utils/sizes.dart';
 import 'room_price_widget.dart';
 
 class RoomPricesTab extends StatelessWidget {
@@ -11,9 +12,10 @@ class RoomPricesTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
+      padding: EdgeInsets.symmetric(vertical: Insets.xs8, horizontal: 0),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -26,12 +28,11 @@ class RoomPricesTab extends StatelessWidget {
                         .toList(),
                   )
                 : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: EdgeInsets.symmetric(horizontal: Insets.m16),
                     child: Center(
                       child: Text(
                         trans().priceNotAvailable,
-                        style: TextStyle(
-                          fontSize: 16,
+                        style: textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: colorScheme.onSurface,
                         ),

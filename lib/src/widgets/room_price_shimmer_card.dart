@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../utils/sizes.dart';
+
 class RoomPriceShimmerCard extends StatelessWidget {
   const RoomPriceShimmerCard({super.key});
 
@@ -15,31 +17,31 @@ class RoomPriceShimmerCard extends StatelessWidget {
       highlightColor: highlightColor,
       child: Container(
         width: MediaQuery.of(context).size.width * 0.5,
-        margin: const EdgeInsets.symmetric(horizontal: 8),
-        padding: const EdgeInsets.all(10),
+        margin: EdgeInsets.symmetric(horizontal: Insets.xs8),
+        padding: EdgeInsets.all(S.h(10)),
         decoration: BoxDecoration(
           color: baseColor,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: Corners.sm8,
         ),
         child: Column(
-          mainAxisSize: MainAxisSize.min,          // يترك العمود يأخذ أقل ارتفاع ممكن
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: List.generate(5, (index) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
+            padding: EdgeInsets.symmetric(vertical: S.h(5)),
             child: Row(
               children: [
                 Container(
-                  width: 20,
-                  height: 20,
+                  width: S.w(20),
+                  height: S.h(20),
                   decoration: BoxDecoration(
                     color: highlightColor,
                     shape: BoxShape.circle,
                   ),
                 ),
-                const SizedBox(width: 10),
+                Gaps.w12,
                 Expanded(
                   child: Container(
-                    height: 14,
+                    height: S.h(14),
                     color: highlightColor,
                   ),
                 ),

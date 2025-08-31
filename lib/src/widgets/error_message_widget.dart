@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/sizes.dart';
+
 class ErrorMessageWidget extends StatelessWidget {
   final String message;
   final bool isEmpty;
@@ -24,7 +26,7 @@ class ErrorMessageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: height,
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(Insets.m16),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -32,22 +34,22 @@ class ErrorMessageWidget extends StatelessWidget {
             if (headerWidget != null) headerWidget!,
             if (!textOnly)
               Icon(
-                errorIcon ?? Icons.error,
-                size: 120,
+                errorIcon,
+                size: S.r(120),
                 color: isEmpty ? Colors.grey : Colors.red,
               ),
-            const SizedBox(height: 16.0),
+            Gaps.h15,
             Text(
               message,
               style: TextStyle(
                 color: isEmpty ? Colors.grey : Colors.red,
-                fontSize: 16,
+                fontSize: TFont.l16,
                 fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
             ),
             if (onTap != null) ...[
-              const SizedBox(height: 16.0),
+              Gaps.h15,
               ElevatedButton(
                 onPressed: onTap,
                 child: Text('Retry'),

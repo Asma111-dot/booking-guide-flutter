@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../utils/sizes.dart';
 import '../utils/theme.dart';
 
 class CustomAppBarClipper extends StatelessWidget
@@ -21,15 +22,18 @@ class CustomAppBarClipper extends StatelessWidget
           bottomRight: Radius.circular(35),
         ),
       ),
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      padding: EdgeInsets.symmetric(
+        horizontal: S.w(20),
+        vertical: S.h(16),
+      ),
       child: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             color: CustomTheme.whiteColor,
-            fontSize: 20,
+            fontSize: TFont.x2_20,
             fontWeight: FontWeight.w800,
           ),
         ),

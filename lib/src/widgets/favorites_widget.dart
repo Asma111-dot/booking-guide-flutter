@@ -6,6 +6,7 @@ import '../models/facility.dart';
 import '../sheetes/favorite_sheet.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
+import '../utils/sizes.dart';
 import 'shimmer_image_placeholder.dart';
 
 class FavoriteWidget extends StatelessWidget {
@@ -31,14 +32,14 @@ class FavoriteWidget extends StatelessWidget {
     final typeLabel = facility.facilityTypeId == 1
         ? "فندق"
         : facility.facilityTypeId == 2
-        ? "شاليه"
-        : "قاعة أعراس";
+            ? "شاليه"
+            : "قاعة أعراس";
 
     final typeIcon = facility.facilityTypeId == 1
         ? hotelIcon
         : facility.facilityTypeId == 2
-        ? poolIcon
-        : doveIcon;
+            ? poolIcon
+            : doveIcon;
 
     return GestureDetector(
       onTap: () {
@@ -49,15 +50,22 @@ class FavoriteWidget extends StatelessWidget {
         );
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+        margin: EdgeInsets.symmetric(
+          horizontal: S.w(5),
+          vertical: S.h(5),
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: S.w(12),
+          vertical: S.h(10),
+        ),
         decoration: BoxDecoration(
           color: colorScheme.surface,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: Corners.md15,
           boxShadow: [
             BoxShadow(
               color: colorScheme.shadow.withOpacity(0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
+              blurRadius: S.r(8),
+              offset: Offset(0, S.h(4)),
             ),
           ],
         ),
@@ -66,37 +74,45 @@ class FavoriteWidget extends StatelessWidget {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: Corners.sm8,
                   child: CachedNetworkImage(
                     imageUrl: defaultImage,
-                    width: 110,
-                    height: 110,
+                    width: S.w(110),
+                    height: S.h(110),
                     fit: BoxFit.cover,
-                    placeholder: (context, url) => const ShimmerImagePlaceholder(width: 80, height: 80),
+                    placeholder: (context, url) => ShimmerImagePlaceholder(
+                      width: S.w(80),
+                      height: S.h(80),
+                    ),
                     errorWidget: (context, url, error) => Image.asset(
                       appIcon,
-                      width: 110,
-                      height: 110,
+                      width: S.w(110),
+                      height: S.h(110),
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
                 Positioned(
-                  top: 6,
-                  left: 6,
+                  top: S.h(6),
+                  left: S.w(6),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Insets.xs8,
+                      vertical: S.h(4),
+                    ),
                     decoration: BoxDecoration(
                       color: colorScheme.onSurface.withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: Corners.sm8,
                     ),
                     child: Row(
                       children: [
-                        Icon(typeIcon, color: Colors.white, size: 14),
-                        const SizedBox(width: 4),
-                         Text(
+                        Icon(typeIcon,
+                            color: Colors.white, size: Sizes.iconS16),
+                        Gaps.w4,
+                        Text(
                           typeLabel,
-                          style: TextStyle(color: Colors.white, fontSize: 12),
+                          style: TextStyle(
+                              color: Colors.white, fontSize: TFont.s12),
                         ),
                       ],
                     ),
@@ -104,10 +120,13 @@ class FavoriteWidget extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(width: 12),
+            Gaps.w12,
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+                padding: EdgeInsets.symmetric(
+                  horizontal: S.w(4),
+                  vertical: S.h(12),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -119,13 +138,12 @@ class FavoriteWidget extends StatelessWidget {
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 8),
+                    Gaps.h20,
                     Row(
                       children: [
-                        Icon(
-                            mapIcon,
-                            color: colorScheme.secondary, size: 16),
-                        const SizedBox(width: 4),
+                        Icon(mapIcon,
+                            color: colorScheme.secondary, size: Sizes.iconS16),
+                        Gaps.w4,
                         Expanded(
                           child: Text(
                             facility.address ?? trans().address,
@@ -142,7 +160,9 @@ class FavoriteWidget extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: EdgeInsets.symmetric(
+                horizontal: S.w(8),
+              ),
               child: GestureDetector(
                 onTap: () {
                   showRemoveFavoriteSheet(
@@ -151,21 +171,21 @@ class FavoriteWidget extends StatelessWidget {
                   );
                 },
                 child: Container(
-                  padding: const EdgeInsets.all(6),
+                  padding: EdgeInsets.all(Insets.xxs6),
                   decoration: BoxDecoration(
                     color: colorScheme.surface,
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
                         color: colorScheme.shadow.withOpacity(0.1),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
+                        blurRadius: S.r(4),
+                        offset: Offset(0, S.h(2)),
+
                       ),
                     ],
                   ),
-                  child: Icon(
-                      favoriteFullIcon,
-                      color: colorScheme.primary, size: 22),
+                  child: Icon(favoriteFullIcon,
+                      color: colorScheme.primary,size: Sizes.iconL24),
                 ),
               ),
             ),

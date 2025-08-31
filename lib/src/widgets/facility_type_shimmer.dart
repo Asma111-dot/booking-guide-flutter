@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../utils/sizes.dart';
+
 class FacilityTypeShimmer extends StatelessWidget {
   const FacilityTypeShimmer({super.key});
 
@@ -19,26 +21,26 @@ class FacilityTypeShimmer extends StatelessWidget {
         child: Row(
           children: List.generate(5, (index) {
             return Container(
-              margin: const EdgeInsets.only(right: 8),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-              decoration: BoxDecoration(
-                color: baseColor,
-                borderRadius: BorderRadius.circular(12),
-              ),
+              margin: EdgeInsets.only(right: Insets.xs8),
+              padding:
+                  EdgeInsets.symmetric(horizontal: S.w(10), vertical: S.h(8)),
+              decoration:
+                  BoxDecoration(color: baseColor, borderRadius: Corners.md15),
               child: Row(
                 children: [
                   Container(
-                    width: 24,
-                    height: 24,
+                    width: S.w(24),
+                    height: S.h(24),
                     decoration: BoxDecoration(
                       color: highlightColor,
                       shape: BoxShape.circle,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  Gaps.w8,
                   Container(
-                    width: 60,
-                    height: 14,
+                    width: S.w(60),
+                    height: S.h(14),
+
                     color: highlightColor,
                   ),
                 ],

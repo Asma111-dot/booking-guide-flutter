@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../utils/assets.dart';
 import '../helpers/general_helper.dart';
+import '../utils/sizes.dart';
 
 class CustomHeaderDetailsWidget extends StatelessWidget {
   final String? logo;
@@ -25,16 +26,16 @@ class CustomHeaderDetailsWidget extends StatelessWidget {
       children: [
         if (logo != null) ...[
           Container(
-            height: 100,
-            width: 100,
+            height: S.h(100),
+            width: S.w(100),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
                   color: colorScheme.primary.withOpacity(0.1),
-                  spreadRadius: 2,
-                  blurRadius: 3,
-                  offset: const Offset(0, 3),
+                  spreadRadius: S.r(2),
+                  blurRadius: S.r(3),
+                  offset: Offset(0, S.h(3)),
                 ),
               ],
             ),
@@ -51,7 +52,7 @@ class CustomHeaderDetailsWidget extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          Gaps.w8,
         ],
         Expanded(
           child: Column(
@@ -60,27 +61,27 @@ class CustomHeaderDetailsWidget extends StatelessWidget {
               Text(
                 name ?? trans().not_available,
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: TFont.xl18,
                   fontWeight: FontWeight.bold,
                   color: colorScheme.primary,
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
               ),
-              const SizedBox(height: 4),
+              Gaps.h4,
               Row(
                 children: [
                   Icon(
                     mapIcon,
                     color: colorScheme.secondary,
-                    size: 16,
+                    size: Sizes.iconS16,
                   ),
-                  const SizedBox(width: 4),
+                  Gaps.w4,
                   Expanded(
                     child: Text(
                       address ?? trans().not_available,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: TFont.m14,
                         color: colorScheme.onSurface.withOpacity(0.7),
                       ),
                       overflow: TextOverflow.ellipsis,

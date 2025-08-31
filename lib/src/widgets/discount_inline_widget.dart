@@ -6,13 +6,16 @@ import 'package:shimmer/shimmer.dart';
 import '../models/discount.dart';
 import '../pages/discount_page.dart';
 import '../providers/discount/discount_provider.dart';
+import '../utils/assets.dart';
+import '../utils/sizes.dart';
 import '../widgets/view_widget.dart';
 
 class DiscountInlineWidget extends ConsumerStatefulWidget {
   const DiscountInlineWidget({super.key});
 
   @override
-  ConsumerState<DiscountInlineWidget> createState() => _DiscountInlineWidgetState();
+  ConsumerState<DiscountInlineWidget> createState() =>
+      _DiscountInlineWidgetState();
 }
 
 class _DiscountInlineWidgetState extends ConsumerState<DiscountInlineWidget> {
@@ -66,10 +69,10 @@ class _DiscountInlineWidgetState extends ConsumerState<DiscountInlineWidget> {
       meta: discountState.meta,
       data: discountState.data,
       onLoaded: (data) {
-        if (data.isEmpty) return const SizedBox.shrink(); // ✅ اختفاء تام عند عدم وجود خصومات
+        if (data.isEmpty) return const SizedBox.shrink();
 
         return SizedBox(
-          height: 120,
+          height: S.h(150),
           child: Stack(
             children: [
               PageView.builder(
@@ -86,7 +89,8 @@ class _DiscountInlineWidgetState extends ConsumerState<DiscountInlineWidget> {
                       );
                     },
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 10),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: S.w(26), vertical: S.h(10)),
                       child: Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
@@ -97,37 +101,37 @@ class _DiscountInlineWidgetState extends ConsumerState<DiscountInlineWidget> {
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: Corners.md15,
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.05),
-                              blurRadius: 6,
-                              offset: const Offset(0, 3),
+                              blurRadius: S.r(6),
+                              offset: Offset(0, S.h(3)),
                             ),
                           ],
                         ),
-                        padding: const EdgeInsets.all(12),
+                        padding: EdgeInsets.all(S.h(12)),
                         child: Row(
                           children: [
                             Container(
-                              width: 60,
-                              height: 60,
+                              width: S.w(60),
+                              height: S.w(60),
                               decoration: BoxDecoration(
                                 color: colorScheme.primary.withOpacity(0.15),
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: Corners.sm8,
                               ),
                               child: Icon(
-                                Icons.local_offer,
-                                size: 30,
+                                localOfferIcon,
+                                size: S.r(30),
                                 color: colorScheme.tertiary.withOpacity(0.5),
                               ),
                             ),
-                            const SizedBox(width: 12),
+                            Gaps.w12,
                             Expanded(
                               child: Text(
                                 discount.name ?? '',
-                                style: const TextStyle(
-                                  fontSize: 16,
+                                style: TextStyle(
+                                  fontSize: TFont.l16,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 maxLines: 2,
@@ -141,7 +145,6 @@ class _DiscountInlineWidgetState extends ConsumerState<DiscountInlineWidget> {
                   );
                 },
               ),
-
               Positioned(
                 left: 8,
                 top: 0,
@@ -154,9 +157,9 @@ class _DiscountInlineWidgetState extends ConsumerState<DiscountInlineWidget> {
 
                     return AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
-                      margin: const EdgeInsets.symmetric(vertical: 4),
-                      width: isActive ? 14 : 10,
-                      height: isActive ? 14 : 10,
+                      margin: EdgeInsets.symmetric(vertical: S.h(4)),
+                      width: isActive ? S.r(14) : S.r(10),
+                      height: isActive ? S.r(14) : S.r(10),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: isActive
@@ -172,27 +175,27 @@ class _DiscountInlineWidgetState extends ConsumerState<DiscountInlineWidget> {
         );
       },
       onLoading: () => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: S.w(26), vertical: S.h(10)),
         child: Shimmer.fromColors(
           baseColor: baseColor,
           highlightColor: highlightColor,
           child: Container(
-            height: 100,
+            height: S.h(100),
             decoration: BoxDecoration(
               color: baseColor,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: Corners.md15,
               boxShadow: [
                 BoxShadow(
                   color: isDark ? Colors.black12 : Colors.grey.withOpacity(0.1),
-                  blurRadius: 6,
-                  offset: const Offset(0, 2),
+                  blurRadius: S.r(6),
+                  offset: Offset(0, S.h(2)),
                 ),
               ],
             ),
           ),
         ),
       ),
-      onEmpty: () => const SizedBox.shrink(),
+      onEmpty: () => SizedBox(height: S.h(150)),
       showError: false,
       showEmpty: false,
     );

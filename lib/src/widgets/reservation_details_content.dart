@@ -6,6 +6,7 @@ import '../helpers/general_helper.dart';
 import '../models/reservation.dart' as res;
 import '../enums/reservation_status.dart';
 import '../utils/assets.dart';
+import '../utils/sizes.dart';
 import 'custom_header_details_widget.dart';
 import 'custom_row_details_widget.dart';
 
@@ -16,7 +17,7 @@ class ReservationDetailsContent extends StatelessWidget {
   const ReservationDetailsContent({
     super.key,
     required this.data,
-    this.padding = const EdgeInsets.fromLTRB(16, 16, 16, 100),
+    this.padding = const EdgeInsets.fromLTRB(0, 0, 0, 0),
   });
 
   @override
@@ -27,7 +28,7 @@ class ReservationDetailsContent extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return SingleChildScrollView(
-      padding: padding,
+      padding: EdgeInsets.fromLTRB(Insets.m16, Insets.m16, Insets.m16, S.h(100)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -37,23 +38,24 @@ class ReservationDetailsContent extends StatelessWidget {
             address: data.roomPrice?.room?.facility?.address,
           ),
 
-          const SizedBox(height: 10),
+          S.gapH(10),
           Divider(color: colorScheme.outline.withOpacity(0.5)),
-          const SizedBox(height: 10),
+          S.gapH(10),
 
           CustomRowDetailsWidget(
-            icon:   periodIcon,
+            icon: periodIcon,
             label: trans().reservation_date,
             value: data.checkInDate.toDateDateView(),
           ),
+
           if (checkOut.isAfter(checkIn)) ...[
-            const SizedBox(height: 12),
+            Gaps.h12,
             CustomRowDetailsWidget(
               icon: rangeDataIcon,
               label: trans().number_of_days,
               value: formatDaysAr(daysCount),
             ),
-            const SizedBox(height: 12),
+            Gaps.h12,
             CustomRowDetailsWidget(
               icon: logoutIcon,
               label: trans().check_out_date,
@@ -61,30 +63,34 @@ class ReservationDetailsContent extends StatelessWidget {
             ),
           ],
 
-          const SizedBox(height: 12),
+          Gaps.h12,
           CustomRowDetailsWidget(
             icon: playListIcon,
-            label: trans().period,
+            label: trans().package,
             value: data.roomPrice?.period ?? trans().not_available,
           ),
-          const SizedBox(height: 12),
+
+          Gaps.h12,
           CustomRowDetailsWidget(
             icon: accessTimeIcon,
             label: trans().access_time,
             value:
-            "${data.roomPrice?.timeFrom?.fromTimeToDateTime()?.toTimeView() ?? '--:--'} - ${data.roomPrice?.timeTo?.fromTimeToDateTime()?.toTimeView() ?? '--:--'}",
+            "${data.roomPrice?.timeFrom?.fromTimeToDateTime()?.toTimeView() ?? '--:--'} - "
+                "${data.roomPrice?.timeTo?.fromTimeToDateTime()?.toTimeView() ?? '--:--'}",
           ),
 
-          const SizedBox(height: 15),
+          S.gapH(15),
           Divider(color: colorScheme.outline.withOpacity(0.5)),
-          const SizedBox(height: 15),
+          S.gapH(15),
 
           CustomRowDetailsWidget(
             icon: personalIcon,
             label: trans().attendance_type,
             value: data.bookingType,
           ),
-          const SizedBox(height: 12),
+
+          // const SizedBox(height: 12),
+          Gaps.h12,
           CustomRowDetailsWidget(
             icon: groupsIcon,
             label: trans().adults_count,
@@ -92,7 +98,8 @@ class ReservationDetailsContent extends StatelessWidget {
                 ? '${data.adultsCount} ${trans().person}'
                 : trans().not_available,
           ),
-          const SizedBox(height: 12),
+
+          Gaps.h12,
           CustomRowDetailsWidget(
             icon: groups2Icon,
             label: trans().children_count,
@@ -101,9 +108,9 @@ class ReservationDetailsContent extends StatelessWidget {
                 : trans().not_available,
           ),
 
-          const SizedBox(height: 15),
+          S.gapH(15),
           Divider(color: colorScheme.outline.withOpacity(0.5)),
-          const SizedBox(height: 15),
+          S.gapH(15),
 
           CustomRowDetailsWidget(
             icon: priceCheckIcon,
@@ -112,7 +119,8 @@ class ReservationDetailsContent extends StatelessWidget {
                 ? '${data.totalPrice?.toInt()} ${trans().riyalY}'
                 : trans().not_available,
           ),
-          const SizedBox(height: 12),
+
+          Gaps.h12,
 
           if (parseStatus(data.status) == ReservationStatus.confirmed) ...[
             CustomRowDetailsWidget(
@@ -122,11 +130,11 @@ class ReservationDetailsContent extends StatelessWidget {
                   ? '${data.totalDeposit?.toInt()} ${trans().riyalY}'
                   : trans().not_available,
             ),
-            const SizedBox(height: 12),
+            Gaps.h12,
             CustomRowDetailsWidget(
               icon: priceCheckIcon,
               label: trans().remaining_amount,
-              value: data.totalPrice != null && data.totalDeposit != null
+              value: (data.totalPrice != null && data.totalDeposit != null)
                   ? '${((data.totalPrice ?? 0) - (data.totalDeposit ?? 0)).toInt()} ${trans().riyalY}'
                   : trans().not_available,
             ),
@@ -139,7 +147,6 @@ class ReservationDetailsContent extends StatelessWidget {
                   : trans().not_available,
             ),
           ],
-
         ],
       ),
     );

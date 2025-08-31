@@ -14,6 +14,7 @@ import '../sheetes/capacity_filter_sheet.dart';
 import '../sheetes/filter_type_selector_bottom_sheet.dart';
 import '../sheetes/price_filter_sheet.dart';
 import '../utils/assets.dart';
+import '../utils/sizes.dart';
 import '../utils/theme.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/filtered_facilities_list_widget.dart';
@@ -131,28 +132,28 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
         icon: arrowBackIcon,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(Insets.m16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 16),
+              padding: EdgeInsets.only(bottom: S.h(16)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     trans().discoverBestPlace,
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: TFont.m14,
                       fontWeight: FontWeight.w600,
                       color: colorScheme.onSurface,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  Gaps.h4,
                   Text(
                     trans().searchByNameAddress,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: TFont.xxs10,
                       fontWeight: FontWeight.w300,
                       color: colorScheme.onSurface.withOpacity(0.6),
                     ),
@@ -171,25 +172,25 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                 Tab(text: trans().hall),
               ],
             ),
-            const SizedBox(height: 8),
+            Gaps.h6,
             Row(
               children: [
                 // زر اختيار نوع الفلتر
                 Flexible(
                   flex: 2,
                   child: Container(
-                    height: 45,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
+                    height: S.h(45),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: S.w(10),
                     ),
                     decoration: BoxDecoration(
                       color: colorScheme.surface,
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: Corners.md15,
                       boxShadow: [
                         BoxShadow(
                             color: colorScheme.shadow.withOpacity(0.08),
-                            blurRadius: 3,
-                            offset: Offset(0, 2)),
+                            blurRadius: S.r(3),
+                            offset: Offset(0, S.h(2))),
                       ],
                     ),
                     child: GestureDetector(
@@ -200,8 +201,8 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                           Expanded(
                             child: Text(
                               selectedFilter?.label ?? 'اختر الفلتر',
-                              style: const TextStyle(
-                                fontSize: 10,
+                              style: TextStyle(
+                                fontSize: TFont.xxs10,
                                 fontWeight: FontWeight.w200,
                               ),
                               overflow: TextOverflow.ellipsis,
@@ -217,8 +218,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
-
+                Gaps.w8,
                 // مربع البحث
                 Flexible(
                   flex: 6,
@@ -227,7 +227,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                     decoration: InputDecoration(
                       hintText: trans().search_in_facilities,
                       hintStyle: TextStyle(
-                        fontSize: 10,
+                        fontSize: TFont.xxs10,
                         fontWeight: FontWeight.w400,
                         color: colorScheme.onSurface.withOpacity(0.5),
                       ),
@@ -236,11 +236,11 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                         color: CustomTheme.color2,
                       ),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: Corners.md15,
                       ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 15,
-                        vertical: 12,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: S.w(15),
+                        vertical: S.h(12),
                       ),
                     ),
                     onChanged: (value) {
@@ -258,8 +258,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                     },
                   ),
                 ),
-                const SizedBox(width: 10),
-
+                Gaps.w12,
                 // زر الفلترة
                 Flexible(
                   flex: 1,
@@ -283,7 +282,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                       width: double.infinity,
                       decoration: BoxDecoration(
                         gradient: CustomTheme.primaryGradient,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: Corners.md15,
                       ),
                       child: Icon(
                         key: ValueKey(currentSort),
@@ -322,14 +321,14 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                     trans().reset_filters,
                     style: TextStyle(
                       color: colorScheme.onSurface.withOpacity(0.6),
-                      fontSize: 12,
+                      fontSize: TFont.xxs10,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
             const Divider(height: 12),
-            const SizedBox(height: 8),
+            Gaps.h12,
             Expanded(
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),

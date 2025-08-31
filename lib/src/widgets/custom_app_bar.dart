@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/sizes.dart';
 import '../utils/theme.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -35,7 +36,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       title: Text(
         widget.appTitle ?? '',
         style: TextStyle(
-          fontSize: 20,
+          fontSize: TFont.x2_20,
           color: colorScheme.primary,
         ),
       ),
@@ -55,7 +56,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
             }
           },
           icon: widget.icon!,
-          iconSize: 18,
+          iconSize: Sizes.iconS18,
           color: Colors.white,
           alignment: Alignment.center,
           padding: EdgeInsets.zero,

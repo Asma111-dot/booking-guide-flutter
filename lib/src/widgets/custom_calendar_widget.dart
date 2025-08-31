@@ -70,17 +70,6 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
 
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.45,
-    // child: SfDateRangePickerTheme(
-    // data: SfDateRangePickerThemeData(
-    // brightness: Theme.of(context).brightness,
-    // dayTextStyle: const TextStyle(fontSize: 12), // حجم نص أيام الأسبوع
-    // todayTextStyle: const TextStyle(fontSize: 12),
-    // blackoutDateTextStyle: const TextStyle(fontSize: 12),
-    // weekendTextStyle: const TextStyle(fontSize: 12),
-    // monthCellStyle: const DateRangePickerMonthCellStyle(
-    // textStyle: TextStyle(fontSize: 12),
-    // ),
-    // ),
       child: SfDateRangePicker(
         controller: _controller,
         initialDisplayDate: widget.selectionType == SelectionType.single
@@ -145,7 +134,6 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
           // dayFormat: Localizations.localeOf(context).languageCode == 'ar' ? 'EE' : 'E',
           blackoutDates: blackoutDates,
           showTrailingAndLeadingDates: false,
-          // weekendDays: const [DateTime.tuesday, DateTime.friday],
         ),
         monthCellStyle: DateRangePickerMonthCellStyle(
           blackoutDateTextStyle: TextStyle(

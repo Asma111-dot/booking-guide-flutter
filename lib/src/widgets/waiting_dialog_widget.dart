@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../helpers/general_helper.dart';
+import '../utils/sizes.dart'; // ⬅️ مهم
 
 class WaitingDialogWidget extends StatelessWidget {
   const WaitingDialogWidget({super.key});
@@ -11,22 +12,29 @@ class WaitingDialogWidget extends StatelessWidget {
 
     return Center(
       child: Container(
-        padding: const EdgeInsets.all(24),
-        margin: const EdgeInsets.symmetric(horizontal: 48),
+        padding: EdgeInsets.all(Insets.l20),
+        margin: EdgeInsets.symmetric(horizontal: Insets.x2_32),
         decoration: BoxDecoration(
           color: colorScheme.surface,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: Corners.md15,
+          boxShadow: [
+            BoxShadow(
+              color: colorScheme.shadow.withOpacity(0.1),
+              blurRadius: S.r(8),
+              offset: Offset(0, S.h(3)),
+            ),
+          ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const CircularProgressIndicator(),
-            const SizedBox(height: 20),
+            Gaps.h15,
             Text(
               trans().please_wait,
               style: TextStyle(
                 color: colorScheme.onSurface,
-                fontSize: 16,
+                fontSize: TFont.l16,
                 fontWeight: FontWeight.bold,
               ),
             ),

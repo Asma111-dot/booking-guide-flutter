@@ -11,6 +11,7 @@ import '../models/room.dart' as r;
 import '../providers/room/room_provider.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
+import '../utils/sizes.dart';
 import '../utils/theme.dart';
 import '../helpers/general_helper.dart';
 import '../widgets/full_map_widget.dart';
@@ -118,7 +119,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                 left: 0,
                 right: 0,
                 child: SizedBox(
-                  height: 400,
+                  height: S.h(400),
                   child: PageView.builder(
                     controller: pageController,
                     itemCount: room.media.isNotEmpty ? room.media.length : 1,
@@ -151,8 +152,9 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                             child: CachedNetworkImage(
                               imageUrl: mediaUrl,
                               fit: BoxFit.cover,
-                              placeholder: (context, url) => const ShimmerImagePlaceholder(width: 80, height: 80),
-
+                              placeholder: (context, url) =>
+                                  const ShimmerImagePlaceholder(
+                                      width: 80, height: 80),
                               errorWidget: (context, url, error) =>
                                   const Icon(errorIcon),
                             ),
@@ -165,11 +167,11 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
               ),
               PositionedDirectional(
                 top: topPad + 10,
-                start: 10, // يعادل left في LTR و right في RTL تلقائياً
+                start: 10,
                 child: Container(
                   decoration: BoxDecoration(
                     color: colorScheme.surface.withOpacity(0.8),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: Corners.sm8,
                   ),
                   child: IconButton(
                     icon: Icon(arrowBacksIcon, color: colorScheme.onSurface),
@@ -177,14 +179,13 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                   ),
                 ),
               ),
-
               PositionedDirectional(
                 top: topPad + 10,
                 end: 10,
                 child: Container(
                   decoration: BoxDecoration(
                     color: colorScheme.surface.withOpacity(0.8),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: Corners.sm8,
                   ),
                   child: IconButton(
                     icon: Icon(shareIcon, color: colorScheme.onSurface),
@@ -198,20 +199,22 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                 ),
               ),
               Positioned(
-                top: 200,
-                left: 10,
+                top: S.h(200),
+                left: S.w(10),
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Insets.s12,
+                    vertical: Insets.xxs6,
+                  ),
                   decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.black.withOpacity(0.1),
+                    borderRadius: Corners.sm8,
                   ),
                   child: Text(
                     "${pageController.positions.isNotEmpty ? (pageController.page?.toInt() ?? 0) + 1 : 1}/${room.media.length}",
                     style: TextStyle(
                       color: colorScheme.onPrimary,
-                      fontSize: 15,
+                      fontSize: TFont.m14,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -223,7 +226,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                 maxChildSize: 0.9,
                 builder: (context, scrollController) {
                   return Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(Insets.m16),
                     decoration: BoxDecoration(
                       color: colorScheme.background,
                       borderRadius: const BorderRadius.only(
@@ -233,8 +236,8 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                       boxShadow: [
                         BoxShadow(
                           color: colorScheme.shadow.withOpacity(0.1),
-                          blurRadius: 10,
-                          offset: const Offset(0, -4),
+                          blurRadius: S.r(10),
+                          offset: Offset(0, -S.h(4)),
                         ),
                       ],
                     ),
@@ -245,23 +248,25 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                         children: [
                           Text(
                             widget.facility.name,
-                            style: const TextStyle(
-                              fontSize: 22,
+                            style:  TextStyle(
+                              fontSize: TFont.xl18,
                               fontWeight: FontWeight.bold,
                               color: CustomTheme.primaryColor,
                             ),
                           ),
-                          const SizedBox(height: 12),
+                          Gaps.h12,
                           Row(
                             children: [
-                              Icon(mapIcon, color: colorScheme.onSurface, size: 20),
-                              const SizedBox(width: 4),
+                              Icon(mapIcon,
+                                  color: colorScheme.onSurface, size: Sizes.iconM20),
+                              Gaps.w4,
                               Expanded(
                                 child: Text(
-                                  widget.facility.address ?? trans().address_not_available,
-                                  style: const TextStyle(
+                                  widget.facility.address ??
+                                      trans().address_not_available,
+                                  style:  TextStyle(
                                     color: CustomTheme.color3,
-                                    fontSize: 14,
+                                    fontSize: TFont.s12,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   overflow: TextOverflow.ellipsis,
@@ -269,7 +274,8 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                                 ),
                               ),
                               IconButton(
-                                icon:  Icon(map2Icon, color: colorScheme.primary),
+                                icon:
+                                    Icon(map2Icon, color: colorScheme.primary),
                                 onPressed: () {
                                   Navigator.push(
                                     context,
@@ -285,7 +291,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                               ),
                             ],
                           ),
-                          const SizedBox(height: 16),
+                          Gaps.h15,
                           RoomDetailsTabs(
                             room: room,
                             facility: widget.facility,
@@ -307,9 +313,9 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                 },
               ),
               Positioned(
-                bottom: 16,
-                left: 16,
-                right: 16,
+                bottom: Insets.m16,
+                left: Insets.m16,
+                right: Insets.m16,
                 child: Button(
                   width: double.infinity,
                   disable: false,
@@ -319,8 +325,11 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                     arguments: room.id,
                   ),
                   title: trans().showAvailableDays,
-                  icon:
-                      Icon(periodIcon, size: 20, color: colorScheme.onPrimary),
+                  icon: Icon(
+                    periodIcon,
+                    size: Sizes.iconM20,
+                    color: colorScheme.onPrimary,
+                  ),
                 ),
               ),
             ],

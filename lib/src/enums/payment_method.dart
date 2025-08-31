@@ -3,10 +3,10 @@ import '../utils/assets.dart';
 enum PaymentMethod {
   floosak(1, 'فلوسك', floosakImage),
   jib(2, 'جيب', jaibImage),
-  jawali(3, 'جوالي', jawaliImage),
-  cash(4, 'كاش', cashImage),
-  pyes(5, 'بيس', pyesImage),
-  sabaCash(6, 'سبأ كاش', sabaCashImage);
+  jawali(3, 'جوالي', jawaliImage);
+  // cash(4, 'كاش', cashImage),
+  // pyes(5, 'بيس', pyesImage),
+  // sabaCash(6, 'سبأ كاش', sabaCashImage);
 
   final int id;
   final String name;

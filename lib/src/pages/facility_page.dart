@@ -13,6 +13,7 @@ import '../widgets/facility_shimmer_card.dart';
 import '../widgets/facility_widget.dart';
 import '../widgets/view_widget.dart';
 import '../models/facility.dart';
+import '../utils/sizes.dart'; // Insets, Gaps, Corners, TFont
 
 class FacilityPage extends ConsumerStatefulWidget {
   final int facilityTypeId;
@@ -90,15 +91,15 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
                 children: [
                   SvgPicture.asset(
                     inboxIconSvg,
-                    width: 140,
-                    height: 140,
+                    width: S.w(140),
+                    height: S.w(140),
                   ),
-                  const SizedBox(height: 12),
+                  Gaps.h12,
                   Text(
                     trans().no_facilities,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: TFont.s12,
                       color: Colors.grey.shade700,
                       fontWeight: FontWeight.w700,
                     ),
@@ -109,17 +110,19 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
           }
           return isGrid
               ? ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: EdgeInsets.symmetric(horizontal: Insets.m16),
                   itemCount: data.length,
                   itemBuilder: (context, index) =>
                       FacilityWidget(facility: data[index]),
                 )
               : GridView.builder(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Insets.m16, vertical: Insets.s12),
                   itemCount: data.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 5,
+                    crossAxisSpacing: S.w(6),
+                    mainAxisSpacing: S.h(6),
                     childAspectRatio: 0.80,
                   ),
                   itemBuilder: (context, index) =>
@@ -127,7 +130,7 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
                 );
         },
         onLoading: () => ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: Insets.m16),
           itemCount: 5,
           itemBuilder: (_, __) => const FacilityShimmerCard(),
         ),

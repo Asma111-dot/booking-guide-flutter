@@ -7,6 +7,7 @@ import '../models/facility.dart';
 import '../providers/favorite/favorite_provider.dart';
 import '../storage/auth_storage.dart';
 import '../utils/assets.dart';
+import '../utils/sizes.dart';
 import '../utils/theme.dart';
 import '../widgets/facility_shimmer_card.dart';
 import '../widgets/view_widget.dart';
@@ -61,13 +62,24 @@ class _FavoritesScreenState extends ConsumerState<FavoritesPage> {
             indicatorColor: CustomTheme.color2,
             labelColor: CustomTheme.primaryColor,
             unselectedLabelColor: Colors.grey,
-            labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-            unselectedLabelStyle: const TextStyle(fontSize: 12),
+            labelStyle:
+                TextStyle(fontSize: TFont.s12, fontWeight: FontWeight.bold),
+            unselectedLabelStyle: TextStyle(
+              fontSize: TFont.xxs10,
+            ),
             tabs: [
-              Tab(child: Text(trans().all, textAlign: TextAlign.center, softWrap: true)),
-              Tab(child: Text(trans().hotel, textAlign: TextAlign.center, softWrap: true)),
-              Tab(child: Text(trans().chalet, textAlign: TextAlign.center, softWrap: true)),
-              Tab(child: Text(trans().hall, textAlign: TextAlign.center, softWrap: true)),
+              Tab(
+                  child: Text(trans().all,
+                      textAlign: TextAlign.center, softWrap: true)),
+              Tab(
+                  child: Text(trans().hotel,
+                      textAlign: TextAlign.center, softWrap: true)),
+              Tab(
+                  child: Text(trans().chalet,
+                      textAlign: TextAlign.center, softWrap: true)),
+              Tab(
+                  child: Text(trans().hall,
+                      textAlign: TextAlign.center, softWrap: true)),
             ],
           ),
         ),
@@ -87,17 +99,15 @@ class _FavoritesScreenState extends ConsumerState<FavoritesPage> {
                   children: [
                     SvgPicture.asset(
                       emptyFavoriteIcon,
-                      width: 140,
-                      height: 140,
-                      // // احذف اللون لو الأيقونة ملوّنة
-                      // colorFilter: ColorFilter.mode(Colors.grey.shade400, BlendMode.srcIn),
+                      width: S.w(140),
+                      height: S.h(140),
                     ),
-                    const SizedBox(height: 12),
+                    Gaps.h12,
                     Text(
                       trans().noFavorites,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: TFont.xxs10,
                         color: Colors.grey.shade600,
                         fontWeight: FontWeight.w600,
                       ),

@@ -1,3 +1,4 @@
+import 'package:booking_guide/src/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -55,64 +56,11 @@ class _PriceAndCalendarPageState
   void _fetchRoomPrices() async {
     await ref.read(roomPricesProvider.notifier).fetch(roomId: widget.roomId);
 
-    final roomPrices = ref.read(roomPricesProvider).data;
     setState(() {
       selectedPrice = null;
       events = {};
     });
   }
-
-  // void _populateEvents({
-  //   required RoomPrice selectedPrice,
-  //   required List<Map<String, dynamic>> bookedDates,
-  // }) {
-  //   final Map<DateTime, List<dynamic>> tempEvents = {};
-  //
-  //   for (var reservation in selectedPrice.reservations) {
-  //     if (reservation.status != 'confirmed') continue;
-  //
-  //     final checkInDate = DateTime.parse(reservation.checkInDate.toString());
-  //     final checkOutDate = DateTime.parse(reservation.checkOutDate.toString());
-  //
-  //     DateTime currentDate = checkInDate;
-  //     while (currentDate.isBefore(checkOutDate) ||
-  //         currentDate.isAtSameMomentAs(checkOutDate)) {
-  //       final normalized = DateTime(
-  //           currentDate.year, currentDate.month, currentDate.day);
-  //       tempEvents[normalized] = [
-  //         ...(tempEvents[normalized] ?? []),
-  //         reservation
-  //       ];
-  //       currentDate = currentDate.add(const Duration(days: 1));
-  //     }
-  //   }
-  //
-  //   for (final item in bookedDates) {
-  //     if (!item.containsKey('date') || !item.containsKey('period')) continue;
-  //
-  //     final rawDate = item['date'];
-  //     final rawPeriod = item['period'];
-  //     final selectedRawPeriod = selectedPrice.period;
-  //
-  //     if (rawDate == null || rawDate.toString().trim().isEmpty) continue;
-  //
-  //     final period = rawPeriod.toString().trim().toLowerCase();
-  //     final selectedPeriod = selectedRawPeriod.toString().trim().toLowerCase();
-  //
-  //     final parsed = DateTime.parse(rawDate);
-  //     final date = DateTime(parsed.year, parsed.month, parsed.day);
-  //
-  //     if (period == selectedPeriod) {
-  //       tempEvents[date] = [
-  //         ...(tempEvents[date] ?? []),
-  //         {'type': 'google', 'label': 'محجوز: $rawPeriod'}
-  //       ];
-  //     }
-  //   }
-  //
-  //   events = tempEvents;
-  //   setState(() {});
-  // }
 
   void _populateEvents({
     required RoomPrice selectedPrice,
@@ -140,7 +88,7 @@ class _PriceAndCalendarPageState
     }
 
     // التواريخ القادمة من API (الآن دمجنا Google + DB في السيرفر)
-    final selectedPeriod = norm(selectedPrice.period?.toString() ?? '');
+    final selectedPeriod = norm(selectedPrice.period.toString() ?? '');
 
     for (final item in bookedDates) {
       final rawDate   = item['date'];
@@ -172,7 +120,6 @@ class _PriceAndCalendarPageState
   @override
   Widget build(BuildContext context) {
     final roomPriceState = ref.watch(roomPricesProvider);
-    final bookedDates = ref.watch(bookedDatesFromGoogleCalendarProvider);
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -196,43 +143,45 @@ class _PriceAndCalendarPageState
                 children: [
                   // العنوان والوصف
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 14.0, vertical: 10.0),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: Insets.l20, vertical: S.h(10)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           trans().view_price_list,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: TFont.s12,
                             fontWeight: FontWeight.w600,
                             color: theme.colorScheme.onSurface,
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          trans().select_period_and_day,
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w400,
-                            color: theme.colorScheme.onSurface.withOpacity(0.6),
-                          ),
-                        ),
+                        Gaps.h4,
+                        // Text(
+                        //   trans().select_period_and_day,
+                        //   style: TextStyle(
+                        //     fontSize: TFont.xxs10,
+                        //     fontWeight: FontWeight.w400,
+                        //     color: theme.colorScheme.onSurface.withOpacity(0.6),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
 
                   // قائمة الفترات بشكل أفقي مع Shimmer عند عدم توفر البيانات
                   SizedBox(
-                    height: 200,
+                    height: S.h(170),
                     child: (data == null || data.isEmpty)
                         ? ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: 4,
-                      itemBuilder: (context, index) => const Padding(
+                      itemBuilder: (context, index) => Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: 4.0, vertical: 14.0),
-                        child: RoomPriceShimmerCard(),
+                          horizontal: S.w(4),
+                          vertical: S.h(14),
+                        ),
+                        child: const RoomPriceShimmerCard(),
                       ),
                     )
                         : ListView.builder(
@@ -241,8 +190,10 @@ class _PriceAndCalendarPageState
                       itemBuilder: (context, index) {
                         final roomPrice = data[index];
                         return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 4.0, vertical: 14.0),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: S.w(4),
+                            vertical: S.h(14),
+                          ),
                           child: RoomPriceWidget(
                             roomPrice: roomPrice,
                             isSelected: selectedPrice == roomPrice,
@@ -259,12 +210,11 @@ class _PriceAndCalendarPageState
                               if (facilityId == null || facilityId == 0) return;
 
                               await ref
-                                  .read(bookedDatesFromGoogleCalendarProvider
-                                  .notifier)
+                                  .read(bookedDatesFromGoogleCalendarProvider.notifier)
                                   .fetch(facilityId);
 
-                              final googleBookedDates = ref.read(
-                                  bookedDatesFromGoogleCalendarProvider);
+                              final googleBookedDates =
+                              ref.read(bookedDatesFromGoogleCalendarProvider);
                               _populateEvents(
                                 selectedPrice: roomPrice,
                                 bookedDates: googleBookedDates,
@@ -275,31 +225,32 @@ class _PriceAndCalendarPageState
                       },
                     ),
                   ),
-
                   // نص توضيحي
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 14.0, vertical: 10.0),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Insets.m16,
+                      vertical: S.h(10),
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           trans().question_title,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: TFont.s12,
                             fontWeight: FontWeight.w600,
                             color: theme.colorScheme.onSurface,
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          trans().question_description,
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w400,
-                            color: theme.colorScheme.onSurface.withOpacity(0.6),
-                          ),
-                        ),
+                        Gaps.h4,
+                        // Text(
+                        //   trans().question_description,
+                        //   style: TextStyle(
+                        //     fontSize: TFont.xxs10,
+                        //     fontWeight: FontWeight.w400,
+                        //     color: theme.colorScheme.onSurface.withOpacity(0.6),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
@@ -344,13 +295,13 @@ class _PriceAndCalendarPageState
         showEmpty: true,
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: EdgeInsets.all(Insets.m16),
         child: Button(
           width: double.infinity,
           title: trans().continueBooking,
           icon: Icon(
             arrowForWordIcon,
-            size: 20,
+            size: Sizes.iconM20,
             color: theme.colorScheme.background,
           ),
           iconAfterText: true,
@@ -383,8 +334,8 @@ class _PriceAndCalendarPageState
               );
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('يرجى اختيار فترة وتحديد السعر أولاً'),
+                SnackBar(
+                  content: Text(trans().pleaseSelectPeriodAndPriceFirst),
                 ),
               );
             }

@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../models/media.dart';
 import '../helpers/general_helper.dart';
 import '../pages/image_gallery_page.dart';
+import '../utils/sizes.dart';
 import 'shimmer_image_placeholder.dart';
 import 'video_widget.dart';
 
@@ -111,8 +112,8 @@ class _RoomPriceMediaCarouselState extends State<RoomPriceMediaCarousel> {
           ),
 
           PositionedDirectional(
-            top: 12,
-            start: 12,
+            top: Insets.s12,
+            start: Insets.s12,
             child: AnimatedBuilder(
               animation: _controller,
               builder: (_, __) {
@@ -123,10 +124,13 @@ class _RoomPriceMediaCarouselState extends State<RoomPriceMediaCarousel> {
                   page = p == null ? 0 : p.round();
                 }
                 return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: S.w(10),
+                    vertical: S.h(4),
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.black.withOpacity(0.25),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: Corners.sm8,
                   ),
                   child: Text(
                     "${(page + 1).clamp(1, total)}/$total",

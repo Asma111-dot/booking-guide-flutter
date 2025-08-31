@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 import '../utils/assets.dart';
+import '../utils/sizes.dart';
 import '../helpers/general_helper.dart';
 
 class UnauthorizedWidget extends StatelessWidget {
@@ -16,36 +17,49 @@ class UnauthorizedWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final unauthorizedMessage = message.isEmpty ? trans().unauthorizedMessage : message;
+    final unauthorizedMessage =
+    message.isEmpty ? trans().unauthorizedMessage : message;
 
     return Container(
-      height: height ?? 200,
-      padding: const EdgeInsets.all(16.0),
+      height: height ?? S.h(200),
+      padding: EdgeInsets.all(Insets.m16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Lottie.asset(
             unauthorizedJson,
-            width: 120,
-            height: 120,
+            width: S.w(120),
+            height: S.h(120),
             repeat: false,
           ),
-          const SizedBox(height: 16.0),
+          Gaps.h15,
           Text(
             unauthorizedMessage,
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.red,
-              fontSize: 16,
+              fontSize: TFont.l16,
               fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 16.0),
+          Gaps.h15,
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.symmetric(
+                horizontal: Insets.l20,
+                vertical: S.h(12),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: Corners.md15,
+              ),
+            ),
             onPressed: () {
               Navigator.pushNamed(context, '/login');
             },
-            child: Text(trans().login),
+            child: Text(
+              trans().login,
+              style: TextStyle(fontSize: TFont.m14),
+            ),
           ),
         ],
       ),

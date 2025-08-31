@@ -23,11 +23,6 @@ class ReservationPage extends ConsumerStatefulWidget {
   @override
   ConsumerState<ReservationPage> createState() => _ReservationPageState();
 }
-// late final ValueNotifier<bool> isButtonDisabled;
-// ...
-// isButtonDisabled = ValueNotifier(true);
-// ...
-// isButtonDisabled.dispose();
 
 class _ReservationPageState extends ConsumerState<ReservationPage> {
   late TextEditingController adultsController;

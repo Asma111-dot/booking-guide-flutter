@@ -5,6 +5,7 @@ import '../extensions/string_formatting.dart';
 import '../helpers/general_helper.dart';
 import '../models/room_price.dart';
 import '../utils/assets.dart';
+import '../utils/sizes.dart';
 import '../utils/theme.dart';
 
 class RoomPriceWidget extends StatelessWidget {
@@ -30,19 +31,19 @@ class RoomPriceWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.5,
-        margin: const EdgeInsets.symmetric(horizontal: 8),
-        padding: const EdgeInsets.all(10),
+        width: S.w(MediaQuery.of(context).size.width * 0.4),
+        margin: EdgeInsets.symmetric(horizontal: S.h(4)),
+        padding: EdgeInsets.all(S.h(8)),
         decoration: BoxDecoration(
           gradient: isSelected ? CustomTheme.primaryGradient : null,
           color: isSelected ? null : colorScheme.surface,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(S.r(10)),
           border: Border.all(color: colorScheme.primary),
           boxShadow: [
             BoxShadow(
               color: colorScheme.shadow.withOpacity(0.1),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
+              blurRadius: S.r(4),
+              offset: Offset(0, S.h(2)),
             ),
           ],
         ),
@@ -50,11 +51,11 @@ class RoomPriceWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildPriceRow(context, priceIcon, roomPrice.price, finalPrice, trans().riyalY),
-            const SizedBox(height: 6),
+            Gaps.h8,
             _buildRow(context, periodIcon, roomPrice.period),
-            const SizedBox(height: 6),
+            Gaps.h8,
             _buildRow(context, groupsIcon, "${roomPrice.capacity} ${trans().person}"),
-            const SizedBox(height: 6),
+            Gaps.h8,
             _buildPriceRow(
               context,
               depositIcon,
@@ -82,15 +83,17 @@ class RoomPriceWidget extends StatelessWidget {
 
     return Row(
       children: [
-        Icon(icon, size: 20, color: iconColor),
-        const SizedBox(width: 10),
+        Icon(icon, size: Sizes.iconM20, color: iconColor),
+        Gaps.w12,
         Flexible(
           child: Text(
             text,
             style: TextStyle(
+              fontSize: TFont.s12,
               color: textColor,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.w800,
             ),
+            // strutStyle: StrutStyle(height: 1.0, forceStrutHeight: true),
             overflow: TextOverflow.ellipsis,
             textDirection: TextDirection.rtl,
           ),
@@ -108,8 +111,8 @@ class RoomPriceWidget extends StatelessWidget {
 
     return Row(
       children: [
-        Icon(icon, size: 20, color: iconColor),
-        const SizedBox(width: 10),
+        Icon(icon, size: Sizes.iconM20, color: iconColor),
+        Gaps.w8,
         Flexible(
           child: RichText(
             textDirection: TextDirection.rtl,
@@ -127,7 +130,7 @@ class RoomPriceWidget extends StatelessWidget {
                     text: "${original.toInt()} $unit",
                     style: TextStyle(
                       color: textColor.withOpacity(0.5),
-                      fontSize: 10,
+                      fontSize: TFont.xxs10,
                       decoration: TextDecoration.lineThrough,
                     ),
                   ),

@@ -105,9 +105,9 @@
   "showAvailableDays": "Show available days",
   "availabilityCalendar": "List bookings",
   "selectDateAndPrice": "Select Date And Price",
-  "view_price_list": "Browse the available price list to choose what suits you best",
+  "view_price_list": "Chooses to a available price list to choose what package suits you best",
   "select_period_and_day": "Select your preferred period from the displayed price list and choose the day that suits you.",
-  "question_title": "What day would you like to book?",
+  "question_title": "Select the day(s) you want to book",
   "question_description": "Please select the day you would like to book. If the selected day is not available, please choose another day.",
   "continueBooking": "Continue Booking",
   "completeTheReservation": "Complete the reservation",
@@ -132,7 +132,7 @@
   "please_complete_data_correctly": "Please complete the data correctly",
   "error_occurred_during_save": "An error occurred during saving",
   "reservation_date": "Reservation Date",
-  "period": "Period",
+  "package": "Package",
   "access_time": "Time",
   "attendance_type": "Attendance Type",
   "total_price": "Total price",
@@ -208,7 +208,7 @@
   "desc_name": "Search for facilities by typing part of their name.",
   "desc_address_like": "Find facilities based on keywords in their address.",
   "desc_price_between": "Select a minimum and maximum price to display suitable facilities.",
-  "desc_check_in_between": "View facilities available during a specific check-in period.",
+  "desc_check_in_between": "View facilities available during a specific check-in package.",
   "desc_address_near_user": "Find facilities closest to your specified address.",
   "desc_capacity_at_least": "Find facilities that can accommodate at least a specified number of people.",
   "desc_available_on_day": "View facilities available for booking on a selected day.",
@@ -272,6 +272,9 @@
   "package_features_detailed": "Detailed package features",
   "amenities": "amenities",
   "size": "size",
-  "meter2": " m²"
-
+  "meter2": " m²",
+  "pleaseSelectPeriodAndPriceFirst": "Please select a Package and choose a day first",
+  "manual_deposit_instruction": "Please pay the deposit manually via Jaib and then enter the received code.",
+  "list_your_facility": "Showcase your facility on our platform",
+  "promote_your_facility": "You can showcase any facility, whether it's a hotel, chalet, or hall, on our platform"
 }

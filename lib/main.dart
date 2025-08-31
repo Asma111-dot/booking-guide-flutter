@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -42,7 +43,15 @@ Future<void> main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(
+      ScreenUtilInit(
+        designSize: const Size(375, 812), // حجم التصميم الأساسي (مثلاً iPhone X)
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (context, child) => const ProviderScope(child: MyApp()),
+      ),
+  );
+  // runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerWidget {

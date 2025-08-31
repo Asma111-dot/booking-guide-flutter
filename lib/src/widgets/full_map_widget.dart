@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../utils/assets.dart';
+import '../utils/sizes.dart';
 import 'custom_app_bar.dart';
 
 class FullMapWidget extends StatefulWidget {
@@ -88,14 +89,14 @@ class _FullMapWidgetState extends State<FullMapWidget> {
           FloatingActionButton(
             heroTag: "centerBtn",
             onPressed: _goToInitialLocation,
-            child: const Icon(Icons.my_location),
+            child: Icon(myLocationIcon),
             tooltip: "الرجوع للموقع",
           ),
-          const SizedBox(height: 10),
+          Gaps.h12,
           FloatingActionButton(
             heroTag: "mapTypeBtn",
             onPressed: _toggleMapType,
-            child: const Icon(Icons.layers),
+            child: Icon(layerIcon),
             tooltip: "تغيير نوع الخريطة",
           ),
         ],

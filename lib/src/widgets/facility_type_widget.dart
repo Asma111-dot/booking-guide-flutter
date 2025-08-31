@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/sizes.dart';
+
 class FacilityTypeWidget extends StatelessWidget {
   final String title;
   final int typeId;
@@ -24,23 +26,26 @@ class FacilityTypeWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () => onTap(typeId),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        padding: EdgeInsets.symmetric(
+          horizontal: S.w(5) ,
+          vertical: S.h(5),
+        ),
         decoration: BoxDecoration(
           color: isSelected ? colorScheme.secondary.withOpacity(0.1) : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: Corners.md15,
         ),
         child: Row(
           children: [
             Icon(
               icon,
               color: isSelected ? colorScheme.secondary : colorScheme.onSurface.withOpacity(0.6),
-              size: 24,
+              size: Sizes.iconL24,
             ),
-            const SizedBox(width: 10),
+            Gaps.w8,
             Text(
               title,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: TFont.m14,
                 fontWeight: FontWeight.w700,
                 color: isSelected ? colorScheme.primary : colorScheme.onSurface.withOpacity(0.5),
               ),
