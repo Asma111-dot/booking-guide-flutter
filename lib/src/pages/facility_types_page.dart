@@ -28,24 +28,15 @@ class FacilityTypesPage extends ConsumerStatefulWidget {
   ConsumerState createState() => _FacilityTypesPageState();
 }
 
-class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
+class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage>
+    with WidgetsBindingObserver {
   int? selectedFacilityType;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   Future.microtask(() {
-  //     ref.read(facilityTypesProvider.notifier).fetch();
-  //     ref.read(userProvider.notifier).fetch();
-  //     ref.read(discountsProvider.notifier).fetch();
-  //     ref.read(notificationsProvider.notifier).fetch();
-  //
-  //   });
-  // }
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
     Future.microtask(() {
       ref.read(facilityTypesProvider.notifier).fetch();
       ref.read(userProvider.notifier).fetch();
@@ -58,6 +49,21 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
         });
       });
     });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  // لما التطبيق يرجع للواجهة
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // جدّد الإشعارات حتى لو وصلت وأنت بالخلفية
+      ref.read(notificationsProvider.notifier).fetch();
+    }
   }
 
   void _onFacilityTypeChange(int facilityTypeId) {
@@ -149,7 +155,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage> {
                           icon: (whatsappIcon),
                           color: Colors.green,
                           onPressed: () =>
-                              launchUrl(Uri.parse("https://wa.me/775421110")),
+                              launchUrl(Uri.parse("https://wa.me/782006100")),
                         ),
                         Gaps.w8,
                         Stack(

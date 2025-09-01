@@ -35,4 +35,30 @@ class Notifications extends _$Notifications {
       state = state.setError(e.toString());
     }
   }
+
+  /// ✅ دالة تحديد كل الإشعارات كمقروءة
+  Future markAllAsRead() async {
+    try {
+      await request(
+        url: markAllNotificationsReadUrl(),
+        method: Method.post,
+      );
+
+      // عدّل الحالة محلياً بحيث يصير readAt = DateTime.now()
+      state = Response<List<NotificationModel>>(
+        data: state.data?.map((n) => NotificationModel(
+          id: n.id,
+          type: n.type,
+          notifiableId: n.notifiableId,
+          data: n.data,
+          createdAt: n.createdAt,
+          updatedAt: n.updatedAt,
+          readAt: DateTime.now(), // ✅ تعيينها كمقروءة
+        )).toList(),
+        meta: state.meta,
+      ).setLoaded();
+    } catch (e) {
+      print("❌ خطأ markAllAsRead: $e");
+    }
+  }
 }

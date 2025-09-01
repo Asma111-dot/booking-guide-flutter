@@ -56,6 +56,7 @@ class _PriceAndCalendarPageState
   void _fetchRoomPrices() async {
     await ref.read(roomPricesProvider.notifier).fetch(roomId: widget.roomId);
 
+    final roomPrices = ref.read(roomPricesProvider).data;
     setState(() {
       selectedPrice = null;
       events = {};
@@ -120,6 +121,7 @@ class _PriceAndCalendarPageState
   @override
   Widget build(BuildContext context) {
     final roomPriceState = ref.watch(roomPricesProvider);
+    final bookedDates = ref.watch(bookedDatesFromGoogleCalendarProvider);
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -171,7 +173,7 @@ class _PriceAndCalendarPageState
 
                   // قائمة الفترات بشكل أفقي مع Shimmer عند عدم توفر البيانات
                   SizedBox(
-                    height: S.h(170),
+                    height: S.h(210),
                     child: (data == null || data.isEmpty)
                         ? ListView.builder(
                       scrollDirection: Axis.horizontal,

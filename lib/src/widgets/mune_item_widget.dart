@@ -40,7 +40,7 @@ class MenuItem extends StatelessWidget {
         style: theme.textTheme.titleSmall?.copyWith(
           fontWeight: FontWeight.w700,
           fontSize: TFont.m14,
-          color: colors.primary,
+          color: colors.secondary,
         ),
       ),
       subtitle: subtitle == null

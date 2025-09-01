@@ -90,7 +90,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                           user?.name ?? "User",
                           style: theme.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: colorScheme.primary,
+                            color: colorScheme.secondary,
                           ),
                         ),
                         Gaps.h8,
@@ -98,7 +98,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                           user?.email ?? "user@mybooking.com",
                           style: TextStyle(
                             fontSize: TFont.s12,
-                            color: colorScheme.secondary,
+                            color: colorScheme.primary,
                           ),
                         ),
                       ],
@@ -140,8 +140,8 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                           context: context,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(S.r(20)),
-                        ),
+                              top: Radius.circular(S.r(20)),
+                            ),
                           ),
                           backgroundColor: colorScheme.surface,
                           isScrollControlled: true,
@@ -177,7 +177,8 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(
                               top: Radius.circular(S.r(20)),
-                            ),                          ),
+                            ),
+                          ),
                           backgroundColor: colorScheme.surface,
                           isScrollControlled: true,
                           builder: (context) => const SupportBottomSheet(),
@@ -189,18 +190,39 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   _buildMenuCard(
                     theme,
                     MenuItem(
-                      title: trans().list_your_facility,
-                      subtitle: trans().promote_your_facility,
-                      onPressed: () async {
-                        const url = 'https://bookings-guide.com';
-                        if (await canLaunchUrl(Uri.parse(url))) {
-                          await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-                        } else {
-                          throw 'Could not launch $url';
-                        }
-                      },
-                      icon: showIcon,
-                    ),                  ),
+                        title: trans().list_your_facility,
+                        subtitle: trans().promote_your_facility,
+                        icon: showIcon,
+                        onPressed: () async {
+                          final uri = Uri.parse('https://bookings-guide.com');
+
+                          // حاول أولًا بمتصفح خارجي
+                          final launchedExternally = await launchUrl(
+                            uri,
+                            mode: LaunchMode.externalApplication,
+                          );
+
+                          if (!launchedExternally) {
+                            // جرّب فتحه داخل التطبيق كحل احتياطي
+                            final launchedInApp = await launchUrl(
+                              uri,
+                              mode: LaunchMode
+                                  .inAppBrowserView, // أو LaunchMode.inAppWebView
+                            );
+
+                            if (!launchedInApp) {
+                              // أظهر رسالة مناسبة بدل الرمي
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          'لا يمكن فتح الرابط على هذا الجهاز')),
+                                );
+                              }
+                            }
+                          }
+                        }),
+                  ),
                   _buildMenuCard(
                     theme,
                     MenuItem(
@@ -223,7 +245,6 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                         mybooking,
                         width: S.w(150),
                         height: S.h(40),
-                        
                         fit: BoxFit.contain,
                       ),
                       Gaps.h15,

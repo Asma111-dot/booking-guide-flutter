@@ -38,15 +38,15 @@ class SupportBottomSheet extends StatelessWidget {
           _buildSupportOption(
             context,
             icon: callIcon,
-            label: '775421110',
-            onTap: () => _launchPhone('775421110'),
+            label: '782006100',
+            onTap: () => _launchPhone('782006100'),
           ),
           const SizedBox(height: 10),
           _buildSupportOption(
             context,
             icon: whatsappInIcon,
-            label: '775421110',
-            onTap: () => _launchWhatsApp(context, '775421110'),
+            label: '782006100',
+            onTap: () => _launchWhatsApp(context, '782006100'),
           ),
           const SizedBox(height: 10),
           _buildSupportOption(
@@ -90,6 +90,7 @@ class SupportBottomSheet extends StatelessWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   color: colorScheme.onSurface,
+                  fontFamily: 'Roboto',
                 ),
               ),
               Icon(icon, color: colorScheme.primary),

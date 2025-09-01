@@ -1,7 +1,9 @@
+import 'package:booking_guide/src/extensions/date_formatting.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../extensions/date_formatting.dart';
 import '../helpers/general_helper.dart';
 import '../providers/notification/notification_provider.dart';
 import '../utils/assets.dart';
@@ -22,8 +24,10 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      ref.read(notificationsProvider.notifier).fetch();
+    Future.microtask(() async {
+      await ref.read(notificationsProvider.notifier).fetch();
+
+      await ref.read(notificationsProvider.notifier).markAllAsRead();
     });
   }
 
@@ -90,49 +94,35 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
             return ListView.builder(
               padding: EdgeInsets.symmetric(vertical: S.h(8)),
               itemCount: data.length,
-              itemBuilder: (context, index) {
-                final notification = data[index];
-                final title = notification.title ?? 'بدون عنوان';
-                final body = notification.body ?? '';
-                final createdAt = notification.createdAt != null
-                    ? notification.createdAt
-                        .toLocal()
-                        .toString()
-                        .substring(0, 16)
-                    : '';
+                itemBuilder: (context, index) {
+                  final n = data[index];
+                  final createdAtStr = n.createdAt != null
+                      ? n.createdAt.toLocal().toDateTimeView()
+                      : '';
 
-                return Card(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: S.w(12), vertical: S.h(6)),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: Corners.md15,
-                  ),
-                  child: ListTile(
-                    leading: const Icon(Icons.notifications,
-                        color: CustomTheme.color1),
-                    title: Text(
-                      title,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
+                  return Card(
+                    margin: EdgeInsets.symmetric(horizontal: S.w(12), vertical: S.h(6)),
+                    shape: RoundedRectangleBorder(borderRadius: Corners.md15),
+                    child: ListTile(
+                      leading: const Icon(Icons.notifications, color: CustomTheme.color1),
+                      title: Text(
+                        n.title ?? 'بدون عنوان',
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                    subtitle: Text(
-                      body,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    trailing: Text(
-                      createdAt,
-                      style: TextStyle(
-                        fontSize: TFont.s12,
-                        color: colorScheme.onSurface.withOpacity(0.6),
+                      subtitle: Text(n.body ?? ''),
+                      trailing: Text(
+                        createdAtStr,
+                        style: TextStyle(
+                          fontSize: TFont.s12,
+                          color: colorScheme.onSurface.withOpacity(0.6),
+                        ),
                       ),
+                      onTap: () {},
                     ),
-                    onTap: () {
-                      // ✅ يمكنك إضافة فتح تفاصيل الإشعار هنا
-                    },
-                  ),
-                );
-              },
+                  );
+                }
             );
           },
         ),
