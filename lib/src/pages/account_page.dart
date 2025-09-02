@@ -51,6 +51,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
           style: theme.textTheme.headlineMedium?.copyWith(
             color: colorScheme.primary,
             fontWeight: FontWeight.bold,
+            fontSize: TFont.xl18,
           ),
         ),
         elevation: 0,
@@ -91,6 +92,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                           style: theme.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: colorScheme.secondary,
+                            fontSize: TFont.m14,
                             fontFamily: 'Roboto',
                           ),
                         ),
@@ -108,9 +110,8 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   ],
                 ),
               ),
-              Gaps.h15,
               const Divider(),
-              Gaps.h6,
+              Gaps.h4,
               ListView(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -198,14 +199,12 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                         onPressed: () async {
                           final uri = Uri.parse('https://bookings-guide.com');
 
-                          // حاول أولًا بمتصفح خارجي
                           final launchedExternally = await launchUrl(
                             uri,
                             mode: LaunchMode.externalApplication,
                           );
 
                           if (!launchedExternally) {
-                            // جرّب فتحه داخل التطبيق كحل احتياطي
                             final launchedInApp = await launchUrl(
                               uri,
                               mode: LaunchMode
@@ -213,7 +212,6 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                             );
 
                             if (!launchedInApp) {
-                              // أظهر رسالة مناسبة بدل الرمي
                               if (context.mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
@@ -236,7 +234,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   ),
                 ],
               ),
-              Gaps.h20,
+              Gaps.h8,
               _buildMenuCard(
                 theme,
                 Padding(
@@ -292,7 +290,6 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   ),
                 ),
               ),
-              Gaps.h20,
             ],
           ),
         ),
@@ -309,8 +306,8 @@ Widget _buildMenuCard(ThemeData theme, Widget child) {
       borderRadius: Corners.md15,
     ),
     margin: EdgeInsets.symmetric(
-      vertical: Insets.xs8,
-      horizontal: Insets.xs8,
+      vertical: Insets.xxs6,
+      horizontal: Insets.xxs6,
     ),
     child: child,
   );

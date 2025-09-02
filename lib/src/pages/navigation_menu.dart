@@ -33,96 +33,103 @@ class NavigationMenu extends StatelessWidget {
           },
           child: Scaffold(
             body: controller.screens[controller.selectedIndex.value],
-            bottomNavigationBar: Container(
-              padding:
-                  EdgeInsets.symmetric(vertical: S.h(8), horizontal: S.w(16)),
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .secondary
-                        .withOpacity(0.08),
-                    blurRadius: 8,
-                  ),
-                ],
+            bottomNavigationBar: SafeArea(
+              minimum: EdgeInsets.only(
+                // left: S.w(16),
+                // right: S.w(16),
+                bottom: S.h(20),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: List.generate(controller.screens.length, (index) {
-                  final isSelected = controller.selectedIndex.value == index;
-
-                  final iconData = [
-                    homeIcon,
-                    mapIcon,
-                    bookingIcon,
-                    favoriteIcon,
-                    personIcon,
-                  ][index];
-
-                  final label = [
-                    trans().facilityTypes,
-                    trans().map,
-                    trans().booking,
-                    trans().favorite,
-                    trans().persons,
-                  ][index];
-
-                  return Expanded(
-                    child: GestureDetector(
-                      onTap: () => controller.selectedIndex.value = index,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 250),
-                        padding: EdgeInsets.symmetric(
-                            vertical: S.h(8), horizontal: S.w(8)),
-                        decoration: BoxDecoration(
-                          color: isSelected
-                              ? Theme.of(context)
-                                  .colorScheme
-                                  .secondary
-                                  .withOpacity(0.1)
-                              : Colors.transparent,
-                          borderRadius: Corners.lg30,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              iconData,
-                              color: isSelected
-                                  ? Theme.of(context).colorScheme.secondary
-                                  : Theme.of(context)
-                                      .colorScheme
-                                      .onSurface
-                                      .withOpacity(0.6),
-                            ),
-                            Gaps.h4,
-                            Text(
-                              label,
-                              style: TextStyle(
-                                fontSize: TFont.xxs10,
-                                fontWeight: isSelected
-                                    ? FontWeight.w400
-                                    : FontWeight.w200,
+              child: Container(
+                padding:
+                    EdgeInsets.symmetric(vertical: S.h(8), horizontal: S.w(16)),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .secondary
+                          .withOpacity(0.08),
+                      blurRadius: 8,
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: List.generate(controller.screens.length, (index) {
+                    final isSelected = controller.selectedIndex.value == index;
+              
+                    final iconData = [
+                      homeIcon,
+                      mapIcon,
+                      bookingIcon,
+                      favoriteIcon,
+                      personIcon,
+                    ][index];
+              
+                    final label = [
+                      trans().facilityTypes,
+                      trans().map,
+                      trans().booking,
+                      trans().favorite,
+                      trans().persons,
+                    ][index];
+              
+                    return Expanded(
+                      child: GestureDetector(
+                        onTap: () => controller.selectedIndex.value = index,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 250),
+                          padding: EdgeInsets.symmetric(
+                              vertical: S.h(8), horizontal: S.w(8)),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .secondary
+                                    .withOpacity(0.1)
+                                : Colors.transparent,
+                            borderRadius: Corners.lg30,
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                iconData,
                                 color: isSelected
-                                    ? Theme.of(context).colorScheme.primary
+                                    ? Theme.of(context).colorScheme.secondary
                                     : Theme.of(context)
                                         .colorScheme
                                         .onSurface
                                         .withOpacity(0.6),
                               ),
-                            ),
-                          ],
+                              Gaps.h4,
+                              Text(
+                                label,
+                                style: TextStyle(
+                                  fontSize: TFont.xxs10,
+                                  fontWeight: isSelected
+                                      ? FontWeight.w400
+                                      : FontWeight.w200,
+                                  color: isSelected
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .onSurface
+                                          .withOpacity(0.6),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }),
+                    );
+                  }),
+                ),
               ),
             ),
           ),

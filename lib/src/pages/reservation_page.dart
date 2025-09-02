@@ -227,7 +227,7 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
         ),
       ),
       bottomNavigationBar: SafeArea(
-        minimum: const EdgeInsets.all(16),
+        minimum: const EdgeInsets.only(left: 16, right: 16, bottom: 40),
         child: Button(
           width: double.infinity,
           title: trans().completeTheReservation,

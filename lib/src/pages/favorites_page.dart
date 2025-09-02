@@ -53,6 +53,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesPage> {
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   color: CustomTheme.color2,
                   fontWeight: FontWeight.bold,
+                  fontSize: TFont.xl18,
                 ),
           ),
           elevation: 0,
@@ -63,9 +64,9 @@ class _FavoritesScreenState extends ConsumerState<FavoritesPage> {
             labelColor: CustomTheme.primaryColor,
             unselectedLabelColor: Colors.grey,
             labelStyle:
-                TextStyle(fontSize: TFont.s12, fontWeight: FontWeight.bold),
+                TextStyle(fontSize: TFont.l16, fontWeight: FontWeight.bold),
             unselectedLabelStyle: TextStyle(
-              fontSize: TFont.xxs10,
+              fontSize: TFont.m14,
             ),
             tabs: [
               Tab(

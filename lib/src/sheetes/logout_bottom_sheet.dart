@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helpers/general_helper.dart';
 import '../providers/auth/user_provider.dart';
+import '../utils/assets.dart';
 import '../utils/theme.dart';
 
 void showLogoutBottomSheet(BuildContext context, WidgetRef ref) {
@@ -14,12 +15,17 @@ void showLogoutBottomSheet(BuildContext context, WidgetRef ref) {
     ),
     backgroundColor: colorScheme.background,
     builder: (_) => Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+      padding: EdgeInsets.fromLTRB(
+        20,
+        25,
+        20,
+        25 + MediaQuery.of(context).padding.bottom+100, // ← هنا الحل
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            Icons.logout,
+            logoutIcon,
             size: 30,
             color: colorScheme.primary,
           ),

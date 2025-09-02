@@ -57,6 +57,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
             style: textTheme.headlineMedium?.copyWith(
               color: CustomTheme.color2,
               fontWeight: FontWeight.bold,
+              fontSize: TFont.xl18,
             ),
           ),
           elevation: 0,

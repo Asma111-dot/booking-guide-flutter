@@ -65,7 +65,7 @@ class _ReservationDetailsPageState
           showEmpty: true,
         ),
         bottomNavigationBar: SafeArea(
-          minimum: EdgeInsets.all(Insets.m16),
+          minimum: const EdgeInsets.only(left: 16, right: 16, bottom: 40),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,

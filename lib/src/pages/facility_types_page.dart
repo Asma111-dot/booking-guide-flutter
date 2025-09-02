@@ -251,9 +251,9 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage>
                   ],
                 ),
               ),
-              Gaps.h12,
+              Gaps.h8,
               const DiscountInlineWidget(),
-              Gaps.h20,
+              Gaps.h12,
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: S.w(12)),
                 child: facilityTypesState.data == null

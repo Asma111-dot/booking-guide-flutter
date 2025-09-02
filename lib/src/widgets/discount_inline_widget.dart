@@ -72,7 +72,7 @@ class _DiscountInlineWidgetState extends ConsumerState<DiscountInlineWidget> {
         if (data.isEmpty) return const SizedBox.shrink();
 
         return SizedBox(
-          height: S.h(150),
+          height: S.h(130),
           child: Stack(
             children: [
               PageView.builder(

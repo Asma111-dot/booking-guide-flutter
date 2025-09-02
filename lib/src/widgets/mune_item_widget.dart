@@ -39,7 +39,7 @@ class MenuItem extends StatelessWidget {
         title,
         style: theme.textTheme.titleSmall?.copyWith(
           fontWeight: FontWeight.w700,
-          fontSize: TFont.m14,
+          fontSize: TFont.s12,
           color: colors.secondary,
         ),
       ),
@@ -48,7 +48,7 @@ class MenuItem extends StatelessWidget {
           : Text(
         subtitle!,
         style: theme.textTheme.bodySmall?.copyWith(
-          fontSize: TFont.s12,
+          fontSize: TFont.xxs10,
           color: colors.onSurface.withOpacity(0.6),
         ),
       ),
