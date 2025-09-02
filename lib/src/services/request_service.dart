@@ -175,7 +175,8 @@ Future<Response<T>> request<T>({
           meta = meta.copyWith(status: Status.loaded);
         }
 
-        if (showSuccessMessage && method != Method.get) showMessage(meta);
+        // if (showSuccessMessage && method != Method.get) showMessage(meta);
+        if (showSuccessMessage) showMessage(meta);
 
         debugPrint(
             "✅ Dio Response:\nT is ${T.toString()}\nData: ${data.runtimeType}\nMeta: $meta\nDeleted: $deleted");

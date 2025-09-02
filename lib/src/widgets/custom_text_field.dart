@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../utils/assets.dart';
 import '../utils/sizes.dart';
 
 class CustomTextField extends StatefulWidget {
@@ -73,7 +74,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         suffixIcon: widget.obscureText
             ? IconButton(
           icon: Icon(
-            _obscure ? Icons.visibility_off : Icons.visibility,
+            _obscure ? invisibleIcon: visibleIcon,
             color: colorScheme.primary,
           ),
           onPressed: () => setState(() => _obscure = !_obscure),
@@ -82,6 +83,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       ),
 
       style: theme.textTheme.bodyMedium?.copyWith(
+        fontFamily: 'Roboto',
         fontSize: TFont.m14,
         fontWeight: FontWeight.w500,
         color: colorScheme.onSurface,

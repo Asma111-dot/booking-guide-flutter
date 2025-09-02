@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../helpers/general_helper.dart';
 import '../providers/auth/login_provider.dart';
+import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../widgets/avatar_picker.dart';
 import '../widgets/button_widget.dart';
@@ -126,7 +127,7 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
                   width: double.infinity,
                   title: trans().save,
                   disable: isLoading,
-                  icon: Icon(Icons.save_alt, color: colorScheme.onPrimary),
+                  icon: Icon(saveIcon, color: colorScheme.onPrimary),
                   iconAfterText: true,
                   onPressed: submit,
                 ),

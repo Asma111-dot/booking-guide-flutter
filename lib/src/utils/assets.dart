@@ -145,5 +145,6 @@ const myLocationIcon = Icons.my_location;
 const layerIcon = Icons.layers;
 const videoIcon = Icons.videocam;
 const playCircleIcon = Icons.play_circle_fill;
+const saveIcon = Icons.save_alt;
 
 

@@ -4,9 +4,9 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart' as image_picker;
 
+import '../../l10n/app_localizations.dart';
 import '../storage/auth_storage.dart';
 import '../storage/settings_storage.dart';
 import '../utils/routes.dart';

@@ -92,7 +92,7 @@
   "enter_confirmation_number": "أدخل رقم التأكيد",
   "enter_current_address": "أدخل عنوانك الحالي",
   "enter_payment_code": "إدخال كود الدفع",
-  "enter_verification_code_message": "يرجى إدخال رمز التحقق الذي تم إرساله إلى رقم هاتفكم.",
+  "enter_verification_code_message": "يرجى إدخال رمز التحقق المُرسل عبر واتساب إلى رقمكم.",
   "error": "خطأ",
   "errorOccurred": "حدث خطأ، يرجى المحاولة مرة أخرى",
   "error_occurred_during_save": "حدث خطأ أثناء الحفظ",

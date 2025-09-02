@@ -25,16 +25,13 @@ class Login extends _$Login {
 
   Future<bool> requestOtp() async {
     final phone = ref.read(phoneProvider);
+    if (phone.isEmpty) return false;
 
-    if (phone.isEmpty) {
-      print("📛 الهاتف فارغ");
-      return false;
-    }
-
+    final fullPhone = "967$phone";
     final response = await request<Map>(
       url: otpRequestUrl(),
-      method: Method.post,
-      body: {"phone": phone},
+      method: Method.get,
+      body: {"phone": fullPhone},
     );
 
     return response.isLoaded();
@@ -44,33 +41,27 @@ class Login extends _$Login {
     state = state.setLoading();
 
     final phone = ref.read(phoneProvider);
+    final fullPhone = "967$phone";
+
     final code = ref.read(otpCodeProvider);
     final englishCode = convertToEnglishNumbers(code);
 
     final body = {
-      'phone': phone,
+      'phone': fullPhone,
       'code': englishCode.toString(),
     };
 
-    print("🚀 إرسال التحقق بـ: $body");
-
     final value = await request<model.User>(
       url: otpVerifyUrl(),
-      method: Method.post,
+      method: Method.get,
       body: body,
     );
 
-    print("📥 Response Meta: ${value.meta.toJson()}");
-
     state = state.copyWith(meta: value.meta);
-
     if (value.isLoaded()) {
       await onSuccessLogin(value);
     } else {
-      showNotify(
-        alert: Alert.error,
-        message: value.meta.message ,
-      );
+      showNotify(alert: Alert.error, message: value.meta.message);
     }
   }
 

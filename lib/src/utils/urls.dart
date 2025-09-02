@@ -2,16 +2,16 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 
 
-// String baseUrl = kDebugMode
-//     ? "http://${Platform.isIOS ? "localhost" : "10.0.2.2"}:8000/"
-//     : "https://bookings-guide.com/";
-
 String baseUrl = kDebugMode
-    ? (Platform.isIOS
-    ? "http://localhost:8000/" // إذا كان التطبيق يعمل على iOS
-    // : "http://192.168.227.220:8000/") // إذا كان التطبيق يعمل على Android
-    : "http://172.21.0.168:8000/") // إذا كان التطبيق يعمل على Android
-    : "https://bookings-guide.com/"; // إذا كان التطبيق في وضع الإنتاج
+    ? "http://${Platform.isIOS ? "localhost" : "10.0.2.2"}:8000/"
+    : "https://bookings-guide.com/";
+
+// String baseUrl = kDebugMode
+//     ? (Platform.isIOS
+//     ? "http://localhost:8000/" // إذا كان التطبيق يعمل على iOS
+//     // : "http://192.168.227.220:8000/") // إذا كان التطبيق يعمل على Android
+//     : "http://172.21.0.168:8000/") // إذا كان التطبيق يعمل على Android
+//     : "https://bookings-guide.com/"; // إذا كان التطبيق في وضع الإنتاج
 
 String apiUrl = "${baseUrl}api/";
 
@@ -29,8 +29,9 @@ String updateUserUrl() => "${apiUrl}user/update";
 String deleteUserUrl() => "${apiUrl}user/delete";
 
 // URLs OTP & Profile
-String otpRequestUrl() => "${apiUrl}otp/request";
-String otpVerifyUrl() => "${apiUrl}otp/verify";
+String otpRequestUrl() => "${apiUrl}auth/otp/request";
+String otpVerifyUrl()  => "${apiUrl}auth/otp/verify";
+
 String completeProfileUrl() => "${apiUrl}complete-profile";
 
 // URLs  Facility Type

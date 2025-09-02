@@ -77,7 +77,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               prefix:  Directionality(
                                 textDirection: TextDirection.ltr,
                                 child: Text(
-                                  '+967 ',
+                                  '967 ',
                                   style: TextStyle(
                                     fontFamily: 'Roboto',
                                     fontSize: TFont.m14,

@@ -105,7 +105,7 @@ class CustomTheme {
     cardColor: cardColor(),
 
     appBarTheme: AppBarTheme(
-      color: appBarColor(),
+      backgroundColor: appBarColor(),
       centerTitle: true,
       surfaceTintColor: Colors.transparent,
       titleTextStyle: TextStyle(
@@ -147,14 +147,14 @@ class CustomTheme {
     ),
 
     // ✅ تبويبات
-    tabBarTheme: TabBarTheme(
-      dividerColor: Colors.transparent,
-      labelColor: secondaryColor,
-      indicatorColor: secondaryColor,
-      overlayColor: WidgetStateProperty.resolveWith(
-            (state) => secondaryColor.withOpacity(0.10),
-      ),
-    ),
+    // tabBarTheme: TabBarTheme?(
+    //   dividerColor: Colors.transparent,
+    //   labelColor: secondaryColor,
+    //   indicatorColor: secondaryColor,
+    //   overlayColor: WidgetStateProperty.resolveWith(
+    //         (state) => secondaryColor.withOpacity(0.10),
+    //   ),
+    // ),
 
     // ✅ ListTile
     listTileTheme: ListTileThemeData(

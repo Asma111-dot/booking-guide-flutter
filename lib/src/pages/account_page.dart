@@ -91,6 +91,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                           style: theme.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: colorScheme.secondary,
+                            fontFamily: 'Roboto',
                           ),
                         ),
                         Gaps.h8,
@@ -98,6 +99,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                           user?.email ?? "user@mybooking.com",
                           style: TextStyle(
                             fontSize: TFont.s12,
+                            fontFamily: 'Roboto',
                             color: colorScheme.primary,
                           ),
                         ),
