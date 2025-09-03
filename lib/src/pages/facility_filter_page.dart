@@ -163,9 +163,11 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
             ),
             TabBar(
               controller: _tabController,
-              indicatorColor: colorScheme.secondary,
-              labelColor: colorScheme.primary,
+              indicatorColor: colorScheme.primary,
+              labelColor: colorScheme.secondary,
               unselectedLabelColor: colorScheme.onSurface.withOpacity(0.4),
+              dividerColor: Colors.transparent,
+              dividerHeight: 0,
               tabs: [
                 Tab(text: trans().hotel),
                 Tab(text: trans().chalet),

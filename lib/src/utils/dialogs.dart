@@ -1,12 +1,12 @@
 import 'package:booking_guide/src/helpers/general_helper.dart';
 import 'package:flutter/material.dart';
 
-void showWaitingDialog(BuildContext context, void Function(BuildContext dialogCtx) onReady) {
+void showWaitingDialog(
+    BuildContext context, void Function(BuildContext dialogCtx) onReady) {
   showDialog(
     context: context,
     barrierDismissible: false,
     builder: (dialogCtx) {
-      // 🔥 استدعِ الدالة عند بناء السياق
       WidgetsBinding.instance.addPostFrameCallback((_) {
         onReady(dialogCtx);
       });
@@ -25,11 +25,11 @@ void showWaitingDialog(BuildContext context, void Function(BuildContext dialogCt
               const CircularProgressIndicator(),
               const SizedBox(height: 20),
               Text(
-                trans().please_wait,
-                style: TextStyle(
+                trans().please_wait.replaceAll('<u>', '').replaceAll('</u>', ''),
+                style:  TextStyle(decoration: TextDecoration.none,
                   color: Theme.of(context).colorScheme.onSurface,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                       fontSize: 16,
+                       fontWeight: FontWeight.bold,
                 ),
               ),
             ],

@@ -61,10 +61,12 @@ class _FavoritesScreenState extends ConsumerState<FavoritesPage> {
           iconTheme: const IconThemeData(color: Colors.black),
           bottom: TabBar(
             indicatorColor: CustomTheme.color2,
-            labelColor: CustomTheme.primaryColor,
+            labelColor: CustomTheme.color3,
             unselectedLabelColor: Colors.grey,
+            dividerColor: Colors.transparent,
+            dividerHeight: 0,
             labelStyle:
-                TextStyle(fontSize: TFont.l16, fontWeight: FontWeight.bold),
+                TextStyle(fontSize: TFont.m14, fontWeight: FontWeight.bold),
             unselectedLabelStyle: TextStyle(
               fontSize: TFont.m14,
             ),

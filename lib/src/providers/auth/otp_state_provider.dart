@@ -8,3 +8,6 @@ final otpCodeProvider = StateProvider<String>((ref) => '');
 
 /// The authentication token received after successful login
 final authTokenProvider = StateProvider<String?>((ref) => null);
+
+/// Flag to prevent multiple OTP submissions at the same time
+final otpSubmittingProvider = StateProvider.autoDispose<bool>((ref) => false);

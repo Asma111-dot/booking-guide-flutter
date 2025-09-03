@@ -65,8 +65,10 @@ class _BookingPageState extends ConsumerState<BookingPage>
           iconTheme: IconThemeData(color: Theme.of(context).colorScheme.onSurface),
           bottom: TabBar(
             indicatorColor: CustomTheme.color2,
-            labelColor: CustomTheme.primaryColor,
+            labelColor: CustomTheme.color3,
             unselectedLabelColor: Colors.grey,
+            dividerColor: Colors.transparent,
+            dividerHeight: 0,
             tabs: [
               Tab(text: trans().all),
               Tab(text: trans().confirmed),

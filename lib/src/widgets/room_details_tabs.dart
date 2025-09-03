@@ -42,7 +42,9 @@ class RoomDetailsTabs extends StatelessWidget {
           controller: tabController,
           labelColor:CustomTheme.color3,
           unselectedLabelColor: Colors.grey,
-          indicatorColor: CustomTheme.color3,
+          indicatorColor: CustomTheme.color2,
+          dividerColor: Colors.transparent,
+          dividerHeight: 0,
           labelPadding: const EdgeInsets.symmetric(horizontal: 12),
           tabs: [
             Tab(text: trans().description),
