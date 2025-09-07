@@ -1,4 +1,3 @@
-import 'package:booking_guide/src/extensions/date_formatting.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';

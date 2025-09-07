@@ -66,14 +66,11 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          FittedBox(
-            fit: BoxFit.contain,
-            child: Image.asset(mybooking),
-          ),
-        ],
+      body: Center(
+        child: FractionallySizedBox(
+          widthFactor: 0.8, // نسبة من العرض (70%)
+          child: Image.asset(booking),
+        ),
       ),
     );
   }

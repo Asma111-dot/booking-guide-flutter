@@ -1,9 +1,9 @@
-import 'package:booking_guide/src/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../helpers/general_helper.dart';
 import '../storage/auth_storage.dart';
 import '../utils/assets.dart';
+import '../utils/sizes.dart';
 import 'booking_page.dart';
 import 'facility_types_page.dart';
 import 'favorites_page.dart';

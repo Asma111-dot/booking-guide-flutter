@@ -242,7 +242,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   child: Column(
                     children: [
                       Image.asset(
-                        mybooking,
+                        myBooking,
                         width: S.w(150),
                         height: S.h(40),
                         fit: BoxFit.contain,

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:booking_guide/src/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,6 +7,7 @@ import '../helpers/general_helper.dart';
 import '../providers/auth/login_provider.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
+import '../utils/sizes.dart';
 import '../widgets/avatar_picker.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/custom_text_field.dart';

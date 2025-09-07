@@ -1,7 +1,8 @@
-import 'package:booking_guide/src/utils/sizes.dart';
 import 'package:flutter/material.dart';
+
 import '../enums/payment_method.dart';
 import '../utils/assets.dart';
+import '../utils/sizes.dart';
 
 class PaymentMethodTile extends StatelessWidget {
   const PaymentMethodTile({

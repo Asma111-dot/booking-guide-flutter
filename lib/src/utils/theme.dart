@@ -1,6 +1,6 @@
-import 'package:booking_guide/src/extensions/theme_extension.dart';
 import 'package:flutter/material.dart';
 
+import '../extensions/theme_extension.dart';
 import 'routes.dart';
 import 'sizes.dart';
 

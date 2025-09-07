@@ -51,7 +51,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           S.gapH(100),
                           Padding(
                             padding: EdgeInsets.only(bottom: S.h(40)),
-                            child: Image.asset(mybooking, height: S.h(50)),
+                            child: Image.asset(myBooking, height: S.h(50)),
                           ),
                           Padding(
                             padding: EdgeInsets.symmetric(vertical: S.h(8)),

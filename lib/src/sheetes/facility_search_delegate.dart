@@ -1,6 +1,7 @@
-import 'package:booking_guide/src/helpers/general_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+
+import '../helpers/general_helper.dart';
 import '../models/facility.dart' as f;
 import '../utils/assets.dart';
 import '../utils/theme.dart';

@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/reservation.dart' as res;
 import '../utils/assets.dart';
-import '../utils/sizes.dart';
 import '../widgets/custom_app_bar_clipper.dart';
 import '../widgets/reservation_details_content.dart';
 import '../widgets/view_widget.dart';

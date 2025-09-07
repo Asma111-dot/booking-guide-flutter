@@ -1,7 +1,7 @@
-import 'package:booking_guide/src/helpers/general_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../helpers/general_helper.dart';
 import '../utils/assets.dart';
 import '../utils/theme.dart';
 import '../storage/auth_storage.dart';

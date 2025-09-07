@@ -1,5 +1,6 @@
-import 'package:booking_guide/src/helpers/general_helper.dart';
 import 'package:flutter/material.dart';
+
+import '../helpers/general_helper.dart';
 
 void showWaitingDialog(
     BuildContext context, void Function(BuildContext dialogCtx) onReady) {
