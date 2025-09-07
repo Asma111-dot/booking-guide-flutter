@@ -327,7 +327,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get selectDateAndPrice => 'اختيار الايام والسعر';
 
   @override
-  String get view_price_list => 'اختر من قائمة الأسعار المتاحة واختيار الباقة الأنسب لك';
+  String get view_price_list => 'اختر من القوائم المتاحة واختيار الباقة الأنسب لك';
 
   @override
   String get select_period_and_day => 'حدد الفترات التي تناسبك من خلال قائمة الأسعار المعروضة، واختر اليوم أو الأيام التي ترغب في الحجز خلالها.';
@@ -760,7 +760,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get booking_type_hint => 'يرجى اختيار نوع الحجز المناسب ';
 
   @override
-  String get adults_hint => 'حدد عدد الأشخاص البالغين الذين سيحضرون؟';
+  String get adults_hint => 'حدد عدد الأشخاص البالغين ';
 
   @override
   String get children_hint => 'حدد عدد الأطفال (اختياري – فقط إذا كان هناك أطفال)';

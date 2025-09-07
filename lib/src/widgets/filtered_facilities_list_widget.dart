@@ -37,8 +37,8 @@ class FilteredFacilitiesListWidget extends ConsumerWidget {
     if (filtered.isLoading()) {
       return ListView.builder(
         padding: EdgeInsets.symmetric(
-          horizontal: Insets.m16,
-          vertical: S.h(12),
+          horizontal: Insets.xxs6,
+          vertical: S.h(6),
         ),
         itemCount: 5,
         itemBuilder: (_, __) => const FacilityShimmerCard(),
@@ -94,7 +94,7 @@ class FilteredFacilitiesListWidget extends ConsumerWidget {
           Padding(
             padding: EdgeInsets.symmetric(
               vertical: Insets.s3_4,
-              horizontal: Insets.s12,
+              horizontal: Insets.xxs6,
             ),
             child: Text(
               buildFilterDescription(

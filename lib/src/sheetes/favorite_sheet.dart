@@ -16,14 +16,16 @@ void showRemoveFavoriteSheet(
     ),
     backgroundColor: colorScheme.background,
     builder: (_) => Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+      padding: EdgeInsets.only(top:10,bottom: 50),
+
+     // padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
            Icon(
             Icons.warning_amber_rounded,
             size: 30,
-            color: colorScheme.onSurface,
+            color: colorScheme.primary,
           ),
           const SizedBox(height: 15),
           Text(
@@ -40,8 +42,8 @@ void showRemoveFavoriteSheet(
             width: double.infinity,
             child: InkWell(
               onTap: () {
-                Navigator.pop(context); // إغلاق الشيت أولًا
-                onConfirm(); // تنفيذ الإزالة
+                Navigator.pop(context);
+                onConfirm();
               },
               borderRadius: BorderRadius.circular(12),
               child: Ink(

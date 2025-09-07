@@ -65,7 +65,7 @@ class _ReservationDetailsPageState
           showEmpty: true,
         ),
         bottomNavigationBar: SafeArea(
-          minimum: const EdgeInsets.only(left: 16, right: 16, bottom: 40),
+          minimum: const EdgeInsets.only(bottom: 0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -89,7 +89,7 @@ class _ReservationDetailsPageState
                   ],
                 ),
               ),
-              Gaps.h12,
+              Gaps.h6,
               OutlinedButton.icon(
                 onPressed: () async {
                   Navigator.pushNamedAndRemoveUntil(
@@ -105,7 +105,7 @@ class _ReservationDetailsPageState
                   padding: EdgeInsets.symmetric(vertical: S.h(12)),
                 ),
               ),
-              Gaps.h12,
+              Gaps.h6,
               Button(
                 width: double.infinity,
                 title: trans().payment_now,

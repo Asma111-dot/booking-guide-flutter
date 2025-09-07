@@ -88,7 +88,7 @@ class RoomPriceWidget extends StatelessWidget {
                 Text(
                   "${price.price.toInt()} ${trans().riyalY}",
                   style: TextStyle(
-                    fontSize: TFont.m14,
+                    fontSize: TFont.s12,
                     fontFamily: 'Roboto',
                     color: colorScheme.onSurface.withOpacity(0.4),
                     decoration: TextDecoration.lineThrough,
@@ -128,11 +128,11 @@ class RoomPriceWidget extends StatelessWidget {
                 spacing: S.r(8),
                 children: [
                   Icon(verifiedIcon,
-                      color: colorScheme.secondary, size: Sizes.iconM20),
+                      color: colorScheme.secondary, size: Sizes.iconS18),
                   Text(
                     trans().package_features_detailed,
                     style: TextStyle(
-                      fontSize: TFont.m14,
+                      fontSize: TFont.s12,
                       fontWeight: FontWeight.w500,
                       color: colorScheme.primary,
                     ),
@@ -198,7 +198,7 @@ class RoomPriceWidget extends StatelessWidget {
                               Text(
                                 '${trans().size} : ${price.size} ${trans().meter2}',
                                 style: TextStyle(
-                                  fontSize: TFont.l16,
+                                  fontSize: TFont.m14,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'Roboto',
                                   color:
@@ -208,7 +208,7 @@ class RoomPriceWidget extends StatelessWidget {
                             ],
                           ),
                         ),
-                      Gaps.h8,
+                      Gaps.h12,
                       if (price.capacity > 0)
                         Row(
                           mainAxisSize: MainAxisSize.min,
@@ -217,7 +217,7 @@ class RoomPriceWidget extends StatelessWidget {
                             Text(
                               '${trans().capacity}: ${price.capacity} ${trans().person}',
                               style: TextStyle(
-                                fontSize: TFont.l16,
+                                fontSize: TFont.m14,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'Roboto',
                                 color: Theme.of(context).colorScheme.onSurface,
@@ -225,16 +225,16 @@ class RoomPriceWidget extends StatelessWidget {
                             ),
                           ],
                         ),
-                      Gaps.h8,
+                      Gaps.h12,
                       if (price.deposit! > 0)
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Gaps.w4,
                             Text(
-                              '${trans().deposit}: ${price.deposit} ${trans().riyalY}',
+                              '${trans().deposit}: ${price.deposit?.toInt()} ${trans().riyalY}',
                               style: TextStyle(
-                                fontSize: TFont.l16,
+                                fontSize: TFont.m14,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'Roboto',
                                 color: Theme.of(context).colorScheme.onSurface,
@@ -332,11 +332,11 @@ class RoomPriceWidget extends StatelessWidget {
                 crossAxisAlignment: WrapCrossAlignment.center,
                 spacing: S.w(6),
                 children: [
-                  Icon(Icons.local_offer, color: Colors.green, size: Sizes.iconS16),
+                  Icon(localOfferIcon, color: Colors.green, size: Sizes.iconS16),
                   Text(
                     trans().show_discount_details,
                     style: TextStyle(
-                      fontSize: TFont.m14,
+                      fontSize: TFont.s12,
                       fontWeight: FontWeight.w500,
                       color: colorScheme.primary,
                     ),
@@ -354,7 +354,7 @@ class RoomPriceWidget extends StatelessWidget {
                   child: Row(
                     children: [
                       Gaps.w4,
-                      Icon(Icons.arrow_right, size: Sizes.iconS16, color: Colors.grey),
+                      Icon(rightArrowIcon, size: Sizes.iconS16, color: Colors.grey),
                       Gaps.w4,
                       Expanded(
                         child: Text(

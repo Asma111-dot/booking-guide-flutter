@@ -163,7 +163,7 @@ class FacilityWidget extends ConsumerWidget {
                             child: Text(
                               facility.address ?? trans().address,
                               style: TextStyle(
-                                color: colorScheme.secondary,
+                                color: colorScheme.onSurface.withOpacity(0.6),
                                 fontSize: TFont.xxs10,
                                 fontWeight: FontWeight.w400,
                               ),

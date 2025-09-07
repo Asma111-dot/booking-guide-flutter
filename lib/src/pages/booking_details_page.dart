@@ -58,7 +58,7 @@ class _BookingDetailsPageState extends ConsumerState<BookingDetailsPage> {
         showEmpty: true,
       ),
       bottomNavigationBar: SafeArea(
-        minimum: EdgeInsets.all(Insets.m16),
+        minimum: EdgeInsets.only(bottom: 0),
         child: Button(
           width: double.infinity,
           title: trans().viewFacilityDetails,

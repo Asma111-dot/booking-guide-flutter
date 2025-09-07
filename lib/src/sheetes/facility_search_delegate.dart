@@ -11,15 +11,13 @@ class FacilitySearchDelegate extends SearchDelegate<f.Facility?> {
   FacilitySearchDelegate(this.all)
       : super(
           searchFieldLabel: trans().searchFieldLabel,
-// ↓ هنا تضبط حجم الخط الفعلي في مربع البحث
           searchFieldStyle: const TextStyle(
-            fontSize: 12, // جرّب 13–14
-            height: 1.2, // يخفّض الارتفاع قليلاً
+            fontSize: 12,
+            height: 1.2,
             fontWeight: FontWeight.w500,
           ),
         );
 
-  // توحيد ألوان شريط البحث مع الثيم
   @override
   ThemeData appBarTheme(BuildContext context) {
     final theme = Theme.of(context);

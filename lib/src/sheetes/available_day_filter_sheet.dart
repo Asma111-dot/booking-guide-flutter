@@ -3,6 +3,7 @@ import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
 import '../extensions/date_formatting.dart';
 import '../utils/assets.dart';
 import '../helpers/general_helper.dart';
+import '../utils/theme.dart';
 
 typedef OnDaySelected = void Function(String value);
 
@@ -24,12 +25,13 @@ void showAvailableDayBottomSheet({
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),
     builder: (context) {
-      return Padding(
+      final bottomPad = MediaQuery.of(context).padding.bottom;
+      return AnimatedPadding(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
         padding: EdgeInsets.only(
-          left: 16,
-          right: 16,
           top: 16,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+          bottom: bottomPad,
         ),
         child: ValueListenableBuilder(
           valueListenable: date,
@@ -41,7 +43,7 @@ void showAvailableDayBottomSheet({
                   trans().select_availability_day,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: colorScheme.onSurface,
+                    color: CustomTheme.color3,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -52,7 +54,6 @@ void showAvailableDayBottomSheet({
                     labelText: trans().select_date,
                     labelStyle: TextStyle(
                       fontSize: 12,
-                      fontFamily: 'Roboto',
                       fontWeight: FontWeight.bold,
                       color: colorScheme.primary,
                     ),
@@ -109,22 +110,40 @@ void showAvailableDayBottomSheet({
                 const SizedBox(height: 16),
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: colorScheme.primary,
-                      foregroundColor: colorScheme.onPrimary,
-                    ),
-                    onPressed: () {
-                      if (date.value != null) {
-                        onSelected(
-                          convertToEnglishNumbers(
-                            date.value!.toSqlDateOnly(),
+                  child: Material(
+                    color: Colors.transparent,
+                    // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    child: Ink(
+                      decoration: BoxDecoration(
+                        gradient: CustomTheme.primaryGradient,
+                        borderRadius: BorderRadius.circular(12),
+
+                      ),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(12),
+                        onTap: () {
+                          if (date.value != null) {
+                            onSelected(
+                              convertToEnglishNumbers(
+                                date.value!.toSqlDateOnly(),
+                              ),
+                            );
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: Container(
+                          height: 50,
+                          alignment: Alignment.center,
+                          child: Text(
+                            trans().apply_filter,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        );
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: Text(trans().apply_filter),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ],

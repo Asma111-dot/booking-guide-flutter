@@ -125,7 +125,6 @@ class FacilityGridWidget extends ConsumerWidget {
             ),
             Expanded(
               child: Padding(
-                // padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                 padding: EdgeInsets.symmetric(
                     horizontal: Insets.xs8, vertical: Insets.xxs6),
                 child: Column(
@@ -177,7 +176,7 @@ class FacilityGridWidget extends ConsumerWidget {
                     // العنوان
                     Row(
                       children: [
-                        Icon(Icons.location_on,
+                        Icon(mapIcon,
                             color: colorScheme.secondary, size: Sizes.iconS16),
                         Gaps.w4,
                         Expanded(

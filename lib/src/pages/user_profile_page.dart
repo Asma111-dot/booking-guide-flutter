@@ -7,8 +7,8 @@ import '../helpers/general_helper.dart';
 import '../providers/auth/user_provider.dart';
 import '../utils/assets.dart';
 import '../utils/sizes.dart';
-import '../utils/theme.dart';
 import '../widgets/avatar_picker.dart';
+import '../widgets/button_widget.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_text_field.dart';
 
@@ -44,11 +44,55 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
     super.dispose();
   }
 
+
+  Widget _buildDeleteDialog(BuildContext context, ColorScheme colorScheme) {
+    return AlertDialog(
+      backgroundColor: colorScheme.surface,
+      title: Text(
+        trans().are_you_sure,
+        style: TextStyle(
+          fontSize: TFont.m14,
+          fontWeight: FontWeight.bold,
+          color: colorScheme.primary,
+        ),
+      ),
+      content: Text(
+        trans().delete_account_confirmation,
+        style: TextStyle(
+          fontSize: TFont.s12,
+          fontWeight: FontWeight.bold,
+          color: colorScheme.onSurface.withOpacity(0.7),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          child: Text(
+            trans().cancel,
+            style: TextStyle(
+              color: colorScheme.onSurface,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context, true),
+          child: Text(
+            trans().verify,
+            style: TextStyle(
+              color: colorScheme.primary,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider).data;
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
 
     if (user == null) {
       return const Scaffold(
@@ -62,88 +106,76 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
         appTitle: trans().edit_personal_data,
         icon: arrowBackIcon,
       ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.only(top: 10, bottom: 0),
+        child: Row(
+          children: [
+            Expanded(
+              child: Button(
+                title: trans().save,
+                icon: Icon(saveIcon,
+                    size: Sizes.iconM20, color: theme.colorScheme.onPrimary),
+                iconAfterText: true,
+                disable: false,
+                onPressed: () async {
+                  final updatedUser = user.copyWith(
+                    name: nameController.text.trim(),
+                    email: emailController.text.trim(),
+                    address: addressController.text.trim(),
+                  );
+                  await ref.read(userProvider.notifier).updateUser(
+                        updatedUser,
+                        selectedImage,
+                      );
+                },
+              ),
+            ),
+            Gaps.w8,
+            Expanded(
+              child: Button(
+                title: trans().cancel,
+                icon: Icon(closeIcon,
+                    size: Sizes.iconM20, color: theme.colorScheme.onPrimary),
+                iconAfterText: true,
+                disable: false,
+                onPressed: () async => Navigator.pop(context),
+              ),
+            ),
+          ],
+        ),
+      ),
+
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(Insets.m16),
+        padding: EdgeInsets.fromLTRB(
+          Insets.s12,
+          Insets.s12,
+          Insets.s12,
+          S.h(12),
+        ),
         child: Column(
           children: [
             Gaps.h20,
             AvatarPicker(
               initialImageUrl: user.getAvatarUrl(),
-              onImageSelected: (file) {
-                setState(() {
-                  selectedImage = file;
-                });
-              },
+              onImageSelected: (file) => setState(() => selectedImage = file),
             ),
-
             Gaps.h30,
             CustomTextField(
-              controller: nameController,
-              label: trans().fullName,
-            ),
+                controller: nameController, label: trans().fullName),
             Gaps.h20,
-
-            CustomTextField(
-              controller: emailController,
-              label: trans().email,
-            ),
+            CustomTextField(controller: emailController, label: trans().email),
             Gaps.h20,
-
             CustomTextField(
-              controller: addressController,
-              label: trans().address,
-            ),
-
+                controller: addressController, label: trans().address),
             Gaps.h30,
-
-            /// زر حذف الحساب
+            Gaps.h30,
             ElevatedButton.icon(
               onPressed: () async {
                 final confirm = await showDialog<bool>(
                   context: context,
-                  builder: (_) => AlertDialog(
-                    backgroundColor: colorScheme.surface,
-                    title: Text(
-                      trans().are_you_sure,
-                      style: TextStyle(
-                        fontSize: TFont.m14,
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.primary,
-                      ),
-                    ),
-                    content: Text(
-                      trans().delete_account_confirmation,
-                      style: TextStyle(
-                        fontSize: TFont.s12,
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.onSurface.withOpacity(0.7),
-                      ),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, false),
-                        child: Text(
-                          trans().cancel,
-                          style: TextStyle(
-                            color: colorScheme.onSurface,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, true),
-                        child: Text(
-                          trans().verify,
-                          style: TextStyle(
-                            color: colorScheme.primary,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  builder: (_) =>
+                      _buildDeleteDialog(context, theme.colorScheme),
                 );
-
                 if (confirm == true) {
                   await ref.read(userProvider.notifier).deleteAccount(context);
                 }
@@ -151,86 +183,18 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
               label: Text(
                 trans().delete_account,
                 style: TextStyle(
-                  color: colorScheme.onSurface,
+                  color: theme.colorScheme.onSurface,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              icon: Icon(deleteIcon, color: colorScheme.onSurface),
+              icon: Icon(deleteIcon, color: theme.colorScheme.primary),
               style: ElevatedButton.styleFrom(
-                backgroundColor: colorScheme.surface,
-                // أو Colors.transparent
+                backgroundColor: theme.colorScheme.surface,
                 elevation: 0,
-                side: BorderSide(color: colorScheme.error, width: 1),
+                side: BorderSide(color: theme.colorScheme.error, width: 1),
                 minimumSize: Size(double.infinity, S.h(50)),
-                shape: RoundedRectangleBorder(
-                  borderRadius: Corners.md15,
-                ),
+                shape: RoundedRectangleBorder(borderRadius: Corners.md15),
               ),
-            ),
-
-            S.gapH(40),
-
-            /// أزرار الحفظ والإلغاء
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: CustomTheme.primaryGradient,
-                      borderRadius: Corners.sm8,
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        final updatedUser = user.copyWith(
-                          name: nameController.text.trim(),
-                          email: emailController.text.trim(),
-                          address: addressController.text.trim(),
-                        );
-                        await ref.read(userProvider.notifier).updateUser(
-                              updatedUser,
-                              selectedImage,
-                            );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: Corners.sm8,
-                        ),
-                      ),
-                      child: Text(
-                        trans().save,
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 15),
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: CustomTheme.primaryGradient,
-                      borderRadius: Corners.sm8,
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () => Navigator.pop(context),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: Corners.sm8,
-                        ),
-                      ),
-                      child: Text(
-                        trans().cancel,
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
             ),
           ],
         ),

@@ -15,12 +15,13 @@ void showLogoutBottomSheet(BuildContext context, WidgetRef ref) {
     ),
     backgroundColor: colorScheme.background,
     builder: (_) => Padding(
-      padding: EdgeInsets.fromLTRB(
-        20,
-        25,
-        20,
-        25 + MediaQuery.of(context).padding.bottom+100, // ← هنا الحل
-      ),
+      // padding: EdgeInsets.fromLTRB(
+      //   20,
+      //   25,
+      //   20,
+      //   25 + MediaQuery.of(context).padding.bottom+30,
+      // ),
+      padding: EdgeInsets.only(top:10,bottom: 50),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

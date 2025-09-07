@@ -215,7 +215,7 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
           showEmpty: true,
         ),
         bottomNavigationBar: Padding(
-          padding: EdgeInsets.all(Insets.m16),
+          padding: EdgeInsets.only(bottom: 0),
           child: Row(
             children: [
               Expanded(

@@ -180,8 +180,8 @@ class _PriceAndCalendarPageState
                       itemCount: 4,
                       itemBuilder: (context, index) => Padding(
                         padding: EdgeInsets.symmetric(
-                          horizontal: S.w(4),
-                          vertical: S.h(14),
+                          horizontal: S.w(2),
+                          vertical: S.h(10),
                         ),
                         child: const RoomPriceShimmerCard(),
                       ),
@@ -297,7 +297,7 @@ class _PriceAndCalendarPageState
         showEmpty: true,
       ),
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(Insets.m16),
+        padding: EdgeInsets.only(bottom:0),
         child: Button(
           width: double.infinity,
           title: trans().continueBooking,

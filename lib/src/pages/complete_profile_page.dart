@@ -80,7 +80,7 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
             trans().completeProfile,
             style: theme.textTheme.headlineMedium?.copyWith(
               color: colorScheme.onSurface,
-              fontSize: TFont.x2_20
+              fontSize: TFont.x2_20,
             ),
           ),
           elevation: 1,
@@ -122,16 +122,25 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
                   obscureText: true,
                 ),
                 Gaps.h30,
-
-                Button(
-                  width: double.infinity,
-                  title: trans().save,
-                  disable: isLoading,
-                  icon: Icon(saveIcon, color: colorScheme.onPrimary),
-                  iconAfterText: true,
-                  onPressed: submit,
-                ),
               ],
+            ),
+          ),
+        ),
+        bottomNavigationBar: AnimatedPadding(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: SafeArea(
+            minimum: const EdgeInsets.all(16),
+            child: Button(
+              width: double.infinity,
+              title: trans().save,
+              disable: isLoading,
+              icon: Icon(saveIcon, color: colorScheme.onPrimary),
+              iconAfterText: true,
+              onPressed: submit,
             ),
           ),
         ),

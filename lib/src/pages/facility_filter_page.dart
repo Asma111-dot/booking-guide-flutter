@@ -179,11 +179,11 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
               children: [
                 // زر اختيار نوع الفلتر
                 Flexible(
-                  flex: 2,
+                  flex: 4,
                   child: Container(
                     height: S.h(45),
                     padding: EdgeInsets.symmetric(
-                      horizontal: S.w(10),
+                      horizontal: S.w(15),
                     ),
                     decoration: BoxDecoration(
                       color: colorScheme.surface,
@@ -220,7 +220,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                     ),
                   ),
                 ),
-                Gaps.w8,
+                Gaps.w4,
                 // مربع البحث
                 Flexible(
                   flex: 6,
@@ -260,7 +260,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                     },
                   ),
                 ),
-                Gaps.w12,
+                Gaps.w8,
                 // زر الفلترة
                 Flexible(
                   flex: 1,

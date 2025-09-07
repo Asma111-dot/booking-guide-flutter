@@ -35,9 +35,7 @@ class NavigationMenu extends StatelessWidget {
             body: controller.screens[controller.selectedIndex.value],
             bottomNavigationBar: SafeArea(
               minimum: EdgeInsets.only(
-                // left: S.w(16),
-                // right: S.w(16),
-                bottom: S.h(20),
+                bottom: S.h(0),
               ),
               child: Container(
                 padding:
@@ -62,7 +60,7 @@ class NavigationMenu extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: List.generate(controller.screens.length, (index) {
                     final isSelected = controller.selectedIndex.value == index;
-              
+
                     final iconData = [
                       homeIcon,
                       mapIcon,
@@ -70,7 +68,7 @@ class NavigationMenu extends StatelessWidget {
                       favoriteIcon,
                       personIcon,
                     ][index];
-              
+
                     final label = [
                       trans().facilityTypes,
                       trans().map,
@@ -78,7 +76,7 @@ class NavigationMenu extends StatelessWidget {
                       trans().favorite,
                       trans().persons,
                     ][index];
-              
+
                     return Expanded(
                       child: GestureDetector(
                         onTap: () => controller.selectedIndex.value = index,

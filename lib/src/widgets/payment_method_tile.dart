@@ -51,7 +51,7 @@ class PaymentMethodTile extends StatelessWidget {
                 height: S.h(40),
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) =>
-                    Icon(NotImageIcon, color: cs.error, size: Sizes.iconM20),
+                    Icon(notImageIcon, color: cs.error, size: Sizes.iconM20),
               ),
             ),
             Gaps.w16,

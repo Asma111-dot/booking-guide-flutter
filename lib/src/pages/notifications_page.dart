@@ -104,7 +104,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
                     margin: EdgeInsets.symmetric(horizontal: S.w(12), vertical: S.h(6)),
                     shape: RoundedRectangleBorder(borderRadius: Corners.md15),
                     child: ListTile(
-                      leading: const Icon(Icons.notifications, color: CustomTheme.color1),
+                      leading: const Icon(notificationsIcon, color: CustomTheme.color1),
                       title: Text(
                         n.title ?? 'بدون عنوان',
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(

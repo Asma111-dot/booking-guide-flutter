@@ -12,12 +12,13 @@ class SupportBottomSheet extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(
-        20,
-        20,
-        20,
-        20 + MediaQuery.of(context).padding.bottom,
-      ),
+      // padding: EdgeInsets.fromLTRB(
+      //   20,
+      //   20,
+      //   20,
+      //   20 + MediaQuery.of(context).padding.bottom,
+      // ),
+      padding: EdgeInsets.only(top:10,bottom: 50),
       child: Column(
       mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -25,7 +26,7 @@ class SupportBottomSheet extends StatelessWidget {
           Text(
             trans().support,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontSize: 20,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: colorScheme.primary,
             ),
@@ -39,7 +40,7 @@ class SupportBottomSheet extends StatelessWidget {
             ),
             textAlign: TextAlign.right,
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 15),
           _buildSupportOption(
             context,
             icon: callIcon,

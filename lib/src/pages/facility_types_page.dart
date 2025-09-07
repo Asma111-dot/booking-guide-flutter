@@ -57,11 +57,9 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage>
     super.dispose();
   }
 
-  // لما التطبيق يرجع للواجهة
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      // جدّد الإشعارات حتى لو وصلت وأنت بالخلفية
       ref.read(notificationsProvider.notifier).fetch();
     }
   }
@@ -143,6 +141,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage>
                                   text: userState?.name ?? "User",
                                   style: TextStyle(
                                     fontSize: TFont.m14,
+                                    fontFamily: 'Roboto',
                                     fontWeight: FontWeight.w400,
                                     color: colorScheme.secondary,
                                   ),
@@ -157,7 +156,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage>
                           onPressed: () =>
                               launchUrl(Uri.parse("https://wa.me/782006100")),
                         ),
-                        Gaps.w8,
+                        Gaps.w4,
                         Stack(
                           children: [
                             IconButton(
@@ -253,7 +252,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage>
               ),
               Gaps.h8,
               const DiscountInlineWidget(),
-              Gaps.h12,
+              Gaps.h8,
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: S.w(12)),
                 child: facilityTypesState.data == null
@@ -289,7 +288,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage>
                             ),
                           ),
               ),
-              Gaps.h12,
+              Gaps.h8,
               Expanded(
                 child: selectedFacilityType == null
                     ? ListView.builder(

@@ -26,13 +26,13 @@ class RoomPriceShimmerCard extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: List.generate(5, (index) => Padding(
+          children: List.generate(4, (index) => Padding(
             padding: EdgeInsets.symmetric(vertical: S.h(5)),
             child: Row(
               children: [
                 Container(
-                  width: S.w(20),
-                  height: S.h(20),
+                  width: S.w(10),
+                  height: S.h(10),
                   decoration: BoxDecoration(
                     color: highlightColor,
                     shape: BoxShape.circle,

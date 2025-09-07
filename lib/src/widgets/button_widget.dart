@@ -28,7 +28,7 @@ class Button extends StatelessWidget {
     final bottomInset = MediaQuery.of(context).padding.bottom;
 
     return Padding(
-      padding: EdgeInsets.only(bottom: bottomInset), // ← هنا
+      padding: EdgeInsets.only(bottom: bottomInset),
       child: SizedBox(
         width: effectiveWidth,
         child: DecoratedBox(
@@ -44,8 +44,8 @@ class Button extends StatelessWidget {
               shadowColor: Colors.transparent,
               foregroundColor: cs.onPrimary,
               padding: EdgeInsets.symmetric(
-                horizontal: Insets.m16,
-                vertical: S.h(12),
+                horizontal: Insets.s12,
+                vertical: S.h(10),
               ),
               minimumSize: Sizes.btnM,
               shape: RoundedRectangleBorder(

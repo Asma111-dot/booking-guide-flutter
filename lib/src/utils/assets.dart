@@ -72,7 +72,7 @@ const deleteOutIcon = Icons.delete_outline_rounded;
 const callIcon = Icons.phone_rounded;
 const phoneIcon = Icons.phone_iphone_rounded;
 const emailIcon = Icons.email_outlined;
-const mapIcon = Icons.location_on_outlined;
+const mapIcon = Icons.location_on;
 const map2Icon = Icons.map_rounded;
 const bookingIcon = Icons.sticky_note_2_outlined;
 const favoriteIcon = Icons.favorite_outline_outlined;
@@ -97,7 +97,8 @@ const goBackIcon = Icons.arrow_back;
 const cameraIcon = Icons.camera_alt_outlined;
 const cameraSourceIcon = Icons.camera_alt;
 const gallerySourceIcon = Icons.photo;
-const NotImageIcon = Icons.image_not_supported;
+const notImageIcon = Icons.image_not_supported;
+const brokenImageIcon = Icons.broken_image_outlined;
 
 const hotelIcon = Icons.hotel;
 const poolIcon = Icons.pool;
@@ -124,6 +125,7 @@ const instagramIcon = LineAwesomeIcons.instagram;
 const whatsappInIcon = FontAwesomeIcons.whatsapp;
 const pauseIcon = Icons.pause;
 const playArrowIcon = Icons.play_arrow;
+const rightArrowIcon = Icons.arrow_right;
 const userCircleIcon = LineAwesomeIcons.user_circle;
 const cogIcon = LineAwesomeIcons.cog_solid;
 const bookOpenIcon = LineAwesomeIcons.book_open_solid;
@@ -146,5 +148,7 @@ const layerIcon = Icons.layers;
 const videoIcon = Icons.videocam;
 const playCircleIcon = Icons.play_circle_fill;
 const saveIcon = Icons.save_alt;
+const notificationsIcon = Icons.notifications;
+
 
 

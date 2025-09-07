@@ -100,6 +100,26 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
+      bottomNavigationBar: Button(
+        width: double.infinity,
+        disable: false,
+        onPressed: () async{
+          final room = ref.read(roomProvider).data;
+          if (room?.id != null) {
+            Navigator.pushNamed(
+              context,
+              Routes.priceAndCalendar,
+              arguments: room!.id,
+            );
+          }
+        },
+        title: trans().showAvailableDays,
+        icon: Icon(
+          periodIcon,
+          size: Sizes.iconM20,
+          color: colorScheme.onPrimary,
+        ),
+      ),
       //if you went add SafeArea
       body: ViewWidget<r.Room>(
         meta: roomState.meta,
@@ -258,7 +278,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                           Row(
                             children: [
                               Icon(mapIcon,
-                                  color: colorScheme.onSurface, size: Sizes.iconM20),
+                                  color: colorScheme.primary, size: Sizes.iconM20),
                               Gaps.w4,
                               Expanded(
                                 child: Text(
@@ -292,45 +312,28 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                             ],
                           ),
                           Gaps.h15,
-                          RoomDetailsTabs(
-                            room: room,
-                            facility: widget.facility,
-                            tabController: tabController,
-                            showAboutFull: showAboutFull,
-                            showTypeFull: showTypeFull,
-                            showDescFull: showDescFull,
-                            onShowAboutToggle: (val) =>
-                                setState(() => showAboutFull = val),
-                            onShowTypeToggle: (val) =>
-                                setState(() => showTypeFull = val),
-                            onShowDescToggle: (val) =>
-                                setState(() => showDescFull = val),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 0),
+                            child: RoomDetailsTabs(
+                              room: room,
+                              facility: widget.facility,
+                              tabController: tabController,
+                              showAboutFull: showAboutFull,
+                              showTypeFull: showTypeFull,
+                              showDescFull: showDescFull,
+                              onShowAboutToggle: (val) =>
+                                  setState(() => showAboutFull = val),
+                              onShowTypeToggle: (val) =>
+                                  setState(() => showTypeFull = val),
+                              onShowDescToggle: (val) =>
+                                  setState(() => showDescFull = val),
+                            ),
                           ),
                         ],
                       ),
                     ),
                   );
                 },
-              ),
-              Positioned(
-                bottom: Insets.m16,
-                left: Insets.m16,
-                right: Insets.m16,
-                child: Button(
-                  width: double.infinity,
-                  disable: false,
-                  onPressed: () => Navigator.pushNamed(
-                    context,
-                    Routes.priceAndCalendar,
-                    arguments: room.id,
-                  ),
-                  title: trans().showAvailableDays,
-                  icon: Icon(
-                    periodIcon,
-                    size: Sizes.iconM20,
-                    color: colorScheme.onPrimary,
-                  ),
-                ),
               ),
             ],
           );

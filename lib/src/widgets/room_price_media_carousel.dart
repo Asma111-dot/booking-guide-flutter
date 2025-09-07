@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../models/media.dart';
 import '../helpers/general_helper.dart';
 import '../pages/image_gallery_page.dart';
+import '../utils/assets.dart';
 import '../utils/sizes.dart';
 import 'shimmer_image_placeholder.dart';
 import 'video_widget.dart';
@@ -104,7 +105,7 @@ class _RoomPriceMediaCarouselState extends State<RoomPriceMediaCarousel> {
                       height: double.infinity,
                     ),
                     errorWidget: (ctx, u, e) =>
-                    const Icon(Icons.broken_image_outlined),
+                    const Icon(brokenImageIcon),
                   ),
                 ),
               );

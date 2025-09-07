@@ -28,6 +28,7 @@ class CustomRowDetailsWidget extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: TFont.m14,
+
             fontWeight: FontWeight.w400,
           ),
         ),
@@ -36,7 +37,8 @@ class CustomRowDetailsWidget extends StatelessWidget {
           value,
           style: TextStyle(
             fontSize: TFont.m14,
-            fontWeight: FontWeight.w300,
+            fontFamily: 'Roboto',
+            fontWeight: FontWeight.w500,
           ),
         ),
       ],

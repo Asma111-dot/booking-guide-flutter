@@ -129,7 +129,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
 
       // ───────── زر إكمال الحجز ─────────
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(Insets.m16),
+        padding: EdgeInsets.only(bottom: 0),
         child: Button(
             width: MediaQuery.of(context).size.width - 40,
             title: trans().completeTheReservation,
