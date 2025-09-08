@@ -25,13 +25,13 @@ class FacilitySearchDelegate extends SearchDelegate<f.Facility?> {
     final cs = theme.colorScheme;
     return theme.copyWith(
       appBarTheme: theme.appBarTheme.copyWith(
-        backgroundColor: cs.background,
+        backgroundColor: cs.surface,
         elevation: 0,
-        foregroundColor: cs.onBackground,
+        foregroundColor: cs.onSurface,
         surfaceTintColor: Colors.transparent,
       ),
       inputDecorationTheme: theme.inputDecorationTheme.copyWith(
-        fillColor: cs.surfaceVariant.withOpacity(.5),
+        fillColor: cs.surfaceContainerHighest.withOpacity(.5),
         hintStyle: TextStyle(color: cs.onSurface.withOpacity(.6), fontSize: 12),
       ),
       textSelectionTheme: TextSelectionThemeData(
@@ -41,9 +41,9 @@ class FacilitySearchDelegate extends SearchDelegate<f.Facility?> {
       ),
       textTheme: theme.textTheme.apply(
         bodyColor: cs.onBackground,
-        displayColor: cs.onBackground,
+        displayColor: cs.onSurface,
       ),
-      iconTheme: theme.iconTheme.copyWith(color: cs.onBackground),
+      iconTheme: theme.iconTheme.copyWith(color: cs.onSurface),
     );
   }
 
@@ -86,86 +86,90 @@ class FacilitySearchDelegate extends SearchDelegate<f.Facility?> {
     final cs = Theme.of(context).colorScheme;
     final q = query.trim().toLowerCase();
 
+    final bottomSafe = MediaQuery.of(context).padding.bottom;
+
     final results = q.isEmpty
         ? all
         : all.where((e) => (e.name).toLowerCase().contains(q)).toList();
 
     if (results.isEmpty) {
-      return _EmptyState(
-        title: trans().no_matching_facilities_title,
-        subtitle: trans().no_matching_facilities_subtitle,
-        svgAsset: mapIconSvg,
+      return SafeArea(
+        top: false,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: bottomSafe),
+          child: _EmptyState(
+            title: trans().no_matching_facilities_title,
+            subtitle: trans().no_matching_facilities_subtitle,
+            svgAsset: mapIconSvg,
+          ),
+        ),
       );
     }
 
-    return ListView.separated(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      itemCount: results.length,
-      separatorBuilder: (_, __) => Divider(
-        height: 1,
-        color: cs.outlineVariant.withOpacity(.4),
-        indent: 16,
-        endIndent: 16,
-      ),
-      itemBuilder: (context, i) {
-        final item = results[i];
-
-        return InkWell(
-          onTap: () => close(context, item),
-          borderRadius: BorderRadius.circular(14),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            child: Row(
-              children: [
-                // أيقونة بنمط الخريطة مع خلفية ناعمة
-                Container(
-                  width: 42,
-                  height: 42,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: CustomTheme.color1.withOpacity(.08),
+    return SafeArea(
+      top: false,
+      child: ListView.separated(
+        padding: EdgeInsets.fromLTRB(0, 8, 0, bottomSafe),
+        itemCount: results.length,
+        separatorBuilder: (_, __) => Divider(
+          height: 1,
+          color: cs.outlineVariant.withOpacity(.4),
+          indent: 16,
+          endIndent: 16,
+        ),
+        itemBuilder: (context, i) {
+          final item = results[i];
+          return InkWell(
+            onTap: () => close(context, item),
+            borderRadius: BorderRadius.circular(14),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              child: Row(
+                children: [
+                  Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: CustomTheme.color1.withOpacity(.08),
+                    ),
+                    child: Icon(mapIcon, size: 22, color: CustomTheme.color3),
                   ),
-                  child: Icon(
-                    mapIcon,
-                    size: 22,
-                    color: CustomTheme.color3,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                // الاسم + العنوان
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: CustomTheme.color2,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      if ((item.address?.isNotEmpty ?? false)) ...[
-                        const SizedBox(height: 2),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Text(
-                          item.address!,
-                          maxLines: 2,
+                          item.name,
+                          maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: CustomTheme.primaryColor,
-                            fontSize: 12.5,
+                            color: CustomTheme.color2,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
+                        if ((item.address?.isNotEmpty ?? false)) ...[
+                          const SizedBox(height: 2),
+                          Text(
+                            item.address!,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: CustomTheme.primaryColor,
+                              fontSize: 12.5,
+                            ),
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
@@ -195,7 +199,7 @@ class _EmptyState extends StatelessWidget {
             Text(title,
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
-                  color: cs.onBackground,
+                  color: cs.onSurface,
                 )),
             const SizedBox(height: 8),
             Text(

@@ -851,4 +851,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get confirmExitMessage => 'Do you want to return to the home page?';
+
+  @override
+  String get filter_and_search_facilities => 'Filter & Search Facilities';
 }

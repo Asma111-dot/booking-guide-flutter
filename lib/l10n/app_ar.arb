@@ -278,5 +278,6 @@
   "list_your_facility": "اعرض منشأتك على موقعنا",
   "promote_your_facility": "يمكنك عرض أي منشأة سواء فندقاً أو شاليهاً أو قاعة على منصتنا",
   "confirmExitTitle": "تأكيد الخروج",
-  "confirmExitMessage": "هل تريد العودة إلى الصفحة الرئيسية؟"
+  "confirmExitMessage": "هل تريد العودة إلى الصفحة الرئيسية؟",
+  "filter_and_search_facilities": "فلترة وبحث المنشآت"
 }

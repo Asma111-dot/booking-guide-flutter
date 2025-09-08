@@ -36,7 +36,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       title: Text(
         widget.appTitle ?? '',
         style: TextStyle(
-          fontSize: TFont.x2_20,
+          fontSize: TFont.xl18,
           color: colorScheme.primary,
         ),
       ),

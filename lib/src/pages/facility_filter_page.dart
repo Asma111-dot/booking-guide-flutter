@@ -48,10 +48,16 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
   @override
   void initState() {
     super.initState();
-    values[FacilityFilterType.facilityTypeId] = 1;
+
+    // استخدم القيمة القادمة من الصفحة السابقة
+    values[FacilityFilterType.facilityTypeId] = widget.initialFacilityTypeId;
+
     selectedFilter = FacilityFilterType.name;
-    _tabController = TabController(length: 3, vsync: this);
-    _tabController.index = 0;
+
+    // اجعل التاب مطابقًا للنوع (1->0, 2->1, 3->2)
+    final initialIndex = (widget.initialFacilityTypeId - 1).clamp(0, 2);
+    _tabController = TabController(length: 3, vsync: this, initialIndex: initialIndex);
+
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) return;
       _onTabChanged(_tabController.index);
@@ -125,10 +131,13 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
+    final showReset = values.length > 1 || isSorting;
+    final bottomPad = showReset ? MediaQuery.of(context).padding.bottom : 0.0;
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: CustomAppBar(
-        appTitle: '',
+        appTitle: trans().filter_and_search_facilities,
         icon: arrowBackIcon,
       ),
       body: Padding(
@@ -332,29 +341,36 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
             const Divider(height: 12),
             Gaps.h12,
             Expanded(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                child: showResults
-                    ? FilteredFacilitiesListWidget(
-                        filters: currentFilters!,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: bottomPad),
+                child: Builder(
+                  builder: (_) {
+                    if (showResults) {
+                      // نتائج البحث/الفلاتر
+                      return FilteredFacilitiesListWidget(
+                        filters: currentFilters ?? {},
                         values: values,
                         selectedFilter: selectedFilter,
                         minPrice: minPriceFilter,
                         maxPrice: maxPriceFilter,
-                      )
-                    : (isSorting
-                        ? SortedFacilitiesListWidget(
-                            sortKey: ref.watch(sortKeyProvider),
-                            facilityTypeId:
-                                values[FacilityFilterType.facilityTypeId],
-                            currentSort: currentSort,
-                          )
-                        : TabFilteredFacilitiesListWidget(
-                            facilityTypeId:
-                                values[FacilityFilterType.facilityTypeId],
-                          )),
+                      );
+                    } else if (isSorting) {
+                      // نتائج الفرز فقط
+                      return SortedFacilitiesListWidget(
+                        sortKey: ref.watch(sortKeyProvider),
+                        facilityTypeId: values[FacilityFilterType.facilityTypeId],
+                        currentSort: currentSort,
+                      );
+                    } else {
+                      // العرض الافتراضي: حسب نوع المنشأة (بدون /search)
+                      return TabFilteredFacilitiesListWidget(
+                        facilityTypeId: values[FacilityFilterType.facilityTypeId],
+                      );
+                    }
+                  },
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),

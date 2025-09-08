@@ -107,7 +107,7 @@ class _DiscountPageState extends ConsumerState<DiscountPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              discount.name ?? '',
+                              discount.name ,
                               style: TextStyle(
                                 color: colorScheme.primary,
                                 fontSize: TFont.m14,
@@ -118,7 +118,7 @@ class _DiscountPageState extends ConsumerState<DiscountPage> {
                             ),
                             Gaps.h4,
                             Text(
-                              '${trans().discount_value}: ${discount.value ?? '-'}',
+                              '${trans().discount_value}: ${discount.value}',
                               style: TextStyle(
                                 color: colorScheme.secondary,
                                 fontSize: TFont.s12,

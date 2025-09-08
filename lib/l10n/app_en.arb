@@ -278,5 +278,6 @@
   "list_your_facility": "Showcase your facility on our platform",
   "promote_your_facility": "You can showcase any facility, whether it's a hotel, chalet, or hall, on our platform",
   "confirmExitTitle": "Confirm Exit",
-  "confirmExitMessage": "Do you want to return to the home page?"
+  "confirmExitMessage": "Do you want to return to the home page?",
+  "filter_and_search_facilities": "Filter & Search Facilities"
 }

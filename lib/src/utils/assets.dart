@@ -55,6 +55,7 @@ const lightModeIcon = LineAwesomeIcons.sun;
 const privacyPolicyIcon = Feather.lock;
 const termsOfUseIcon = Feather.shield;
 const searchIcon = Feather.search;
+const filterIcon = Feather.filter;
 const imageIcon = Feather.image;
 const dropDownIcon = Icons.arrow_drop_down_rounded;
 const infoIcon = Feather.info;

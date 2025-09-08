@@ -1,9 +1,10 @@
+// lib/widgets/tab_filtered_facilities_list_widget.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../helpers/general_helper.dart';
-import '../providers/sort/sorted_facilities_provider.dart';
+import '../providers/facility/facilities_by_type_provider.dart';
 import '../utils/assets.dart';
 import '../utils/sizes.dart';
 import 'facility_shimmer_card.dart';
@@ -11,46 +12,52 @@ import 'facility_widget.dart';
 
 class TabFilteredFacilitiesListWidget extends ConsumerWidget {
   final int facilityTypeId;
-
-  const TabFilteredFacilitiesListWidget({
-    super.key,
-    required this.facilityTypeId,
-  });
+  const TabFilteredFacilitiesListWidget({super.key, required this.facilityTypeId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final allFacilitiesAsync = ref.watch(sortedFacilitiesProvider(''));
+    final state = ref.watch(
+      facilitiesByTypeProvider(facilityTypeId: facilityTypeId),
+    );
+    final notifier = ref.read(
+      facilitiesByTypeProvider(facilityTypeId: facilityTypeId).notifier,
+    );
+
     final colorScheme = Theme.of(context).colorScheme;
 
-    if (allFacilitiesAsync.isLoading()) {
+    if (!state.isLoading() && !state.isLoaded() && !state.isError()) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifier.fetch();
+      });
+    }
+
+    if (state.isLoading()) {
       return ListView.builder(
-        padding:
-            EdgeInsets.symmetric(horizontal: Insets.m16, vertical: S.h(12)),
+        padding: EdgeInsets.symmetric(horizontal: Insets.m16, vertical: S.h(12)),
         itemCount: 5,
         itemBuilder: (_, __) => const FacilityShimmerCard(),
       );
     }
 
-    if (allFacilitiesAsync.isError()) {
+    if (state.isError()) {
       return Center(
-        child: Text(
-          'خطأ: ${allFacilitiesAsync.message()}',
-          style: TextStyle(color: colorScheme.error),
-        ),
+        child: Text('خطأ: ${state.message()}', style: TextStyle(color: colorScheme.error)),
       );
     }
 
-    final allFacilities = allFacilitiesAsync.data ?? [];
-    final filteredFacilities =
-        allFacilities.where((f) => f.facilityTypeId == facilityTypeId).toList();
+    final facilities = state.data ?? [];
+
+    final displayed = facilities.where(
+          (f) => f.facilityTypeId == facilityTypeId,
+    ).toList();
 
     final title = facilityTypeId == 1
         ? trans().all_available_hotels
         : facilityTypeId == 2
-            ? trans().all_available_chalets
-            : trans().all_available_halls;
+        ? trans().all_available_chalets
+        : trans().all_available_halls;
 
-    if (filteredFacilities.isEmpty) {
+    if (displayed.isEmpty) {
       return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -75,8 +82,7 @@ class TabFilteredFacilitiesListWidget extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(
-              bottom: S.h(10), left: Insets.s12, right: Insets.s12),
+          padding: EdgeInsets.only(bottom: S.h(10), left: Insets.s12, right: Insets.s12),
           child: Text(
             title,
             style: TextStyle(
@@ -88,14 +94,12 @@ class TabFilteredFacilitiesListWidget extends ConsumerWidget {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: filteredFacilities.length,
-            itemBuilder: (_, index) {
-              final facility = filteredFacilities[index];
-              return FacilityWidget(facility: facility);
-            },
+            itemCount: displayed.length,
+            itemBuilder: (_, i) => FacilityWidget(facility: displayed[i]),
           ),
         ),
       ],
     );
+
   }
 }

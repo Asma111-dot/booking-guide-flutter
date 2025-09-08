@@ -7,7 +7,7 @@ part of 'filtered_facilities_provider.dart';
 // **************************************************************************
 
 String _$filteredFacilitiesHash() =>
-    r'6c248be2771daaef2029e5d7867318f16f24b9b6';
+    r'e0254e38459e48a1114408a7dfa97de50af4536f';
 
 /// Copied from Dart SDK
 class _SystemHash {

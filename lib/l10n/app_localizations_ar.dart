@@ -851,4 +851,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get confirmExitMessage => 'هل تريد العودة إلى الصفحة الرئيسية؟';
+
+  @override
+  String get filter_and_search_facilities => 'فلترة وبحث المنشآت';
 }

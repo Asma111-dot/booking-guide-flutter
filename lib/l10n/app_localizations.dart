@@ -1774,6 +1774,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Do you want to return to the home page?'**
   String get confirmExitMessage;
+
+  /// No description provided for @filter_and_search_facilities.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter & Search Facilities'**
+  String get filter_and_search_facilities;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

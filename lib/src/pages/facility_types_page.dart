@@ -99,7 +99,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage>
         Scaffold(
           body: Column(
             children: [
-              Gaps.h20,
+              Gaps.h30,
               Center(
                 child: Image.asset(
                   booking,
@@ -109,8 +109,8 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage>
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: Insets.l20,
-                  vertical: S.h(10),
+                  horizontal: Insets.m16,
+                  vertical: S.h(5),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,39 +195,55 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage>
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: Insets.l20),
+                padding: EdgeInsets.symmetric(horizontal: Insets.m16,),
                 child: Row(
                   children: [
                     Expanded(
                       child: Row(
                         children: [
-                          IconButton(
-                            icon: Icon(
-                              listAltIcon,
-                              color: ref.watch(isGridProvider)
-                                  ? Theme.of(context).primaryColor
-                                  : Colors.grey.withOpacity(0.4),
-                            ),
-                            onPressed: () {
+                          GestureDetector(
+                            onTap: () {
                               ref.read(isGridProvider.notifier).state = true;
                             },
-                          ),
-                          IconButton(
-                            icon: Icon(
-                              gridIcon,
-                              color: !ref.watch(isGridProvider)
-                                  ? Theme.of(context).primaryColor
-                                  : Colors.grey.withOpacity(0.4),
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              margin: const EdgeInsets.only(right: 8),
+                              decoration: BoxDecoration(
+                                gradient: CustomTheme.primaryGradient,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Icon(
+                                listAltIcon,
+                                color: ref.watch(isGridProvider)
+                                    ? Colors.white
+                                    : Colors.white.withOpacity(0.6),
+                              ),
                             ),
-                            onPressed: () {
+                          ),
+                          Gaps.w12,
+                          GestureDetector(
+                            onTap: () {
                               ref.read(isGridProvider.notifier).state = false;
                             },
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                gradient: CustomTheme.primaryGradient,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Icon(
+                                gridIcon,
+                                color: !ref.watch(isGridProvider)
+                                    ? Colors.white
+                                    : Colors.white.withOpacity(0.6),
+                              ),
+                            ),
                           ),
                         ],
                       ),
                     ),
-
-                    // Pushes filter button to the far right
                     GestureDetector(
                       onTap: () {
                         if (selectedFacilityType == null) return;
@@ -238,21 +254,21 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage>
                         );
                       },
                       child: Container(
-                        height: S.h(50),
-                        width: S.w(50),
+                        height: S.h(40),
+                        width: S.w(40),
                         decoration: BoxDecoration(
                           gradient: CustomTheme.primaryGradient,
                           borderRadius: Corners.md15,
                         ),
-                        child: const Icon(searchIcon, color: Colors.white),
+                        child: const Icon(filterIcon, color: Colors.white),
                       ),
                     ),
                   ],
                 ),
               ),
-              Gaps.h8,
+              Gaps.h4,
               const DiscountInlineWidget(),
-              Gaps.h8,
+              Gaps.h4,
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: S.w(12)),
                 child: facilityTypesState.data == null
@@ -288,7 +304,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage>
                             ),
                           ),
               ),
-              Gaps.h8,
+              Gaps.h4,
               Expanded(
                 child: selectedFacilityType == null
                     ? ListView.builder(

@@ -16,7 +16,7 @@ class FilteredFacilities extends _$FilteredFacilities {
   Future<void> fetch() async {
     state = state.setLoading();
 
-    final url = searchFacilitiesUrl(this.filters);
+    final url = searchFacilitiesUrl(filters);
 
     try {
       final result = await request<Map<String, dynamic>>(
