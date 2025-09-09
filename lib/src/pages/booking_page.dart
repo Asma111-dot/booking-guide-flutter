@@ -64,7 +64,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
           backgroundColor: Colors.transparent,
           iconTheme: IconThemeData(color: Theme.of(context).colorScheme.onSurface),
           bottom: TabBar(
-            indicatorColor: CustomTheme.color2,
+            indicatorColor: CustomTheme.color4,
             labelColor: CustomTheme.color3,
             unselectedLabelColor: Colors.grey,
             dividerColor: Colors.transparent,
@@ -212,7 +212,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
                             child: Text(
                               "${trans().number_of_days} : ${formatDaysAr(daysCount)}",
                               style: textTheme.bodySmall?.copyWith(
-                                color: CustomTheme.color1,
+                                color: CustomTheme.color4,
                               ),
                             ),
                           ),
@@ -245,10 +245,11 @@ class _BookingPageState extends ConsumerState<BookingPage>
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        "#${reservation.id}",
+                        "#2025${reservation.id}",
                         style: textTheme.labelLarge?.copyWith(
                           color: CustomTheme.color4,
-                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Roboto',
+                          // fontWeight: FontWeight.bold,
                         ),
                       ),
                       Gaps.h4,
@@ -256,6 +257,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
                         "${reservation.totalPrice?.toStringAsFixed(0) ?? trans().priceNotAvailable} ${trans().riyalY}",
                         style: textTheme.titleSmall?.copyWith(
                           color: CustomTheme.color3,
+                          fontFamily: 'Roboto',
                           fontWeight: FontWeight.bold,
                         ),
                       ),

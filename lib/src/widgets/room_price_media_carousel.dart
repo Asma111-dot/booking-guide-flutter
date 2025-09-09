@@ -32,7 +32,6 @@ class _RoomPriceMediaCarouselState extends State<RoomPriceMediaCarousel> {
   void initState() {
     super.initState();
     _controller = PageController(viewportFraction: 1);
-    // Auto-slide كل 3 ثواني (يتوقف لو عنصر واحد)
     _timer = Timer.periodic(const Duration(seconds: 3), (_) {
       if (!mounted || widget.media.length <= 1 || !_controller.hasClients) return;
       final current = _controller.page?.round() ?? 0;
@@ -105,7 +104,7 @@ class _RoomPriceMediaCarouselState extends State<RoomPriceMediaCarousel> {
                       height: double.infinity,
                     ),
                     errorWidget: (ctx, u, e) =>
-                    const Icon(brokenImageIcon),
+                        Icon(brokenImageIcon,color: colorScheme.error,),
                   ),
                 ),
               );
@@ -113,8 +112,8 @@ class _RoomPriceMediaCarouselState extends State<RoomPriceMediaCarousel> {
           ),
 
           PositionedDirectional(
-            top: Insets.s12,
-            start: Insets.s12,
+            bottom: Insets.s12,
+            end: Insets.s12,
             child: AnimatedBuilder(
               animation: _controller,
               builder: (_, __) {
@@ -130,7 +129,7 @@ class _RoomPriceMediaCarouselState extends State<RoomPriceMediaCarousel> {
                     vertical: S.h(4),
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.25),
+                    color: Colors.black.withOpacity(0.10),
                     borderRadius: Corners.sm8,
                   ),
                   child: Text(

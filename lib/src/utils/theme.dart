@@ -22,7 +22,9 @@ class CustomTheme {
   static const Color color3 = Color(0xFF565BF2);
   static const Color color4 = Color(0xFF0DD7FC);
 
-  static const Color primaryColor   = Color(0xFF150D33);
+  // static const Color primaryColor   = Color(0xFF150D33);
+  // static const Color primaryColor = Color(0xFF2A1F55);
+  static const Color primaryColor = Color(0xFF3B2A66);
   static const Color secondaryColor = color3;
   static const Color tertiaryColor  = color4;
   static const Color accentColor    = color1;
@@ -44,7 +46,7 @@ class CustomTheme {
     end: Alignment.bottomRight,
   );
 
-  static const Color instagramColor = Color(0xFFE1306C); // اللون الرسمي
+  static const Color instagramColor = Color(0xFFE1306C);
   static const Color facebookColor  = Color(0xFF1877F2);
 
   Color lightBackgroundColor() => isDark ? Colors.grey[900]! : const Color(0xffF0F0F0);

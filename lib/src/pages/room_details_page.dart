@@ -176,7 +176,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                                   const ShimmerImagePlaceholder(
                                       width: 80, height: 80),
                               errorWidget: (context, url, error) =>
-                                  const Icon(errorIcon),
+                                   Icon(brokenImageIcon,color: colorScheme.error,),
                             ),
                           ),
                         );
@@ -271,10 +271,10 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                             style:  TextStyle(
                               fontSize: TFont.xl18,
                               fontWeight: FontWeight.bold,
-                              color: CustomTheme.primaryColor,
+                              color: CustomTheme.color4,
                             ),
                           ),
-                          Gaps.h12,
+                          Gaps.h8,
                           Row(
                             children: [
                               Icon(mapIcon,
@@ -311,7 +311,7 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
                               ),
                             ],
                           ),
-                          Gaps.h15,
+                          Gaps.h12,
                           Padding(
                             padding: const EdgeInsets.only(bottom: 0),
                             child: RoomDetailsTabs(

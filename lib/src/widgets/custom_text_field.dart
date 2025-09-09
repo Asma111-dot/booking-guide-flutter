@@ -42,12 +42,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
         labelStyle: TextStyle(
           fontSize: TFont.m14,
           fontWeight: FontWeight.bold,
-          color: colorScheme.primary,
+          color: colorScheme.secondary,
         ),
         floatingLabelStyle: TextStyle(
           fontSize: TFont.m14,
           fontWeight: FontWeight.w600,
-          color: colorScheme.primary,
+          color: colorScheme.secondary,
         ),
 
         filled: true,
@@ -66,7 +66,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         focusedBorder: OutlineInputBorder(
           borderRadius: Corners.md15,
           borderSide: BorderSide(
-            color: colorScheme.primary,
+            color: colorScheme.secondary,
             width: S.r(1.5),
           ),
         ),
@@ -75,7 +75,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ? IconButton(
           icon: Icon(
             _obscure ? invisibleIcon: visibleIcon,
-            color: colorScheme.primary,
+            color: colorScheme.secondary,
           ),
           onPressed: () => setState(() => _obscure = !_obscure),
         )
@@ -84,7 +84,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
       style: theme.textTheme.bodyMedium?.copyWith(
         fontFamily: 'Roboto',
-        fontSize: TFont.m14,
+        fontSize: TFont.l16,
         fontWeight: FontWeight.w500,
         color: colorScheme.onSurface,
       ),

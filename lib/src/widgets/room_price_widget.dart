@@ -31,7 +31,7 @@ class RoomPriceWidget extends StatelessWidget {
     bool hasAppliedDiscounts = price.appliedDiscounts.isNotEmpty;
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: Insets.xs8),
+      margin: EdgeInsets.symmetric(vertical: Insets.xxs6),
       padding: EdgeInsets.all(Insets.m16),
       decoration: BoxDecoration(
         color: colorScheme.surface,
@@ -101,7 +101,7 @@ class RoomPriceWidget extends StatelessWidget {
                     fontSize: TFont.m14,
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.bold,
-                    color: Colors.red,
+                    color: colorScheme.tertiary,
                   ),
                 ),
               ] else ...[
@@ -111,7 +111,7 @@ class RoomPriceWidget extends StatelessWidget {
                     fontSize: TFont.m14,
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.bold,
-                    color: colorScheme.primary,
+                    color: colorScheme.tertiary,
                   ),
                 ),
               ],
@@ -134,7 +134,7 @@ class RoomPriceWidget extends StatelessWidget {
                     style: TextStyle(
                       fontSize: TFont.s12,
                       fontWeight: FontWeight.w500,
-                      color: colorScheme.primary,
+                      color: colorScheme.secondary,
                     ),
                   ),
                 ],
@@ -153,7 +153,7 @@ class RoomPriceWidget extends StatelessWidget {
                           style: TextStyle(
                             fontSize: TFont.m14,
                             fontWeight: FontWeight.w600,
-                            color: colorScheme.onSurface,
+                            color: colorScheme.tertiary,
                           ),
                         ),
                       ),
@@ -179,8 +179,12 @@ class RoomPriceWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Gaps.h12
+                  Gaps.h8
                 ],
+                const Divider(
+                  thickness: 1,
+                ),
+                Gaps.h8,
 
                 // الحجم + السعة (كل واحد في سطر)
                 Align(
@@ -201,14 +205,17 @@ class RoomPriceWidget extends StatelessWidget {
                                   fontSize: TFont.m14,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'Roboto',
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      Gaps.h12,
+                      Gaps.h8,
+                      const Divider(
+                        thickness: 1,
+                      ),
+                      Gaps.h8,
                       if (price.capacity > 0)
                         Row(
                           mainAxisSize: MainAxisSize.min,
@@ -220,12 +227,16 @@ class RoomPriceWidget extends StatelessWidget {
                                 fontSize: TFont.m14,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'Roboto',
-                                color: Theme.of(context).colorScheme.onSurface,
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                             ),
                           ],
                         ),
-                      Gaps.h12,
+                      Gaps.h8,
+                      const Divider(
+                        thickness: 1,
+                      ),
+                      Gaps.h8,
                       if (price.deposit! > 0)
                         Row(
                           mainAxisSize: MainAxisSize.min,
@@ -237,19 +248,21 @@ class RoomPriceWidget extends StatelessWidget {
                                 fontSize: TFont.m14,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'Roboto',
-                                color: Theme.of(context).colorScheme.onSurface,
+                                color: Theme.of(context).colorScheme.tertiary,
                               ),
                             ),
                           ],
                         ),
-                      Gaps.h12
                     ],
                   ),
                 ),
-
+                Gaps.h8,
+                const Divider(
+                  thickness: 1,
+                ),
+                Gaps.h8,
                 // amenities
                 if (price.amenities.isNotEmpty) ...[
-                  Gaps.h12,
                   Align(
                     alignment: AlignmentDirectional.centerStart,
                     child: Text(
@@ -257,11 +270,11 @@ class RoomPriceWidget extends StatelessWidget {
                       style: TextStyle(
                         fontSize: TFont.l16,
                         fontWeight: FontWeight.bold,
-                        color: CustomTheme.color3,
+                        color: CustomTheme.color2,
                       ),
                     ),
                   ),
-                  // const SizedBox(height: 8),
+                  Gaps.h8,
                   Align(
                     alignment: AlignmentDirectional.centerStart,
                     child: Wrap(
@@ -306,7 +319,11 @@ class RoomPriceWidget extends StatelessWidget {
                     ),
                   ),
                 ],
-                Gaps.h15,
+                Gaps.h8,
+                const Divider(
+                  thickness: 1,
+                ),
+                Gaps.h8,
                 // معرض الوسائط (صور + فيديو)
                 if (price.media.isNotEmpty) ...[
                   ClipRRect(
@@ -332,13 +349,14 @@ class RoomPriceWidget extends StatelessWidget {
                 crossAxisAlignment: WrapCrossAlignment.center,
                 spacing: S.w(6),
                 children: [
-                  Icon(localOfferIcon, color: Colors.green, size: Sizes.iconS16),
+                  Icon(localOfferIcon,
+                      color: CustomTheme.color3, size: Sizes.iconS16),
                   Text(
                     trans().show_discount_details,
                     style: TextStyle(
                       fontSize: TFont.s12,
                       fontWeight: FontWeight.w500,
-                      color: colorScheme.primary,
+                      color: colorScheme.onTertiary,
                     ),
                   ),
                 ],
@@ -354,17 +372,18 @@ class RoomPriceWidget extends StatelessWidget {
                   child: Row(
                     children: [
                       Gaps.w4,
-                      Icon(rightArrowIcon, size: Sizes.iconS16, color: Colors.grey),
+                      Icon(rightArrowIcon,
+                          size: Sizes.iconS16,
+                          color: CustomTheme.color3),
                       Gaps.w4,
                       Expanded(
                         child: Text(
                           "${discount['name']} ($type: $value)",
                           style: TextStyle(
-                            fontSize: TFont.s12,
-                            color: colorScheme.onSurface.withOpacity(0.7),
-                          ),
+                              fontSize: TFont.s12,
+                              color: CustomTheme.primaryColor),
                           overflow: TextOverflow.clip,
-                          maxLines: 2,
+                          maxLines: 4,
                           softWrap: true,
                         ),
                       ),

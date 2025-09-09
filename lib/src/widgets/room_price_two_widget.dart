@@ -38,7 +38,7 @@ class RoomPriceWidget extends StatelessWidget {
           gradient: isSelected ? CustomTheme.primaryGradient : null,
           color: isSelected ? null : colorScheme.surface,
           borderRadius: BorderRadius.circular(S.r(10)),
-          border: Border.all(color: colorScheme.primary),
+          border: Border.all(color: colorScheme.tertiary),
           boxShadow: [
             BoxShadow(
               color: colorScheme.shadow.withOpacity(0.1),
@@ -79,7 +79,7 @@ class RoomPriceWidget extends StatelessWidget {
   Widget _buildRow(BuildContext context, IconData icon, String text) {
     final colorScheme = Theme.of(context).colorScheme;
     final textColor = isSelected ? Colors.white : colorScheme.onSurface;
-    final iconColor = isSelected ? Colors.white : colorScheme.primary;
+    final iconColor = isSelected ? colorScheme.tertiary : colorScheme.secondary;
 
     return Row(
       children: [
@@ -105,7 +105,7 @@ class RoomPriceWidget extends StatelessWidget {
   Widget _buildPriceRow(BuildContext context, IconData icon, double original, double discounted, String unit, {String prefix = ""}) {
     final colorScheme = Theme.of(context).colorScheme;
     final textColor = isSelected ? Colors.white : colorScheme.onSurface;
-    final iconColor = isSelected ? Colors.white : colorScheme.primary;
+    final iconColor = isSelected ? colorScheme.tertiary : colorScheme.secondary;
 
     final bool hasDiscount = discounted < original;
 

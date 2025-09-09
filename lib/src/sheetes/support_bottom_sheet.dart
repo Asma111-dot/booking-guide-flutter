@@ -80,8 +80,8 @@ class SupportBottomSheet extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
-        splashColor: colorScheme.primary.withOpacity(0.1),
-        highlightColor: colorScheme.primary.withOpacity(0.05),
+        splashColor: colorScheme.secondary.withOpacity(0.1),
+        highlightColor: colorScheme.secondary.withOpacity(0.05),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           decoration: BoxDecoration(
@@ -99,7 +99,7 @@ class SupportBottomSheet extends StatelessWidget {
                   fontFamily: 'Roboto',
                 ),
               ),
-              Icon(icon, color: colorScheme.primary),
+              Icon(icon, color: colorScheme.secondary),
             ],
           ),
         ),

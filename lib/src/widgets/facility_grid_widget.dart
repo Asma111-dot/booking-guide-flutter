@@ -9,6 +9,7 @@ import '../storage/auth_storage.dart';
 import '../utils/assets.dart';
 import '../utils/routes.dart';
 import '../utils/sizes.dart';
+import '../utils/theme.dart';
 import 'shimmer_image_placeholder.dart';
 
 class FacilityGridWidget extends ConsumerWidget {
@@ -138,6 +139,7 @@ class FacilityGridWidget extends ConsumerWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: TFont.m14,
+                        color: CustomTheme.color2,
                       ),
                     ),
                     Gaps.h4,

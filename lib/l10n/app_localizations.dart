@@ -680,13 +680,13 @@ abstract class AppLocalizations {
   /// No description provided for @read_terms_before_booking.
   ///
   /// In en, this message translates to:
-  /// **'Before you book… read these terms'**
+  /// **'Facility Policies'**
   String get read_terms_before_booking;
 
   /// No description provided for @insurance_coverage_question.
   ///
   /// In en, this message translates to:
-  /// **'What does the insurance cover?'**
+  /// **'Property Insurance'**
   String get insurance_coverage_question;
 
   /// No description provided for @available_spaces.
@@ -722,7 +722,7 @@ abstract class AppLocalizations {
   /// No description provided for @availabilityCalendar.
   ///
   /// In en, this message translates to:
-  /// **'List bookings'**
+  /// **'Choose Package & Date'**
   String get availabilityCalendar;
 
   /// No description provided for @selectDateAndPrice.
@@ -1778,8 +1778,14 @@ abstract class AppLocalizations {
   /// No description provided for @filter_and_search_facilities.
   ///
   /// In en, this message translates to:
-  /// **'Filter & Search Facilities'**
+  /// **'Filter & Search'**
   String get filter_and_search_facilities;
+
+  /// No description provided for @privacy_policy.
+  ///
+  /// In en, this message translates to:
+  /// **'📌 Hajoozaty App | My Booking\n\nAt \"Hajoozaty\", we care about your privacy and are committed to protecting your personal information.\nThis policy explains how we collect, use, and safeguard your data when using our services for booking chalets, hotels, or event halls.\n\n━━━━━━━━━━━━━━━━━━\n🔹 Information We Collect:\n- Full name\n- Phone number\n- Email address\n- Booking details (facility type, date, time, number of guests)\n- Payment details (such as deposit proof or total amount)\n- Interaction data with the app (favorites, reviews, ratings)\n\n━━━━━━━━━━━━━━━━━━\n🔹 How We Use This Information:\n- To allow you to browse facilities (hotels, chalets, halls) and check available booking times\n- To confirm and manage your bookings smoothly\n- To send booking notifications (confirmation, or cancellation)\n- To provide secure payment options, including partial payment (deposit) or full payment\n- To improve user experience and personalize offers according to your interests\n- To provide fast technical support when needed\n\n━━━━━━━━━━━━━━━━━━\n🔹 Data Protection:\n- Your data is stored on secure servers following the highest security standards\n- We do not share your information with any third party (unless required by payment providers or law)\n- We use encryption technologies and regular updates to protect information from unauthorized access\n\n━━━━━━━━━━━━━━━━━━\n🔹 User Rights:\n- You can edit or delete your personal information at any time\n- You have the right to delete your account and request complete removal of your data\n- You can manage your notifications and preferences from account settings\n\n━━━━━━━━━━━━━━━━━━\n🔹 Acceptance:\nBy using \"Hajoozaty\", you agree to all the terms stated in this policy.\nWe may update this policy from time to time, and you will be notified of any important changes within the app.\n\n📩 For any privacy-related inquiries or requests, you can contact us through the support page inside the app or by email.\n\nWe value your trust ❤️ and continuously strive to provide a safe and convenient booking experience.'**
+  String get privacy_policy;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -84,17 +84,18 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
         view: DateRangePickerView.month,
         showNavigationArrow: true,
         showTodayButton: false,
-        todayHighlightColor: CustomTheme.color2,
-        selectionColor: CustomTheme.color2,
+        todayHighlightColor: CustomTheme.color3,
+        selectionColor: CustomTheme.color3,
         rangeSelectionColor: CustomTheme.color2.withOpacity(0.3),
-        startRangeSelectionColor: CustomTheme.color2,
-        endRangeSelectionColor: CustomTheme.color2,
+        startRangeSelectionColor: CustomTheme.color3,
+        endRangeSelectionColor: CustomTheme.color3,
         selectionTextStyle: TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
         rangeTextStyle: TextStyle(
-          color: Colors.white,
+          color: CustomTheme.color3,
+          fontWeight: FontWeight.bold,
         ),
 
         onSelectionChanged: (args) {
@@ -138,11 +139,13 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
         monthCellStyle: DateRangePickerMonthCellStyle(
           blackoutDateTextStyle: TextStyle(
             color: Colors.grey,
+            fontWeight: FontWeight.bold,
+
             decoration: TextDecoration.combine([
               TextDecoration.lineThrough,
               TextDecoration.lineThrough,
             ]),
-            decorationColor: Colors.red,
+            decorationColor: CustomTheme.color4,
             decorationThickness: 3,
           ),
 

@@ -14,8 +14,8 @@ class RoomAmenitiesTab extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: EdgeInsets.symmetric(
-        vertical: S.h(8),
-        horizontal: 0,
+        vertical: S.h(15),
+        horizontal: S.w(4),
       ),
       child: SingleChildScrollView(
         child: Column(
@@ -40,7 +40,7 @@ class RoomAmenitiesTab extends StatelessWidget {
 
                 return Container(
                   padding: EdgeInsets.symmetric(
-                    horizontal: S.w(12),
+                    horizontal: S.w(15),
                     vertical: S.h(8),
                   ),
                   decoration: BoxDecoration(
@@ -64,7 +64,8 @@ class RoomAmenitiesTab extends StatelessWidget {
                 );
               }).toList(),
             ),
-            const Divider(thickness: 2,),
+            Gaps.h12,
+            const Divider(thickness: 1,),
             Gaps.h12,
             Text(
               trans().amenities_and_facilities,
@@ -83,7 +84,7 @@ class RoomAmenitiesTab extends StatelessWidget {
                 final icon = AmenityIconHelper.getAmenityIcon(a.name);
                 return Container(
                   padding: EdgeInsets.symmetric(
-                    horizontal: S.w(12),
+                    horizontal: S.w(15),
                     vertical: S.h(8),
                   ),
                   decoration: BoxDecoration(

@@ -100,22 +100,19 @@ class FavoriteWidget extends StatelessWidget {
                       horizontal: Insets.xs8,
                       vertical: S.h(4),
                     ),
-                    decoration: BoxDecoration(
-                      color: colorScheme.onSurface.withOpacity(0.4),
-                      borderRadius: Corners.sm8,
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(typeIcon,
-                            color: Colors.white, size: Sizes.iconS16),
-                        Gaps.w4,
-                        Text(
-                          typeLabel,
-                          style: TextStyle(
-                              color: Colors.white, fontSize: TFont.s12),
-                        ),
-                      ],
-                    ),
+
+                    // child: Row(
+                    //   children: [
+                    //     Icon(typeIcon,
+                    //         color: Colors.white, size: Sizes.iconS16),
+                    //     Gaps.w4,
+                    //     Text(
+                    //       typeLabel,
+                    //       style: TextStyle(
+                    //           color: Colors.white, fontSize: TFont.s12),
+                    //     ),
+                    //   ],
+                    // ),
                   ),
                 ),
               ],

@@ -146,7 +146,7 @@ class _PriceAndCalendarPageState
                   // العنوان والوصف
                   Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: Insets.l20, vertical: S.h(10)),
+                        horizontal: Insets.s12, vertical: S.h(10)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -173,7 +173,7 @@ class _PriceAndCalendarPageState
 
                   // قائمة الفترات بشكل أفقي مع Shimmer عند عدم توفر البيانات
                   SizedBox(
-                    height: S.h(210),
+                    height: S.h(200),
                     child: (data == null || data.isEmpty)
                         ? ListView.builder(
                       scrollDirection: Axis.horizontal,

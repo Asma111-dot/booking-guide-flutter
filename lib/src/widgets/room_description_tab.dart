@@ -32,8 +32,8 @@ class RoomDescriptionTab extends StatelessWidget {
     // final colorScheme = Theme.of(context).colorScheme;
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(
-        vertical: S.h(8),
-        horizontal: 0,
+        vertical: S.h(15),
+        horizontal: S.w(4),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,13 +47,14 @@ class RoomDescriptionTab extends StatelessWidget {
               color: CustomTheme.color2,
             ),
           ),
-          Gaps.h4,
+          Gaps.h8,
           AnimatedSize(
             duration: const Duration(milliseconds: 300),
             child: Text(
               facility.desc,
               style: TextStyle(
                 fontSize: TFont.s12,
+                color: CustomTheme.primaryColor,
               ),
               maxLines: showAboutFull ? null : 2,
               overflow:
@@ -72,8 +73,8 @@ class RoomDescriptionTab extends StatelessWidget {
                 ),
               ),
             ),
-
-          const Divider(thickness: 2),
+          Gaps.h4,
+          const Divider(thickness: 1),
           Gaps.h8,
 
           // السياسات
@@ -85,13 +86,14 @@ class RoomDescriptionTab extends StatelessWidget {
               color: CustomTheme.color2,
             ),
           ),
-          Gaps.h4,
+          Gaps.h8,
           AnimatedSize(
             duration: const Duration(milliseconds: 300),
             child: Text(
               room.type,
               style: TextStyle(
                 fontSize: TFont.s12,
+                color: CustomTheme.primaryColor,
               ),
               maxLines: showTypeFull ? null : 2,
               overflow:
@@ -110,8 +112,8 @@ class RoomDescriptionTab extends StatelessWidget {
                 ),
               ),
             ),
-
-          const Divider(thickness: 2),
+          Gaps.h4,
+          const Divider(thickness: 1),
           Gaps.h8,
 
           // التأمين
@@ -130,6 +132,7 @@ class RoomDescriptionTab extends StatelessWidget {
               room.desc,
               style:  TextStyle(
                 fontSize: TFont.s12,
+                color: CustomTheme.primaryColor,
               ),
               maxLines: showDescFull ? null : 2,
               overflow:

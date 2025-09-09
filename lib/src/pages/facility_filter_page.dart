@@ -49,12 +49,10 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
   void initState() {
     super.initState();
 
-    // استخدم القيمة القادمة من الصفحة السابقة
     values[FacilityFilterType.facilityTypeId] = widget.initialFacilityTypeId;
 
     selectedFilter = FacilityFilterType.name;
 
-    // اجعل التاب مطابقًا للنوع (1->0, 2->1, 3->2)
     final initialIndex = (widget.initialFacilityTypeId - 1).clamp(0, 2);
     _tabController = TabController(length: 3, vsync: this, initialIndex: initialIndex);
 
@@ -172,7 +170,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
             ),
             TabBar(
               controller: _tabController,
-              indicatorColor: colorScheme.primary,
+              indicatorColor: colorScheme.tertiary,
               labelColor: colorScheme.secondary,
               unselectedLabelColor: colorScheme.onSurface.withOpacity(0.4),
               dividerColor: Colors.transparent,

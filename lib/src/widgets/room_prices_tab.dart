@@ -15,7 +15,7 @@ class RoomPricesTab extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: Insets.xs8, horizontal: 0),
+      padding: EdgeInsets.symmetric(vertical: Insets.s12, horizontal: S.w(4)),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -28,7 +28,7 @@ class RoomPricesTab extends StatelessWidget {
                         .toList(),
                   )
                 : Padding(
-              padding: EdgeInsets.symmetric(horizontal: Insets.m16),
+              padding: EdgeInsets.symmetric(horizontal: 0),
                     child: Center(
                       child: Text(
                         trans().priceNotAvailable,

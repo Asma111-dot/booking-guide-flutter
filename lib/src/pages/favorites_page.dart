@@ -60,7 +60,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesPage> {
           backgroundColor: Colors.transparent,
           iconTheme: const IconThemeData(color: Colors.black),
           bottom: TabBar(
-            indicatorColor: CustomTheme.color2,
+            indicatorColor: CustomTheme.color4,
             labelColor: CustomTheme.color3,
             unselectedLabelColor: Colors.grey,
             dividerColor: Colors.transparent,
