@@ -73,7 +73,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               fontSize: TFont.m14,
                             ),
                             decoration: InputDecoration(
-                              prefixIcon: Icon(callIcon, color: colorScheme.primary),
+                              prefixIcon: Icon(callIcon, color: colorScheme.secondary),
                               prefix:  Directionality(
                                 textDirection: TextDirection.ltr,
                                 child: Text(
@@ -86,7 +86,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               ),
                               labelText: trans().phone_number,
                               labelStyle: theme.textTheme.bodyMedium?.copyWith(
-                                color: colorScheme.onSurface.withOpacity(0.7),
+                                color: colorScheme.primary.withOpacity(0.7),
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: Corners.sm8,
