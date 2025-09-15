@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:234388177714:android:dc129a7720e1745c4a8d2b",
+        "android_client_info": {
+          "package_name": "com.mybooking.bookingguide"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVLvqNR87i3fBcCm1OKG4RUID5lINoMy8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:234388177714:android:c0affdbb84e82a674a8d2b",
         "android_client_info": {
           "package_name": "com.mybooking.mybooking"

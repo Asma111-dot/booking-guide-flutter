@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helpers/general_helper.dart';
@@ -19,6 +20,7 @@ class LoginPage extends ConsumerStatefulWidget {
 class _LoginPageState extends ConsumerState<LoginPage> {
   final GlobalKey<FormState> loginKey = GlobalKey<FormState>();
   bool autoValidate = false;
+  bool isGoogleReviewMode = false; // false دائمًا للمستخدم العادي
 
   @override
   Widget build(BuildContext context) {
@@ -139,45 +141,113 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   ? MediaQuery.of(context).viewInsets.bottom
                   : 16,
             ),
-            child: Hero(
-              tag: 'login',
-              child: Button(
-                width: double.infinity,
-                title: trans().login,
-                disable: login.isLoading(),
-                icon: Icon(loginIcon, color: colorScheme.onPrimary),
-                iconAfterText: true,
-                onPressed: () async {
-                  final phone = ref.read(phoneProvider);
-                  if (phone.length != 9 || !phone.startsWith('7')) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("الرجاء إدخال رقم هاتف صحيح مكون من 9 أرقام ويبدأ بـ 7"),
-                      ),
-                    );
-                    return;
-                  }
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Hero(
+                  tag: 'login',
+                  child: Button(
+                    width: double.infinity,
+                    title: trans().login,
+                    disable: login.isLoading(),
+                    icon: Icon(loginIcon, color: colorScheme.onPrimary),
+                    iconAfterText: true,
+                    onPressed: () async {
+                      final phone = ref.read(phoneProvider);
+                      if (phone.length != 9 || !phone.startsWith('7')) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                "الرجاء إدخال رقم هاتف صحيح مكون من 9 أرقام ويبدأ بـ 7"),
+                          ),
+                        );
+                        return;
+                      }
 
-                  if (loginKey.currentState!.validate()) {
-                    FocusManager.instance.primaryFocus?.unfocus();
-                    loginKey.currentState!.save();
+                      if (loginKey.currentState!.validate()) {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        loginKey.currentState!.save();
 
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (_) => const OtpVerifySheet(),
-                    );
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (_) => const OtpVerifySheet(),
+                        );
 
-                    await ref.read(loginProvider.notifier).requestOtp();
-                  }
+                        await ref.read(loginProvider.notifier).requestOtp();
+                      }
 
-                  setState(() => autoValidate = true);
-                },
-              ),
+                      setState(() => autoValidate = true);
+                    },
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                // زر تسجيل الدخول التجريبي للمراجعة فقط
+                Visibility(
+                  visible: isGoogleReviewMode, // يظهر فقط أثناء التجربة أو المراجعة
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await ref.read(loginProvider.notifier).loginWithTestAccount();
+                    },
+                    child: const Text('Login with Test Account'),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
+
+        // bottomNavigationBar: SafeArea(
+        //   child: Padding(
+        //     padding: EdgeInsets.only(
+        //       left: 16,
+        //       right: 16,
+        //       bottom: MediaQuery.of(context).viewInsets.bottom > 0
+        //           ? MediaQuery.of(context).viewInsets.bottom
+        //           : 16,
+        //     ),
+        //     child: Hero(
+        //       tag: 'login',
+        //       child: Button(
+        //         width: double.infinity,
+        //         title: trans().login,
+        //         disable: login.isLoading(),
+        //         icon: Icon(loginIcon, color: colorScheme.onPrimary),
+        //         iconAfterText: true,
+        //         onPressed: () async {
+        //           final phone = ref.read(phoneProvider);
+        //           if (phone.length != 9 || !phone.startsWith('7')) {
+        //             ScaffoldMessenger.of(context).showSnackBar(
+        //               const SnackBar(
+        //                 content: Text("الرجاء إدخال رقم هاتف صحيح مكون من 9 أرقام ويبدأ بـ 7"),
+        //               ),
+        //             );
+        //             return;
+        //           }
+        //
+        //           if (loginKey.currentState!.validate()) {
+        //             FocusManager.instance.primaryFocus?.unfocus();
+        //             loginKey.currentState!.save();
+        //
+        //             showModalBottomSheet(
+        //               context: context,
+        //               isScrollControlled: true,
+        //               backgroundColor: Colors.transparent,
+        //               builder: (_) => const OtpVerifySheet(),
+        //             );
+        //
+        //             await ref.read(loginProvider.notifier).requestOtp();
+        //           }
+        //
+        //           setState(() => autoValidate = true);
+        //         },
+        //       ),
+        //     ),
+        //   ),
+        // ),
       ),
     );
   }

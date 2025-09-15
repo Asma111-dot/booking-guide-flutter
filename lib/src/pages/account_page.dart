@@ -98,7 +98,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                         ),
                         Gaps.h8,
                         Text(
-                          user?.email ?? "user@mybooking.com",
+                          user?.email ?? "user@bookingguide.com",
                           style: TextStyle(
                             fontSize: TFont.s12,
                             fontFamily: 'Roboto',
@@ -253,7 +253,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       TextButton.icon(
                         onPressed: () async {
                           final shareText =
-                              '${trans().share_app_message}📲 https://play.google.com/store/apps/details?id=com.mybooking';
+                              '${trans().share_app_message}📲 https://play.google.com/store/apps/details?id=com.bookingguide';
                           await Share.share(
                             shareText,
                             subject: trans().share_subject,

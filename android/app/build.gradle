@@ -12,12 +12,12 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.mybooking.mybooking"
+    namespace "com.mybooking.bookingguide"
     compileSdk flutter.compileSdkVersion
     ndkVersion "25.1.8937393"
 
     defaultConfig {
-        applicationId "com.mybooking.mybooking"
+        applicationId "com.mybooking.bookingguide"
         minSdk flutter.minSdkVersion
         targetSdk flutter.targetSdkVersion
         versionCode flutter.versionCode

@@ -1,5 +1,6 @@
 import 'dart:io';
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -149,6 +150,49 @@ class Login extends _$Login {
       ),
           (r) => false,
     );
+  }
+
+  Future<bool> loginWithTestAccount() async {
+    const email = 'bookingguide999@gmail.com';
+    const password = 'asma1234';
+
+    final url = Uri.parse('https://bookings-guide.com/api/test-login');
+
+    final response = await http.post(
+      url,
+      body: jsonEncode({
+        'email': email,
+        'password': password,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+
+      final userData = data['user'];
+      final token = data['access_token'];
+
+      if (userData != null && token != null) {
+        await setToken(token); // خزني التوكن
+        await ref.read(userProvider.notifier).saveUserLocally(model.User.fromJson(userData));
+        await setLoggedIn(true);
+        await setFirstTimeFalse();
+
+        // فتح الصفحة الرئيسية مباشرة
+        final navigator = navKey.currentState;
+        if (navigator != null) {
+          navigator.pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const NavigationMenu()),
+                (r) => false,
+          );
+        }
+        return true;
+      }
+    } else {
+      print('Test login error: ${response.body}');
+    }
+
+    return false;
   }
 
 }
