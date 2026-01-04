@@ -33,7 +33,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('🔔 رسالة واردة في الخلفية: ${message.notification?.title}');
 }
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

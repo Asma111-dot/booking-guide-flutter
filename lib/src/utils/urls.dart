@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 
-
 // String baseUrl = kDebugMode
 //     ? "http://${Platform.isIOS ? "localhost" : "10.0.2.2"}:8000/"
 //     : "https://bookings-guide.com/";
@@ -11,7 +10,7 @@ String baseUrl = kDebugMode
     ? "http://localhost:8000/" // إذا كان التطبيق يعمل على iOS
     // : "http://192.168.1.102:8000/") // 192.168.1.103إذا كان التطبيق يعمل على Android
     : "http://172.21.0.95:8000/") // إذا كان التطبيق يعمل على Android
-    : "https://bookings-guide.com/"; // إذا كان التطبيق في وضع الإنتاج
+    : "https://mybookingsguide.com/"; // إذا كان التطبيق في وضع الإنتاج
 
 String apiUrl = "${baseUrl}api/";
 
