@@ -67,29 +67,29 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             ),
                           ),
                           Gaps.h20,
+
                           TextFormField(
                             keyboardType: TextInputType.phone,
                             readOnly: login.isLoading(),
-                            style:  TextStyle(
+
+                            textDirection: TextDirection.ltr,
+                            textAlign: TextAlign.left,
+
+                            style: TextStyle(
                               fontFamily: 'Roboto',
                               fontSize: TFont.m14,
                             ),
+
                             decoration: InputDecoration(
-                              prefixIcon: Icon(callIcon, color: colorScheme.secondary),
-                              prefix:  Directionality(
-                                textDirection: TextDirection.ltr,
-                                child: Text(
-                                  '967 ',
-                                  style: TextStyle(
-                                    fontFamily: 'Roboto',
-                                    fontSize: TFont.m14,
-                                  ),
-                                ),
+                              suffixIcon: Icon(callIcon, color: colorScheme.secondary),
+
+                              suffixText: '967 ',
+                              suffixStyle: TextStyle(
+                                fontFamily: 'Roboto',
+                                fontSize: TFont.m14,
                               ),
+
                               labelText: trans().phone_number,
-                              labelStyle: theme.textTheme.bodyMedium?.copyWith(
-                                color: colorScheme.primary.withOpacity(0.7),
-                              ),
                               border: OutlineInputBorder(
                                 borderRadius: Corners.sm8,
                               ),
@@ -108,6 +108,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 ),
                               ),
                             ),
+
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return trans().phoneFieldIsRequired;
@@ -118,6 +119,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               }
                               return null;
                             },
+
                             onChanged: (value) {
                               final normalized = convertToEnglishNumbers(value);
                               ref.read(phoneProvider.notifier).state = normalized;
