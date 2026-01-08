@@ -11,58 +11,54 @@ export '../../enums/facility_targets.dart';
 
 part 'facility_provider.g.dart';
 
-@Riverpod(keepAlive: false)
+@Riverpod(keepAlive: true)
 class Facilities extends _$Facilities {
+  bool _fetched = false;
+  int? _lastFacilityTypeId;
+
   @override
   Response<List<Facility>> build(FacilityTarget target) =>
       const Response<List<Facility>>(data: []);
 
-  setData(Facility facility) {
-    state = state.copyWith();
-  }
+  Future<void> fetch({
+    required int facilityTypeId,
+    bool force = false,
+  }) async {
+    if (_fetched && !force && _lastFacilityTypeId == facilityTypeId) {
+      return;
+    }
 
-  Future fetch({required int facilityTypeId, int? userId}) async {
+    _lastFacilityTypeId = facilityTypeId;
     state = state.setLoading();
-    String url = getFacilitiesUrl(facilityTypeId: facilityTypeId);
-
 
     try {
-      await request<List<dynamic>>(
-        url: url,
+      final response = await request<List<dynamic>>(
+        url: getFacilitiesUrl(facilityTypeId: facilityTypeId),
         method: Method.get,
-      ).then((value) async {
+      );
 
-        List<Facility> facilities = Facility.fromJsonList(value.data ?? []);
+      List<Facility> facilities = Facility.fromJsonList(response.data ?? []);
 
-        if (target == FacilityTarget.hotels ||
-            target == FacilityTarget.chalets) {
-          facilities = facilities
-              .where((facility) => facility.facilityTypeId == facilityTypeId)
-              .toList();
-        } else if (target != FacilityTarget.all &&
-            target != FacilityTarget.maps) {
-          facilities = facilities
-              .where((facility) => facility.facilityTypeId == facilityTypeId)
-              .toList();
-        } else if (target == FacilityTarget.favorites) {
-          final favoritesState = ref.read(favoritesProvider);
-          final favoriteIds = favoritesState.data?.map((f) => f.id).toSet() ?? {};
+// filter حسب target
+      if (target == FacilityTarget.favorites) {
+        final favoritesState = ref.read(favoritesProvider);
+        final favoriteIds = favoritesState.data?.map((f) => f.id).toSet() ?? {};
 
+        facilities =
+            facilities.where((f) => favoriteIds.contains(f.id)).toList();
+      } else if (target != FacilityTarget.all &&
+          target != FacilityTarget.maps) {
+        facilities = facilities
+            .where((f) => f.facilityTypeId == facilityTypeId)
+            .toList();
+      }
 
-          facilities = facilities.where((facility) => favoriteIds.contains(facility.id)).toList();
-        } else if (target == FacilityTarget.filters) {
-        }
+      state = state.copyWith(data: facilities, meta: response.meta);
+      state = state.setLoaded();
 
-        state = Response<List<Facility>>(data: facilities, meta: value.meta).setLoaded();
-
-        // state = state.copyWith(data: facilities, meta: value.meta);
-        // state = state.setLoaded();
-      }).catchError((error) {
-        state = state.setError(error.toString());
-        print("❌ خطأ أثناء جلب البيانات: $error");
-      });
-    } catch (e, s) {
-      print("⚠️ استثناء أثناء الجلب: $e\n$s");
+      _fetched = true;
+    } catch (e) {
+      state = state.setError(e.toString());
     }
   }
 }

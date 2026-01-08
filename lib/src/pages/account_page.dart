@@ -197,7 +197,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                         subtitle: trans().promote_your_facility,
                         icon: showIcon,
                         onPressed: () async {
-                          final uri = Uri.parse('https://bookings-guide.com');
+                          final uri = Uri.parse('https://mybookingsguide.com');
 
                           final launchedExternally = await launchUrl(
                             uri,

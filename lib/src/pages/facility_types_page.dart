@@ -42,14 +42,16 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage>
       ref.read(userProvider.notifier).fetch();
       ref.read(discountsProvider.notifier).fetch();
       ref.read(notificationsProvider.notifier).fetch();
-
-      ref.listen(connectivityProvider, (prev, next) {
-        next.whenData((list) {
-          debugPrint('🔌 Connectivity changed: $list');
-        });
-      });
     });
   }
+
+  // ref.listen(connectivityProvider, (prev, next) {
+  //       next.whenData((list) {
+  //         debugPrint('🔌 Connectivity changed: $list');
+  //       });
+  //     });
+  //   });
+  // }
 
   @override
   void dispose() {

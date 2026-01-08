@@ -23,8 +23,25 @@ Box<T> box<T>(String name, [bool secure = true]) {
 /// Opens a box if closed
 Future<void> openBox<T>(String name, [bool secure = true]) async {
   if (!Hive.isBoxOpen(name)) {
-    await Hive.openBox<T>(name,
-        encryptionCipher: await _encrypt(secure ? name : null));
+    try {
+      await Hive.openBox<T>(
+        name,
+        encryptionCipher: await _encrypt(secure ? name : null),
+      );
+    } catch (e) {
+      // 🔥 في حال فشل فك التشفير (Release issue)
+      await Hive.deleteBoxFromDisk(name);
+
+      // حذف المفتاح القديم
+      const secureStorage = FlutterSecureStorage();
+      await secureStorage.delete(key: name);
+
+      // إعادة فتح الصندوق بمفتاح جديد
+      await Hive.openBox<T>(
+        name,
+        encryptionCipher: await _encrypt(secure ? name : null),
+      );
+    }
   }
 }
 

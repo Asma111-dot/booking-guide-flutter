@@ -7,19 +7,18 @@ import '../../utils/urls.dart';
 
 part 'reservations_provider.g.dart';
 
-@Riverpod(keepAlive: false)
+@Riverpod(keepAlive: true)
 class Reservations extends _$Reservations {
-  List<Map<String, String>> bookedDates = [];
+  bool _fetched = false;
 
   @override
-  Response<List<Reservation>> build() =>
-      const Response<List<Reservation>>(data: []);
-
-  setData(Reservation reservation) {
-    state = state.copyWith();
+  Response<List<Reservation>> build() {
+    return const Response<List<Reservation>>(data: []);
   }
 
-  Future fetch({required int userId, int? facilityId}) async {
+  Future<void> fetch({required int userId, int? facilityId, bool force = false}) async {
+    if (_fetched && !force) return; // ⛔ يمنع التكرار
+
     state = state.setLoading();
 
     try {
@@ -38,20 +37,24 @@ class Reservations extends _$Reservations {
       } else if (raw is List) {
         reservationsJson = raw;
       } else {
-        throw Exception(
-            "Invalid response format: Unable to parse reservations");
+        throw Exception("Invalid response format");
       }
 
-      final reservations = Reservation.fromJsonList(reservationsJson)
-          .where((reservation) => reservation.userId == userId)
-          .toList();
+      final reservations = Reservation.fromJsonList(reservationsJson);
 
       state = state.copyWith(data: reservations, meta: response.meta);
       state = state.setLoaded();
+
+      _fetched = true;
     } catch (e, s) {
-      print("❌ Error while fetching reservations: $e");
-      print("📌 Stacktrace: $s");
       state = state.setError(e.toString());
     }
   }
+
+  /// تحديث يدوي (Pull to refresh)
+  Future<void> refresh({required int userId, int? facilityId}) async {
+    _fetched = false;
+    await fetch(userId: userId, facilityId: facilityId, force: true);
+  }
 }
+

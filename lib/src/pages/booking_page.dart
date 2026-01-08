@@ -29,21 +29,23 @@ class BookingPage extends ConsumerStatefulWidget {
 }
 
 class _BookingPageState extends ConsumerState<BookingPage>
-    with SingleTickerProviderStateMixin {
-  bool _isLoading = true;
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
-    Future.microtask(() async {
-      setState(() => _isLoading = true);
-      await ref.read(reservationsProvider.notifier).fetch(userId: widget.userId);
-      setState(() => _isLoading = false);
+    Future.microtask(() {
+      ref.read(reservationsProvider.notifier)
+          .fetch(userId: widget.userId);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final reservationState = ref.watch(reservationsProvider);
     final textTheme = Theme.of(context).textTheme;
 
@@ -76,7 +78,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
             ],
           ),
         ),
-        body: _isLoading
+        body: reservationState.isLoading == true
             ? ListView.builder(
           padding: EdgeInsets.all(Insets.m16),
           itemCount: 5,
@@ -85,8 +87,10 @@ class _BookingPageState extends ConsumerState<BookingPage>
             : TabBarView(
           children: [
             _buildReservationList(reservationState.data, null),
-            _buildReservationList(reservationState.data, ReservationStatus.confirmed),
-            _buildReservationList(reservationState.data, ReservationStatus.cancelled),
+            _buildReservationList(
+                reservationState.data, ReservationStatus.confirmed),
+            _buildReservationList(
+                reservationState.data, ReservationStatus.cancelled),
           ],
         ),
       ),

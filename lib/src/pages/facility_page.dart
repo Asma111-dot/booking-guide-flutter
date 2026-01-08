@@ -27,9 +27,12 @@ class FacilityPage extends ConsumerStatefulWidget {
   ConsumerState createState() => _FacilityPageState();
 }
 
-class _FacilityPageState extends ConsumerState<FacilityPage> {
-  FacilityTarget currentTarget = FacilityTarget.hotels;
+class _FacilityPageState extends ConsumerState<FacilityPage>
+    with AutomaticKeepAliveClientMixin {
 
+  @override
+  bool get wantKeepAlive => true;
+  late FacilityTarget currentTarget;
   @override
   void initState() {
     super.initState();
@@ -62,20 +65,33 @@ class _FacilityPageState extends ConsumerState<FacilityPage> {
   @override
   void didUpdateWidget(covariant FacilityPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.facilityTypeId != oldWidget.facilityTypeId) {
-      Future.microtask(() {
-        ref
-            .read(facilitiesProvider(currentTarget).notifier)
-            .fetch(facilityTypeId: widget.facilityTypeId);
 
-        int? userId = currentUser()?.id;
-        ref.read(favoritesProvider.notifier).fetchFavorites(userId: userId!);
+    if (widget.facilityTypeId != oldWidget.facilityTypeId) {
+      // 🔹 تحديث target حسب النوع الجديد
+      switch (widget.facilityTypeId) {
+        case 1:
+          currentTarget = FacilityTarget.hotels;
+          break;
+        case 2:
+          currentTarget = FacilityTarget.chalets;
+          break;
+        default:
+          currentTarget = FacilityTarget.all;
+          break;
+      }
+
+      Future.microtask(() {
+        ref.read(facilitiesProvider(currentTarget).notifier).fetch(
+          facilityTypeId: widget.facilityTypeId,
+          force: true,
+        );
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final facilitiesState = ref.watch(facilitiesProvider(currentTarget));
     final isGrid = ref.watch(isGridProvider);
 
