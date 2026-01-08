@@ -6,7 +6,7 @@ part of 'facility_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$facilitiesHash() => r'184e6ff282b6c154196f7e3c30f3d1e42b5d75aa';
+String _$facilitiesHash() => r'3cb1c49a108c116f45868e1ea353e3407a8938ed';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,7 +30,7 @@ class _SystemHash {
 }
 
 abstract class _$Facilities
-    extends BuildlessAutoDisposeNotifier<Response<List<Facility>>> {
+    extends BuildlessNotifier<Response<List<Facility>>> {
   late final FacilityTarget target;
 
   Response<List<Facility>> build(
@@ -81,8 +81,8 @@ class FacilitiesFamily extends Family<Response<List<Facility>>> {
 }
 
 /// See also [Facilities].
-class FacilitiesProvider extends AutoDisposeNotifierProviderImpl<Facilities,
-    Response<List<Facility>>> {
+class FacilitiesProvider
+    extends NotifierProviderImpl<Facilities, Response<List<Facility>>> {
   /// See also [Facilities].
   FacilitiesProvider(
     FacilityTarget target,
@@ -138,7 +138,7 @@ class FacilitiesProvider extends AutoDisposeNotifierProviderImpl<Facilities,
   }
 
   @override
-  AutoDisposeNotifierProviderElement<Facilities, Response<List<Facility>>>
+  NotifierProviderElement<Facilities, Response<List<Facility>>>
       createElement() {
     return _FacilitiesProviderElement(this);
   }
@@ -159,14 +159,14 @@ class FacilitiesProvider extends AutoDisposeNotifierProviderImpl<Facilities,
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin FacilitiesRef
-    on AutoDisposeNotifierProviderRef<Response<List<Facility>>> {
+mixin FacilitiesRef on NotifierProviderRef<Response<List<Facility>>> {
   /// The parameter `target` of this provider.
   FacilityTarget get target;
 }
 
-class _FacilitiesProviderElement extends AutoDisposeNotifierProviderElement<
-    Facilities, Response<List<Facility>>> with FacilitiesRef {
+class _FacilitiesProviderElement
+    extends NotifierProviderElement<Facilities, Response<List<Facility>>>
+    with FacilitiesRef {
   _FacilitiesProviderElement(super.provider);
 
   @override
