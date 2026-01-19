@@ -24,7 +24,10 @@ class Facilities extends _$Facilities {
     required int facilityTypeId,
     bool force = false,
   }) async {
-    if (_fetched && !force && _lastFacilityTypeId == facilityTypeId) {
+    if (target != FacilityTarget.maps &&
+        _fetched &&
+        !force &&
+        _lastFacilityTypeId == facilityTypeId) {
       return;
     }
 
@@ -32,17 +35,26 @@ class Facilities extends _$Facilities {
     state = state.setLoading();
 
     try {
+      String url;
+
+      if (target == FacilityTarget.maps) {
+        url = getFacilitiesMapUrl(facilityTypeId: facilityTypeId);
+      } else {
+        url = getFacilitiesUrl(facilityTypeId: facilityTypeId);
+      }
+
       final response = await request<List<dynamic>>(
-        url: getFacilitiesUrl(facilityTypeId: facilityTypeId),
+        url: url,
         method: Method.get,
       );
 
       List<Facility> facilities = Facility.fromJsonList(response.data ?? []);
 
-// filter حسب target
+      // filter حسب target
       if (target == FacilityTarget.favorites) {
         final favoritesState = ref.read(favoritesProvider);
-        final favoriteIds = favoritesState.data?.map((f) => f.id).toSet() ?? {};
+        final favoriteIds =
+            favoritesState.data?.map((f) => f.id).toSet() ?? {};
 
         facilities =
             facilities.where((f) => favoriteIds.contains(f.id)).toList();

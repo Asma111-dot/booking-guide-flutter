@@ -27,6 +27,7 @@ class _MapPageState extends ConsumerState<MapPage> {
   final CustomInfoWindowController _customInfoWindowController = CustomInfoWindowController();
   int? selectedMarkerId;
   List<f.Facility> _lastFacilities = const [];
+  bool _movedOnce = false;
 
   getProvider() => facilitiesProvider(FacilityTarget.maps);
 
@@ -36,7 +37,17 @@ class _MapPageState extends ConsumerState<MapPage> {
 
 
     Future.microtask(() {
-      ref.read(getProvider().notifier).fetch(facilityTypeId: widget.facilityTypeId);
+      ref.read(getProvider().notifier)
+          .fetch(
+        facilityTypeId: 0,
+        force: true,
+      );
+
+      // fetch(
+      //   facilityTypeId: widget.facilityTypeId,
+      //   force: true,
+      // );
+
     });
   }
 
@@ -221,8 +232,8 @@ class _MapPageState extends ConsumerState<MapPage> {
               forceShowLoaded: facilitiesState.data != null,
               onLoaded: (data) {
                 _lastFacilities = data;
-                final theme = Theme.of(context);
-                final colorScheme = theme.colorScheme;
+                // final theme = Theme.of(context);
+                // final colorScheme = theme.colorScheme;
                 // final isDark = theme.brightness == Brightness.dark;
                 final Set<Marker> markers = data.map((facility) {
                   final bool isSelected = selectedMarkerId == facility.id;
@@ -250,8 +261,12 @@ class _MapPageState extends ConsumerState<MapPage> {
                   );
                 }).toSet();
 
-                if (data.isNotEmpty) {
+                // if (data.isNotEmpty) {
+                //   moveToLocation(data);
+                // }
+                if (data.isNotEmpty && !_movedOnce) {
                   moveToLocation(data);
+                  _movedOnce = true;
                 }
 
                 return Stack(

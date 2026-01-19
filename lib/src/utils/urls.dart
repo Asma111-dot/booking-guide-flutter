@@ -69,6 +69,15 @@ String searchFacilitiesUrl(Map<String, String> filters) {
 }
 // String searchFacilitiesUrl() => "${apiUrl}facilities/search";
 
+// URLs Facility Map
+String getFacilitiesMapUrl({int? facilityTypeId}) {
+  String url = "${apiUrl}facilities/map";
+  if (facilityTypeId != null) {
+    url += "?facility_type_id=$facilityTypeId";
+  }
+  return url;
+}
+
 //Urls Room
 String getRoomUrl({required int roomId}) => "${apiUrl}rooms/$roomId";
 
