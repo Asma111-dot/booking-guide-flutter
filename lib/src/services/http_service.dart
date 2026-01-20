@@ -10,12 +10,10 @@ import 'app_service.dart';
 
 class HttpService {
 
-  // Singleton pattern instance
   static final HttpService _httpService = HttpService._internal();
   HttpService._internal();
   static HttpService get instance => _httpService;
 
-  // Members
   static Dio? _dio;
   Dio get dio {
     if(_dio != null) return _dio!;
@@ -63,20 +61,10 @@ class HttpService {
     return dio;
   }
 
-  // Call it on first request
   Future setDefaultHeaders() async {
-    String? firebaseToken;
-
-    try {
-      // NotificationService.token().then((value) {
-      //   firebaseToken = value;
-      //   debugPrint('FirebaseToken: $firebaseToken');
-      // });
-    } catch (e) {}
 
     final device = await deviceInfo();
     final package = await packageInfo();
-    // final signature = await SmsAutoFill().getAppSignature;
 
     dio.interceptors.addAll([
       InterceptorsWrapper(

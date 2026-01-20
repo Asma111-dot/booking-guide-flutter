@@ -1,4 +1,4 @@
-import 'dart:io';// تحديد هل االنظام  يعمل عليه التطبيق (Android أو iOS).
+import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -7,7 +7,7 @@ import 'package:open_store/open_store.dart';
 
 Future<void> openStore() async{
   await OpenStore.instance.open(
-    androidAppBundleId: ''// name in app store
+    androidAppBundleId: 'My Booking'// name in app store
   );
 }
 

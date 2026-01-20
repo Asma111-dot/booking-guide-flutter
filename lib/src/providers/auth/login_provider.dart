@@ -31,7 +31,7 @@ class Login extends _$Login {
     final fullPhone = "967$phone";
     final response = await request<Map>(
       url: otpRequestUrl(),
-      method: Method.get,
+      method: Method.post,
       body: {"phone": fullPhone},
     );
 
@@ -54,7 +54,7 @@ class Login extends _$Login {
 
     final value = await request<model.User>(
       url: otpVerifyUrl(),
-      method: Method.get,
+      method: Method.post,
       body: body,
     );
 
