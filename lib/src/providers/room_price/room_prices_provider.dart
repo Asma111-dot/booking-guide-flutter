@@ -20,26 +20,31 @@ class RoomPrices extends _$RoomPrices {
   Future fetch({
     required int roomId,
   }) async {
+
     state = state.setLoading();
 
     try {
-      await request<List<dynamic>>(
+
+      final value = await request<List<dynamic>>(
         url: getRoomPricesUrl(roomId: roomId),
         method: Method.get,
-      ).then((value) async {
-        List<RoomPrice> roomPrices = RoomPrice.fromJsonList(value.data ?? [])
-            .where((roomPrice) => roomPrice.roomId == roomId)
-            .toList();
+      );
 
-        state = state.copyWith(data: roomPrices, meta: value.meta);
-        state = state.setLoaded();
-      }).catchError((error) {
-        state = state.setError(error.toString());
-        print(error);
-      });
-    } catch (e, s) {
-      print("error test $e");
-      print(s);
+      final List<RoomPrice> roomPrices =
+      RoomPrice.fromJsonList(value.data ?? []);
+
+      state = state.copyWith(
+        data: roomPrices,
+        meta: value.meta,
+      );
+
+      state = state.setLoaded();
+
+    } catch (error) {
+
+      state = state.setError(error.toString());
+      print(error);
+
     }
   }
 }

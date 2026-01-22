@@ -39,11 +39,15 @@ class _PriceAndCalendarPageState
 
   String norm(String s) {
     final t = s.trim().toLowerCase();
+
     if (t.contains('صباح')) return 'صباحية';
-    if (t.contains('مسائ') || t.contains('مساء')) return 'مسائية';
-    if (t.contains('كامل')) return 'كامل';
-    return 'غير محددة';
+    if (t.contains('مساء')) return 'مسائية';
+    if (t.contains('كامل')) return 'يوم كامل';
+    if (t.contains('نصف')) return 'نصف يوم';
+
+    return t;
   }
+
 
   @override
   void initState() {
@@ -54,12 +58,15 @@ class _PriceAndCalendarPageState
   }
 
   void _fetchRoomPrices() async {
-    await ref.read(roomPricesProvider.notifier).fetch(roomId: widget.roomId);
+    await ref
+        .read(roomPricesProvider.notifier)
+        .fetch(roomId: widget.roomId);
 
-    final roomPrices = ref.read(roomPricesProvider).data;
     setState(() {
       selectedPrice = null;
       events = {};
+      rangeStart = null;
+      rangeEnd = null;
     });
   }
 
@@ -69,9 +76,7 @@ class _PriceAndCalendarPageState
   }) {
     final Map<DateTime, List<dynamic>> tempEvents = {};
 
-    // حجوزات الداتابيز اللي جاية مع الـ RoomPrice نفسه
     for (var reservation in selectedPrice.reservations) {
-      if (reservation.status != 'confirmed') continue;
 
       final checkInDate  = DateTime.parse(reservation.checkInDate.toString());
       final checkOutDate = DateTime.parse(reservation.checkOutDate.toString());
@@ -88,8 +93,7 @@ class _PriceAndCalendarPageState
       }
     }
 
-    // التواريخ القادمة من API (الآن دمجنا Google + DB في السيرفر)
-    final selectedPeriod = norm(selectedPrice.period.toString() ?? '');
+    final selectedPeriod = norm(selectedPrice.period.toString());
 
     for (final item in bookedDates) {
       final rawDate   = item['date'];
@@ -99,10 +103,8 @@ class _PriceAndCalendarPageState
       final parsed = DateTime.parse(rawDate.toString());
       final date   = DateTime(parsed.year, parsed.month, parsed.day);
 
-      // 👇 طابق الفترات بعد التطبيع
       final period = norm(rawPeriod?.toString() ?? '');
       if (period == selectedPeriod) {
-        // منع التكرار
         final list = tempEvents[date] ?? [];
         final already = list.any((e) =>
         e is Map && e['type'] == 'google' && (e['label']?.toString().contains(period) ?? false));
@@ -121,7 +123,6 @@ class _PriceAndCalendarPageState
   @override
   Widget build(BuildContext context) {
     final roomPriceState = ref.watch(roomPricesProvider);
-    final bookedDates = ref.watch(bookedDatesFromGoogleCalendarProvider);
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -143,7 +144,6 @@ class _PriceAndCalendarPageState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // العنوان والوصف
                   Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: Insets.s12, vertical: S.h(10)),
@@ -171,10 +171,9 @@ class _PriceAndCalendarPageState
                     ),
                   ),
 
-                  // قائمة الفترات بشكل أفقي مع Shimmer عند عدم توفر البيانات
                   SizedBox(
                     height: S.h(200),
-                    child: (data == null || data.isEmpty)
+                    child: (data.isEmpty)
                         ? ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: 4,
@@ -206,28 +205,35 @@ class _PriceAndCalendarPageState
                                 selectedPrice = roomPrice;
                               });
 
-                              final facilityId =
-                                  roomPrice.room?.facility?.id ??
-                                      roomPrice.room?.facilityId;
-                              if (facilityId == null || facilityId == 0) return;
-
-                              await ref
-                                  .read(bookedDatesFromGoogleCalendarProvider.notifier)
-                                  .fetch(facilityId);
-
-                              final googleBookedDates =
-                              ref.read(bookedDatesFromGoogleCalendarProvider);
                               _populateEvents(
                                 selectedPrice: roomPrice,
-                                bookedDates: googleBookedDates,
+                                bookedDates: const [],
                               );
+
+                              final facilityId = roomPrice.facilityId;
+                              if (facilityId == null || facilityId == 0) return;
+
+                              try {
+                                await ref
+                                    .read(bookedDatesFromGoogleCalendarProvider.notifier)
+                                    .fetch(facilityId);
+
+                                final googleBookedDates =
+                                ref.read(bookedDatesFromGoogleCalendarProvider);
+
+                                _populateEvents(
+                                  selectedPrice: roomPrice,
+                                  bookedDates: googleBookedDates,
+                                );
+                              } catch (e) {
+                                debugPrint('Google dates error: $e');
+                              }
                             },
                           ),
                         );
                       },
                     ),
                   ),
-                  // نص توضيحي
                   Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: Insets.m16,
@@ -257,7 +263,6 @@ class _PriceAndCalendarPageState
                     ),
                   ),
 
-                  // تقويم الحجوزات
                   CustomCalendarWidget(
                     key: ValueKey(
                         '${selectedPrice?.id}-${DateTime.now().millisecondsSinceEpoch}'),
@@ -291,7 +296,6 @@ class _PriceAndCalendarPageState
             ),
           );
         },
-        // onLoading: () => const SizedBox.shrink(), // لا حاجة لعرض تحميل هنا
         onEmpty: () => Center(child: Text(trans().no_data)),
         showError: true,
         showEmpty: true,
@@ -304,7 +308,7 @@ class _PriceAndCalendarPageState
           icon: Icon(
             arrowForWordIcon,
             size: Sizes.iconM20,
-            color: theme.colorScheme.background,
+            color: theme.colorScheme.surface,
           ),
           iconAfterText: true,
           disable: (rangeStart == null ||

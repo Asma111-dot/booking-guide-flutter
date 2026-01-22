@@ -7,9 +7,9 @@ import 'package:flutter/foundation.dart';
 
 String baseUrl = kDebugMode
     ? (Platform.isIOS
-    ? "http://localhost:8000/" // إذا كان التطبيق يعمل على iOS
-    // : "http://192.168.1.102:8000/") // 192.168.1.103إذا كان التطبيق يعمل على Android
-    : "http://172.21.0.95:8000/") // إذا كان التطبيق يعمل على Android
+        ? "http://localhost:8000/" // إذا كان التطبيق يعمل على iOS
+// : "http://192.168.1.102:8000/") // 192.168.1.103إذا كان التطبيق يعمل على Android
+        : "http://172.21.0.95:8000/") // إذا كان التطبيق يعمل على Android
     : "https://mybookingsguide.com/"; // إذا كان التطبيق في وضع الإنتاج
 
 String apiUrl = "${baseUrl}api/";
@@ -31,7 +31,8 @@ String deleteUserUrl() => "${apiUrl}user/delete";
 
 // URLs OTP & Profile
 String otpRequestUrl() => "${apiUrl}auth/otp/request";
-String otpVerifyUrl()  => "${apiUrl}auth/otp/verify";
+
+String otpVerifyUrl() => "${apiUrl}auth/otp/verify";
 
 String completeProfileUrl() => "${apiUrl}complete-profile";
 
@@ -48,7 +49,6 @@ String completeProfileUrl() => "${apiUrl}complete-profile";
 //     "${apiUrl}facility-types/$facilityTypeId";
 
 String getFacilityTypesUrl() => "${apiUrl}facility-types";
-
 
 // URLs Facility
 String getFacilitiesUrl({int? facilityTypeId}) {
@@ -85,14 +85,15 @@ String getRoomsUrl({required int facilityId}) {
   return "${apiUrl}rooms?facility_id=$facilityId";
 }
 
-//Urls Room Price
+// Urls Room Price
 String getRoomPricesUrl({int? roomId}) {
   String url = "${apiUrl}room-prices";
   if (roomId != null) {
-    url += "?rooms=$roomId";
+    url += "?room_id=$roomId";
   }
   return url;
 }
+
 // String getRoomPricesUrl({required int roomPriceId}) {
 //   return "${apiUrl}room-prices/$roomPriceId";
 // }
@@ -105,24 +106,32 @@ String getReservationUrl({required int reservationId}) =>
 
 String getReservationsUrl({int? userId}) {
   String url = "${apiUrl}reservations";
-  if (userId != null){
+  if (userId != null) {
     url += "?user_id=$userId";
   }
   return url;
 }
 
 // URLs Date from google
-String getBookedDatesUrl(int facilityId) => "${apiUrl}facilities/$facilityId/booked-dates";
+String getBookedDatesUrl(int facilityId) =>
+    "${apiUrl}facilities/$facilityId/booked-dates";
 
 // Payments (عام) - عرض/حذف فقط حسب كنترولرك الحالي
 String getPaymentsUrl() => "${apiUrl}payments";
-String getPaymentUrl({required int paymentId}) => "${apiUrl}payments/$paymentId";
+
+String getPaymentUrl({required int paymentId}) =>
+    "${apiUrl}payments/$paymentId";
+
 String deletePaymentUrl(int paymentId) => "${apiUrl}payments/$paymentId";
 
 // Floosak
 String floosakInitiateUrl() => "${apiUrl}floosak-payment/initiate";
-String floosakConfirmUrl(int paymentId) => "${apiUrl}floosak-payment/$paymentId/confirm";
-String floosakRefundUrl(int paymentId)  => "${apiUrl}floosak-payment/$paymentId/refund";
+
+String floosakConfirmUrl(int paymentId) =>
+    "${apiUrl}floosak-payment/$paymentId/confirm";
+
+String floosakRefundUrl(int paymentId) =>
+    "${apiUrl}floosak-payment/$paymentId/refund";
 
 // =================== Jaib Payment URLs ===================
 
@@ -133,7 +142,6 @@ String jaibInitiatePaymentUrl() => "${apiUrl}jaib-payment/initiate";
 String jaibConfirmPaymentUrl() => "${apiUrl}jaib-payment/confirm";
 
 // =================== Jawali Payment URLs ===================
-
 
 // Initiate jawali Payment (Step 1)
 String jawaliInitiatePaymentUrl() => "${apiUrl}jawali-payment/initiate";
@@ -152,7 +160,7 @@ String pyesPurchasePaymentUrl() => "${apiUrl}pyes-payment/purchase";
 
 String pyesConfirmPaymentUrl() => "${apiUrl}pyes-payment/confirm";
 
- // =================== SabaCash Payment URLs ===================
+// =================== SabaCash Payment URLs ===================
 
 String sabaCashInitiatePaymentUrl() => "${apiUrl}saba-cash-payment/initiate";
 
@@ -160,9 +168,15 @@ String sabaCashConfirmPaymentUrl() => "${apiUrl}saba-cash-payment/confirm";
 
 // URLs Favorite
 String getFavoritesUrl({int? userId}) => '${apiUrl}users/$userId/favorites';
-String addFavoriteUrl(int userId, int facilityId) => '${apiUrl}users/$userId/favorites/$facilityId';
-String clearFavoritesUrl(int userId) => '${apiUrl}users/$userId/favorites/clear';
-String removeFavoriteUrl(int userId, int facilityId) => '${apiUrl}users/$userId/favorites/$facilityId';
+
+String addFavoriteUrl(int userId, int facilityId) =>
+    '${apiUrl}users/$userId/favorites/$facilityId';
+
+String clearFavoritesUrl(int userId) =>
+    '${apiUrl}users/$userId/favorites/clear';
+
+String removeFavoriteUrl(int userId, int facilityId) =>
+    '${apiUrl}users/$userId/favorites/$facilityId';
 
 // URLs Discounts
 String getDiscountUrl(int discountId) => "${apiUrl}discounts/$discountId";
@@ -177,4 +191,5 @@ String getDiscountsUrl() => "${apiUrl}discounts";
 
 // URLs Notifications
 String getNotificationsUrl() => "${apiUrl}notifications";
+
 String markAllNotificationsReadUrl() => "${apiUrl}notifications/mark-all-read";

@@ -16,6 +16,7 @@ class RoomPrice {
   String? title;
   String? description;
   int? size;
+  int? facilityId;
 
   double? finalPrice;
   double? finalDeposit;
@@ -48,11 +49,13 @@ class RoomPrice {
     this.title,
     this.description,
     this.size,
+    this.facilityId,
   });
 
   RoomPrice.init()
       : id = 0,
         roomId = 0,
+        facilityId = null,
         capacity = 0,
         price = 0.0,
         deposit = null,
@@ -62,7 +65,7 @@ class RoomPrice {
         timeTo = null,
         finalPrice = null,
         finalDeposit = null,
-      discount = null,
+        discount = null,
         appliedDiscounts = [],
         reservations = [],
         media = [],
@@ -76,6 +79,7 @@ class RoomPrice {
     return RoomPrice(
       id: int.tryParse(jsonMap['id']?.toString() ?? '') ?? 0,
       roomId: int.tryParse(jsonMap['room_id']?.toString() ?? '') ?? 0,
+      facilityId: int.tryParse(jsonMap['facility_id']?.toString() ?? ''),
       capacity: int.tryParse(jsonMap['capacity']?.toString() ?? '') ?? 0,
       price: double.tryParse(jsonMap['price']?.toString() ?? '0.0') ?? 0.0,
       deposit: double.tryParse(jsonMap['deposit']?.toString() ?? ''),
@@ -94,17 +98,18 @@ class RoomPrice {
           : null,
       appliedDiscounts: jsonMap['applied_discounts'] ?? [],
       reservations: (jsonMap['reservations'] is List)
-          ? List<Reservation>.from((jsonMap['reservations'] as List).map((item) => Reservation.fromJson(item)))
+          ? List<Reservation>.from((jsonMap['reservations'] as List)
+              .map((item) => Reservation.fromJson(item)))
           : [],
       media: (jsonMap['media'] is List)
-          ? List<Media>.from((jsonMap['media'] as List).map((item) => Media.fromJson(item)))
+          ? List<Media>.from(
+              (jsonMap['media'] as List).map((item) => Media.fromJson(item)))
           : [],
       amenities: (jsonMap['amenities'] is List)
-          ? List<Amenity>.from((jsonMap['amenities'] as List).map((item) => Amenity.fromJson(item)))
+          ? List<Amenity>.from((jsonMap['amenities'] as List)
+              .map((item) => Amenity.fromJson(item)))
           : [],
-      room: (jsonMap['room'] is Map)
-          ? Room.fromJson(jsonMap['room'])
-          : null,
+      room: (jsonMap['room'] is Map) ? Room.fromJson(jsonMap['room']) : null,
       title: jsonMap['title'],
       description: jsonMap['description'],
       size: int.tryParse(jsonMap['size']?.toString() ?? ''),
@@ -112,27 +117,28 @@ class RoomPrice {
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'room_id': roomId,
-    'capacity': capacity,
-    'price': price,
-    'deposit': deposit,
-    'currency': currency,
-    'period': period,
-    'time_from': timeFrom,
-    'time_to': timeTo,
-    'final_price': finalPrice,
-    'final_deposit': finalDeposit,
-    'discount': discount,
-    'applied_discounts': appliedDiscounts,
-    'reservations': reservations.map((r) => r.toJson()).toList(),
-    'media': media.map((m) => m.toJson()).toList(),
-    'amenities': amenities.map((a) => a.toJson()).toList(),
-    'room': room?.toJson(),
-    'title': title,
-    'description': description,
-    'size': size,
-  };
+        'id': id,
+        'room_id': roomId,
+        'facility_id': facilityId,
+        'capacity': capacity,
+        'price': price,
+        'deposit': deposit,
+        'currency': currency,
+        'period': period,
+        'time_from': timeFrom,
+        'time_to': timeTo,
+        'final_price': finalPrice,
+        'final_deposit': finalDeposit,
+        'discount': discount,
+        'applied_discounts': appliedDiscounts,
+        'reservations': reservations.map((r) => r.toJson()).toList(),
+        'media': media.map((m) => m.toJson()).toList(),
+        'amenities': amenities.map((a) => a.toJson()).toList(),
+        'room': room?.toJson(),
+        'title': title,
+        'description': description,
+        'size': size,
+      };
 
   bool isCreate() => id == 0;
 
@@ -142,7 +148,7 @@ class RoomPrice {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is RoomPrice && runtimeType == other.runtimeType && id == other.id;
+      other is RoomPrice && runtimeType == other.runtimeType && id == other.id;
 
   @override
   int get hashCode => id.hashCode;
