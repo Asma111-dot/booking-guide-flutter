@@ -54,7 +54,7 @@ class RoomPriceWidget extends StatelessWidget {
             Gaps.h8,
             _buildRow(context, periodIcon, roomPrice.period),
             Gaps.h8,
-            _buildRow(context, groupsIcon, "${roomPrice.capacity} ${trans().person}"),
+            _buildRow(context, groupsIcon, "${roomPrice.capacity} ${trans().persons}"),
             Gaps.h8,
             _buildPriceRow(
               context,

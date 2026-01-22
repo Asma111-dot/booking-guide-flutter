@@ -222,7 +222,7 @@ class RoomPriceWidget extends StatelessWidget {
                           children: [
                             Gaps.w4,
                             Text(
-                              '${trans().capacity}: ${price.capacity} ${trans().person}',
+                              '${trans().capacity}: ${price.capacity} ${trans().persons}',
                               style: TextStyle(
                                 fontSize: TFont.m14,
                                 fontWeight: FontWeight.bold,

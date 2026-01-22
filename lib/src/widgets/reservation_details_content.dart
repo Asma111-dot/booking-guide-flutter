@@ -95,7 +95,7 @@ class ReservationDetailsContent extends StatelessWidget {
             icon: groupsIcon,
             label: trans().adults_count,
             value: data.adultsCount != null
-                ? '${data.adultsCount} ${trans().person}'
+                ? '${data.adultsCount} ${trans().persons}'
                 : trans().not_available,
           ),
 
@@ -104,7 +104,7 @@ class ReservationDetailsContent extends StatelessWidget {
             icon: groups2Icon,
             label: trans().children_count,
             value: data.childrenCount != null
-                ? '${data.childrenCount} ${trans().person}'
+                ? '${data.childrenCount} ${trans().persons}'
                 : trans().not_available,
           ),
 

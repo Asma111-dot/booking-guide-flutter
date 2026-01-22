@@ -593,11 +593,11 @@ abstract class AppLocalizations {
   /// **'capacity'**
   String get capacity;
 
-  /// No description provided for @person.
+  /// No description provided for @persons.
   ///
   /// In en, this message translates to:
-  /// **'Person'**
-  String get person;
+  /// **'Persons'**
+  String get persons;
 
   /// No description provided for @status.
   ///
@@ -1037,11 +1037,11 @@ abstract class AppLocalizations {
   /// **'Booking'**
   String get booking;
 
-  /// No description provided for @persons.
+  /// No description provided for @account.
   ///
   /// In en, this message translates to:
-  /// **'Person'**
-  String get persons;
+  /// **'Account'**
+  String get account;
 
   /// No description provided for @imageGallery.
   ///

@@ -258,7 +258,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get capacity => 'السعة';
 
   @override
-  String get person => 'شخص';
+  String get persons => 'أشخاص';
 
   @override
   String get status => 'الحالة';
@@ -480,7 +480,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get booking => 'الحجوزات';
 
   @override
-  String get persons => 'الحساب';
+  String get account => 'الحساب';
 
   @override
   String get imageGallery => 'معرض الصور';

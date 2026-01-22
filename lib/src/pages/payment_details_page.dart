@@ -166,13 +166,13 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                         CustomRowDetailsWidget(
                           icon: peopleIcon,
                           label: trans().adults_count,
-                          value: "${reservation.adultsCount} ${trans().person}",
+                          value: "${reservation.adultsCount} ${trans().persons}",
                         ),
                         CustomRowDetailsWidget(
                           icon: childIcon,
                           label: trans().children_count,
                           value:
-                              "${reservation.childrenCount} ${trans().person}",
+                              "${reservation.childrenCount} ${trans().persons}",
                         ),
                         Divider(
                             height: S.h(30),
