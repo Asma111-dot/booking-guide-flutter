@@ -6,6 +6,7 @@ import '../utils/assets.dart';
 import '../utils/theme.dart';
 import '../storage/auth_storage.dart';
 import '../utils/routes.dart';
+import '../widgets/button_widget.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -57,7 +58,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
         statusBarBrightness: Brightness.dark, // للـ iOS
       ),
       child: Scaffold(
-        backgroundColor: cs.background,
+        backgroundColor: cs.surface,
         body: SafeArea(
           top: false,
           child: Column(
@@ -93,48 +94,25 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       gradient: active ? CustomTheme.primaryGradient : null,
-                      color: active ? null : cs.outlineVariant.withOpacity(.6),
+                      color: !active ? cs.outlineVariant.withOpacity(.6) : null,
                     ),
                   );
                 }),
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(12),
-                    onTap: () {
-                      if (index == pages.length - 1) {
-                        _finish();
-                      } else {
-                        controller.nextPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeOut,
-                        );
-                      }
-                    },
-                    child: Ink(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        gradient: CustomTheme.primaryGradient,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        child: Center(
-                          child: Text(
-                            index == pages.length - 1 ? 'ابدأ الآن' : 'التالي',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+              Button(
+                width: double.infinity,
+                title: index == pages.length - 1 ? 'ابدأ الآن' : 'التالي',
+                disable: false,
+                onPressed: () async {
+                  if (index == pages.length - 1) {
+                    _finish();
+                  } else {
+                    controller.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                    );
+                  }
+                },
               ),
             ],
           ),
@@ -174,7 +152,6 @@ class _OnbItem extends StatelessWidget {
 
             const SizedBox(height: 30),
 
-            // الوصف
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(

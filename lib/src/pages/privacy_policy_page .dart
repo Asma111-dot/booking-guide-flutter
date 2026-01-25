@@ -17,16 +17,20 @@ class PrivacyPolicyPage extends StatelessWidget {
         appTitle: trans().policies,
         icon: arrowBackIcon,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
-          child: Text(
-            trans().privacy_policy,
-            textDirection: Directionality.of(context),
-            style: TextStyle(
-              fontSize: 14,
-              height: 1.6,
-              color: colorScheme.onSurface,
+      body: SafeArea(
+        bottom: true, // نحمي فقط من الأسفل
+        top: false,   // لا نلمس AppBar
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+          child: SingleChildScrollView(
+            child: Text(
+              trans().privacy_policy,
+              textDirection: Directionality.of(context),
+              style: TextStyle(
+                fontSize: 14,
+                height: 1.6,
+                color: colorScheme.onSurface,
+              ),
             ),
           ),
         ),

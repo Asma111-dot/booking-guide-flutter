@@ -25,13 +25,14 @@ void showAvailableDayBottomSheet({
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),
     builder: (context) {
-      final bottomPad = MediaQuery.of(context).padding.bottom;
       return AnimatedPadding(
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeOut,
-        padding: EdgeInsets.only(
-          top: 16,
-          bottom: bottomPad,
+        padding: EdgeInsets.fromLTRB(
+          20,
+          20,
+          20,
+          10 + MediaQuery.of(context).padding.bottom,
         ),
         child: ValueListenableBuilder(
           valueListenable: date,
@@ -51,16 +52,40 @@ void showAvailableDayBottomSheet({
                   controller: controller,
                   readOnly: true,
                   decoration: InputDecoration(
-                    labelText: trans().select_date,
+                    labelText: trans().people_count,
                     labelStyle: TextStyle(
                       fontSize: 12,
+                      fontFamily: 'Roboto',
                       fontWeight: FontWeight.bold,
-                      color: colorScheme.primary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
-                    border: const OutlineInputBorder(),
+
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.primary,
+                        width: 2,
+                      ),
+                    ),
+
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: Colors.grey.shade400,
+                        width: 1,
+                      ),
+                    ),
                     suffixIcon: Icon(
                       periodIcon,
                       color: colorScheme.secondary,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
                     ),
                   ),
                   onTap: () async {
@@ -112,7 +137,6 @@ void showAvailableDayBottomSheet({
                   width: double.infinity,
                   child: Material(
                     color: Colors.transparent,
-                    // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     child: Ink(
                       decoration: BoxDecoration(
                         gradient: CustomTheme.primaryGradient,

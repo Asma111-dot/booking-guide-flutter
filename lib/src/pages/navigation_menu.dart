@@ -74,7 +74,7 @@ class NavigationMenu extends StatelessWidget {
                       trans().map,
                       trans().booking,
                       trans().favorite,
-                      trans().persons,
+                      trans().account,
                     ][index];
 
                     return Expanded(

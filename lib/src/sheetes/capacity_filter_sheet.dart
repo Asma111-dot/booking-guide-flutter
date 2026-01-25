@@ -11,24 +11,23 @@ void showCapacityBottomSheet({
 }) {
   final controller = TextEditingController();
   final theme = Theme.of(context);
-  final colorScheme = theme.colorScheme;
 
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     backgroundColor: theme.scaffoldBackgroundColor,
     shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
     ),
     builder: (context) {
-      final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-
       return AnimatedPadding(
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeOut,
-        padding: EdgeInsets.only(
-          top: 16,
-          bottom: bottomInset + 8,
+        padding: EdgeInsets.fromLTRB(
+          20,
+          20,
+          20,
+          10 + MediaQuery.of(context).padding.bottom,
         ),
         child: SafeArea(
           top: false,
@@ -60,11 +59,35 @@ void showCapacityBottomSheet({
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    border: const OutlineInputBorder(),
+
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.primary,
+                        width: 2,
+                      ),
+                    ),
+
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: Colors.grey.shade400,
+                        width: 1,
+                      ),
+                    ),
+
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
                   ),
                 ),
 
-                const SizedBox(height: 12),
+                const SizedBox(height: 20),
 
                 SizedBox(
                   width: double.infinity,

@@ -133,7 +133,10 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfilePage> {
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: SafeArea(
-            minimum: const EdgeInsets.all(16),
+            top: false,
+            left: false,
+            right: false,
+            minimum: const EdgeInsets.fromLTRB(16, 8, 16, 16),
             child: Button(
               width: double.infinity,
               title: trans().save,

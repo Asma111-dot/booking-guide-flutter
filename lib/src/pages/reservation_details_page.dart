@@ -65,66 +65,65 @@ class _ReservationDetailsPageState
           showEmpty: true,
         ),
         bottomNavigationBar: SafeArea(
-          minimum: const EdgeInsets.only(bottom: 0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(vertical: S.h(8)),
-                decoration: BoxDecoration(
-                  color: colorScheme.secondaryContainer.withOpacity(0.2),
-                  borderRadius: Corners.sm8,
-                ),
-                child: Row(
-                  children: [
-                    Icon(errorIcon, color: colorScheme.secondary),
-                    Gaps.w8,
-                    Expanded(
-                      child: Text(
-                        trans().booking_not_confirmed_warning,
-                        style: TextStyle(color: colorScheme.onSurface),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: S.h(8)),
+                  decoration: BoxDecoration(
+                    color: colorScheme.secondaryContainer.withOpacity(0.2),
+                    borderRadius: Corners.sm8,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(errorIcon, color: colorScheme.secondary),
+                      Gaps.w8,
+                      Expanded(
+                        child: Text(
+                          trans().booking_not_confirmed_warning,
+                          style: TextStyle(color: colorScheme.onSurface),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Gaps.h6,
-              OutlinedButton.icon(
-                onPressed: () async {
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    Routes.navigationMenu,
-                        (route) => false,
-                  );
-                },
-                icon: const Icon(goBackIcon),
-                label: Text(trans().go_back),
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: colorScheme.outline),
-                  padding: EdgeInsets.symmetric(vertical: S.h(12)),
+                Button(
+                  width: double.infinity,
+                  title: trans().go_back,
+                  icon: const Icon(goBackIcon, color: Colors.white),
+                  iconAfterText: true,
+                  disable: false,
+                  onPressed: () async {
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      Routes.navigationMenu,
+                          (route) => false,
+                    );
+                  },
                 ),
-              ),
-              Gaps.h6,
-              Button(
-                width: double.infinity,
-                title: trans().payment_now,
-                icon: Icon(
-                  arrowForWordIcon,
-                  size: Sizes.iconM20,
-                  color: colorScheme.onPrimary,
+                Button(
+                  width: double.infinity,
+                  title: trans().payment_now,
+                  icon: Icon(
+                    arrowForWordIcon,
+                    size: Sizes.iconM20,
+                    color: colorScheme.onPrimary,
+                  ),
+                  iconAfterText: true,
+                  disable: false,
+                  onPressed: () async {
+                    Navigator.pushNamed(
+                      context,
+                      Routes.payment,
+                      arguments: reservationState.data?.id,
+                    );
+                  },
                 ),
-                iconAfterText: true,
-                disable: false,
-                onPressed: () async {
-                  Navigator.pushNamed(
-                    context,
-                    Routes.payment,
-                    arguments: reservationState.data?.id,
-                  );
-                },
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

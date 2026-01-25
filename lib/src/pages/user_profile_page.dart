@@ -106,42 +106,51 @@ class _UserProfilePageState extends ConsumerState<UserProfilePage> {
         appTitle: trans().edit_personal_data,
         icon: arrowBackIcon,
       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(top: 10, bottom: 0),
-        child: Row(
-          children: [
-            Expanded(
-              child: Button(
-                title: trans().save,
-                icon: Icon(saveIcon,
-                    size: Sizes.iconM20, color: theme.colorScheme.onPrimary),
-                iconAfterText: true,
-                disable: false,
-                onPressed: () async {
-                  final updatedUser = user.copyWith(
-                    name: nameController.text.trim(),
-                    email: emailController.text.trim(),
-                    address: addressController.text.trim(),
-                  );
-                  await ref.read(userProvider.notifier).updateUser(
-                        updatedUser,
-                        selectedImage,
-                      );
-                },
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+          child: Row(
+            children: [
+              Expanded(
+                child: Button(
+                  title: trans().save,
+                  icon: Icon(
+                    saveIcon,
+                    size: Sizes.iconM20,
+                    color: theme.colorScheme.onPrimary,
+                  ),
+                  iconAfterText: true,
+                  disable: false,
+                  onPressed: () async {
+                    final updatedUser = user.copyWith(
+                      name: nameController.text.trim(),
+                      email: emailController.text.trim(),
+                      address: addressController.text.trim(),
+                    );
+
+                    await ref.read(userProvider.notifier).updateUser(
+                      updatedUser,
+                      selectedImage,
+                    );
+                  },
+                ),
               ),
-            ),
-            Gaps.w8,
-            Expanded(
-              child: Button(
-                title: trans().cancel,
-                icon: Icon(closeIcon,
-                    size: Sizes.iconM20, color: theme.colorScheme.onPrimary),
-                iconAfterText: true,
-                disable: false,
-                onPressed: () async => Navigator.pop(context),
+              Gaps.w8,
+              Expanded(
+                child: Button(
+                  title: trans().cancel,
+                  icon: Icon(
+                    closeIcon,
+                    size: Sizes.iconM20,
+                    color: theme.colorScheme.onPrimary,
+                  ),
+                  iconAfterText: true,
+                  disable: false,
+                  onPressed: () async => Navigator.pop(context),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
 

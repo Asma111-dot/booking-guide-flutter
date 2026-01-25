@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../utils/theme.dart';
-import '../utils/sizes.dart';
 
 class Button extends StatelessWidget {
   final double width;
@@ -23,73 +22,92 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final effectiveWidth = width.isFinite ? S.w(width) : width;
 
-    final bottomInset = MediaQuery.of(context).padding.bottom;
+    return MediaQuery.removePadding(
+      context: context,
+      removeBottom: true,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 20, 10, 4),
+        child: SizedBox(
+          width: width.isFinite ? width : double.infinity,
+          height: 48,
+          child: Material(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(12),
 
-    return Padding(
-      padding: EdgeInsets.only(bottom: bottomInset),
-      child: SizedBox(
-        width: effectiveWidth,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: Corners.pill100,
-            gradient: disable ? null : CustomTheme.primaryGradient,
-            color: disable ? cs.onSurface.withOpacity(0.12) : null,
-          ),
-          child: ElevatedButton(
-            onPressed: disable ? null : () => onPressed?.call(),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.transparent,
-              shadowColor: Colors.transparent,
-              foregroundColor: cs.onPrimary,
-              padding: EdgeInsets.symmetric(
-                horizontal: Insets.s12,
-                vertical: S.h(10),
-              ),
-              minimumSize: Sizes.btnM,
-              shape: RoundedRectangleBorder(
-                borderRadius: Corners.pill100,
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: iconAfterText
-                  ? [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: TFont.l16,
-                    fontWeight: FontWeight.bold,
-                    color: cs.onPrimary,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: disable ? null : () => onPressed?.call(),
+
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+
+                  gradient: disable
+                      ? null
+                      : CustomTheme.primaryGradient,
+
+                  color: disable
+                      ? Colors.grey.shade300
+                      : null,
+                ),
+
+                child: Center(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: iconAfterText
+                        ? [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: disable
+                              ? Colors.grey.shade600
+                              : cs.onPrimary,
+                        ),
+                      ),
+
+                      if (icon != null) ...[
+                        const SizedBox(width: 8),
+                        IconTheme(
+                          data: IconThemeData(
+                            color: disable
+                                ? Colors.grey.shade600
+                                : cs.onPrimary,
+                          ),
+                          child: icon!,
+                        ),
+                      ],
+                    ]
+                        : [
+                      if (icon != null) ...[
+                        IconTheme(
+                          data: IconThemeData(
+                            color: disable
+                                ? Colors.grey.shade600
+                                : cs.onPrimary,
+                          ),
+                          child: icon!,
+                        ),
+                        const SizedBox(width: 8),
+                      ],
+
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: disable
+                              ? Colors.grey.shade600
+                              : cs.onPrimary,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                if (icon != null) ...[
-                  Gaps.w8,
-                  IconTheme(
-                    data: IconThemeData(color: cs.onPrimary),
-                    child: icon!,
-                  ),
-                ],
-              ]
-                  : [
-                if (icon != null) ...[
-                  IconTheme(
-                    data: IconThemeData(color: cs.onPrimary),
-                    child: icon!,
-                  ),
-                  Gaps.w8,
-                ],
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: TFont.l16,
-                    fontWeight: FontWeight.bold,
-                    color: cs.onPrimary,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),

@@ -300,52 +300,54 @@ class _PriceAndCalendarPageState
         showError: true,
         showEmpty: true,
       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(bottom:0),
-        child: Button(
-          width: double.infinity,
-          title: trans().continueBooking,
-          icon: Icon(
-            arrowForWordIcon,
-            size: Sizes.iconM20,
-            color: theme.colorScheme.surface,
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+          child: Button(
+            width: double.infinity,
+            title: trans().continueBooking,
+            icon: Icon(
+              arrowForWordIcon,
+              size: Sizes.iconM20,
+              color: theme.colorScheme.surface,
+            ),
+            iconAfterText: true,
+            disable: (rangeStart == null ||
+                rangeEnd == null ||
+                selectedPrice == null) &&
+                !hasSuccessfulAttempt,
+            onPressed: () async {
+              if (rangeStart != null &&
+                  rangeEnd != null &&
+                  selectedPrice != null) {
+                setState(() {
+                  hasSuccessfulAttempt = true;
+                });
+
+                ref.read(reservationSaveProvider.notifier).saveReservationDraft(
+                  Reservation(
+                    roomPriceId: selectedPrice!.id,
+                    checkInDate: rangeStart!,
+                    checkOutDate: rangeEnd!,
+                    id: 0,
+                    bookingType: '',
+                  ),
+                );
+
+                Navigator.pushNamed(
+                  context,
+                  Routes.reservation,
+                  arguments: selectedPrice,
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(trans().pleaseSelectPeriodAndPriceFirst),
+                  ),
+                );
+              }
+            },
           ),
-          iconAfterText: true,
-          disable: (rangeStart == null ||
-              rangeEnd == null ||
-              selectedPrice == null) &&
-              !hasSuccessfulAttempt,
-          onPressed: () async {
-            if (rangeStart != null &&
-                rangeEnd != null &&
-                selectedPrice != null) {
-              setState(() {
-                hasSuccessfulAttempt = true;
-              });
-
-              ref.read(reservationSaveProvider.notifier).saveReservationDraft(
-                Reservation(
-                  roomPriceId: selectedPrice!.id,
-                  checkInDate: rangeStart!,
-                  checkOutDate: rangeEnd!,
-                  id: 0,
-                  bookingType: '',
-                ),
-              );
-
-              Navigator.pushNamed(
-                context,
-                Routes.reservation,
-                arguments: selectedPrice,
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(trans().pleaseSelectPeriodAndPriceFirst),
-                ),
-              );
-            }
-          },
         ),
       ),
     );

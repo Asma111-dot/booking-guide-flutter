@@ -12,13 +12,12 @@ class SupportBottomSheet extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Padding(
-      // padding: EdgeInsets.fromLTRB(
-      //   20,
-      //   20,
-      //   20,
-      //   20 + MediaQuery.of(context).padding.bottom,
-      // ),
-      padding: EdgeInsets.only(top:10,bottom: 50),
+      padding: EdgeInsets.fromLTRB(
+        20,
+        20,
+        20,
+        20 + MediaQuery.of(context).padding.bottom,
+      ),
       child: Column(
       mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../enums/payment_method.dart';
 import '../helpers/general_helper.dart';
 import '../helpers/notify_helper.dart';
-import '../models/payment.dart' as pay;
 import '../providers/payment/payment_floosak_provider.dart';
 import '../providers/payment/payment_cash_provider.dart';
 import '../providers/payment/payment_jaib_provider.dart';
@@ -128,438 +127,449 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
       ),
 
       // ───────── زر إكمال الحجز ─────────
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(bottom: 0),
-        child: Button(
-            width: MediaQuery.of(context).size.width - 40,
-            title: trans().completeTheReservation,
-            disable: selectedPaymentMethod == null || isLoading,
-            icon: isLoading
-                ? SizedBox(
-                    width: S.w(20),
-                    height: S.h(20),
-                    child: CircularProgressIndicator(
-                        strokeWidth: 2, color: Colors.white),
-                  )
-                : Icon(arrowForWordIcon,
-                    size: Sizes.iconM20, color: colorScheme.onPrimary),
-            iconAfterText: true,
-            onPressed: selectedPaymentMethod == null || isLoading
-                ? null
-                : () async {
-                    // [جيب]
-                    if (selectedPaymentMethod == PaymentMethod.jib) {
-                      // 1️⃣ Show info notify
-                      showNotify(
-                        message: trans().manual_deposit_instruction,
-                        alert: Alert.info,
-                      );
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+          child: Button(
+              width: double.infinity,
+              title: trans().completeTheReservation,
+              disable: selectedPaymentMethod == null || isLoading,
+              icon: isLoading
+                  ? SizedBox(
+                      width: S.w(20),
+                      height: S.h(20),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
+                  : Icon(
+                      arrowForWordIcon,
+                      size: Sizes.iconM20,
+                      color: colorScheme.onPrimary,
+                    ),
+              iconAfterText: true,
+              onPressed: selectedPaymentMethod == null || isLoading
+                  ? null
+                  : () async {
+                      // [جيب]
+                      if (selectedPaymentMethod == PaymentMethod.jib) {
+                        // 1️⃣ Show info notify
+                        showNotify(
+                          message: trans().manual_deposit_instruction,
+                          alert: Alert.info,
+                        );
 
-                      // 2️⃣ Open dialog for code entry
-                      final TextEditingController confirmationController =
-                          TextEditingController();
+                        // 2️⃣ Open dialog for code entry
+                        final TextEditingController confirmationController =
+                            TextEditingController();
 
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            backgroundColor: colorScheme.background,
-                            title: Text(
-                              (trans().enter_payment_code),
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                color: colorScheme.primary,
-                                fontWeight: FontWeight.bold,
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              backgroundColor: colorScheme.background,
+                              title: Text(
+                                (trans().enter_payment_code),
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  color: colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            content: TextField(
-                              controller: confirmationController,
-                              keyboardType: TextInputType.number,
-                              style: TextStyle(
-                                fontFamily: 'Roboto',
-                                fontSize: TFont.l16,
+                              content: TextField(
+                                controller: confirmationController,
+                                keyboardType: TextInputType.number,
+                                style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: TFont.l16,
+                                ),
+                                decoration: InputDecoration(
+                                  hintText: trans().enter_code_from_wallet,
+                                ),
                               ),
-                              decoration: InputDecoration(
-                                hintText: trans().enter_code_from_wallet,
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(),
-                                child: Text(trans().cancel),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  final code =
-                                      confirmationController.text.trim();
-                                  Navigator.of(context).pop();
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text(trans().cancel),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    final code =
+                                        confirmationController.text.trim();
+                                    Navigator.of(context).pop();
 
-                                  final waitingDialogCompleter =
-                                      Completer<BuildContext>();
-                                  showWaitingDialog(scaffoldContext,
-                                      (dialogCtx) {
-                                    waitingDialogCompleter.complete(dialogCtx);
-                                  });
+                                    final waitingDialogCompleter =
+                                        Completer<BuildContext>();
+                                    showWaitingDialog(scaffoldContext,
+                                        (dialogCtx) {
+                                      waitingDialogCompleter
+                                          .complete(dialogCtx);
+                                    });
 
-                                  try {
-                                    await jaibPayment.confirmJaibPayment(
-                                      reservationId: widget.reservationId,
-                                      paymentMethodId:
-                                          selectedPaymentMethod!.id,
-                                      code: code,
-                                    );
-                                  } finally {
-                                    if (mounted) {
-                                      final dialogCtx =
-                                          await waitingDialogCompleter.future;
-                                      Navigator.of(dialogCtx,
-                                              rootNavigator: true)
-                                          .pop();
+                                    try {
+                                      await jaibPayment.confirmJaibPayment(
+                                        reservationId: widget.reservationId,
+                                        paymentMethodId:
+                                            selectedPaymentMethod!.id,
+                                        code: code,
+                                      );
+                                    } finally {
+                                      if (mounted) {
+                                        final dialogCtx =
+                                            await waitingDialogCompleter.future;
+                                        Navigator.of(dialogCtx,
+                                                rootNavigator: true)
+                                            .pop();
+                                      }
                                     }
-                                  }
 
-                                  final state = ref.read(paymentJaibProvider);
+                                    final state = ref.read(paymentJaibProvider);
 
-                                  if (state.isLoaded()) {
+                                    if (state.isLoaded()) {
+                                      showNotify(
+                                        message: state.meta.message,
+                                        alert: Alert.success,
+                                      );
+
+                                      await Future.delayed(
+                                          const Duration(milliseconds: 300));
+
+                                      Navigator.of(scaffoldContext)
+                                          .pushNamedAndRemoveUntil(
+                                        Routes.paymentDetails,
+                                        (r) => false,
+                                        arguments: state.data?.id,
+                                      );
+                                    } else {
+                                      showNotify(
+                                        message: state.meta.message,
+                                        alert: Alert.info,
+                                      );
+                                    }
+                                  },
+                                  child: Text(trans().verify),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                        return;
+                      }
+
+                      // 🟡 [جوالي]
+                      if (selectedPaymentMethod == PaymentMethod.jawali) {
+                        final reservationId = widget.reservationId;
+
+                        final waitingDialogCompleter =
+                            Completer<BuildContext>();
+                        showWaitingDialog(scaffoldContext, (dialogCtx) {
+                          waitingDialogCompleter.complete(dialogCtx);
+                        });
+
+                        try {
+                          await ref
+                              .read(paymentJawaliProvider.notifier)
+                              .initiateJawaliPayment(reservationId);
+                        } finally {
+                          final dialogCtx = await waitingDialogCompleter.future;
+                          if (mounted)
+                            Navigator.of(dialogCtx, rootNavigator: true).pop();
+                        }
+
+                        final initiateState = ref.read(paymentJawaliProvider);
+                        if (!initiateState.isLoaded()) {
+                          showNotify(
+                            message: initiateState.meta.message ??
+                                "فشل بدء عملية الدفع.",
+                            alert: Alert.error,
+                          );
+                          return;
+                        }
+
+                        final TextEditingController confirmationController =
+                            TextEditingController();
+
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              backgroundColor: colorScheme.background,
+                              title: Text(
+                                trans().enter_payment_code,
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  color: colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              content: TextField(
+                                controller: confirmationController,
+                                keyboardType: TextInputType.number,
+                                style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: TFont.l16,
+                                ),
+                                decoration: InputDecoration(
+                                  hintText: trans().enter_code2_from_wallet,
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text(trans().cancel),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    final code =
+                                        confirmationController.text.trim();
+                                    Navigator.of(context).pop();
+
+                                    final waitingDialogCompleter =
+                                        Completer<BuildContext>();
+                                    showWaitingDialog(scaffoldContext,
+                                        (dialogCtx) {
+                                      waitingDialogCompleter
+                                          .complete(dialogCtx);
+                                    });
+
+                                    try {
+                                      await ref
+                                          .read(paymentJawaliProvider.notifier)
+                                          .confirmJawaliPayment(
+                                            reservationId: widget.reservationId,
+                                            paymentMethodId:
+                                                selectedPaymentMethod!.id,
+                                            code: code,
+                                          );
+                                    } finally {
+                                      if (mounted) {
+                                        final dialogCtx =
+                                            await waitingDialogCompleter.future;
+                                        Navigator.of(dialogCtx,
+                                                rootNavigator: true)
+                                            .pop();
+                                      }
+                                    }
+
+                                    final state =
+                                        ref.read(paymentJawaliProvider);
+                                    if (state.isLoaded()) {
+                                      showNotify(
+                                          message: state.meta.message,
+                                          alert: Alert.success);
+                                      await Future.delayed(
+                                          Duration(milliseconds: 300));
+                                      Navigator.of(scaffoldContext)
+                                          .pushNamedAndRemoveUntil(
+                                        Routes.paymentDetails,
+                                        (r) => false,
+                                        arguments: state.data?.id,
+                                      );
+                                    } else {
+                                      showNotify(
+                                          message: state.meta.message,
+                                          alert: Alert.info);
+                                    }
+                                  },
+                                  child: Text(trans().verify),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                        return;
+                      }
+
+                      // [كاش]
+                      // if (selectedPaymentMethod == PaymentMethod.cash) {
+                      //   final waitingDialogCompleter = Completer<BuildContext>();
+                      //   showWaitingDialog(scaffoldContext, (dialogCtx) {
+                      //     waitingDialogCompleter.complete(dialogCtx);
+                      //   });
+                      //
+                      //   try {
+                      //     await cashPayment.payCash(
+                      //       reservationId: widget.reservationId,
+                      //       paymentMethodId: selectedPaymentMethod!.id,
+                      //       purpose: "حجز غرفة",
+                      //     );
+                      //   } finally {
+                      //     if (mounted) {
+                      //       final dialogCtx = await waitingDialogCompleter.future;
+                      //       Navigator.of(dialogCtx, rootNavigator: true).pop();
+                      //     }
+                      //   }
+                      //
+                      //   final state = ref.read(paymentCashProvider);
+                      //
+                      //   if (state.isLoaded()) {
+                      //     showNotify(
+                      //       message: state.meta.message,
+                      //       alert: Alert.success,
+                      //     );
+                      //
+                      //     await Future.delayed(const Duration(milliseconds: 300));
+                      //
+                      //     Navigator.of(scaffoldContext).pushNamedAndRemoveUntil(
+                      //       Routes.paymentDetails,
+                      //           (r) => false,
+                      //       arguments: state.data?.id,
+                      //     );
+                      //   } else {
+                      //     showNotify(
+                      //       message: state.meta.message,
+                      //       alert: Alert.info,
+                      //     );
+                      //   }
+                      //   return;
+                      // }
+
+                      // ───────── فلوسك ─────────
+
+                      if (selectedPaymentMethod == PaymentMethod.floosak) {
+                        setState(() => isLoading = true);
+                        debugPrint(
+                            "====== [FLOOSAK PAYMENT PROCESS STARTED] ======");
+
+                        // 1) initiate
+                        final waitingDialogCompleter =
+                            Completer<BuildContext>();
+                        showWaitingDialog(scaffoldContext, (dialogCtx) {
+                          waitingDialogCompleter.complete(dialogCtx);
+                        });
+
+                        try {
+                          await ref
+                              .read(paymentFloosakProvider.notifier)
+                              .initiateFloosakPayment(
+                                reservationId: widget.reservationId,
+                                paymentMethodId: selectedPaymentMethod!.id,
+                              );
+                        } finally {
+                          if (mounted) {
+                            final dialogCtx =
+                                await waitingDialogCompleter.future;
+                            Navigator.of(dialogCtx, rootNavigator: true).pop();
+                          }
+                        }
+
+                        final initiateState = ref.read(paymentFloosakProvider);
+                        if (!initiateState.isLoaded()) {
+                          showNotify(
+                            message: initiateState.meta.message,
+                            alert: Alert.error,
+                          );
+                          setState(() => isLoading = false);
+                          return;
+                        }
+
+                        // خذ الـ paymentId من الاستجابة
+                        paymentId = initiateState.data!.id;
+
+                        // 2) اطلب OTP ثم أكّد
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            final TextEditingController confirmationController =
+                                TextEditingController();
+
+                            return AlertDialog(
+                              backgroundColor: colorScheme.background,
+                              title: Text(
+                                trans().confirm_payment,
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  color: colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              content: TextField(
+                                controller: confirmationController,
+                                keyboardType: TextInputType.number,
+                                style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: TFont.l16,
+                                ),
+                                decoration: InputDecoration(
+                                    hintText:
+                                        trans().enter_confirmation_number),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text(trans().cancel),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    final code = int.tryParse(
+                                      convertToEnglishNumbers(
+                                          confirmationController.text.trim()),
+                                    );
+                                    if (code == null || paymentId == null) {
+                                      debugPrint(
+                                          "❌ Invalid or missing OTP/paymentId.");
+                                      return;
+                                    }
+
+                                    Navigator.of(context).pop();
+
+                                    final wait2 = Completer<BuildContext>();
+                                    showWaitingDialog(scaffoldContext,
+                                        (ctx) => wait2.complete(ctx));
+
+                                    try {
+                                      await ref
+                                          .read(paymentFloosakProvider.notifier)
+                                          .confirmFloosakPayment(
+                                            paymentId: paymentId!,
+                                            otp: code,
+                                          );
+                                    } finally {
+                                      if (mounted) {
+                                        final ctx = await wait2.future;
+                                        Navigator.of(ctx, rootNavigator: true)
+                                            .pop();
+                                      }
+                                    }
+
+                                    final confirmState =
+                                        ref.read(paymentFloosakProvider);
+                                    if (!confirmState.isLoaded()) {
+                                      showNotify(
+                                          message: confirmState.meta.message,
+                                          alert: Alert.info);
+                                      return;
+                                    }
+
                                     showNotify(
-                                      message: state.meta.message,
+                                      message: trans()
+                                          .payment_confirmed_successfully,
                                       alert: Alert.success,
                                     );
 
                                     await Future.delayed(
                                         const Duration(milliseconds: 300));
-
-                                    Navigator.of(scaffoldContext)
-                                        .pushNamedAndRemoveUntil(
-                                      Routes.paymentDetails,
-                                      (r) => false,
-                                      arguments: state.data?.id,
-                                    );
-                                  } else {
-                                    showNotify(
-                                      message: state.meta.message,
-                                      alert: Alert.info,
-                                    );
-                                  }
-                                },
-                                child: Text(trans().verify),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                      return;
-                    }
-
-                    // 🟡 [جوالي]
-                    if (selectedPaymentMethod == PaymentMethod.jawali) {
-                      final reservationId = widget.reservationId;
-
-                      // ✅ 1. نفذ initiate أولاً
-                      final waitingDialogCompleter = Completer<BuildContext>();
-                      showWaitingDialog(scaffoldContext, (dialogCtx) {
-                        waitingDialogCompleter.complete(dialogCtx);
-                      });
-
-                      try {
-                        await ref
-                            .read(paymentJawaliProvider.notifier)
-                            .initiateJawaliPayment(reservationId);
-                      } finally {
-                        final dialogCtx = await waitingDialogCompleter.future;
-                        if (mounted)
-                          Navigator.of(dialogCtx, rootNavigator: true).pop();
-                      }
-
-                      final initiateState = ref.read(paymentJawaliProvider);
-                      if (!initiateState.isLoaded()) {
-                        showNotify(
-                          message: initiateState.meta.message ??
-                              "فشل بدء عملية الدفع.",
-                          alert: Alert.error,
-                        );
-                        return;
-                      }
-
-                      // ✅ 2. عرض نافذة إدخال الكود بعد نجاح initiate
-                      final TextEditingController confirmationController =
-                          TextEditingController();
-
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            backgroundColor: colorScheme.background,
-                            title: Text(
-                              trans().enter_payment_code,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                color: colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            content: TextField(
-                              controller: confirmationController,
-                              keyboardType: TextInputType.number,
-                              style: TextStyle(
-                                fontFamily: 'Roboto',
-                                fontSize: TFont.l16,
-                              ),
-                              decoration: InputDecoration(
-                                hintText: trans().enter_code2_from_wallet,
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(),
-                                child: Text(trans().cancel),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  final code =
-                                      confirmationController.text.trim();
-                                  Navigator.of(context).pop();
-
-                                  final waitingDialogCompleter =
-                                      Completer<BuildContext>();
-                                  showWaitingDialog(scaffoldContext,
-                                      (dialogCtx) {
-                                    waitingDialogCompleter.complete(dialogCtx);
-                                  });
-
-                                  try {
-                                    await ref
-                                        .read(paymentJawaliProvider.notifier)
-                                        .confirmJawaliPayment(
-                                          reservationId: widget.reservationId,
-                                          paymentMethodId:
-                                              selectedPaymentMethod!.id,
-                                          code: code,
-                                        );
-                                  } finally {
                                     if (mounted) {
-                                      final dialogCtx =
-                                          await waitingDialogCompleter.future;
-                                      Navigator.of(dialogCtx,
-                                              rootNavigator: true)
-                                          .pop();
+                                      Navigator.of(scaffoldContext)
+                                          .pushNamedAndRemoveUntil(
+                                        Routes.paymentDetails,
+                                        (r) => false,
+                                        arguments: paymentId,
+                                      );
                                     }
-                                  }
-
-                                  final state = ref.read(paymentJawaliProvider);
-                                  if (state.isLoaded()) {
-                                    showNotify(
-                                        message: state.meta.message,
-                                        alert: Alert.success);
-                                    await Future.delayed(
-                                        Duration(milliseconds: 300));
-                                    Navigator.of(scaffoldContext)
-                                        .pushNamedAndRemoveUntil(
-                                      Routes.paymentDetails,
-                                      (r) => false,
-                                      arguments: state.data?.id,
-                                    );
-                                  } else {
-                                    showNotify(
-                                        message: state.meta.message,
-                                        alert: Alert.info);
-                                  }
-                                },
-                                child: Text(trans().verify),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                      return;
-                    }
-
-                    // [كاش]
-                    // if (selectedPaymentMethod == PaymentMethod.cash) {
-                    //   final waitingDialogCompleter = Completer<BuildContext>();
-                    //   showWaitingDialog(scaffoldContext, (dialogCtx) {
-                    //     waitingDialogCompleter.complete(dialogCtx);
-                    //   });
-                    //
-                    //   try {
-                    //     await cashPayment.payCash(
-                    //       reservationId: widget.reservationId,
-                    //       paymentMethodId: selectedPaymentMethod!.id,
-                    //       purpose: "حجز غرفة",
-                    //     );
-                    //   } finally {
-                    //     if (mounted) {
-                    //       final dialogCtx = await waitingDialogCompleter.future;
-                    //       Navigator.of(dialogCtx, rootNavigator: true).pop();
-                    //     }
-                    //   }
-                    //
-                    //   final state = ref.read(paymentCashProvider);
-                    //
-                    //   if (state.isLoaded()) {
-                    //     showNotify(
-                    //       message: state.meta.message,
-                    //       alert: Alert.success,
-                    //     );
-                    //
-                    //     await Future.delayed(const Duration(milliseconds: 300));
-                    //
-                    //     Navigator.of(scaffoldContext).pushNamedAndRemoveUntil(
-                    //       Routes.paymentDetails,
-                    //           (r) => false,
-                    //       arguments: state.data?.id,
-                    //     );
-                    //   } else {
-                    //     showNotify(
-                    //       message: state.meta.message,
-                    //       alert: Alert.info,
-                    //     );
-                    //   }
-                    //   return;
-                    // }
-
-                    // ───────── فلوسك ─────────
-
-                    if (selectedPaymentMethod == PaymentMethod.floosak) {
-                      setState(() => isLoading = true);
-                      debugPrint(
-                          "====== [FLOOSAK PAYMENT PROCESS STARTED] ======");
-
-                      // 1) initiate
-                      final waitingDialogCompleter = Completer<BuildContext>();
-                      showWaitingDialog(scaffoldContext, (dialogCtx) {
-                        waitingDialogCompleter.complete(dialogCtx);
-                      });
-
-                      try {
-                        await ref
-                            .read(paymentFloosakProvider.notifier)
-                            .initiateFloosakPayment(
-                              reservationId: widget.reservationId,
-                              paymentMethodId: selectedPaymentMethod!.id,
+                                  },
+                                  child: Text(trans().verify),
+                                ),
+                              ],
                             );
-                      } finally {
-                        if (mounted) {
-                          final dialogCtx = await waitingDialogCompleter.future;
-                          Navigator.of(dialogCtx, rootNavigator: true).pop();
-                        }
-                      }
-
-                      final initiateState = ref.read(paymentFloosakProvider);
-                      if (!initiateState.isLoaded()) {
-                        showNotify(
-                          message: initiateState.meta.message,
-                          alert: Alert.error,
+                          },
                         );
+
                         setState(() => isLoading = false);
+                        debugPrint(
+                            "====== [FLOOSAK PAYMENT PROCESS ENDED] ======");
                         return;
                       }
-
-                      // خذ الـ paymentId من الاستجابة
-                      paymentId = initiateState.data!.id;
-
-                      // 2) اطلب OTP ثم أكّد
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          final TextEditingController confirmationController =
-                              TextEditingController();
-
-                          return AlertDialog(
-                            backgroundColor: colorScheme.background,
-                            title: Text(
-                              trans().confirm_payment,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                color: colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            content: TextField(
-                              controller: confirmationController,
-                              keyboardType: TextInputType.number,
-                              style: TextStyle(
-                                fontFamily: 'Roboto',
-                                fontSize: TFont.l16,
-                              ),
-                              decoration: InputDecoration(
-                                  hintText: trans().enter_confirmation_number),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(),
-                                child: Text(trans().cancel),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  final code = int.tryParse(
-                                    convertToEnglishNumbers(
-                                        confirmationController.text.trim()),
-                                  );
-                                  if (code == null || paymentId == null) {
-                                    debugPrint(
-                                        "❌ Invalid or missing OTP/paymentId.");
-                                    return;
-                                  }
-
-                                  Navigator.of(context)
-                                      .pop(); // أغلق حوار إدخال الكود
-
-                                  final wait2 = Completer<BuildContext>();
-                                  showWaitingDialog(scaffoldContext,
-                                      (ctx) => wait2.complete(ctx));
-
-                                  try {
-                                    await ref
-                                        .read(paymentFloosakProvider.notifier)
-                                        .confirmFloosakPayment(
-                                          paymentId: paymentId!,
-                                          otp: code,
-                                        );
-                                  } finally {
-                                    if (mounted) {
-                                      final ctx = await wait2.future;
-                                      Navigator.of(ctx, rootNavigator: true)
-                                          .pop();
-                                    }
-                                  }
-
-                                  final confirmState =
-                                      ref.read(paymentFloosakProvider);
-                                  if (!confirmState.isLoaded()) {
-                                    showNotify(
-                                        message: confirmState.meta.message,
-                                        alert: Alert.info);
-                                    return;
-                                  }
-
-                                  showNotify(
-                                    message:
-                                        trans().payment_confirmed_successfully,
-                                    alert: Alert.success,
-                                  );
-
-                                  await Future.delayed(
-                                      const Duration(milliseconds: 300));
-                                  if (mounted) {
-                                    Navigator.of(scaffoldContext)
-                                        .pushNamedAndRemoveUntil(
-                                      Routes.paymentDetails,
-                                      (r) => false,
-                                      arguments: paymentId,
-                                    );
-                                  }
-                                },
-                                child: Text(trans().verify),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-
-                      setState(() => isLoading = false);
-                      debugPrint(
-                          "====== [FLOOSAK PAYMENT PROCESS ENDED] ======");
-                      return;
-                    }
-                  }),
+                    }),
+        ),
       ),
     );
   }

@@ -100,24 +100,29 @@ class _RoomDetailsPageState extends ConsumerState<RoomDetailsPage>
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      bottomNavigationBar: Button(
-        width: double.infinity,
-        disable: false,
-        onPressed: () async{
-          final room = ref.read(roomProvider).data;
-          if (room?.id != null) {
-            Navigator.pushNamed(
-              context,
-              Routes.priceAndCalendar,
-              arguments: room!.id,
-            );
-          }
-        },
-        title: trans().showAvailableDays,
-        icon: Icon(
-          periodIcon,
-          size: Sizes.iconM20,
-          color: colorScheme.onPrimary,
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+          child: Button(
+            width: double.infinity,
+            disable: false,
+            onPressed: () async {
+              final room = ref.read(roomProvider).data;
+              if (room?.id != null) {
+                Navigator.pushNamed(
+                  context,
+                  Routes.priceAndCalendar,
+                  arguments: room!.id,
+                );
+              }
+            },
+            title: trans().showAvailableDays,
+            icon: Icon(
+              periodIcon,
+              size: Sizes.iconM20,
+              color: colorScheme.onPrimary,
+            ),
+          ),
         ),
       ),
       //if you went add SafeArea

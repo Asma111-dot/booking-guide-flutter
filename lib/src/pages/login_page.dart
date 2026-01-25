@@ -20,7 +20,7 @@ class LoginPage extends ConsumerStatefulWidget {
 class _LoginPageState extends ConsumerState<LoginPage> {
   final GlobalKey<FormState> loginKey = GlobalKey<FormState>();
   bool autoValidate = false;
-  bool isGoogleReviewMode = false; // false دائمًا للمستخدم العادي
+  bool isGoogleReviewMode = false;
 
   @override
   Widget build(BuildContext context) {
@@ -67,28 +67,23 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             ),
                           ),
                           Gaps.h20,
-
                           TextFormField(
                             keyboardType: TextInputType.phone,
                             readOnly: login.isLoading(),
-
                             textDirection: TextDirection.ltr,
                             textAlign: TextAlign.left,
-
                             style: TextStyle(
                               fontFamily: 'Roboto',
                               fontSize: TFont.m14,
                             ),
-
                             decoration: InputDecoration(
-                              suffixIcon: Icon(callIcon, color: colorScheme.secondary),
-
+                              suffixIcon:
+                                  Icon(callIcon, color: colorScheme.secondary),
                               suffixText: '967 ',
                               suffixStyle: TextStyle(
                                 fontFamily: 'Roboto',
                                 fontSize: TFont.m14,
                               ),
-
                               labelText: trans().phone_number,
                               border: OutlineInputBorder(
                                 borderRadius: Corners.sm8,
@@ -108,21 +103,21 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 ),
                               ),
                             ),
-
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return trans().phoneFieldIsRequired;
                               } else if (value.length != 9) {
                                 return "رقم الهاتف يجب أن يتكون من 9 أرقام";
-                              } else if (!value.startsWith('7') && !value.startsWith('٧')) {
+                              } else if (!value.startsWith('7') &&
+                                  !value.startsWith('٧')) {
                                 return "رقم الهاتف يجب أن يبدأ بـ 7";
                               }
                               return null;
                             },
-
                             onChanged: (value) {
                               final normalized = convertToEnglishNumbers(value);
-                              ref.read(phoneProvider.notifier).state = normalized;
+                              ref.read(phoneProvider.notifier).state =
+                                  normalized;
                             },
                           ),
                         ],
@@ -137,62 +132,79 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         bottomNavigationBar: SafeArea(
           child: Padding(
             padding: EdgeInsets.only(
-              left: 16,
-              right: 16,
+              left: 4,
+              right: 4,
               bottom: MediaQuery.of(context).viewInsets.bottom > 0
                   ? MediaQuery.of(context).viewInsets.bottom
-                  : 16,
+                  : 8,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Hero(
-                  tag: 'login',
-                  child: Button(
-                    width: double.infinity,
-                    title: trans().login,
-                    disable: login.isLoading(),
-                    icon: Icon(loginIcon, color: colorScheme.onPrimary),
-                    iconAfterText: true,
-                    onPressed: () async {
-                      final phone = ref.read(phoneProvider);
-                      if (phone.length != 9 || !phone.startsWith('7')) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                                "الرجاء إدخال رقم هاتف صحيح مكون من 9 أرقام ويبدأ بـ 7"),
-                          ),
-                        );
-                        return;
-                      }
+                Button(
+                  width: double.infinity,
+                  title: trans().login,
+                  disable: login.isLoading(),
+                  icon: Icon(loginIcon, color: colorScheme.onPrimary),
+                  iconAfterText: true,
+                  onPressed: () async {
+                    final phone = ref.read(phoneProvider);
+                    if (phone.length != 9 || !phone.startsWith('7')) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                              "الرجاء إدخال رقم هاتف صحيح مكون من 9 أرقام ويبدأ بـ 7"),
+                        ),
+                      );
+                      return;
+                    }
 
-                      if (loginKey.currentState!.validate()) {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                        loginKey.currentState!.save();
+                    if (loginKey.currentState!.validate()) {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      loginKey.currentState!.save();
 
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (_) => const OtpVerifySheet(),
-                        );
+                      showGeneralDialog(
+                        context: context,
+                        barrierDismissible: true,
+                        barrierLabel: "OTP",
+                        barrierColor: Colors.black54,
 
-                        await ref.read(loginProvider.notifier).requestOtp();
-                      }
+                        transitionDuration: const Duration(milliseconds: 250),
 
-                      setState(() => autoValidate = true);
-                    },
-                  ),
+                        pageBuilder: (context, anim1, anim2) {
+                          return Align(
+                            alignment: Alignment.bottomCenter,
+                            child: OtpVerifySheet(),
+                          );
+                        },
+
+                        transitionBuilder: (context, anim1, anim2, child) {
+                          final tween = Tween(begin: const Offset(0, 1), end: Offset.zero);
+
+                          return SlideTransition(
+                            position: tween.animate(anim1),
+                            child: child,
+                          );
+                        },
+                      );
+
+
+                      await ref.read(loginProvider.notifier).requestOtp();
+                    }
+
+                    setState(() => autoValidate = true);
+                  },
                 ),
 
                 const SizedBox(height: 10),
 
-                // زر تسجيل الدخول التجريبي للمراجعة فقط
                 Visibility(
-                  visible: isGoogleReviewMode, // يظهر فقط أثناء التجربة أو المراجعة
+                  visible: isGoogleReviewMode,
                   child: ElevatedButton(
                     onPressed: () async {
-                      await ref.read(loginProvider.notifier).loginWithTestAccount();
+                      await ref
+                          .read(loginProvider.notifier)
+                          .loginWithTestAccount();
                     },
                     child: const Text('Login with Test Account'),
                   ),
@@ -201,55 +213,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             ),
           ),
         ),
-
-        // bottomNavigationBar: SafeArea(
-        //   child: Padding(
-        //     padding: EdgeInsets.only(
-        //       left: 16,
-        //       right: 16,
-        //       bottom: MediaQuery.of(context).viewInsets.bottom > 0
-        //           ? MediaQuery.of(context).viewInsets.bottom
-        //           : 16,
-        //     ),
-        //     child: Hero(
-        //       tag: 'login',
-        //       child: Button(
-        //         width: double.infinity,
-        //         title: trans().login,
-        //         disable: login.isLoading(),
-        //         icon: Icon(loginIcon, color: colorScheme.onPrimary),
-        //         iconAfterText: true,
-        //         onPressed: () async {
-        //           final phone = ref.read(phoneProvider);
-        //           if (phone.length != 9 || !phone.startsWith('7')) {
-        //             ScaffoldMessenger.of(context).showSnackBar(
-        //               const SnackBar(
-        //                 content: Text("الرجاء إدخال رقم هاتف صحيح مكون من 9 أرقام ويبدأ بـ 7"),
-        //               ),
-        //             );
-        //             return;
-        //           }
-        //
-        //           if (loginKey.currentState!.validate()) {
-        //             FocusManager.instance.primaryFocus?.unfocus();
-        //             loginKey.currentState!.save();
-        //
-        //             showModalBottomSheet(
-        //               context: context,
-        //               isScrollControlled: true,
-        //               backgroundColor: Colors.transparent,
-        //               builder: (_) => const OtpVerifySheet(),
-        //             );
-        //
-        //             await ref.read(loginProvider.notifier).requestOtp();
-        //           }
-        //
-        //           setState(() => autoValidate = true);
-        //         },
-        //       ),
-        //     ),
-        //   ),
-        // ),
       ),
     );
   }

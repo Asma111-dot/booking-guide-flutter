@@ -214,38 +214,46 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
           showError: true,
           showEmpty: true,
         ),
-        bottomNavigationBar: Padding(
-          padding: EdgeInsets.only(bottom: 0),
-          child: Row(
-            children: [
-              Expanded(
-                child: Button(
-                  title: trans().close_and_go_back,
-                  icon: Icon(closeIcon,
-                      size: Sizes.iconM20, color: colorScheme.onPrimary),
-                  iconAfterText: true,
-                  disable: false,
-                  onPressed: () async {
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      Routes.navigationMenu,
-                      (route) => false,
-                    );
-                  },
+        bottomNavigationBar: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Button(
+                    title: trans().close_and_go_back,
+                    icon: Icon(
+                      closeIcon,
+                      size: Sizes.iconM20,
+                      color: colorScheme.onPrimary,
+                    ),
+                    iconAfterText: true,
+                    disable: false,
+                    onPressed: () async {
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        Routes.navigationMenu,
+                            (route) => false,
+                      );
+                    },
+                  ),
                 ),
-              ),
-              Gaps.w8,
-              Expanded(
-                child: Button(
-                  title: trans().share,
-                  icon: Icon(shareIcon,
-                      size: Sizes.iconM20, color: colorScheme.onPrimary),
-                  iconAfterText: true,
-                  disable: false,
-                  onPressed: _shareScreenshot,
+                Gaps.w8,
+                Expanded(
+                  child: Button(
+                    title: trans().share,
+                    icon: Icon(
+                      shareIcon,
+                      size: Sizes.iconM20,
+                      color: colorScheme.onPrimary,
+                    ),
+                    iconAfterText: true,
+                    disable: false,
+                    onPressed: _shareScreenshot,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -16,9 +16,12 @@ void showRemoveFavoriteSheet(
     ),
     backgroundColor: colorScheme.background,
     builder: (_) => Padding(
-      padding: EdgeInsets.only(top:10,bottom: 50),
-
-     // padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+      padding: EdgeInsets.fromLTRB(
+        20,
+        20,
+        20,
+        30 + MediaQuery.of(context).padding.bottom,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
