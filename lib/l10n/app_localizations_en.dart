@@ -853,6 +853,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirmExitMessage => 'Do you want to return to the home page?';
 
   @override
+  String get exit_confirm_message => 'Are you sure you want to exit the application?';
+
+  @override
   String get filter_and_search_facilities => 'Filter & Search';
 
   @override

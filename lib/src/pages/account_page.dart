@@ -47,7 +47,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          trans().persons,
+          trans().account,
           style: theme.textTheme.headlineMedium?.copyWith(
             color: colorScheme.primary,
             fontWeight: FontWeight.bold,

@@ -312,7 +312,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get special_services_amenities => 'الخدمات والمرافق المميزة';
 
   @override
-  String get noAmenities => 'لا يوجد المرافق متاح حالياَ';
+  String get noAmenities => 'لا يوجد مرافق متاح حالياَ';
 
   @override
   String get bookingNow => 'احجز الأن';
@@ -851,6 +851,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get confirmExitMessage => 'هل تريد العودة إلى الصفحة الرئيسية؟';
+
+  @override
+  String get exit_confirm_message => 'هل أنت متأكد أنك تريد الخروج من التطبيق؟';
 
   @override
   String get filter_and_search_facilities => 'فلترة وبحث';

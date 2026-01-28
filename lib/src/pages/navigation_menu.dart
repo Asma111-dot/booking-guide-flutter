@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../helpers/general_helper.dart';
+import '../sheetes/show_exit_bottom_sheet.dart';
 import '../storage/auth_storage.dart';
 import '../utils/assets.dart';
 import '../utils/sizes.dart';
@@ -23,13 +25,23 @@ class NavigationMenu extends StatelessWidget {
       facilityId: facilityId,
     ));
 
-    return Obx(() => WillPopScope(
-          onWillPop: () async {
+    return Obx(() => PopScope(
+          canPop: false,
+          onPopInvoked: (didPop) async {
+            if (didPop) return;
+
+            final controller = Get.find<NavigationController>();
+
             if (controller.selectedIndex.value != 0) {
               controller.selectedIndex.value = 0;
-              return false;
+              return;
             }
-            return true;
+
+            final shouldExit = await showExitDialog(context);
+
+            if (shouldExit) {
+              SystemNavigator.pop();
+            }
           },
           child: Scaffold(
             body: controller.screens[controller.selectedIndex.value],

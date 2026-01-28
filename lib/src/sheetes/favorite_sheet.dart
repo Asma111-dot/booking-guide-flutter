@@ -20,7 +20,7 @@ void showRemoveFavoriteSheet(
         20,
         20,
         20,
-        30 + MediaQuery.of(context).padding.bottom,
+        50 + MediaQuery.of(context).padding.bottom,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

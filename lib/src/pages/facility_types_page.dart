@@ -80,11 +80,9 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage>
     final notificationsState = ref.watch(notificationsProvider);
     final unreadCount =
         notificationsState.data?.where((n) => n.readAt == null).length ?? 0;
-    final isGrid = ref.watch(isGridProvider);
 
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
 
     if (facilityTypesState.data != null &&
         facilityTypesState.data!.isNotEmpty &&

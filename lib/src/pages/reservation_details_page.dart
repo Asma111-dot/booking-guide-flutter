@@ -43,8 +43,21 @@ class _ReservationDetailsPageState
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return WillPopScope(
-      onWillPop: () => confirmExitToHome(context),
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (didPop) return;
+
+        final ok = await confirmExitToHome(context);
+
+        if (ok) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            Routes.navigationMenu,
+            (route) => false,
+          );
+        }
+      },
       child: Scaffold(
         backgroundColor: theme.scaffoldBackgroundColor,
         appBar: CustomAppBarClipper(
@@ -93,14 +106,18 @@ class _ReservationDetailsPageState
                 Button(
                   width: double.infinity,
                   title: trans().go_back,
-                  icon: const Icon(goBackIcon, color: Colors.white),
+                  icon: Icon(
+                    goBackIcon,
+                    size: Sizes.iconM20,
+                    color: colorScheme.onPrimary,
+                  ),
                   iconAfterText: true,
                   disable: false,
                   onPressed: () async {
                     Navigator.pushNamedAndRemoveUntil(
                       context,
                       Routes.navigationMenu,
-                          (route) => false,
+                      (route) => false,
                     );
                   },
                 ),

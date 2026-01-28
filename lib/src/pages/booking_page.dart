@@ -30,16 +30,24 @@ class BookingPage extends ConsumerStatefulWidget {
 
 class _BookingPageState extends ConsumerState<BookingPage>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-
   @override
   bool get wantKeepAlive => true;
+  bool _firstLoad = true;
 
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      ref.read(reservationsProvider.notifier)
+
+    Future.microtask(() async {
+      await ref
+          .read(reservationsProvider.notifier)
           .fetch(userId: widget.userId);
+
+      if (mounted) {
+        setState(() {
+          _firstLoad = false;
+        });
+      }
     });
   }
 
@@ -48,6 +56,7 @@ class _BookingPageState extends ConsumerState<BookingPage>
     super.build(context);
     final reservationState = ref.watch(reservationsProvider);
     final textTheme = Theme.of(context).textTheme;
+    final isFirstEmpty = _firstLoad && (reservationState.data?.isEmpty ?? true);
 
     return DefaultTabController(
       length: 3,
@@ -64,7 +73,8 @@ class _BookingPageState extends ConsumerState<BookingPage>
           ),
           elevation: 0,
           backgroundColor: Colors.transparent,
-          iconTheme: IconThemeData(color: Theme.of(context).colorScheme.onSurface),
+          iconTheme:
+              IconThemeData(color: Theme.of(context).colorScheme.onSurface),
           bottom: TabBar(
             indicatorColor: CustomTheme.color4,
             labelColor: CustomTheme.color3,
@@ -78,21 +88,21 @@ class _BookingPageState extends ConsumerState<BookingPage>
             ],
           ),
         ),
-        body: reservationState.isLoading == true
+        body: reservationState.isLoading == true || isFirstEmpty
             ? ListView.builder(
-          padding: EdgeInsets.all(Insets.m16),
-          itemCount: 5,
-          itemBuilder: (_, __) => const FacilityShimmerCard(),
-        )
+                padding: EdgeInsets.all(Insets.m16),
+                itemCount: 5,
+                itemBuilder: (_, __) => const FacilityShimmerCard(),
+              )
             : TabBarView(
-          children: [
-            _buildReservationList(reservationState.data, null),
-            _buildReservationList(
-                reservationState.data, ReservationStatus.confirmed),
-            _buildReservationList(
-                reservationState.data, ReservationStatus.cancelled),
-          ],
-        ),
+                children: [
+                  _buildReservationList(reservationState.data, null),
+                  _buildReservationList(
+                      reservationState.data, ReservationStatus.confirmed),
+                  _buildReservationList(
+                      reservationState.data, ReservationStatus.cancelled),
+                ],
+              ),
       ),
     );
   }
@@ -147,7 +157,8 @@ class _BookingPageState extends ConsumerState<BookingPage>
         final reservation = reservations[index];
         final placeName = reservation.roomPrice?.room?.facility?.name ?? '---';
         final logo = reservation.roomPrice?.room?.facility?.logo;
-        final imageUrl = (logo != null && logo.isNotEmpty) ? logo : logoCoverImage;
+        final imageUrl =
+            (logo != null && logo.isNotEmpty) ? logo : logoCoverImage;
 
         final checkIn = reservation.checkInDate;
         final checkOut = reservation.checkOutDate;
@@ -177,8 +188,8 @@ class _BookingPageState extends ConsumerState<BookingPage>
                       width: S.w(110),
                       height: S.w(110),
                       fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          ShimmerImagePlaceholder(width: S.w(80), height: S.w(80)),
+                      placeholder: (context, url) => ShimmerImagePlaceholder(
+                          width: S.w(80), height: S.w(80)),
                       errorWidget: (context, url, error) => Image.asset(
                         appIcon,
                         width: S.w(110),
@@ -269,7 +280,8 @@ class _BookingPageState extends ConsumerState<BookingPage>
 
                       // شارة الحالة
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: S.w(12), vertical: S.h(6)),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: S.w(12), vertical: S.h(6)),
                         decoration: BoxDecoration(
                           color: _getStatusColor(reservation.status),
                           borderRadius: Corners.md15,

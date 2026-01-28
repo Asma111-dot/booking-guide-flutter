@@ -1,34 +1,49 @@
 import 'package:flutter/material.dart';
 import '../helpers/general_helper.dart';
-import '../utils/routes.dart';
 
 Future<bool> confirmExitToHome(BuildContext context) async {
   final result = await showDialog<bool>(
     context: context,
+    barrierDismissible: false,
     builder: (context) => AlertDialog(
-      title: Text(trans().confirmExitTitle),
-      content: Text(trans().confirmExitMessage),
+      title: Text(
+        trans().confirmExitTitle,
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      content: Text(
+        trans().confirmExitMessage,
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
       actions: [
         TextButton(
-          child: Text(trans().no),
+          child: Text(
+            trans().no,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ),
+          ),
           onPressed: () => Navigator.of(context).pop(false),
         ),
         TextButton(
-          child: Text(trans().yes),
+          child: Text(
+            trans().yes,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
+            ),
+          ),
           onPressed: () => Navigator.of(context).pop(true),
         ),
       ],
     ),
   );
 
-  if (result == true) {
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      Routes.navigationMenu,
-          (route) => false,
-    );
-    return true;
-  }
-
-  return false;
+  return result ?? false;
 }

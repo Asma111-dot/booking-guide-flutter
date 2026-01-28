@@ -23,12 +23,13 @@ void showCapacityBottomSheet({
       return AnimatedPadding(
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeOut,
-        padding: EdgeInsets.fromLTRB(
-          20,
-          20,
-          20,
-          10 + MediaQuery.of(context).padding.bottom,
-        ),
+        // padding: EdgeInsets.fromLTRB(
+        //   20,
+        //   20,
+        //   20,
+        //   20 + MediaQuery.of(context).padding.bottom,
+        // ),
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
         child: SafeArea(
           top: false,
           child: SingleChildScrollView(
@@ -44,7 +45,6 @@ void showCapacityBottomSheet({
                   ),
                 ),
                 const SizedBox(height: 16),
-
                 TextField(
                   controller: controller,
                   autofocus: false,
@@ -59,11 +59,9 @@ void showCapacityBottomSheet({
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
@@ -71,7 +69,6 @@ void showCapacityBottomSheet({
                         width: 2,
                       ),
                     ),
-
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
@@ -79,16 +76,13 @@ void showCapacityBottomSheet({
                         width: 1,
                       ),
                     ),
-
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 14,
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 20),
-
                 SizedBox(
                   width: double.infinity,
                   child: Material(
@@ -101,7 +95,8 @@ void showCapacityBottomSheet({
                       child: InkWell(
                         borderRadius: BorderRadius.circular(12),
                         onTap: () {
-                          final value = convertToEnglishNumbers(controller.text.trim());
+                          final value =
+                              convertToEnglishNumbers(controller.text.trim());
                           if (value.isNotEmpty) {
                             onSelected(value);
                             Navigator.pop(context);

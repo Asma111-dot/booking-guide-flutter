@@ -72,8 +72,21 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
     final colorScheme = theme.colorScheme;
     final paymentState = ref.watch(paymentProvider);
 
-    return WillPopScope(
-      onWillPop: () => confirmExitToHome(context),
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (didPop) return;
+
+        final ok = await confirmExitToHome(context);
+
+        if (ok) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            Routes.navigationMenu,
+            (route) => false,
+          );
+        }
+      },
       child: Scaffold(
         backgroundColor: theme.scaffoldBackgroundColor,
         appBar: CustomAppBarClipper(title: trans().payment_details),
@@ -166,7 +179,8 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                         CustomRowDetailsWidget(
                           icon: peopleIcon,
                           label: trans().adults_count,
-                          value: "${reservation.adultsCount} ${trans().persons}",
+                          value:
+                              "${reservation.adultsCount} ${trans().persons}",
                         ),
                         CustomRowDetailsWidget(
                           icon: childIcon,
@@ -233,7 +247,7 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                       Navigator.pushNamedAndRemoveUntil(
                         context,
                         Routes.navigationMenu,
-                            (route) => false,
+                        (route) => false,
                       );
                     },
                   ),

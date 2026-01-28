@@ -1775,6 +1775,12 @@ abstract class AppLocalizations {
   /// **'Do you want to return to the home page?'**
   String get confirmExitMessage;
 
+  /// No description provided for @exit_confirm_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to exit the application?'**
+  String get exit_confirm_message;
+
   /// No description provided for @filter_and_search_facilities.
   ///
   /// In en, this message translates to:

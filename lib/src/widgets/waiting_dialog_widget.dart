@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../helpers/general_helper.dart';
-import '../utils/sizes.dart'; // ⬅️ مهم
+import '../utils/sizes.dart';
 
 class WaitingDialogWidget extends StatelessWidget {
   const WaitingDialogWidget({super.key});
