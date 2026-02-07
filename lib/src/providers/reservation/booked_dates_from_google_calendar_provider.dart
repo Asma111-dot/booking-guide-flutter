@@ -9,9 +9,7 @@ class BookedDatesFromGoogleCalendar extends _$BookedDatesFromGoogleCalendar {
   @override
   List<Map<String, String>> build() => [];
 
-  Future<void> fetch(int facilityId) async {
-    state = [];
-
+  Future<List<Map<String, String>>> fetch(int facilityId) async {
     try {
       final response = await request<List<dynamic>>(
         url: getBookedDatesUrl(facilityId),
@@ -19,15 +17,18 @@ class BookedDatesFromGoogleCalendar extends _$BookedDatesFromGoogleCalendar {
         key: 'dates',
       );
 
-      state = (response.data ?? []).map<Map<String, String>>((e) => {
-        'date': e['date'].toString(),
-        'period': e['period'].toString(),
-      }).toList();
+      final data = (response.data ?? [])
+          .map<Map<String, String>>((e) => {
+                'date': e['date'].toString(),
+                'period': e['period'].toString(),
+              })
+          .toList();
 
-      print("📅 التواريخ المحجوزة من Google Calendar: $state");
-    } catch (e, s) {
-      print("❌ فشل في جلب التواريخ المحجوزة من Google Calendar: $e");
-      print("📌 Stacktrace: $s");
+      state = data;
+      return data;
+    } catch (_) {
+      state = [];
+      return [];
     }
   }
 }

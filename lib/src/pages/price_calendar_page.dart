@@ -27,8 +27,7 @@ class PriceAndCalendarPage extends ConsumerStatefulWidget {
       _PriceAndCalendarPageState();
 }
 
-class _PriceAndCalendarPageState
-    extends ConsumerState<PriceAndCalendarPage> {
+class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
   RoomPrice? selectedPrice;
   Map<DateTime, List<dynamic>> events = {};
   bool hasSuccessfulAttempt = false;
@@ -37,17 +36,23 @@ class _PriceAndCalendarPageState
   bool useRange = true;
   DateTime? someDate = DateTime.now();
 
+  bool isSamePeriod(String roomPeriod, String googlePeriod) {
+    return norm(roomPeriod) == norm(googlePeriod);
+  }
+
   String norm(String s) {
-    final t = s.trim().toLowerCase();
+    final t = s.trim().toLowerCase().replaceAll(' ', '');
 
     if (t.contains('صباح')) return 'صباحية';
     if (t.contains('مساء')) return 'مسائية';
-    if (t.contains('كامل')) return 'يوم كامل';
+    if (t.contains('ليل')) return 'ليلية';
+
+    if (t.contains('كامل')) return 'كامل';
+
     if (t.contains('نصف')) return 'نصف يوم';
 
     return t;
   }
-
 
   @override
   void initState() {
@@ -58,9 +63,7 @@ class _PriceAndCalendarPageState
   }
 
   void _fetchRoomPrices() async {
-    await ref
-        .read(roomPricesProvider.notifier)
-        .fetch(roomId: widget.roomId);
+    await ref.read(roomPricesProvider.notifier).fetch(roomId: widget.roomId);
 
     setState(() {
       selectedPrice = null;
@@ -76,48 +79,51 @@ class _PriceAndCalendarPageState
   }) {
     final Map<DateTime, List<dynamic>> tempEvents = {};
 
-    for (var reservation in selectedPrice.reservations) {
+    final roomPeriod = selectedPrice.period;
 
-      final checkInDate  = DateTime.parse(reservation.checkInDate.toString());
-      final checkOutDate = DateTime.parse(reservation.checkOutDate.toString());
+    // ===============================
+    // 1️⃣ حجوزات النظام (تشطب دائمًا)
+    // ===============================
+    for (final reservation in selectedPrice.reservations) {
+      final start = DateUtils.dateOnly(
+        DateTime.parse(reservation.checkInDate.toString()).toLocal(),
+      );
+      final end = DateUtils.dateOnly(
+        DateTime.parse(reservation.checkOutDate.toString()).toLocal(),
+      );
 
-      DateTime currentDate = checkInDate;
-      while (currentDate.isBefore(checkOutDate) ||
-          currentDate.isAtSameMomentAs(checkOutDate)) {
-        final normalized = DateTime(currentDate.year, currentDate.month, currentDate.day);
-        tempEvents[normalized] = [
-          ...(tempEvents[normalized] ?? []),
-          reservation,
-        ];
-        currentDate = currentDate.add(const Duration(days: 1));
+      for (DateTime d = start;
+          !d.isAfter(end);
+          d = d.add(const Duration(days: 1))) {
+        tempEvents.putIfAbsent(d, () => []);
+        tempEvents[d]!.add('system');
       }
     }
 
-    final selectedPeriod = norm(selectedPrice.period.toString());
-
+    // ===============================
+    // 2️⃣ Google Calendar (تطابق period فقط)
+    // ===============================
     for (final item in bookedDates) {
-      final rawDate   = item['date'];
-      final rawPeriod = item['period'];
-      if (rawDate == null) continue;
+      if (item['date'] == null || item['period'] == null) continue;
 
-      final parsed = DateTime.parse(rawDate.toString());
-      final date   = DateTime(parsed.year, parsed.month, parsed.day);
+      // 🔴 الشرط الوحيد
+      if (!isSamePeriod(roomPeriod, item['period'])) continue;
 
-      final period = norm(rawPeriod?.toString() ?? '');
-      if (period == selectedPeriod) {
-        final list = tempEvents[date] ?? [];
-        final already = list.any((e) =>
-        e is Map && e['type'] == 'google' && (e['label']?.toString().contains(period) ?? false));
+      final date = DateUtils.dateOnly(
+        DateTime.parse(item['date']).toLocal(),
+      );
+      debugPrint(
+          '🧪 compare → room=${norm(roomPeriod)} | google=${norm(item['period'])}');
 
-        tempEvents[date] = [
-          ...list,
-          if (!already) {'type': 'google', 'label': 'محجوز: $period'},
-        ];
-      }
+      tempEvents.putIfAbsent(date, () => []);
+      tempEvents[date]!.add('google');
     }
 
-    events = tempEvents;
-    setState(() {});
+    debugPrint('🔥 Final events: $tempEvents');
+
+    setState(() {
+      events = tempEvents;
+    });
   }
 
   @override
@@ -170,69 +176,62 @@ class _PriceAndCalendarPageState
                       ],
                     ),
                   ),
-
                   SizedBox(
                     height: S.h(200),
                     child: (data.isEmpty)
                         ? ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 4,
-                      itemBuilder: (context, index) => Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: S.w(2),
-                          vertical: S.h(10),
-                        ),
-                        child: const RoomPriceShimmerCard(),
-                      ),
-                    )
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 4,
+                            itemBuilder: (context, index) => Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: S.w(2),
+                                vertical: S.h(10),
+                              ),
+                              child: const RoomPriceShimmerCard(),
+                            ),
+                          )
                         : ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: data.length,
-                      itemBuilder: (context, index) {
-                        final roomPrice = data[index];
-                        return Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: S.w(4),
-                            vertical: S.h(14),
-                          ),
-                          child: RoomPriceWidget(
-                            roomPrice: roomPrice,
-                            isSelected: selectedPrice == roomPrice,
-                            onTap: () async {
-                              if (selectedPrice?.id == roomPrice.id) return;
+                            scrollDirection: Axis.horizontal,
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              final roomPrice = data[index];
+                              return Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: S.w(4),
+                                  vertical: S.h(14),
+                                ),
+                                child: RoomPriceWidget(
+                                    roomPrice: roomPrice,
+                                    isSelected: selectedPrice == roomPrice,
+                                    onTap: () async {
+                                      if (selectedPrice?.id == roomPrice.id)
+                                        return;
 
-                              setState(() {
-                                selectedPrice = roomPrice;
-                              });
+                                      setState(() {
+                                        selectedPrice = roomPrice;
+                                        events = {};
+                                        rangeStart = null;
+                                        rangeEnd = null;
+                                      });
 
-                              _populateEvents(
-                                selectedPrice: roomPrice,
-                                bookedDates: const [],
+                                      final facilityId = roomPrice.facilityId;
+                                      if (facilityId == null || facilityId == 0)
+                                        return;
+
+                                      final googleBookedDates = await ref
+                                          .read(
+                                              bookedDatesFromGoogleCalendarProvider
+                                                  .notifier)
+                                          .fetch(facilityId);
+
+                                      _populateEvents(
+                                        selectedPrice: roomPrice,
+                                        bookedDates: googleBookedDates,
+                                      );
+                                    }),
                               );
-
-                              final facilityId = roomPrice.facilityId;
-                              if (facilityId == null || facilityId == 0) return;
-
-                              try {
-                                await ref
-                                    .read(bookedDatesFromGoogleCalendarProvider.notifier)
-                                    .fetch(facilityId);
-
-                                final googleBookedDates =
-                                ref.read(bookedDatesFromGoogleCalendarProvider);
-
-                                _populateEvents(
-                                  selectedPrice: roomPrice,
-                                  bookedDates: googleBookedDates,
-                                );
-                              } catch (e) {
-                                debugPrint('Google dates error: $e');
-                              }
                             },
                           ),
-                        );
-                      },
-                    ),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
@@ -262,22 +261,19 @@ class _PriceAndCalendarPageState
                       ],
                     ),
                   ),
-
                   CustomCalendarWidget(
-                    key: ValueKey(
-                        '${selectedPrice?.id}-${DateTime.now().millisecondsSinceEpoch}'),
-                    events: events.map(
-                          (key, value) =>
-                          MapEntry(key, value.map((e) => e.toString()).toList()),
-                    ),
+                    key: ValueKey(selectedPrice?.id),
+                    events: {
+                      for (var e in events.entries)
+                        DateUtils.dateOnly(e.key): ['booked'],
+                    },
                     selectionType:
-                    useRange ? SelectionType.range : SelectionType.single,
+                        useRange ? SelectionType.range : SelectionType.single,
                     initialSelectedDay: useRange ? null : someDate,
-                    initialSelectedRange: useRange &&
-                        rangeStart != null &&
-                        rangeEnd != null
-                        ? DateTimeRange(start: rangeStart!, end: rangeEnd!)
-                        : null,
+                    initialSelectedRange:
+                        useRange && rangeStart != null && rangeEnd != null
+                            ? DateTimeRange(start: rangeStart!, end: rangeEnd!)
+                            : null,
                     onSingleDateSelected: (date) {
                       setState(() {
                         rangeStart = date;
@@ -313,8 +309,8 @@ class _PriceAndCalendarPageState
             ),
             iconAfterText: true,
             disable: (rangeStart == null ||
-                rangeEnd == null ||
-                selectedPrice == null) &&
+                    rangeEnd == null ||
+                    selectedPrice == null) &&
                 !hasSuccessfulAttempt,
             onPressed: () async {
               if (rangeStart != null &&
@@ -325,14 +321,14 @@ class _PriceAndCalendarPageState
                 });
 
                 ref.read(reservationSaveProvider.notifier).saveReservationDraft(
-                  Reservation(
-                    roomPriceId: selectedPrice!.id,
-                    checkInDate: rangeStart!,
-                    checkOutDate: rangeEnd!,
-                    id: 0,
-                    bookingType: '',
-                  ),
-                );
+                      Reservation(
+                        roomPriceId: selectedPrice!.id,
+                        checkInDate: rangeStart!,
+                        checkOutDate: rangeEnd!,
+                        id: 0,
+                        bookingType: '',
+                      ),
+                    );
 
                 Navigator.pushNamed(
                   context,

@@ -324,13 +324,13 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                       );
                     } else {
                       setState(() => isLoading = false);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            "حدثت مشكلة في جلب تفاصيل الحجز، حاول مرة أخرى.",
-                          ),
-                        ),
-                      );
+                      // ScaffoldMessenger.of(context).showSnackBar(
+                      //   SnackBar(
+                      //     content: Text(
+                      //       "حدثت مشكلة في جلب تفاصيل الحجز، حاول مرة أخرى.",
+                      //     ),
+                      //   ),
+                      // );
                     }
                   } catch (_) {
                     setState(() => isLoading = false);

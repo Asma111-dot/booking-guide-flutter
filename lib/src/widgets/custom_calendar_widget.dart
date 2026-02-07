@@ -59,12 +59,16 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print('🚨 مفاتيح blackoutDates:');
-    final normalizedEvents = {
-      for (var entry in widget.events.entries)
-        DateUtils.dateOnly(entry.key): entry.value,
-    };
-    final blackoutDates = normalizedEvents.keys.toList();
+    // final normalizedEvents = {
+    //   for (var entry in widget.events.entries)
+    //     DateUtils.dateOnly(entry.key): entry.value,
+    // };
+    // final blackoutDates = normalizedEvents.keys.toList();
+    final blackoutDates = widget.events.keys
+        .map((d) => DateUtils.dateOnly(d))
+        .toList();
+
+    debugPrint('🚫 blackoutDates => $blackoutDates');
 
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -126,7 +130,7 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
               // أظهر رسالة بأن المدى يحتوي تواريخ محجوزة
             }
           } else {
-            print("🚨 قيمة غير متوقعة من onSelectionChanged: ${args.value}");
+            debugPrint("🚨 قيمة غير متوقعة من onSelectionChanged: ${args.value}");
           }
         },
 

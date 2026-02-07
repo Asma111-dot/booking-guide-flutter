@@ -7,10 +7,10 @@ import 'package:flutter/foundation.dart';
 
 String baseUrl = kDebugMode
     ? (Platform.isIOS
-        ? "http://localhost:8000/" // إذا كان التطبيق يعمل على iOS
-// : "http://192.168.1.102:8000/") // 192.168.1.103إذا كان التطبيق يعمل على Android
-        : "http://172.21.0.95:8000/") // إذا كان التطبيق يعمل على Android
-    : "https://mybookingsguide.com/"; // إذا كان التطبيق في وضع الإنتاج
+    ? "http://localhost:8000/" // ios
+    : "http://192.168.8.197:8000/") // Android
+//         : "http://172.21.0.95:8000/") //qk
+    : "https://mybookingsguide.com/";
 
 String apiUrl = "${baseUrl}api/";
 
