@@ -43,11 +43,12 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
   String norm(String s) {
     final t = s.trim().toLowerCase().replaceAll(' ', '');
 
-    if (t.contains('صباح')) return 'صباحية';
+    if (t.contains('صباح')) return 'صباحي';
     if (t.contains('مساء')) return 'مسائية';
     if (t.contains('ليل')) return 'ليلية';
 
     if (t.contains('كامل')) return 'كامل';
+    if (t.contains('يوم')) return 'يوم كامل';
 
     if (t.contains('نصف')) return 'نصف يوم';
 
