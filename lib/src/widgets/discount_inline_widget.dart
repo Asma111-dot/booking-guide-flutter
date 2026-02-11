@@ -62,8 +62,8 @@ class _DiscountInlineWidgetState extends ConsumerState<DiscountInlineWidget> {
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final baseColor = isDark ? Colors.grey.shade800 : Colors.grey.shade300;
-    final highlightColor = isDark ? Colors.grey.shade700 : Colors.grey.shade100;
+    // final baseColor = isDark ? Colors.grey.shade800 : Colors.grey.shade300;
+    // final highlightColor = isDark ? Colors.grey.shade700 : Colors.grey.shade100;
 
     return ViewWidget<List<Discount>>(
       meta: discountState.meta,
@@ -174,27 +174,28 @@ class _DiscountInlineWidgetState extends ConsumerState<DiscountInlineWidget> {
           ),
         );
       },
-      onLoading: () => Padding(
-        padding: EdgeInsets.symmetric(horizontal: S.w(26), vertical: S.h(10)),
-        child: Shimmer.fromColors(
-          baseColor: baseColor,
-          highlightColor: highlightColor,
-          child: Container(
-            height: S.h(100),
-            decoration: BoxDecoration(
-              color: baseColor,
-              borderRadius: Corners.md15,
-              boxShadow: [
-                BoxShadow(
-                  color: isDark ? Colors.black12 : Colors.grey.withOpacity(0.1),
-                  blurRadius: S.r(6),
-                  offset: Offset(0, S.h(2)),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+      onLoading: () => const SizedBox.shrink(),
+      // onLoading: () => Padding(
+      //   padding: EdgeInsets.symmetric(horizontal: S.w(26), vertical: S.h(10)),
+      //   child: Shimmer.fromColors(
+      //     baseColor: baseColor,
+      //     highlightColor: highlightColor,
+      //     child: Container(
+      //       height: S.h(100),
+      //       decoration: BoxDecoration(
+      //         color: baseColor,
+      //         borderRadius: Corners.md15,
+      //         boxShadow: [
+      //           BoxShadow(
+      //             color: isDark ? Colors.black12 : Colors.grey.withOpacity(0.1),
+      //             blurRadius: S.r(6),
+      //             offset: Offset(0, S.h(2)),
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ),
+      // ),
       onEmpty: () => SizedBox(height: S.h(150)),
       showError: false,
       showEmpty: false,

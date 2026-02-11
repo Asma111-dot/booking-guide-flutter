@@ -17,16 +17,21 @@ class BookedDatesFromGoogleCalendar extends _$BookedDatesFromGoogleCalendar {
         key: 'dates',
       );
 
+      print('📡 GoogleBookedDates response: ${response.data}');
+
       final data = (response.data ?? [])
           .map<Map<String, String>>((e) => {
-                'date': e['date'].toString(),
-                'period': e['period'].toString(),
-              })
+        'date': e['date'].toString(),
+        'period': e['period'].toString(),
+      })
           .toList();
 
       state = data;
       return data;
-    } catch (_) {
+    } catch (e, s) {
+      print('❌ GoogleBookedDates error: $e');
+      print('📍 Stack: $s');
+
       state = [];
       return [];
     }

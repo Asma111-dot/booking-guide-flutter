@@ -273,6 +273,7 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage>
                 padding: EdgeInsets.symmetric(horizontal: S.w(12)),
                 child: facilityTypesState.data == null
                     ? const FacilityTypeShimmer()
+                    // ? const SizedBox()
                     : facilityTypesState.data!.isEmpty
                         ? const SizedBox()
                         : SingleChildScrollView(
