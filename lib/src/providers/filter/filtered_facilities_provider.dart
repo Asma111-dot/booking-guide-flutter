@@ -16,20 +16,18 @@ class FilteredFacilities extends _$FilteredFacilities {
   Future<void> fetch() async {
     state = state.setLoading();
 
-    final url = searchFacilitiesUrl(filters);
+    final currentFilters = this.filters;
 
-    try {
-      final result = await request<Map<String, dynamic>>(
-        url: url,
-        method: Method.post,
-        body: filters,
-      );
+    final result = await request<Map<String, dynamic>>(
+      url: searchFacilitiesUrl(currentFilters),
+      method: Method.get,   // 🔥 تغيير مهم
+      body: null,           // 🔥 لا نرسل body
+    );
 
-      final facilities = Facility.fromJsonList(result.data?['data'] ?? []);
-      state = state.copyWith(data: facilities, meta: result.meta);
-      state = state.setLoaded();
-    } catch (error) {
-      state = state.setError(error.toString());
-    }
+    final facilities =
+    Facility.fromJsonList(result.data?['data'] ?? []);
+
+    state = state.copyWith(data: facilities, meta: result.meta);
+    state = state.setLoaded();
   }
 }

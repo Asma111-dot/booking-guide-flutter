@@ -6,7 +6,7 @@ part of 'discount_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$discountsHash() => r'297ad6d29f9b39a1d0cc7aa17dab4c2276d88fe8';
+String _$discountsHash() => r'5a697685df408d5d62f947568b29ad792508ec0f';
 
 /// See also [Discounts].
 @ProviderFor(Discounts)

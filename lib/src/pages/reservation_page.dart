@@ -87,7 +87,7 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
 
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final textColor = colorScheme.onSurface;
+    // final textColor = colorScheme.onSurface;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,

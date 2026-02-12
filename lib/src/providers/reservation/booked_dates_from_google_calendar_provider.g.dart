@@ -7,7 +7,7 @@ part of 'booked_dates_from_google_calendar_provider.dart';
 // **************************************************************************
 
 String _$bookedDatesFromGoogleCalendarHash() =>
-    r'82663327b6f7e0f06fd7cc603766499395ad87b4';
+    r'd89d0d03cff3a4b840ce0ed34632b6a90e314f82';
 
 /// See also [BookedDatesFromGoogleCalendar].
 @ProviderFor(BookedDatesFromGoogleCalendar)

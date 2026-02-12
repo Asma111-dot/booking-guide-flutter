@@ -13,7 +13,7 @@ import '../widgets/facility_shimmer_card.dart';
 import '../widgets/facility_widget.dart';
 import '../widgets/view_widget.dart';
 import '../models/facility.dart';
-import '../utils/sizes.dart'; // Insets, Gaps, Corners, TFont
+import '../utils/sizes.dart';
 
 class FacilityPage extends ConsumerStatefulWidget {
   final int facilityTypeId;
@@ -27,16 +27,13 @@ class FacilityPage extends ConsumerStatefulWidget {
   ConsumerState createState() => _FacilityPageState();
 }
 
-class _FacilityPageState extends ConsumerState<FacilityPage>
-    with AutomaticKeepAliveClientMixin {
+class _FacilityPageState extends ConsumerState<FacilityPage> {
 
-  @override
-  bool get wantKeepAlive => true;
+
   late FacilityTarget currentTarget;
   @override
   void initState() {
     super.initState();
-
     switch (widget.facilityTypeId) {
       case 1:
         currentTarget = FacilityTarget.hotels;
@@ -44,10 +41,13 @@ class _FacilityPageState extends ConsumerState<FacilityPage>
       case 2:
         currentTarget = FacilityTarget.chalets;
         break;
+      case 3:
+        currentTarget = FacilityTarget.halls;
+        break;
       default:
         currentTarget = FacilityTarget.all;
-        break;
     }
+
 
     Future.microtask(() {
       ref
@@ -67,7 +67,7 @@ class _FacilityPageState extends ConsumerState<FacilityPage>
     super.didUpdateWidget(oldWidget);
 
     if (widget.facilityTypeId != oldWidget.facilityTypeId) {
-      // 🔹 تحديث target حسب النوع الجديد
+
       switch (widget.facilityTypeId) {
         case 1:
           currentTarget = FacilityTarget.hotels;
@@ -75,15 +75,16 @@ class _FacilityPageState extends ConsumerState<FacilityPage>
         case 2:
           currentTarget = FacilityTarget.chalets;
           break;
+        case 3:
+          currentTarget = FacilityTarget.halls;
+          break;
         default:
           currentTarget = FacilityTarget.all;
-          break;
       }
 
       Future.microtask(() {
         ref.read(facilitiesProvider(currentTarget).notifier).fetch(
           facilityTypeId: widget.facilityTypeId,
-          force: true,
         );
       });
     }
@@ -91,7 +92,6 @@ class _FacilityPageState extends ConsumerState<FacilityPage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     final facilitiesState = ref.watch(facilitiesProvider(currentTarget));
     final isGrid = ref.watch(isGridProvider);
 

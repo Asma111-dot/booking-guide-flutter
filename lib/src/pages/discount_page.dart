@@ -101,13 +101,13 @@ class _DiscountPageState extends ConsumerState<DiscountPage> {
                           ),
                         ),
                       ),
-                      Gaps.h12,
+                      Gaps.w12,
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              discount.name ,
+                              discount.name,
                               style: TextStyle(
                                 color: colorScheme.primary,
                                 fontSize: TFont.m14,
@@ -116,15 +116,27 @@ class _DiscountPageState extends ConsumerState<DiscountPage> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            Gaps.h4,
-                            Text(
-                              '${trans().discount_value}: ${discount.value}',
-                              style: TextStyle(
-                                color: colorScheme.secondary,
-                                fontSize: TFont.s12,
-                              ),
+                            Gaps.h8,
+                            Row(
+                              children: [
+                                Text(
+                                  '${trans().discount_value}: ',
+                                  style: TextStyle(
+                                    color: colorScheme.secondary,
+                                    fontSize: TFont.s12,
+                                  ),
+                                ),
+                                Text(
+                                  discount.formattedValue,
+                                  style: TextStyle(
+                                    color: colorScheme.tertiary,
+                                    fontSize: TFont.m14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Gaps.h4,
+                            Gaps.h8,
                             Text(
                               ' ${discount.facility?.name ?? '-'}',
                               style: TextStyle(

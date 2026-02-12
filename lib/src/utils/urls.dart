@@ -181,12 +181,6 @@ String removeFavoriteUrl(int userId, int facilityId) =>
 // URLs Discounts
 String getDiscountUrl(int discountId) => "${apiUrl}discounts/$discountId";
 
-String addDiscountUrl() => "${apiUrl}discounts";
-
-String updateDiscountUrl(int discountId) => "${apiUrl}discounts/$discountId";
-
-String deleteDiscountUrl(int discountId) => "${apiUrl}discounts/$discountId";
-
 String getDiscountsUrl() => "${apiUrl}discounts";
 
 // URLs Notifications

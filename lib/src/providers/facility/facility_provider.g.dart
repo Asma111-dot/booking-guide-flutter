@@ -6,7 +6,7 @@ part of 'facility_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$facilitiesHash() => r'3cb1c49a108c116f45868e1ea353e3407a8938ed';
+String _$facilitiesHash() => r'06f64ea4378c34ccd2327eb0c4079de8a5bb849a';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,7 +30,7 @@ class _SystemHash {
 }
 
 abstract class _$Facilities
-    extends BuildlessNotifier<Response<List<Facility>>> {
+    extends BuildlessAutoDisposeNotifier<Response<List<Facility>>> {
   late final FacilityTarget target;
 
   Response<List<Facility>> build(
@@ -81,8 +81,8 @@ class FacilitiesFamily extends Family<Response<List<Facility>>> {
 }
 
 /// See also [Facilities].
-class FacilitiesProvider
-    extends NotifierProviderImpl<Facilities, Response<List<Facility>>> {
+class FacilitiesProvider extends AutoDisposeNotifierProviderImpl<Facilities,
+    Response<List<Facility>>> {
   /// See also [Facilities].
   FacilitiesProvider(
     FacilityTarget target,
@@ -138,7 +138,7 @@ class FacilitiesProvider
   }
 
   @override
-  NotifierProviderElement<Facilities, Response<List<Facility>>>
+  AutoDisposeNotifierProviderElement<Facilities, Response<List<Facility>>>
       createElement() {
     return _FacilitiesProviderElement(this);
   }
@@ -159,14 +159,14 @@ class FacilitiesProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin FacilitiesRef on NotifierProviderRef<Response<List<Facility>>> {
+mixin FacilitiesRef
+    on AutoDisposeNotifierProviderRef<Response<List<Facility>>> {
   /// The parameter `target` of this provider.
   FacilityTarget get target;
 }
 
-class _FacilitiesProviderElement
-    extends NotifierProviderElement<Facilities, Response<List<Facility>>>
-    with FacilitiesRef {
+class _FacilitiesProviderElement extends AutoDisposeNotifierProviderElement<
+    Facilities, Response<List<Facility>>> with FacilitiesRef {
   _FacilitiesProviderElement(super.provider);
 
   @override

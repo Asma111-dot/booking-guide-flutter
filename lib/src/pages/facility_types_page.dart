@@ -195,7 +195,9 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage>
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: Insets.m16,),
+                padding: EdgeInsets.symmetric(
+                  horizontal: Insets.m16,
+                ),
                 child: Row(
                   children: [
                     Expanded(
@@ -307,17 +309,19 @@ class _FacilityTypesPageState extends ConsumerState<FacilityTypesPage>
               ),
               Gaps.h4,
               Expanded(
-                child: selectedFacilityType == null
-                    ? ListView.builder(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Insets.m16,
-                          vertical: S.h(12),
-                        ),
-                        itemCount: 5,
-                        itemBuilder: (_, __) => const FacilityShimmerCard(),
-                      )
-                    : FacilityPage(facilityTypeId: selectedFacilityType!),
-              ),
+                  child: selectedFacilityType == null
+                      ? ListView.builder(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Insets.m16,
+                            vertical: S.h(12),
+                          ),
+                          itemCount: 5,
+                          itemBuilder: (_, __) => const FacilityShimmerCard(),
+                        )
+                      : FacilityPage(
+                          key: ValueKey(selectedFacilityType),
+                          facilityTypeId: selectedFacilityType!,
+                        )),
             ],
           ),
         ),

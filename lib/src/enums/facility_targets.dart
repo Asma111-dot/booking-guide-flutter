@@ -1,5 +1,5 @@
 enum FacilityTarget {
-  all, hotels, chalets, favorites, maps, searches, filters;
+  all, hotels, chalets, halls, favorites, maps, searches, filters;
 }
 
 extension FacilityTargetExtension on FacilityTarget {
@@ -9,6 +9,8 @@ extension FacilityTargetExtension on FacilityTarget {
         return 1;
       case FacilityTarget.chalets:
         return 2;
+      case FacilityTarget.halls:
+        return 3;
       default:
         return null;
     }

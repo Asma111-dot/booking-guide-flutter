@@ -40,9 +40,9 @@ class FacilityWidget extends ConsumerWidget {
     final finalPrice = facility.finalPrice ?? firstPrice;
     final hasDiscount = finalPrice < firstPrice;
 
-    if (!_isWithinPriceRange(firstPrice)) {
-      return const SizedBox();
-    }
+    // if (!_isWithinPriceRange(firstPrice)) {
+    //   return const SizedBox();
+    // }
 
     return GestureDetector(
       onTap: () {

@@ -104,39 +104,34 @@ class Facility {
   }
 
   factory Facility.fromJson(Map<String, dynamic> jsonMap) {
+    final location = jsonMap['location'] as Map<String, dynamic>?;
+
     return Facility(
       id: jsonMap['id'] ?? 0,
       facilityTypeId: jsonMap['facility_type_id'] ?? 0,
       name: jsonMap['name'] ?? '',
       desc: jsonMap['desc'] ?? '',
       address: jsonMap['address'],
-      latitude: double.tryParse(jsonMap['latitude']?.toString() ?? ''),
-      longitude: double.tryParse(jsonMap['longitude']?.toString() ?? ''),
-      geojson: jsonMap['geojson'],
-      logo: jsonMap['logo'],
+
+      latitude: location?['lat'] != null
+          ? double.tryParse(location!['lat'].toString())
+          : null,
+
+      longitude: location?['lng'] != null
+          ? double.tryParse(location!['lng'].toString())
+          : null,
+
+      logo: jsonMap['image'], // 🔥 هنا التعديل
+
       price: jsonMap['price'] != null
           ? double.tryParse(jsonMap['price'].toString())
           : null,
+
       finalPrice: jsonMap['final_price'] != null
           ? double.tryParse(jsonMap['final_price'].toString())
           : null,
+
       firstRoomId: jsonMap['first_room_id'],
-      rooms: (jsonMap['rooms'] is List)
-          ? List<Room>.from(
-              (jsonMap['rooms'] as List).map((item) => Room.fromJson(item)))
-          : [],
-      isFavorite: (jsonMap['is_favorite'] is int)
-          ? jsonMap['is_favorite'] == 1
-          : (jsonMap['is_favorite'] ?? false),
-      discounts: jsonMap['discounts'] != null
-          ? List<Discount>.from(
-              jsonMap['discounts'].map((d) => Discount.fromJson(d)))
-          : [],
-      activeDiscount: jsonMap['active_discount'] != null
-          ? Discount.fromJson(jsonMap['active_discount'])
-          : null,
-      appliedDiscounts: jsonMap['applied_discounts'] ?? [],
-      status: jsonMap['status'] != null ? Status.fromJson(jsonMap['status']) : null,
     );
   }
 

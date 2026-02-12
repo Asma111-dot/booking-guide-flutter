@@ -56,6 +56,19 @@ class Discount {
     );
   }
 
+  String get formattedValue {
+    final cleanValue = value % 1 == 0
+        ? value.toInt().toString()
+        : value.toString();
+
+    if (type == "percentage") {
+      return "$cleanValue %";
+    } else {
+      return "$cleanValue ريال";
+    }
+  }
+
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,

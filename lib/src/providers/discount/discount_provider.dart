@@ -36,46 +36,4 @@ class Discounts extends _$Discounts {
       state = state.setError(e.toString());
     }
   }
-
-  Future save(Discount discount) async {
-    state = state.setLoading();
-    await request<Discount>(
-      url: discount.id == 0 ? addDiscountUrl() : updateDiscountUrl(discount.id),
-      method: discount.id == 0 ? Method.post : Method.put,
-      body: discount.toJson(),
-    ).then((value) {
-      if (value.isLoaded()) {
-        addOrUpdateDiscount(value.data!);
-      }
-      state = state.copyWith(meta: value.meta).setLoaded();
-    }).catchError((error) {
-      state = state.setError(error.toString());
-    });
-  }
-
-  Future delete(int discountId) async {
-    state = state.setLoading();
-    await request(
-      url: deleteDiscountUrl(discountId),
-      method: Method.delete,
-    ).then((value) {
-      final updatedList = <Discount>[...(state.data ?? [])]..removeWhere((d) => d.id == discountId);
-      state = state.copyWith(data: updatedList, meta: value.meta).setLoaded();
-    }).catchError((error) {
-      state = state.setError(error.toString());
-    });
-  }
-
-  void addOrUpdateDiscount(Discount discount) {
-    final updatedList = <Discount>[...(state.data ?? [])];
-    final index = updatedList.indexWhere((d) => d.id == discount.id);
-
-    if (index != -1) {
-      updatedList[index] = discount;
-    } else {
-      updatedList.add(discount);
-    }
-
-    state = state.copyWith(data: updatedList);
-  }
 }
