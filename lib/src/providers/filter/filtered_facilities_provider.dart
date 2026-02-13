@@ -18,14 +18,14 @@ class FilteredFacilities extends _$FilteredFacilities {
 
     final currentFilters = this.filters;
 
-    final result = await request<Map<String, dynamic>>(
+    final result = await request<List<dynamic>>(
       url: searchFacilitiesUrl(currentFilters),
-      method: Method.get,   // 🔥 تغيير مهم
-      body: null,           // 🔥 لا نرسل body
+      method: Method.get,
+      body: null,
     );
 
     final facilities =
-    Facility.fromJsonList(result.data?['data'] ?? []);
+    Facility.fromJsonList(result.data ?? []);
 
     state = state.copyWith(data: facilities, meta: result.meta);
     state = state.setLoaded();

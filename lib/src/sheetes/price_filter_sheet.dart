@@ -46,7 +46,7 @@ void showPriceRangeBottomSheet({
               keyboardType: TextInputType.number,
               style: const TextStyle(fontFamily: 'Roboto'),
               decoration: InputDecoration(
-                labelText: trans().people_count,
+                labelText: trans().min_price,
                 labelStyle: TextStyle(
                   fontSize: 12,
                   fontFamily: 'Roboto',
@@ -86,7 +86,7 @@ void showPriceRangeBottomSheet({
               keyboardType: TextInputType.number,
               style: const TextStyle(fontFamily: 'Roboto'),
               decoration: InputDecoration(
-                labelText: trans().people_count,
+                labelText: trans().max_price,
                 labelStyle: TextStyle(
                   fontSize: 12,
                   fontFamily: 'Roboto',

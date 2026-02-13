@@ -20,22 +20,21 @@ class SortedFacilities extends _$SortedFacilities {
 
     state = state.setLoading();
 
-    final url = "${searchFacilitiesUrl({})}?sort=$key";
-
     try {
-      final result = await request<Map<String, dynamic>>(
-        url: url,
-        method: Method.post,
-        body: {},
+      final result = await request<List<dynamic>>(
+        url: searchFacilitiesUrl({
+          "sort": key,
+        }),
+        method: Method.get,
       );
-     final List<dynamic> dataList = result.data?['data'] ?? [];
 
-      // final List<dynamic> dataList = result.data?['data']?['data'] ?? [];
+      final List<dynamic> dataList = result.data ?? [];
       final facilities = Facility.fromJsonList(dataList);
+      print("Fetched facilities count: ${facilities.length}");
 
       state = Response<List<Facility>>(
         data: facilities,
-        meta: result.meta ,
+        meta: result.meta,
       ).setLoaded();
     } catch (error) {
       state = state.setError(error.toString());

@@ -70,21 +70,21 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
       addressNearUser: values[FacilityFilterType.addressNearUser],
       capacityAtLeast: values[FacilityFilterType.capacityAtLeast],
       availableOnDay: values[FacilityFilterType.availableOnDay],
-      priceBetween: values[FacilityFilterType.priceBetween],
+      // priceBetween: values[FacilityFilterType.priceBetween],
       facilityTypeId: values[FacilityFilterType.facilityTypeId],
     );
 
-    final priceBetween = values[FacilityFilterType.priceBetween];
-    if (priceBetween != null &&
-        priceBetween is String &&
-        priceBetween.contains(',')) {
-      final parts = priceBetween.split(',');
-      minPriceFilter = parts[0];
-      maxPriceFilter = parts[1];
-    } else {
-      minPriceFilter = null;
-      maxPriceFilter = null;
-    }
+    // final priceBetween = values[FacilityFilterType.priceBetween];
+    // if (priceBetween != null &&
+    //     priceBetween is String &&
+    //     priceBetween.contains(',')) {
+    //   final parts = priceBetween.split(',');
+    //   minPriceFilter = parts[0];
+    //   maxPriceFilter = parts[1];
+    // } else {
+    //   minPriceFilter = null;
+    //   maxPriceFilter = null;
+    // }
 
     if (mapEquals(currentFilters, filters)) {
       ref.read(filteredFacilitiesProvider(currentFilters!).notifier).fetch();
@@ -360,7 +360,6 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
                         currentSort: currentSort,
                       );
                     } else {
-                      // العرض الافتراضي: حسب نوع المنشأة (بدون /search)
                       return TabFilteredFacilitiesListWidget(
                         facilityTypeId: values[FacilityFilterType.facilityTypeId],
                       );
@@ -421,18 +420,18 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
 
   void _openValueBottomSheet(FacilityFilterType filter) {
     switch (filter) {
-      case FacilityFilterType.priceBetween:
-        showPriceRangeBottomSheet(
-          context: context,
-          onSelected: (value) {
-            setState(() {
-              values[FacilityFilterType.priceBetween] = value;
-              selectedFilter = FacilityFilterType.priceBetween;
-            });
-            _onApplyFilters();
-          },
-        );
-        break;
+      // case FacilityFilterType.priceBetween:
+      //   showPriceRangeBottomSheet(
+      //     context: context,
+      //     onSelected: (value) {
+      //       setState(() {
+      //         values[FacilityFilterType.priceBetween] = value;
+      //         selectedFilter = FacilityFilterType.priceBetween;
+      //       });
+      //       _onApplyFilters();
+      //     },
+      //   );
+      //   break;
 
       case FacilityFilterType.capacityAtLeast:
         showCapacityBottomSheet(

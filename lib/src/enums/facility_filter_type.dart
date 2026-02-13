@@ -8,7 +8,7 @@ enum FacilityFilterType {
   capacityAtLeast,     // 3
   availableOnDay,      // 4
   addressNearUser,     // 5
-  priceBetween,        // 6
+  // priceBetween,        // 6
   checkInBetween,      // 7 ← مؤجّلة ولن تظهر
   facilityTypeId,      // 8 ← داخلي فقط
 }
@@ -22,8 +22,8 @@ extension FacilityFilterTypeExtension on FacilityFilterType {
         return trans().address_like;
       case FacilityFilterType.facilityTypeId:
         return trans().facility_type_id;
-      case FacilityFilterType.priceBetween:
-        return trans().price_between;
+      // case FacilityFilterType.priceBetween:
+      //   return trans().price_between;
       case FacilityFilterType.checkInBetween:
         return trans().check_in_between;
       case FacilityFilterType.addressNearUser:
@@ -43,8 +43,8 @@ extension FacilityFilterTypeExtension on FacilityFilterType {
         return 'filter[address_like]';
       case FacilityFilterType.facilityTypeId:
         return 'filter[facility_type_id]';
-      case FacilityFilterType.priceBetween:
-        return 'filter[price_between]';
+      // case FacilityFilterType.priceBetween:
+      //   return 'filter[price_between]';
       case FacilityFilterType.checkInBetween:
         return 'filter[check_in_between]';
       case FacilityFilterType.addressNearUser:
@@ -59,26 +59,25 @@ extension FacilityFilterTypeExtension on FacilityFilterType {
   IconData get icon {
     switch (this) {
       case FacilityFilterType.name:
-        return Icons.person_outline; // اسم
+        return Icons.person_outline;
       case FacilityFilterType.addressLike:
-        return Icons.location_on_outlined; // العنوان
-      case FacilityFilterType.priceBetween:
-        return Icons.attach_money; // السعر
+        return Icons.location_on_outlined;
+      // case FacilityFilterType.priceBetween:
+      //   return Icons.attach_money;
       case FacilityFilterType.checkInBetween:
-        return Icons.calendar_today_outlined; // الوصول
+        return Icons.calendar_today_outlined;
       case FacilityFilterType.addressNearUser:
-        return Icons.place_outlined; // بالقرب
+        return Icons.place_outlined;
       case FacilityFilterType.capacityAtLeast:
-        return Icons.group_outlined; // الأشخاص
+        return Icons.group_outlined;
       case FacilityFilterType.availableOnDay:
-        return Icons.event_available_outlined; // متاحة في يوم
+        return Icons.event_available_outlined;
       case FacilityFilterType.facilityTypeId:
-        return Icons.apartment_outlined; // نوع المنشأة
+        return Icons.apartment_outlined;
     }
   }
 }
 
-// الإكستنشن الثاني للوصف
 extension FacilityFilterTypeDescription on FacilityFilterType {
   String get description {
     switch (this) {
@@ -86,8 +85,8 @@ extension FacilityFilterTypeDescription on FacilityFilterType {
         return trans().desc_name;
       case FacilityFilterType.addressLike:
         return trans().desc_address_like;
-      case FacilityFilterType.priceBetween:
-        return trans().desc_price_between;
+      // case FacilityFilterType.priceBetween:
+      //   return trans().desc_price_between;
       case FacilityFilterType.checkInBetween:
         return trans().desc_check_in_between;
       case FacilityFilterType.addressNearUser:
@@ -110,9 +109,9 @@ String buildFilterDescription(FacilityFilterType filter, dynamic value) {
       return 'تمت التصفية حسب العنوان الذي يحتوي: "$value"';
     case FacilityFilterType.capacityAtLeast:
       return 'تمت التصفية لعدد أشخاص لا يقل عن $value';
-    case FacilityFilterType.priceBetween:
-      final parts = value.split(',');
-      return 'تمت التصفية لأسعار بين ${parts[0]} و ${parts[1]}';
+    // case FacilityFilterType.priceBetween:
+    //   final parts = value.split(',');
+    //   return 'تمت التصفية لأسعار بين ${parts[0]} و ${parts[1]}';
     case FacilityFilterType.availableOnDay:
       return 'تمت التصفية حسب اليوم المتاح';
     case FacilityFilterType.addressNearUser:

@@ -52,7 +52,7 @@ void showAvailableDayBottomSheet({
                   controller: controller,
                   readOnly: true,
                   decoration: InputDecoration(
-                    labelText: trans().people_count,
+                    labelText: trans().day_1,
                     labelStyle: TextStyle(
                       fontSize: 12,
                       fontFamily: 'Roboto',

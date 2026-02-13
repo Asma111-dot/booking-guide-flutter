@@ -67,6 +67,7 @@ String searchFacilitiesUrl(Map<String, String> filters) {
   }
   return url;
 }
+
 // String searchFacilitiesUrl() => "${apiUrl}facilities/search";
 
 // URLs Facility Map

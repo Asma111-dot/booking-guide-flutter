@@ -63,6 +63,9 @@ class SortedFacilitiesListWidget extends ConsumerWidget {
         ? trans().hall_sorted_by_lowest_price
         : trans().hall_sorted_by_highest_price);
 
+    print("facilityTypeId from widget: $facilityTypeId");
+    print("first facility type: ${allFacilities.isNotEmpty ? allFacilities.first.facilityTypeId : 'empty'}");
+
     // Empty
     if (facilities.isEmpty) {
       return Center(

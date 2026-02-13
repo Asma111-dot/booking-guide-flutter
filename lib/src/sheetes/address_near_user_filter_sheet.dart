@@ -43,7 +43,7 @@ void showAddressNearUserBottomSheet({
               controller: controller,
               autofocus: false,
               decoration: InputDecoration(
-                labelText: trans().people_count,
+                labelText: trans().address,
                 labelStyle: TextStyle(
                   fontSize: 12,
                   fontFamily: 'Roboto',
