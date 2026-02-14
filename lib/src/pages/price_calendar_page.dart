@@ -83,9 +83,10 @@ class _PriceAndCalendarPageState extends ConsumerState<PriceAndCalendarPage> {
     final roomPeriod = selectedPrice.period;
 
     // ===============================
-    // 1️⃣ حجوزات النظام (تشطب دائمًا)
+    // 1️⃣ حجوزات النظام
     // ===============================
     for (final reservation in selectedPrice.reservations) {
+
       final start = DateUtils.dateOnly(
         DateTime.parse(reservation.checkInDate.toString()).toLocal(),
       );

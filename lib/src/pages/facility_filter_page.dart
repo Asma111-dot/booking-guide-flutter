@@ -67,7 +67,7 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
       name: values[FacilityFilterType.name],
       addressLike: values[FacilityFilterType.addressLike],
       // checkInBetween: values[FacilityFilterType.checkInBetween],
-      addressNearUser: values[FacilityFilterType.addressNearUser],
+      // addressNearUser: values[FacilityFilterType.addressNearUser],
       capacityAtLeast: values[FacilityFilterType.capacityAtLeast],
       availableOnDay: values[FacilityFilterType.availableOnDay],
       // priceBetween: values[FacilityFilterType.priceBetween],
@@ -398,18 +398,21 @@ class _FacilityFilterPageState extends ConsumerState<FacilityFilterPage>
               setState(() {
                 selectedFilter = filter;
               });
-            } else if (filter == FacilityFilterType.addressNearUser) {
-              showAddressNearUserBottomSheet(
-                context: context,
-                onSelected: (value) {
-                  setState(() {
-                    values[FacilityFilterType.addressNearUser] = value;
-                    selectedFilter = FacilityFilterType.addressNearUser;
-                  });
-                  _onApplyFilters();
-                },
-              );
-            } else {
+            }
+            // else if (filter == FacilityFilterType.addressNearUser) {
+            //   showAddressNearUserBottomSheet(
+            //     context: context,
+            //     onSelected: (value) {
+            //       setState(() {
+            //         values[FacilityFilterType.addressNearUser] = value;
+            //         selectedFilter = FacilityFilterType.addressNearUser;
+            //       }
+            //       );
+            //       _onApplyFilters();
+            //     },
+            //   );
+            // }
+            else {
               _openValueBottomSheet(filter);
             }
           },
