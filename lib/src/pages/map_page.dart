@@ -24,7 +24,8 @@ class MapPage extends ConsumerStatefulWidget {
 
 class _MapPageState extends ConsumerState<MapPage> {
   GoogleMapController? mapController;
-  final CustomInfoWindowController _customInfoWindowController = CustomInfoWindowController();
+  final CustomInfoWindowController _customInfoWindowController =
+      CustomInfoWindowController();
   int? selectedMarkerId;
   List<f.Facility> _lastFacilities = const [];
   bool _movedOnce = false;
@@ -35,19 +36,10 @@ class _MapPageState extends ConsumerState<MapPage> {
   void initState() {
     super.initState();
 
-
     Future.microtask(() {
-      ref.read(getProvider().notifier)
-          .fetch(
-        facilityTypeId: 0,
-        force: true,
-      );
-
-      // fetch(
-      //   facilityTypeId: widget.facilityTypeId,
-      //   force: true,
-      // );
-
+      ref.read(getProvider().notifier).fetch(
+            facilityTypeId: widget.facilityTypeId,
+          );
     });
   }
 
@@ -109,7 +101,8 @@ class _MapPageState extends ConsumerState<MapPage> {
           ),
           Expanded(
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: S.h(6), horizontal: S.w(10)),
+              padding:
+                  EdgeInsets.symmetric(vertical: S.h(6), horizontal: S.w(10)),
               decoration: BoxDecoration(
                 color: colorScheme.surface,
                 borderRadius: const BorderRadius.only(
@@ -153,7 +146,7 @@ class _MapPageState extends ConsumerState<MapPage> {
     final lat = facility.latitude ?? 0.0;
     final lng = facility.longitude ?? 0.0;
 
-    setState(() => selectedMarkerId = facility.id); // ← يغير لون الماركر المحدد
+    setState(() => selectedMarkerId = facility.id);
 
     await mapController?.animateCamera(
       CameraUpdate.newCameraPosition(
@@ -161,12 +154,13 @@ class _MapPageState extends ConsumerState<MapPage> {
       ),
     );
 
-    _customInfoWindowController.hideInfoWindow!(); // تنظيف أي نافذة سابقة
+    _customInfoWindowController.hideInfoWindow!();
 
     _customInfoWindowController.addInfoWindow!(
       GestureDetector(
-        onTap: () => Navigator.pushNamed(context, Routes.roomDetails, arguments: facility),
-        child: _buildInfoCard(context, facility), // ← نفس الكرت
+        onTap: () => Navigator.pushNamed(context, Routes.roomDetails,
+            arguments: facility),
+        child: _buildInfoCard(context, facility),
       ),
       LatLng(lat, lng),
     );
@@ -176,17 +170,13 @@ class _MapPageState extends ConsumerState<MapPage> {
   Widget build(BuildContext context) {
     final facilitiesState = ref.watch(getProvider());
 
-    // final double normalHue = hueFromColor(CustomTheme.whiteColor);
-    // final double selectedHue = darkerHueFromColor(CustomTheme.primaryColor);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final double normalHue = isDark
-        ? BitmapDescriptor.hueAzure
-        : BitmapDescriptor.hueAzure;
+    final double normalHue =
+        isDark ? BitmapDescriptor.hueAzure : BitmapDescriptor.hueAzure;
 
-    final double selectedHue = isDark
-        ? BitmapDescriptor.hueViolet
-        : BitmapDescriptor.hueViolet;
+    final double selectedHue =
+        isDark ? BitmapDescriptor.hueViolet : BitmapDescriptor.hueViolet;
 
     return Scaffold(
       appBar: AppBar(
@@ -194,12 +184,12 @@ class _MapPageState extends ConsumerState<MapPage> {
         title: Text(
           trans().map,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            color: CustomTheme.color2,
-            fontWeight: FontWeight.bold,
-            fontSize: TFont.xl18,
-          ),
+                color: CustomTheme.color2,
+                fontWeight: FontWeight.bold,
+                fontSize: TFont.xl18,
+              ),
         ),
-          elevation: 0,
+        elevation: 0,
         backgroundColor: Colors.transparent,
         iconTheme: IconThemeData(color: CustomTheme.color3),
         actions: [
@@ -232,12 +222,11 @@ class _MapPageState extends ConsumerState<MapPage> {
               forceShowLoaded: facilitiesState.data != null,
               onLoaded: (data) {
                 _lastFacilities = data;
-                // final theme = Theme.of(context);
-                // final colorScheme = theme.colorScheme;
-                // final isDark = theme.brightness == Brightness.dark;
+
                 final Set<Marker> markers = data.map((facility) {
                   final bool isSelected = selectedMarkerId == facility.id;
-                  print('${facility.name} => lat: ${facility.latitude}, lng: ${facility.longitude}');
+                  print(
+                      '${facility.name} => lat: ${facility.latitude}, lng: ${facility.longitude}');
                   return Marker(
                     markerId: MarkerId(facility.id.toString()),
                     position: LatLng(
@@ -245,25 +234,25 @@ class _MapPageState extends ConsumerState<MapPage> {
                     icon: BitmapDescriptor.defaultMarkerWithHue(
                       isSelected ? selectedHue : normalHue,
                     ),
-                    // zIndex: isSelected ? 1000 : 0, // ← هنا
                     onTap: () {
                       setState(() => selectedMarkerId = facility.id);
 
-                      _customInfoWindowController.hideInfoWindow!(); // تنظيف
+                      _customInfoWindowController.hideInfoWindow!();
                       _customInfoWindowController.addInfoWindow!(
                         GestureDetector(
-                          onTap: () => Navigator.pushNamed(context, Routes.roomDetails, arguments: facility),
-                          child: _buildInfoCard(context, facility), // ← نفس الكرت
+                          onTap: () => Navigator.pushNamed(
+                              context, Routes.roomDetails,
+                              arguments: facility),
+                          child:
+                              _buildInfoCard(context, facility),
                         ),
-                        LatLng(facility.latitude ?? 0.0, facility.longitude ?? 0.0),
+                        LatLng(facility.latitude ?? 0.0,
+                            facility.longitude ?? 0.0),
                       );
                     },
                   );
                 }).toSet();
 
-                // if (data.isNotEmpty) {
-                //   moveToLocation(data);
-                // }
                 if (data.isNotEmpty && !_movedOnce) {
                   moveToLocation(data);
                   _movedOnce = true;
@@ -308,4 +297,3 @@ class _MapPageState extends ConsumerState<MapPage> {
     );
   }
 }
-
