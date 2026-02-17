@@ -64,20 +64,28 @@ class _BookingDetailsPageState extends ConsumerState<BookingDetailsPage> {
           icon: Icon(apartmentIcon, color: colorScheme.onPrimary),
           iconAfterText: true,
           disable: false,
-          onPressed: () async {
-            final facility = reservationState.data?.roomPrice?.room?.facility;
-            if (facility != null) {
+            onPressed: () async{
+              final reservation = reservationState.data;
+              final facility = reservation?.roomPrice?.room?.facility;
+              final roomId = reservation?.roomPrice?.room?.id;
+
+              if (facility == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("لا يمكن عرض تفاصيل الغرفة")),
+                );
+                return;
+              }
+
+              final fixedFacility = facility.copyWith(
+                firstRoomId: roomId ?? facility.firstRoomId,
+              );
+
               Navigator.pushNamed(
                 context,
                 Routes.roomDetails,
-                arguments: facility,
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("لا يمكن عرض تفاصيل الغرفة")),
+                arguments: fixedFacility,
               );
             }
-          },
         ),
       ),
     );

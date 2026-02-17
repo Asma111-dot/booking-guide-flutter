@@ -15,8 +15,20 @@ class Status {
     name: (json['name'] ?? '').toString(),
     label: json['label']?.toString(),
     statusableType: json['statusable_type']?.toString(),
-    statusableId: json['statusable_id'] as int?,
+    statusableId: int.tryParse(json['statusable_id']?.toString() ?? ''),
   );
+
+  /// ✅ إذا رجع من الـ API "confirmed" كـ String
+  factory Status.fromString(String s) => Status(name: s);
+
+  /// ✅ مرن: يقبل Map أو String أو null
+  static Status? fromAny(dynamic raw) {
+    if (raw == null) return null;
+    if (raw is Status) return raw;
+    if (raw is Map<String, dynamic>) return Status.fromJson(raw);
+    if (raw is String) return Status.fromString(raw);
+    return Status(name: raw.toString());
+  }
 
   Map<String, dynamic> toJson() => {
     'name': name,

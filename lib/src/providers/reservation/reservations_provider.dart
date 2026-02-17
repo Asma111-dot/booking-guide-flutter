@@ -17,7 +17,7 @@ class Reservations extends _$Reservations {
   }
 
   Future<void> fetch({required int userId, int? facilityId, bool force = false}) async {
-    if (_fetched && !force) return; // ⛔ يمنع التكرار
+    if (_fetched && !force) return;
 
     state = state.setLoading();
 

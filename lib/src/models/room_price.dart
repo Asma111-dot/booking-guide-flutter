@@ -76,6 +76,21 @@ class RoomPrice {
         size = null;
 
   factory RoomPrice.fromJson(Map<String, dynamic> jsonMap) {
+    final rawRes = jsonMap['reservations'];
+
+    // ✅ Debug صحيح (خارج الـ return)
+    print('reservations raw => $rawRes');
+    if (rawRes is List && rawRes.isNotEmpty) {
+      print('first reservation => ${rawRes.first}');
+    }
+
+    final reservations = (rawRes is List)
+        ? rawRes
+        .whereType<Map<String, dynamic>>()
+        .map((m) => Reservation.fromJson(m))
+        .toList()
+        : <Reservation>[];
+
     return RoomPrice(
       id: int.tryParse(jsonMap['id']?.toString() ?? '') ?? 0,
       roomId: int.tryParse(jsonMap['room_id']?.toString() ?? '') ?? 0,
@@ -97,19 +112,22 @@ class RoomPrice {
           ? double.tryParse(jsonMap['discount'].toString())
           : null,
       appliedDiscounts: jsonMap['applied_discounts'] ?? [],
-      reservations: (jsonMap['reservations'] is List)
-          ? List<Reservation>.from((jsonMap['reservations'] as List)
-              .map((item) => Reservation.fromJson(item)))
-          : [],
+      reservations: reservations,
       media: (jsonMap['media'] is List)
-          ? List<Media>.from(
-              (jsonMap['media'] as List).map((item) => Media.fromJson(item)))
-          : [],
+          ? (jsonMap['media'] as List)
+          .whereType<Map<String, dynamic>>()
+          .map((m) => Media.fromJson(m))
+          .toList()
+          : <Media>[],
       amenities: (jsonMap['amenities'] is List)
-          ? List<Amenity>.from((jsonMap['amenities'] as List)
-              .map((item) => Amenity.fromJson(item)))
-          : [],
-      room: (jsonMap['room'] is Map) ? Room.fromJson(jsonMap['room']) : null,
+          ? (jsonMap['amenities'] as List)
+          .whereType<Map<String, dynamic>>()
+          .map((m) => Amenity.fromJson(m))
+          .toList()
+          : <Amenity>[],
+      room: (jsonMap['room'] is Map<String, dynamic>)
+          ? Room.fromJson(jsonMap['room'])
+          : null,
       title: jsonMap['title'],
       description: jsonMap['description'],
       size: int.tryParse(jsonMap['size']?.toString() ?? ''),

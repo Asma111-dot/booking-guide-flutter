@@ -56,13 +56,13 @@ class _AccountPageState extends ConsumerState<AccountPage> {
         ),
         elevation: 0,
         backgroundColor: theme.scaffoldBackgroundColor,
-        iconTheme: IconThemeData(color: colorScheme.secondary),
-        leading: Directionality.of(context) == TextDirection.rtl
-            ? toggleButton
-            : null,
-        actions: Directionality.of(context) == TextDirection.ltr
-            ? [toggleButton]
-            : null,
+        // iconTheme: IconThemeData(color: colorScheme.secondary),
+        // leading: Directionality.of(context) == TextDirection.rtl
+        //     ? toggleButton
+        //     : null,
+        // actions: Directionality.of(context) == TextDirection.ltr
+        //     ? [toggleButton]
+        //     : null,
       ),
       backgroundColor: theme.scaffoldBackgroundColor,
       body: SingleChildScrollView(

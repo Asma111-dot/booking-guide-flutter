@@ -58,6 +58,7 @@ class CustomHeaderDetailsWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Gaps.h12,
               Text(
                 name ?? trans().not_available,
                 style: TextStyle(
@@ -68,7 +69,7 @@ class CustomHeaderDetailsWidget extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
               ),
-              Gaps.h4,
+              Gaps.h20,
               Row(
                 children: [
                   Icon(

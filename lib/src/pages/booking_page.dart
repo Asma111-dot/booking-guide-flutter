@@ -203,7 +203,6 @@ class _BookingPageState extends ConsumerState<BookingPage>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // اسم المكان
                         Text(
                           placeName,
                           style: textTheme.titleSmall?.copyWith(
@@ -212,7 +211,6 @@ class _BookingPageState extends ConsumerState<BookingPage>
                           ),
                         ),
                         Gaps.h6,
-                        // تاريخ الحجز (الدخول)
                         Text(
                           "${trans().reservation_date} : ${reservation.checkInDate.toDateView()}",
                           style: textTheme.bodySmall?.copyWith(
@@ -220,7 +218,6 @@ class _BookingPageState extends ConsumerState<BookingPage>
                           ),
                         ),
 
-                        // عدد الأيام
                         if (showDays)
                           Padding(
                             padding: EdgeInsets.only(top: S.h(6)),
@@ -232,7 +229,6 @@ class _BookingPageState extends ConsumerState<BookingPage>
                             ),
                           ),
 
-                        // تاريخ الخروج
                         Padding(
                           padding: EdgeInsets.only(top: S.h(6)),
                           child: Text(
@@ -244,7 +240,6 @@ class _BookingPageState extends ConsumerState<BookingPage>
                         ),
 
                         Gaps.h6,
-                        // تاريخ الإنشاء
                         Text(
                           "${trans().created_at} : ${reservation.createdAt?.toDateView()}",
                           style: textTheme.bodySmall?.copyWith(
@@ -255,7 +250,6 @@ class _BookingPageState extends ConsumerState<BookingPage>
                     ),
                   ),
 
-                  // العمود الأيمن (id/price/status)
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
@@ -278,7 +272,6 @@ class _BookingPageState extends ConsumerState<BookingPage>
                       ),
                       Gaps.h30,
 
-                      // شارة الحالة
                       Container(
                         padding: EdgeInsets.symmetric(
                             horizontal: S.w(12), vertical: S.h(6)),

@@ -123,7 +123,7 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                       ),
                       Gaps.h12,
                       Divider(color: colorScheme.outline.withOpacity(0.3)),
-                      Gaps.h6,
+                      Gaps.h8,
                       Text(
                         trans().payment_details,
                         style: theme.textTheme.titleMedium?.copyWith(
@@ -131,18 +131,20 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                           color: colorScheme.primary,
                         ),
                       ),
-                      Gaps.h8,
+                      Gaps.h12,
                       CustomRowDetailsWidget(
                         icon: priceChangeIcon,
                         label: trans().paid_amount,
                         value:
                             "${reservation?.totalDeposit?.toInt()} ${trans().riyalY}",
                       ),
+                      Gaps.h8,
                       CustomRowDetailsWidget(
                         icon: rangeDataIcon,
                         label: trans().payment_date,
                         value: data.date.toDateView(),
                       ),
+                      Gaps.h6,
                       Divider(
                           height: S.h(30),
                           color: colorScheme.outline.withOpacity(0.3)),
@@ -153,35 +155,40 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                           color: colorScheme.primary,
                         ),
                       ),
-                      Gaps.h8,
+                      Gaps.h12,
                       if (reservation != null) ...[
                         CustomRowDetailsWidget(
                           icon: periodIcon,
                           label: trans().check_in_date,
                           value: reservation.checkInDate.toDateDateView(),
                         ),
+                        Gaps.h6,
                         CustomRowDetailsWidget(
                           icon: calenderIcon,
                           label: trans().check_out_date,
                           value: reservation.checkOutDate.toDateDateView(),
                         ),
+                        Gaps.h6,
                         CustomRowDetailsWidget(
                           icon: rangeDataIcon,
                           label: trans().number_of_days,
                           value: formatDaysAr(daysCount),
                         ),
+                        Gaps.h6,
                         CustomRowDetailsWidget(
                           icon: accessTimeIcon,
                           label: trans().access_time,
                           value:
                               "${reservation.roomPrice?.timeFrom?.fromTimeToDateTime()?.toTimeView() ?? '--:--'} - ${reservation.roomPrice?.timeTo?.fromTimeToDateTime()?.toTimeView() ?? '--:--'}",
                         ),
+                        Gaps.h6,
                         CustomRowDetailsWidget(
                           icon: peopleIcon,
                           label: trans().adults_count,
                           value:
                               "${reservation.adultsCount} ${trans().persons}",
                         ),
+                        Gaps.h6,
                         CustomRowDetailsWidget(
                           icon: childIcon,
                           label: trans().children_count,
@@ -198,18 +205,21 @@ class _PaymentDetailsPageState extends ConsumerState<PaymentDetailsPage> {
                             color: colorScheme.primary,
                           ),
                         ),
+                        Gaps.h6,
                         CustomRowDetailsWidget(
                           icon: moneyIcon,
                           label: trans().total_price,
                           value:
                               "${reservation.totalPrice?.toInt()} ${trans().riyalY}",
                         ),
+                        Gaps.h6,
                         CustomRowDetailsWidget(
                           icon: priceIcon,
                           label: trans().paid_amount,
                           value:
                               "${reservation.totalDeposit?.toInt()} ${trans().riyalY}",
                         ),
+                        Gaps.h6,
                         CustomRowDetailsWidget(
                           icon: priceCheckIcon,
                           label: trans().remaining_amount,

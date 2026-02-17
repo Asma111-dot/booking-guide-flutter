@@ -106,7 +106,6 @@ class _CustomCalendarWidgetState extends State<CustomCalendarWidget> {
           if (args.value is DateTime && widget.selectionType == SelectionType.single) {
             final selected = DateUtils.dateOnly(args.value as DateTime);
             if (widget.events[selected]?.isNotEmpty ?? false) {
-              // يوم محجوز
             } else {
               setState(() => selectedDay = selected);
               widget.onSingleDateSelected?.call(selected);

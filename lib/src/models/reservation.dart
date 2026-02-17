@@ -56,17 +56,31 @@ class Reservation {
         createdAt = null;
 
   factory Reservation.fromJson(Map<String, dynamic> jsonMap) {
+    final rawStatus = jsonMap['status'];
+
+    print('status runtime => ${rawStatus.runtimeType} value=$rawStatus');
+
+    Status? parsedStatus;
+
+    if (rawStatus is Map<String, dynamic>) {
+      parsedStatus = Status.fromJson(rawStatus);
+    } else if (rawStatus is String) {
+      parsedStatus = Status.fromString(rawStatus);
+    } else {
+      parsedStatus = null;
+    }
+
     return Reservation(
       id: jsonMap['id'] ?? 0,
       userId: jsonMap['user_id'] ?? 0,
       roomPriceId: jsonMap['room_price_id'] ?? 0,
       checkInDate:
-          DateTime.tryParse(jsonMap['check_in_date']?.toString() ?? '') ??
-              DateTime.now(),
+      DateTime.tryParse(jsonMap['check_in_date']?.toString() ?? '') ??
+          DateTime.now(),
       checkOutDate:
-          DateTime.tryParse(jsonMap['check_out_date']?.toString() ?? '') ??
-              DateTime.now(),
-      status: jsonMap['status'] != null ? Status.fromJson(jsonMap['status']) : null,
+      DateTime.tryParse(jsonMap['check_out_date']?.toString() ?? '') ??
+          DateTime.now(),
+      status: Status.fromAny(jsonMap['status']),
       totalPrice: (jsonMap['total_price'] != null)
           ? double.tryParse(jsonMap['total_price'].toString()) ?? 0.0
           : 0.0,
@@ -77,10 +91,12 @@ class Reservation {
       adultsCount: jsonMap['adults_count'] ?? 0,
       childrenCount: jsonMap['children_count'] ?? 0,
       payments: (jsonMap['payments'] is List)
-          ? List<Payment>.from((jsonMap['payments'] as List)
-              .map((item) => Payment.fromJson(item)))
-          : [],
-      roomPrice: (jsonMap['room_price'] is Map)
+          ? (jsonMap['payments'] as List)
+          .whereType<Map<String, dynamic>>()
+          .map((m) => Payment.fromJson(m))
+          .toList()
+          : <Payment>[],
+      roomPrice: (jsonMap['room_price'] is Map<String, dynamic>)
           ? RoomPrice.fromJson(jsonMap['room_price'])
           : null,
       createdAt: DateTime.tryParse(jsonMap['created_at']?.toString() ?? ''),

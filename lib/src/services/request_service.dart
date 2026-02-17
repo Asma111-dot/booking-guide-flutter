@@ -112,6 +112,15 @@ Future<Response<T>> request<T>({
   try {
     return await response.then((value) {
       if (kDebugMode) log("📥 Response raw: ${value.data.toString()}");
+      if (value.data is Map) {
+        final m = value.data as Map;
+        final k = 'data';
+        debugPrint('🧪 key=$k runtime=${m[k].runtimeType}');
+        if (m[k] is List && (m[k] as List).isNotEmpty) {
+          debugPrint('🧪 first element runtime=${(m[k] as List).first.runtimeType}');
+          debugPrint('🧪 first element value=${(m[k] as List).first}');
+        }
+      }
 
       dynamic parsed;
       try {
