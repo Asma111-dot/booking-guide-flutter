@@ -821,6 +821,12 @@ abstract class AppLocalizations {
   /// **'Number of Adults'**
   String get adults_count;
 
+  /// No description provided for @guests_count.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of Guests'**
+  String get guests_count;
+
   /// No description provided for @please_enter_adults_count.
   ///
   /// In en, this message translates to:
@@ -1594,6 +1600,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Specify the number of adults attending.'**
   String get adults_hint;
+
+  /// No description provided for @guests_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter number of guests'**
+  String get guests_hint;
 
   /// No description provided for @children_hint.
   ///

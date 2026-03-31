@@ -17,6 +17,7 @@ class RoomPrice {
   String? description;
   int? size;
   int? facilityId;
+  int? facilityTypeId;
 
   double? finalPrice;
   double? finalDeposit;
@@ -50,12 +51,14 @@ class RoomPrice {
     this.description,
     this.size,
     this.facilityId,
+    this.facilityTypeId,
   });
 
   RoomPrice.init()
       : id = 0,
         roomId = 0,
         facilityId = null,
+        facilityTypeId = null,
         capacity = 0,
         price = 0.0,
         deposit = null,
@@ -78,7 +81,6 @@ class RoomPrice {
   factory RoomPrice.fromJson(Map<String, dynamic> jsonMap) {
     final rawRes = jsonMap['reservations'];
 
-    // ✅ Debug صحيح (خارج الـ return)
     print('reservations raw => $rawRes');
     if (rawRes is List && rawRes.isNotEmpty) {
       print('first reservation => ${rawRes.first}');
@@ -86,15 +88,17 @@ class RoomPrice {
 
     final reservations = (rawRes is List)
         ? rawRes
-        .whereType<Map<String, dynamic>>()
-        .map((m) => Reservation.fromJson(m))
-        .toList()
+            .whereType<Map<String, dynamic>>()
+            .map((m) => Reservation.fromJson(m))
+            .toList()
         : <Reservation>[];
 
     return RoomPrice(
       id: int.tryParse(jsonMap['id']?.toString() ?? '') ?? 0,
       roomId: int.tryParse(jsonMap['room_id']?.toString() ?? '') ?? 0,
       facilityId: int.tryParse(jsonMap['facility_id']?.toString() ?? ''),
+      facilityTypeId:
+          int.tryParse(jsonMap['facility_type_id']?.toString() ?? ''),
       capacity: int.tryParse(jsonMap['capacity']?.toString() ?? '') ?? 0,
       price: double.tryParse(jsonMap['price']?.toString() ?? '0.0') ?? 0.0,
       deposit: double.tryParse(jsonMap['deposit']?.toString() ?? ''),
@@ -115,15 +119,15 @@ class RoomPrice {
       reservations: reservations,
       media: (jsonMap['media'] is List)
           ? (jsonMap['media'] as List)
-          .whereType<Map<String, dynamic>>()
-          .map((m) => Media.fromJson(m))
-          .toList()
+              .whereType<Map<String, dynamic>>()
+              .map((m) => Media.fromJson(m))
+              .toList()
           : <Media>[],
       amenities: (jsonMap['amenities'] is List)
           ? (jsonMap['amenities'] as List)
-          .whereType<Map<String, dynamic>>()
-          .map((m) => Amenity.fromJson(m))
-          .toList()
+              .whereType<Map<String, dynamic>>()
+              .map((m) => Amenity.fromJson(m))
+              .toList()
           : <Amenity>[],
       room: (jsonMap['room'] is Map<String, dynamic>)
           ? Room.fromJson(jsonMap['room'])
@@ -138,6 +142,7 @@ class RoomPrice {
         'id': id,
         'room_id': roomId,
         'facility_id': facilityId,
+        'facility_type_id': facilityTypeId,
         'capacity': capacity,
         'price': price,
         'deposit': deposit,

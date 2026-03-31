@@ -372,6 +372,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get adults_count => 'عدد الكبار';
 
   @override
+  String get guests_count => 'عدد الضيوف';
+
+  @override
   String get please_enter_adults_count => 'الرجاء إدخال عدد الكبار';
 
   @override
@@ -761,6 +764,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get adults_hint => 'حدد عدد الأشخاص البالغين ';
+
+  @override
+  String get guests_hint => 'أدخل عدد الضيوف';
 
   @override
   String get children_hint => 'حدد عدد الأطفال (اختياري – فقط إذا كان هناك أطفال)';

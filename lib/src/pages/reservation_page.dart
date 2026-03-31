@@ -30,13 +30,36 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
   late TextEditingController childrenController;
   final GlobalKey<FormState> reservationKey = GlobalKey<FormState>();
   String? bookingType;
+  List<String> bookingTypes = [];
   bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
+
     adultsController = TextEditingController();
     childrenController = TextEditingController();
+
+    if (widget.roomPrice.facilityTypeId == 3) {
+      bookingTypes = [
+        'عرس نساء',
+        'عرس رجال',
+        'عزاء',
+        'حفل تخرج',
+        'مؤتمر',
+        'معرض',
+        'أخرى'
+      ];
+    } else {
+      bookingTypes = [
+        'عائلي(نساء ورجال)',
+        'نساء فقط',
+        ' رجال فقط',
+        'شركة',
+        'مدرسة',
+        'أخرى'
+      ];
+    }
   }
 
   InputDecoration _inputDecoration(BuildContext context, String label,
@@ -114,7 +137,7 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                 children: [
                   Row(
                     children: [
-                       Icon(arrowdownIcon, size: 16, color: CustomTheme.color4),
+                      Icon(arrowdownIcon, size: 16, color: CustomTheme.color4),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
@@ -133,45 +156,51 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                   ),
                   const SizedBox(height: 12),
                   DropdownButtonFormField<String>(
-                    value: bookingType,
-                    items: [
-                      DropdownMenuItem(
-                        value: 'عائلة',
-                        child: Text(
-                          trans().family,
-                          style: TextStyle(
-                            color: colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: 'نساء',
-                        child: Text(
-                          trans().women,
-                          style: TextStyle(
-                            color: colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: 'رجال',
-                        child: Text(
-                          trans().men,
-                          style: TextStyle(
-                            color: colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: 'شركة',
-                        child: Text(
-                          trans().companies,
-                          style: TextStyle(
-                            color: colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                    ],
+                    initialValue: bookingType,
+                    // items: [
+                    //   DropdownMenuItem(
+                    //     value: 'عائلة',
+                    //     child: Text(
+                    //       trans().family,
+                    //       style: TextStyle(
+                    //         color: colorScheme.primary,
+                    //       ),
+                    //     ),
+                    //   ),
+                    //   DropdownMenuItem(
+                    //     value: 'نساء',
+                    //     child: Text(
+                    //       trans().women,
+                    //       style: TextStyle(
+                    //         color: colorScheme.primary,
+                    //       ),
+                    //     ),
+                    //   ),
+                    //   DropdownMenuItem(
+                    //     value: 'رجال',
+                    //     child: Text(
+                    //       trans().men,
+                    //       style: TextStyle(
+                    //         color: colorScheme.primary,
+                    //       ),
+                    //     ),
+                    //   ),
+                    //   DropdownMenuItem(
+                    //     value: 'شركة',
+                    //     child: Text(
+                    //       trans().companies,
+                    //       style: TextStyle(
+                    //         color: colorScheme.primary,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ],
+                    items: bookingTypes.map((type) {
+                      return DropdownMenuItem(
+                        value: type,
+                        child: Text(type),
+                      );
+                    }).toList(),
                     onChanged: (value) => setState(() => bookingType = value),
                     decoration: _inputDecoration(context, trans().booking_type),
                     validator: (value) => value == null
@@ -181,9 +210,13 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                   const SizedBox(height: 20),
                   Row(
                     children: [
-                      const Icon(groups2Icon, size: 16, color: CustomTheme.color4),
+                      const Icon(groups2Icon,
+                          size: 16, color: CustomTheme.color4),
                       const SizedBox(width: 6),
-                      Text(trans().adults_hint,
+                      Text(
+                          widget.roomPrice.facilityTypeId == 3
+                              ? trans().guests_hint
+                              : trans().adults_hint,
                           style: TextStyle(
                               fontSize: 10,
                               color: Theme.of(context)
@@ -202,7 +235,12 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                       color: CustomTheme.color2,
                       fontSize: 16,
                     ),
-                    decoration: _inputDecoration(context, trans().adults_count),
+                    decoration: _inputDecoration(
+                      context,
+                      widget.roomPrice.facilityTypeId == 3
+                          ? trans().guests_count
+                          : trans().adults_count,
+                    ),
                     validator: (value) => value!.isEmpty
                         ? trans().please_enter_adults_count
                         : null,
@@ -218,43 +256,40 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
                     },
                   ),
                   const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      const Icon(childIcon, size: 16, color: CustomTheme.color4),
-                      const SizedBox(width: 6),
-                      Text(trans().children_hint,
+                  if (widget.roomPrice.facilityTypeId != 3) ...[
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        const Icon(childIcon,
+                            size: 16, color: CustomTheme.color4),
+                        const SizedBox(width: 6),
+                        Text(
+                          trans().children_hint,
                           style: TextStyle(
-                              fontSize: 10,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withOpacity(0.7))),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  TextFormField(
-                    controller: childrenController,
-                    keyboardType: TextInputType.number,
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontWeight: FontWeight.bold,
-                      color: CustomTheme.color2,
-                      fontSize: 16,
+                            fontSize: 10,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withOpacity(0.7),
+                          ),
+                        ),
+                      ],
                     ),
-                    decoration:
-                        _inputDecoration(context, trans().children_count),
-                    validator: (value) => null,
-                    onChanged: (value) {
-                      final normalized = convertToEnglishNumbers(value);
-                      if (value != normalized) {
-                        childrenController.value = TextEditingValue(
-                          text: normalized,
-                          selection: TextSelection.collapsed(
-                              offset: normalized.length),
-                        );
-                      }
-                    },
-                  ),
+                    const SizedBox(height: 12),
+                    TextFormField(
+                      controller: childrenController,
+                      keyboardType: TextInputType.number,
+                      style: TextStyle(
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.bold,
+                        color: CustomTheme.color2,
+                        fontSize: 16,
+                      ),
+                      decoration:
+                          _inputDecoration(context, trans().children_count),
+                      validator: (value) => null,
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -275,80 +310,82 @@ class _ReservationPageState extends ConsumerState<ReservationPage> {
               title: trans().completeTheReservation,
               icon: isLoading
                   ? CircularProgressIndicator(
-                strokeWidth: 2,
-                color: Theme.of(context).colorScheme.onPrimary,
-              )
+                      strokeWidth: 2,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    )
                   : Icon(
-                arrowForWordIcon,
-                size: 20,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
+                      arrowForWordIcon,
+                      size: 20,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
               iconAfterText: true,
               disable: isLoading,
               onPressed: isLoading
                   ? null
                   : () async {
-                if (reservationKey.currentState!.validate()) {
-                  setState(() => isLoading = true);
+                      if (reservationKey.currentState!.validate()) {
+                        setState(() => isLoading = true);
 
-                  final adultsCount =
-                  int.parse(adultsController.text.trim());
-                  final childrenCount =
-                  childrenController.text.isNotEmpty
-                      ? int.parse(childrenController.text.trim())
-                      : 0;
+                        final adultsCount =
+                            int.parse(adultsController.text.trim());
+                        final childrenCount = childrenController.text.isNotEmpty
+                            ? int.parse(childrenController.text.trim())
+                            : 0;
 
-                  try {
-                    final savedReservation = await ref
-                        .read(reservationSaveProvider.notifier)
-                        .saveReservation(
-                      reservation.data!,
-                      adultsCount: adultsCount,
-                      childrenCount: childrenCount,
-                      bookingType: bookingType!,
-                    );
+                        try {
+                          final savedReservation = await ref
+                              .read(reservationSaveProvider.notifier)
+                              .saveReservation(
+                                reservation.data!,
+                                adultsCount: adultsCount,
+                                childrenCount:
+                                    widget.roomPrice.facilityTypeId == 3
+                                        ? 0
+                                        : childrenCount,
+                                bookingType: bookingType!,
+                              );
 
-                    if (savedReservation != null &&
-                        savedReservation.id != 0) {
-                      await ref.read(reservationProvider.notifier).fetch(
-                        reservationId: savedReservation.id,
-                      );
+                          if (savedReservation != null &&
+                              savedReservation.id != 0) {
+                            await ref.read(reservationProvider.notifier).fetch(
+                                  reservationId: savedReservation.id,
+                                );
 
-                      setState(() => isLoading = false);
+                            setState(() => isLoading = false);
 
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        Routes.reservationDetails,
-                            (r) => false,
-                        arguments: savedReservation.id,
-                      );
-                    } else {
-                      setState(() => isLoading = false);
-                      // ScaffoldMessenger.of(context).showSnackBar(
-                      //   SnackBar(
-                      //     content: Text(
-                      //       "حدثت مشكلة في جلب تفاصيل الحجز، حاول مرة أخرى.",
-                      //     ),
-                      //   ),
-                      // );
-                    }
-                  } catch (_) {
-                    setState(() => isLoading = false);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(trans().error_occurred_during_save),
-                      ),
-                    );
-                  }
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content:
-                      Text(trans().please_complete_data_correctly),
-                    ),
-                  );
-                }
-              },
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              Routes.reservationDetails,
+                              (r) => false,
+                              arguments: savedReservation.id,
+                            );
+                          } else {
+                            setState(() => isLoading = false);
+                            // ScaffoldMessenger.of(context).showSnackBar(
+                            //   SnackBar(
+                            //     content: Text(
+                            //       "حدثت مشكلة في جلب تفاصيل الحجز، حاول مرة أخرى.",
+                            //     ),
+                            //   ),
+                            // );
+                          }
+                        } catch (_) {
+                          setState(() => isLoading = false);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(trans().error_occurred_during_save),
+                            ),
+                          );
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content:
+                                Text(trans().please_complete_data_correctly),
+                          ),
+                        );
+                      }
+                    },
             ),
           ),
         ),

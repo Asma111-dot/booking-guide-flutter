@@ -372,6 +372,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adults_count => 'Number of Adults';
 
   @override
+  String get guests_count => 'Number of Guests';
+
+  @override
   String get please_enter_adults_count => 'Please enter the number of adults';
 
   @override
@@ -761,6 +764,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adults_hint => 'Specify the number of adults attending.';
+
+  @override
+  String get guests_hint => 'Enter number of guests';
 
   @override
   String get children_hint => 'Specify the number of children (optional – only if applicable)';

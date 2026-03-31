@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 String baseUrl = kDebugMode
     ? (Platform.isIOS
     ? "http://localhost:8000/" // ios
-    : "http://192.168.8.197:8000/") // Android
+    : "http://192.168.1.103:8000/") // Android
 //         : "http://172.21.0.95:8000/") //qk
     : "https://mybookingsguide.com/";
 
