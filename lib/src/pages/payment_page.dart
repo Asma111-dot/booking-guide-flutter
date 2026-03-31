@@ -97,9 +97,10 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
 
             // ───────── قائمة وسائل الدفع ─────────
             ...PaymentMethod.values.map((method) {
-              final isDisabled = !(method == PaymentMethod.floosak ||
-                  method == PaymentMethod.jib ||
-                  method == PaymentMethod.jawali);
+              final isDisabled = !(method == PaymentMethod.floosak
+                  // method == PaymentMethod.jib ||
+                  // method == PaymentMethod.jawali
+                  );
               // || method == PaymentMethod.cash || method == PaymentMethod.pyes || method == PaymentMethod.sabaCash);
 
               return GestureDetector(

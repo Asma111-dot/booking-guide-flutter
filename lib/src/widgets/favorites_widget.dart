@@ -20,7 +20,6 @@ class FavoriteWidget extends StatelessWidget {
   });
 
   @override
-  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
@@ -42,13 +41,20 @@ class FavoriteWidget extends StatelessWidget {
             : doveIcon;
 
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-          Routes.roomDetails,
-          arguments: facility,
-        );
-      },
+        onTap: () {
+          if (facility.firstRoomId == null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("لا توجد غرف متاحة")),
+            );
+            return;
+          }
+
+          Navigator.pushNamed(
+            context,
+            Routes.roomDetails,
+            arguments: facility,
+          );
+        },
       child: Container(
         margin: EdgeInsets.symmetric(
           horizontal: S.w(5),
